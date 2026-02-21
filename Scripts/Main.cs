@@ -6,8 +6,14 @@ public partial class Main : Node2D
 {
 	public override void _Ready()
 	{
+		Vector2I startingPosition = new Vector2I(0, 0);
+		Vector2I endingPosition = new Vector2I(10, 10);
 		GridRenderer gr = GetNode<GridRenderer>("GridRenderer");
 		GenericGrid<GroundTile> grid = new(11, 11, (g, x, y) => null, cellSize: 16);
+		grid.SetGridValue(startingPosition.X, startingPosition.Y, new GroundTile(new Vector2I(2, 0), [true, true, false, false]));
+		grid.SetGridValue(endingPosition.X, endingPosition.Y, new GroundTile(new Vector2I(2, 0), [false, false, true, true]));
+
+
 		gr.RenderGrid(grid);
 		GridAStarPathfinder<GroundTile> pathfinder = new GridAStarPathfinder<GroundTile>(grid, (tile) => tile == null ? -1 : 1, (x, y) =>
 		{
@@ -25,9 +31,9 @@ public partial class Main : Node2D
 
 		GenericGrid<GroundTile> shapeGrid = new GenericGrid<GroundTile>(4, 2, (g, x, y) => null, cellSize: 16);
 		shapeGrid.SetGridValue(0, 0, new GroundTile(new Vector2I(1, 0), roads:[false, true, false, true]));
-		shapeGrid.SetGridValue(1, 0, new GroundTile(new Vector2I(1, 0), roads:[true, true, false, true]));
+		shapeGrid.SetGridValue(1, 0, new GroundTile(new Vector2I(1, 0), roads:[true, true, true, true]));
 		shapeGrid.SetGridValue(2, 0, new GroundTile(new Vector2I(1, 0), roads:[false, true, false, true]));
-		shapeGrid.SetGridValue(3, 0, new GroundTile(new Vector2I(1, 0), roads:[false, false, true, true]));
+		shapeGrid.SetGridValue(3, 0, new GroundTile(new Vector2I(1, 0), roads:[true, true, true, true]));
 		shapeGrid.SetGridValue(1, 1, new GroundTile(new Vector2I(1, 0), roads:[true, false, true, false]));
 
 		TileShape shape = new(shapeGrid);
@@ -35,7 +41,19 @@ public partial class Main : Node2D
 		TileShapePlacer placer = GetNode<TileShapePlacer>("TileShapePlacer");
 		placer.Initialize(shape, grid);
 
-		placer.OnShapePlaced += () => {gr.RenderGrid(grid); pathfinder.UpdateGrid();};
+		placer.OnShapePlaced += () => 
+			{
+				gr.RenderGrid(grid); 
+				pathfinder.UpdateGrid();
+				List<Vector2I> path = pathfinder.GetPath(startingPosition, endingPosition);
+				if (path != null)
+				{
+					foreach (Vector2I node in path)
+					{
+						GD.Print($" - {node}");
+					}
+				}
+			};
 	}
 
 }
