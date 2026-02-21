@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://cundji84oafs3"]
+
+[ext_resource type="Script" uid="uid://dpid00o4uw0cn" path="res://Scripts/TileShapePlacer.cs" id="1_eemkd"]
+[ext_resource type="PackedScene" uid="uid://tw6j84txs1a1" path="res://Scenes/grid_renderer.tscn" id="2_70ymk"]
+
+[node name="TileShapePlacer" type="Node2D" unique_id=1636893986]
+script = ExtResource("1_eemkd")
+
+[node name="GridRenderer" parent="." unique_id=76182152 instance=ExtResource("2_70ymk")]

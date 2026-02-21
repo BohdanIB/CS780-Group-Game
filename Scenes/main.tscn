@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://dgjos5x50idft"]
+
+[ext_resource type="Script" uid="uid://cuir3nismmvnr" path="res://Scripts/Main.cs" id="1_jjgbg"]
+[ext_resource type="PackedScene" uid="uid://tw6j84txs1a1" path="res://Scenes/grid_renderer.tscn" id="2_bo1nx"]
+[ext_resource type="PackedScene" uid="uid://cundji84oafs3" path="res://Scenes/tile_shape_placer.tscn" id="3_jjvhh"]
+[ext_resource type="Texture2D" uid="uid://dbrmvykg7gy0r" path="res://icon.svg" id="4_kry3j"]
+
+[node name="Main" type="Node2D" unique_id=1822167308]
+script = ExtResource("1_jjgbg")
+
+[node name="GridRenderer" parent="." unique_id=76182152 instance=ExtResource("2_bo1nx")]
+
+[node name="TileShapePlacer" parent="." unique_id=1636893986 instance=ExtResource("3_jjvhh")]
+
+[node name="Sprite2D" type="Sprite2D" parent="TileShapePlacer" unique_id=1890949919]
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("4_kry3j")
