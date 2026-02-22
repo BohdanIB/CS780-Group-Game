@@ -6,6 +6,8 @@ public partial class Main : Node2D
 {
 	public override void _Ready()
 	{
+		PathFollower pf = GetNode<PathFollower>("PathFollower");
+
 		Vector2I startingPosition = new Vector2I(0, 0);
 		Vector2I endingPosition = new Vector2I(10, 10);
 		GridRenderer gr = GetNode<GridRenderer>("GridRenderer");
@@ -45,13 +47,14 @@ public partial class Main : Node2D
 			{
 				gr.RenderGrid(grid); 
 				pathfinder.UpdateGrid();
-				List<Vector2I> path = pathfinder.GetPath(startingPosition, endingPosition);
+				List<Vector2> path = pathfinder.GetPathInPositions(startingPosition, endingPosition, 16);
 				if (path != null)
 				{
-					foreach (Vector2I node in path)
+					foreach (Vector2 node in path)
 					{
 						GD.Print($" - {node}");
 					}
+					pf.SetPath(path);
 				}
 			};
 	}

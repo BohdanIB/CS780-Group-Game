@@ -33,6 +33,20 @@ public class GridAStarPathfinder<TGridObject>
         });
     }
 
+    public List<Vector2> GetPathInPositions(Vector2I origin, Vector2I destination, float cellSize)
+    {
+        List<Vector2I> path = GetPath(origin, destination);
+        if (path == null) return null;
+
+        List<Vector2> outputPath = new();
+        foreach(Vector2I coordinate in path)
+        {
+            outputPath.Add(((Vector2) coordinate + Vector2.One*0.5f) * cellSize);
+        }
+
+        return outputPath;
+    }
+
     public List<Vector2I> GetPath(Vector2I origin, Vector2I destination)
     {
         if (!nodeGrid.IsOnGrid(origin.X, origin.Y) || !nodeGrid.IsOnGrid(destination.X, destination.Y)) return null;
