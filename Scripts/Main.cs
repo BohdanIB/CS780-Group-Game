@@ -1,5 +1,4 @@
 using Godot;
-using System;
 using System.Collections.Generic;
 
 public partial class Main : Node2D
@@ -37,10 +36,9 @@ public partial class Main : Node2D
 		shapeGrid.SetGridValue(2, 0, new GroundTile(new Vector2I(1, 0), roads:[false, true, false, true]));
 		shapeGrid.SetGridValue(3, 0, new GroundTile(new Vector2I(1, 0), roads:[true, true, true, true]));
 		shapeGrid.SetGridValue(1, 1, new GroundTile(new Vector2I(1, 0), roads:[true, false, true, false]));
+		Shape shape = new(shapeGrid);
 
-		TileShape shape = new(shapeGrid);
-
-		TileShapePlacer placer = GetNode<TileShapePlacer>("TileShapePlacer");
+		ShapePlacer placer = GetNode<ShapePlacer>("ShapePlacer");
 		placer.Initialize(shape, grid);
 
 		placer.OnShapePlaced += () => 

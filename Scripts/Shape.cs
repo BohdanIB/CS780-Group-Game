@@ -1,12 +1,22 @@
 using Godot;
-using System;
 
-public class TileShape
+public class Shape
 {
     public GenericGrid<GroundTile> grid;
 
+    public Shape(GenericGrid<GroundTile> grid)
+    {
+        this.grid = grid;
+        grid.ForEach((tile) =>
+        {
+            if (tile != null)
+            {
+                tile.parentShape = this;
+            } 
+        });
+    }
 
-    public TileShape GetRotatedShape(int direction)
+    public Shape GetRotatedShape(int direction)
     {
         if (direction == 0) return this;
         GenericGrid<GroundTile> newGrid = new GenericGrid<GroundTile>(grid.GetHeight(), grid.GetWidth(), (g, x, y) =>
@@ -55,20 +65,8 @@ public class TileShape
             return newTile;
         });
 
-        TileShape newShape = new(newGrid);
+        Shape newShape = new(newGrid);
 
         return newShape;
-    }
-
-    public TileShape(GenericGrid<GroundTile> grid)
-    {
-        this.grid = grid;
-        grid.ForEach((tile) =>
-        {
-            if (tile != null)
-            {
-                tile.parentShape = this;
-            } 
-        });
     }
 }

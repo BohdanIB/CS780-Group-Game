@@ -1,16 +1,14 @@
 using Godot;
-using System;
 
-public partial class TileShapePlacer : Node2D
+public partial class ShapePlacer : Node2D
 {
-
-	private TileShape currentShape;
+	private Shape currentShape;
 	private GenericGrid<GroundTile> targetGrid;
 	private Vector2I currentOriginCoordinates;
 
 	[Signal] public delegate void OnShapePlacedEventHandler();
 
-	public void Initialize(TileShape shapeToPlace, GenericGrid<GroundTile> targetGrid)
+	public void Initialize(Shape shapeToPlace, GenericGrid<GroundTile> targetGrid)
 	{
 		currentShape = shapeToPlace;
 		this.targetGrid = targetGrid;

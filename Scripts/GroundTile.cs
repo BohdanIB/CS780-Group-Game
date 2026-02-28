@@ -1,9 +1,8 @@
-using System;
 using Godot;
 
 public class GroundTile
 {
-    public TileShape parentShape = null;
+    public Shape parentShape = null;
     public Vector2I tileAtlasCoords;
     public bool[] roadConnections = new bool[4]; // N,E,S,W
 
