@@ -4,7 +4,10 @@ using System.Collections.Generic;
 
 public partial class PathFollower : RigidBody2D
 {
+
 	private const float DISTANCE_THRESHOLD = 0.01f;
+
+	[Export] public float health = 100.0f;
 	[Export] public float movementSpeed;
 
 	private List<Vector2> path;

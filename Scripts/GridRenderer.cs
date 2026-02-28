@@ -1,30 +1,29 @@
 using Godot;
-using System;
 
 public partial class GridRenderer : Node2D
 {
-	public TileMapLayer terrainMap, roadMap;
-
+	public TileMapLayer terrainMap, roadMap, turretMap;
 
 	public override void _Ready()
 	{
 		terrainMap = GetNode<TileMapLayer>("TerrainMap");
 		roadMap = GetNode<TileMapLayer>("RoadMap");
+		turretMap = GetNode<TileMapLayer>("TurretMap");
 	}
 
-
-	public void RenderGrid(GenericGrid<GroundTile> grid)
+	public void RenderGrid(GenericGrid<Tile> grid)
 	{
 		terrainMap.Clear();
 		roadMap.Clear();
+		turretMap.Clear();
 
 		for (int x = 0; x < grid.GetWidth(); x++)
 		{
 			for (int y = 0; y < grid.GetHeight(); y++)
 			{
-				GroundTile tile = grid.GetGridValueOrDefault(x, y);
+				Tile tile = grid.GetGridValueOrDefault(x, y);
 
-				if (tile == null) continue;
+				if (tile == null) continue; // todo: This seems bad, we shouldn't store null tiles in grids.
 
 				terrainMap.SetCell(new Vector2I(x, y), 0, tile.tileAtlasCoords);
 
@@ -37,8 +36,6 @@ public partial class GridRenderer : Node2D
 			}
 		}
 
-
 	}
-
 
 }

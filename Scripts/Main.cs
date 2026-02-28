@@ -1,5 +1,4 @@
 using Godot;
-using System;
 using System.Collections.Generic;
 
 public partial class Main : Node2D
@@ -11,15 +10,15 @@ public partial class Main : Node2D
 		Vector2I startingPosition = new Vector2I(0, 0);
 		Vector2I endingPosition = new Vector2I(10, 10);
 		GridRenderer gr = GetNode<GridRenderer>("GridRenderer");
-		GenericGrid<GroundTile> grid = new(11, 11, (g, x, y) => null, cellSize: 16);
-		grid.SetGridValue(startingPosition.X, startingPosition.Y, new GroundTile(new Vector2I(2, 0), [true, true, false, false]));
-		grid.SetGridValue(endingPosition.X, endingPosition.Y, new GroundTile(new Vector2I(2, 0), [false, false, true, true]));
+		GenericGrid<Tile> grid = new(11, 11, (g, x, y) => null, cellSize: 16);
+		grid.SetGridValue(startingPosition.X, startingPosition.Y, new Tile(new Vector2I(2, 0), [true, true, false, false]));
+		grid.SetGridValue(endingPosition.X, endingPosition.Y, new Tile(new Vector2I(2, 0), [false, false, true, true]));
 
 
 		gr.RenderGrid(grid);
-		GridAStarPathfinder<GroundTile> pathfinder = new GridAStarPathfinder<GroundTile>(grid, (tile) => tile == null ? -1 : 1, (x, y) =>
+		GridAStarPathfinder<Tile> pathfinder = new GridAStarPathfinder<Tile>(grid, (tile) => tile == null ? -1 : 1, (x, y) =>
 		{
-			GroundTile tile = grid.GetGridValueOrDefault(x, y);
+			Tile tile = grid.GetGridValueOrDefault(x, y);
 			if (!tile.HasRoadConnection()) return [];
 			List<Vector2I> neighborCoordinates = [];
 			if (tile.HasRoadConnection(Vector2I.Up)) neighborCoordinates.Add(new Vector2I(x, y)+Vector2I.Up);
@@ -31,12 +30,12 @@ public partial class Main : Node2D
 		});
 		pathfinder.UpdateGrid();
 
-		GenericGrid<GroundTile> shapeGrid = new GenericGrid<GroundTile>(4, 2, (g, x, y) => null, cellSize: 16);
-		shapeGrid.SetGridValue(0, 0, new GroundTile(new Vector2I(1, 0), roads:[false, true, false, true]));
-		shapeGrid.SetGridValue(1, 0, new GroundTile(new Vector2I(1, 0), roads:[true, true, true, true]));
-		shapeGrid.SetGridValue(2, 0, new GroundTile(new Vector2I(1, 0), roads:[false, true, false, true]));
-		shapeGrid.SetGridValue(3, 0, new GroundTile(new Vector2I(1, 0), roads:[true, true, true, true]));
-		shapeGrid.SetGridValue(1, 1, new GroundTile(new Vector2I(1, 0), roads:[true, false, true, false]));
+		GenericGrid<Tile> shapeGrid = new GenericGrid<Tile>(4, 2, (g, x, y) => null, cellSize: 16);
+		shapeGrid.SetGridValue(0, 0, new Tile(new Vector2I(1, 0), roads:[false, true, false, true]));
+		shapeGrid.SetGridValue(1, 0, new Tile(new Vector2I(1, 0), roads:[true, true, true, true]));
+		shapeGrid.SetGridValue(2, 0, new Tile(new Vector2I(1, 0), roads:[false, true, false, true]));
+		shapeGrid.SetGridValue(3, 0, new Tile(new Vector2I(1, 0), roads:[true, true, true, true]));
+		shapeGrid.SetGridValue(1, 1, new Tile(new Vector2I(1, 0), roads:[true, false, true, false]));
 
 		TileShape shape = new(shapeGrid);
 

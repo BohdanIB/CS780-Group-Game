@@ -1,15 +1,16 @@
-using System;
 using Godot;
 
-public class GroundTile
+public class Tile
 {
     public TileShape parentShape = null;
     public Vector2I tileAtlasCoords;
     public bool[] roadConnections = new bool[4]; // N,E,S,W
+    public Turret turret = null;
 
-    public GroundTile(Vector2I tileAtlasCoords, bool[] roads = null)
+    public Tile(Vector2I tileAtlasCoords, bool[] roads = null, Turret turret = null)
     {
         roadConnections = roads ?? [false, false, false, false];
+        this.turret = turret;
         this.tileAtlasCoords = tileAtlasCoords;
     }
 

@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://b2w8csm5vypb0"]
+
+[ext_resource type="Script" uid="uid://bk3drg0y2r1ku" path="res://Scripts/Turret.cs" id="1_fcprl"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hskch"]
+size = Vector2(32, 32)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_m4t5i"]
+load_path = "res://.godot/imported/temp_turret.png-d2d3f09fb48f808c21f0ae98ab89a449.ctex"
+
+[node name="Turret" type="Area2D" unique_id=814766381]
+script = ExtResource("1_fcprl")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=786318106]
+shape = SubResource("RectangleShape2D_hskch")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=657102081]
+texture = SubResource("CompressedTexture2D_m4t5i")
