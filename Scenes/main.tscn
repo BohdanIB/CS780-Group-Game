@@ -16,3 +16,5 @@ position = Vector2(194, 177)
 [node name="Test_Follower" parent="." unique_id=142391362 instance=ExtResource("4_jjvhh")]
 position = Vector2(380, 190)
 movementSpeed = 100.0
+
+[node name="TurretPlacer" type="Node2D" parent="." unique_id=951368110]

@@ -61,8 +61,8 @@ public partial class Turret : Area2D
 	{
 
 		// Check if something is in area of turret
-		// If something is in area, start shooting at target (spawn bullet?)
-		//   Bullet should send signal to shot path follower when it gets hit (damage)
+		// If something is in area, start shooting at target (spawn Projectile?)
+		//   Projectile should send signal to shot path follower when it gets hit (damage)
 		// Obey firerate restrictions
 
 		// Shoot at an enemy if there is one in range.
@@ -87,16 +87,16 @@ public partial class Turret : Area2D
 				}
 			}
 			
-			GD.Print($"Turret {Name} firing bullet at target {currTargetEnemy} with stats: Damage - {_turretStats.Damage}, Speed - {_turretStats.ProjectileSpeed}");
+			GD.Print($"Turret {Name} firing Projectile at target {currTargetEnemy} with stats: Damage - {_turretStats.Damage}, Speed - {_turretStats.ProjectileSpeed}");
 
 			_shotCooldownTimer.Start(1/_turretStats.FireRate);
-			var bulletScene = GD.Load<PackedScene>("res://Scenes/bullet.tscn");
-			var bullet = bulletScene.Instantiate<Bullet>();
+			var ProjectileScene = GD.Load<PackedScene>("res://Scenes/Projectile.tscn");
+			var Projectile = ProjectileScene.Instantiate<Projectile>();
 			
-			bullet.GlobalPosition = GlobalPosition;
-			bullet.AssignTarget(currTargetEnemy, _turretStats.Damage, _turretStats.ProjectileSpeed);
-			// Owner.AddChild(bullet);
-			GetTree().GetRoot().AddChild(bullet);
+			Projectile.GlobalPosition = GlobalPosition;
+			Projectile.AssignTarget(currTargetEnemy, _turretStats.Damage, _turretStats.ProjectileSpeed);
+			// Owner.AddChild(Projectile);
+			GetTree().GetRoot().AddChild(Projectile);
 		}
 	}
 

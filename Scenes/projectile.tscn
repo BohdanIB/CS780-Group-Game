@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://b1picus170nmk"]
+
+[ext_resource type="Script" uid="uid://bca40tiktvab7" path="res://Scripts/Projectile.cs" id="1_yr2qt"]
+[ext_resource type="Texture2D" uid="uid://g7frsjygfur" path="res://Assets/Sprites/temp_bullet.png" id="2_tl4hk"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_xjght"]
+radius = 4.0
+
+[node name="Projectile" type="Area2D" unique_id=196749450]
+script = ExtResource("1_yr2qt")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1960296799]
+shape = SubResource("CircleShape2D_xjght")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=764759586]
+texture = ExtResource("2_tl4hk")
