@@ -25,7 +25,7 @@ public partial class GridRenderer : Node2D
 
 				if (tile == null) continue; // todo: This seems bad, we shouldn't store null tiles in grids.
 
-				terrainMap.SetCell(new Vector2I(x, y), 0, tile.tileAtlasCoords);
+				terrainMap.SetCell(new Vector2I(x, y), 0, tile.terrain.groundTileAtlasCoords);
 
 				int roadIndex = (tile.HasRoadConnection(Vector2I.Up) ? 1 : 0)
 							+ (tile.HasRoadConnection(Vector2I.Right) ? 2 : 0)

@@ -1,17 +1,17 @@
+using System;
 using Godot;
 
-public class Tile
+public class GroundTile
 {
-    public TileShape parentShape = null;
-    public Vector2I tileAtlasCoords;
+    public TerrainType terrain;
     public bool[] roadConnections = new bool[4]; // N,E,S,W
-    public Turret turret = null;
+    public Vector2I position;
 
-    public Tile(Vector2I tileAtlasCoords, bool[] roads = null, Turret turret = null)
+    public GroundTile(TerrainType terrain, Vector2I position, bool[] roads = null)
     {
         roadConnections = roads ?? [false, false, false, false];
-        this.turret = turret;
-        this.tileAtlasCoords = tileAtlasCoords;
+        this.terrain = terrain;
+        this.position = position;
     }
 
     public bool HasRoadConnection(Vector2I direction)
@@ -46,7 +46,7 @@ public class Tile
 
     public override string ToString()
     {
-        return $"{tileAtlasCoords} {roadConnections}";
+        return $"{terrain} {roadConnections}";
     }
 
 }

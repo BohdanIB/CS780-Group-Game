@@ -3,15 +3,15 @@ using System;
 
 public class TileShape
 {
-    public GenericGrid<Tile> grid;
+    public GenericGrid<GroundTile> grid;
 
 
     public TileShape GetRotatedShape(int direction)
     {
         if (direction == 0) return this;
-        GenericGrid<Tile> newGrid = new GenericGrid<Tile>(grid.GetHeight(), grid.GetWidth(), (g, x, y) =>
+        GenericGrid<GroundTile> newGrid = new GenericGrid<GroundTile>(grid.GetHeight(), grid.GetWidth(), (g, x, y) =>
         {
-            Tile tileToCopy = null;
+            GroundTile tileToCopy = null;
             if (direction > 0)
             {
                 tileToCopy = grid.GetGridValueOrDefault(grid.GetWidth() - y - 1, x);
@@ -49,7 +49,7 @@ public class TileShape
                 newRoadConnections = [false, false, false, false];
             }
 
-            Tile newTile = new Tile(tileToCopy.tileAtlasCoords);
+            GroundTile newTile = new GroundTile(tileToCopy.terrain, tileToCopy.position);
             newTile.roadConnections = newRoadConnections;
 
             return newTile;
@@ -60,15 +60,15 @@ public class TileShape
         return newShape;
     }
 
-    public TileShape(GenericGrid<Tile> grid)
+    public TileShape(GenericGrid<GroundTile> grid)
     {
         this.grid = grid;
         grid.ForEach((tile) =>
         {
-            if (tile != null)
-            {
-                tile.parentShape = this;
-            } 
+            // if (tile != null)
+            // {
+            //     tile.parentShape = this;
+            // } 
         });
     }
 }
