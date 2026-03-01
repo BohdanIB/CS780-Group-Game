@@ -1,17 +1,19 @@
 [gd_scene format=3 uid="uid://cktkmwqovsjyc"]
 
 [ext_resource type="Script" uid="uid://bk3drg0y2r1ku" path="res://Scripts/Turret.cs" id="1_fcprl"]
+[ext_resource type="Texture2D" uid="uid://bl7a37uc0ye6u" path="res://Assets/Sprites/temp_turrets.png" id="2_hskch"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_hskch"]
-size = Vector2(32, 32)
+[sub_resource type="CircleShape2D" id="CircleShape2D_hskch"]
 
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_m4t5i"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_hskch"]
+atlas = ExtResource("2_hskch")
+region = Rect2(0, 0, 32, 0)
 
 [node name="Turret" type="Area2D" unique_id=814766381]
 script = ExtResource("1_fcprl")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=786318106]
-shape = SubResource("RectangleShape2D_hskch")
+shape = SubResource("CircleShape2D_hskch")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=657102081]
-texture = SubResource("CompressedTexture2D_m4t5i")
+texture = SubResource("AtlasTexture_hskch")

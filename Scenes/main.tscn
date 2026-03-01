@@ -2,8 +2,16 @@
 
 [ext_resource type="Script" uid="uid://cuir3nismmvnr" path="res://Scripts/Main.cs" id="1_jjgbg"]
 [ext_resource type="PackedScene" uid="uid://tw6j84txs1a1" path="res://Scenes/grid_renderer.tscn" id="2_bo1nx"]
+[ext_resource type="PackedScene" uid="uid://cktkmwqovsjyc" path="res://Scenes/turret.tscn" id="3_8gbba"]
+[ext_resource type="PackedScene" uid="uid://dtv7kt7wo8omt" path="res://Scenes/path_follower.tscn" id="4_jjvhh"]
 
 [node name="Main" type="Node2D" unique_id=1822167308]
 script = ExtResource("1_jjgbg")
 
 [node name="GridRenderer" parent="." unique_id=76182152 instance=ExtResource("2_bo1nx")]
+
+[node name="Turret" parent="." unique_id=814766381 instance=ExtResource("3_8gbba")]
+position = Vector2(143, 48)
+
+[node name="PathFollower" parent="." unique_id=142391362 instance=ExtResource("4_jjvhh")]
+position = Vector2(295, 91)
