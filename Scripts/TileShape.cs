@@ -49,7 +49,7 @@ public class TileShape
                 newRoadConnections = [false, false, false, false];
             }
 
-            GroundTile newTile = new GroundTile(tileToCopy.terrain);
+            GroundTile newTile = new GroundTile(tileToCopy.terrain, tileToCopy.position);
             newTile.roadConnections = newRoadConnections;
 
             return newTile;
@@ -65,10 +65,10 @@ public class TileShape
         this.grid = grid;
         grid.ForEach((tile) =>
         {
-            if (tile != null)
-            {
-                tile.parentShape = this;
-            } 
+            // if (tile != null)
+            // {
+            //     tile.parentShape = this;
+            // } 
         });
     }
 }

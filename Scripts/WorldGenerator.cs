@@ -6,8 +6,65 @@ public partial class WorldGenerator : Node
 {
     private const float TRAILBLAZER_TERMINATION_CHANCE = 0.03f, TRAILBLAZER_ROTATION_CHANCE = 0.12f, TRAILBLAZER_BRANCH_CHANCE = 0.09f;
     private const int TRAILBLAZER_MIN_COOLDOWN = 2, TRAILBLAZER_MAX_COOLDOWN = 5;
+
+    public static GenericGrid<GroundTile> GenerateWorldAStar(Vector2I dimensions, Vector2I hubLocation, int seed = 42)
+    {
+        Random randomizer = new();
+
+        TerrainType defaultTerrain = new TerrainType()
+        {
+            groundTileAtlasCoords = new Vector2I(1, 0)  
+        };
+
+
+        GenericGrid<GroundTile> newWorld = new GenericGrid<GroundTile>(dimensions.X, dimensions.Y, (g, x, y) => new GroundTile(defaultTerrain, new Vector2I(x, y)));
+
+        GridAStarPathfinder<GroundTile> pathfinder = new GridAStarPathfinder<GroundTile>(newWorld, 
+                (tile) =>
+                {
+                    return tile.HasRoadConnection() ? 9 : (-(Math.Abs(tile.position.X - hubLocation.X) + Math.Abs(tile.position.Y - hubLocation.Y)) + dimensions.X+dimensions.Y);
+                },
+                (x,y) => {
+                    List<Vector2I> neighborPositions = [];
+                    if (newWorld.IsOnGrid(x, y-1)) neighborPositions.Add(new Vector2I(x, y-1)); 
+                    if (newWorld.IsOnGrid(x+1, y)) neighborPositions.Add(new Vector2I(x+1, y)); 
+                    if (newWorld.IsOnGrid(x, y+1)) neighborPositions.Add(new Vector2I(x, y+1)); 
+                    if (newWorld.IsOnGrid(x-1, y)) neighborPositions.Add(new Vector2I(x-1, y)); 
+                    return [.. neighborPositions];
+                    }
+            );
+
+        for (int i = 0; i < 25; i++)
+        {
+            Vector2I targetPoint = new Vector2I(randomizer.Next(dimensions.X), randomizer.Next(dimensions.Y));
+            if (targetPoint.DistanceTo(hubLocation) < 6) continue;
+
+            Vector2I currentPoint = hubLocation;
+            foreach (Vector2I nextPoint in pathfinder.GetPath(hubLocation, targetPoint)[1..])
+            {
+                
+                Vector2I direction = nextPoint - currentPoint;
+
+                GroundTile currentTile = newWorld.GetGridValueOrDefault(currentPoint.X, currentPoint.Y);
+                GroundTile nextTile = newWorld.GetGridValueOrDefault(nextPoint.X, nextPoint.Y);
+
+                GD.Print($"Current Position: {currentPoint}   Next Position: {nextPoint}   Heading: {direction} ({GetDirectionAsIndex(direction)})");
+
+                currentTile.roadConnections[GetDirectionAsIndex(direction)] = true;
+                nextTile.roadConnections[GetDirectionAsIndex(-direction)] = true;
+
+                currentPoint = nextPoint;
+
+            }
+
+            pathfinder.UpdateGrid();
+        }
+
+
+        return newWorld;
+    }
     
-    public static GenericGrid<GroundTile> GenerateWorld(Vector2I dimensions, Vector2I hubLocation, int seed = 42)
+    public static GenericGrid<GroundTile> GenerateWorldRandomAgents(Vector2I dimensions, Vector2I hubLocation, int seed = 42)
     {
 
         Random randomizer = new();
@@ -18,7 +75,7 @@ public partial class WorldGenerator : Node
         };
 
 
-        GenericGrid<GroundTile> newWorld = new GenericGrid<GroundTile>(dimensions.X, dimensions.Y, (g, x, y) => new GroundTile(defaultTerrain));
+        GenericGrid<GroundTile> newWorld = new GenericGrid<GroundTile>(dimensions.X, dimensions.Y, (g, x, y) => new GroundTile(defaultTerrain, new Vector2I(x, y)));
 
         List<TrailBlazer> trailBlazers =
         [

@@ -3,14 +3,15 @@ using Godot;
 
 public class GroundTile
 {
-    public TileShape parentShape = null;
     public TerrainType terrain;
     public bool[] roadConnections = new bool[4]; // N,E,S,W
+    public Vector2I position;
 
-    public GroundTile(TerrainType terrain, bool[] roads = null)
+    public GroundTile(TerrainType terrain, Vector2I position, bool[] roads = null)
     {
         roadConnections = roads ?? [false, false, false, false];
         this.terrain = terrain;
+        this.position = position;
     }
 
     public bool HasRoadConnection(Vector2I direction)
