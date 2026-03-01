@@ -4,13 +4,13 @@ using Godot;
 public class GroundTile
 {
     public TileShape parentShape = null;
-    public Vector2I tileAtlasCoords;
+    public TerrainType terrain;
     public bool[] roadConnections = new bool[4]; // N,E,S,W
 
-    public GroundTile(Vector2I tileAtlasCoords, bool[] roads = null)
+    public GroundTile(TerrainType terrain, bool[] roads = null)
     {
         roadConnections = roads ?? [false, false, false, false];
-        this.tileAtlasCoords = tileAtlasCoords;
+        this.terrain = terrain;
     }
 
     public bool HasRoadConnection(Vector2I direction)
@@ -45,7 +45,7 @@ public class GroundTile
 
     public override string ToString()
     {
-        return $"{tileAtlasCoords} {roadConnections}";
+        return $"{terrain} {roadConnections}";
     }
 
 }

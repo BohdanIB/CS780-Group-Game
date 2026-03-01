@@ -10,11 +10,11 @@ public class GenericGrid<TGridObject>
 	public GenericGrid(int width, int height, Func<GenericGrid<TGridObject>, int, int, TGridObject> createGridObject, float cellSize = 1) {
 		this.width = width;
 		this.height = height;
-		gridArray = new TGridObject[height, width];
+		gridArray = new TGridObject[width, height];
 
 		for (int y = 0; y < gridArray.GetLength(0); y++) {
 			for (int x = 0; x < gridArray.GetLength(1); x++) {
-				gridArray[y, x] = createGridObject(this, x, y);
+				gridArray[x, y] = createGridObject(this, x, y);
 			}
 		} 
 
