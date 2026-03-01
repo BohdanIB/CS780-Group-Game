@@ -24,7 +24,7 @@ public partial class PathFollower : RigidBody2D
 		}
 
 		Position = Position.MoveToward(path[currentPathIndex], (float) delta * movementSpeed);
-    }
+	}
 
 	public void SetPath(List<Vector2> newPath)
 	{

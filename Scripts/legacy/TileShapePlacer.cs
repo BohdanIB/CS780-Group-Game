@@ -5,12 +5,12 @@ public partial class TileShapePlacer : Node2D
 {
 
 	private TileShape currentShape;
-	private GenericGrid<Tile> targetGrid;
+	private GenericGrid<GroundTile> targetGrid;
 	private Vector2I currentOriginCoordinates;
 
 	[Signal] public delegate void OnShapePlacedEventHandler();
 
-	public void Initialize(TileShape shapeToPlace, GenericGrid<Tile> targetGrid)
+	public void Initialize(TileShape shapeToPlace, GenericGrid<GroundTile> targetGrid)
 	{
 		currentShape = shapeToPlace;
 		this.targetGrid = targetGrid;

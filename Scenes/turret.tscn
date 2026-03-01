@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://b2w8csm5vypb0"]
+[gd_scene format=3 uid="uid://cktkmwqovsjyc"]
 
 [ext_resource type="Script" uid="uid://bk3drg0y2r1ku" path="res://Scripts/Turret.cs" id="1_fcprl"]
 
@@ -6,7 +6,6 @@
 size = Vector2(32, 32)
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_m4t5i"]
-load_path = "res://.godot/imported/temp_turret.png-d2d3f09fb48f808c21f0ae98ab89a449.ctex"
 
 [node name="Turret" type="Area2D" unique_id=814766381]
 script = ExtResource("1_fcprl")

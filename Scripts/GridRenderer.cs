@@ -8,22 +8,22 @@ public partial class GridRenderer : Node2D
 	{
 		terrainMap = GetNode<TileMapLayer>("TerrainMap");
 		roadMap = GetNode<TileMapLayer>("RoadMap");
-		turretMap = GetNode<TileMapLayer>("TurretMap");
+		// turretMap = GetNode<TileMapLayer>("TurretMap");
 	}
 
-	public void RenderGrid(GenericGrid<Tile> grid)
+	public void RenderGrid(GenericGrid<GroundTile> grid)
 	{
 		terrainMap.Clear();
 		roadMap.Clear();
-		turretMap.Clear();
+		// turretMap.Clear();
 
 		for (int x = 0; x < grid.GetWidth(); x++)
 		{
 			for (int y = 0; y < grid.GetHeight(); y++)
 			{
-				Tile tile = grid.GetGridValueOrDefault(x, y);
+				GroundTile tile = grid.GetGridValueOrDefault(x, y);
 
-				if (tile == null) continue; // todo: This seems bad, we shouldn't store null tiles in grids.
+				if (tile == null) continue; // todo: This seems bad, we shouldn't store null tiles in grids and check for null entries.
 
 				terrainMap.SetCell(new Vector2I(x, y), 0, tile.terrain.groundTileAtlasCoords);
 
