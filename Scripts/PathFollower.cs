@@ -1,13 +1,12 @@
 using Godot;
-using System;
 using System.Collections.Generic;
 
-public partial class PathFollower : RigidBody2D
+public partial class PathFollower : Area2D
 {
 
 	private const float DISTANCE_THRESHOLD = 0.01f;
 
-	[Export] public float health = 100.0f;
+	[Export] private float _health = 100.0f;
 	[Export] public float movementSpeed;
 
 	private List<Vector2> path;
@@ -15,21 +14,33 @@ public partial class PathFollower : RigidBody2D
 
     public override void _PhysicsProcess(double delta)
     {
-        if (path == null) return;
-		if (Position.DistanceTo(path[currentPathIndex]) < DISTANCE_THRESHOLD)
-		{
-			currentPathIndex++;
-			if (currentPathIndex >= path.Count) path = null;
-			return;
-		}
+		Position = Position.MoveToward(new Vector2(0, 0), (float)delta * movementSpeed);
+        // if (path == null) return;
+		// if (Position.DistanceTo(path[currentPathIndex]) < DISTANCE_THRESHOLD)
+		// {
+		// 	currentPathIndex++;
+		// 	if (currentPathIndex >= path.Count) path = null;
+		// 	return;
+		// }
 
-		Position = Position.MoveToward(path[currentPathIndex], (float) delta * movementSpeed);
+		// Position = Position.MoveToward(path[currentPathIndex], (float) delta * movementSpeed);
 	}
 
 	public void SetPath(List<Vector2> newPath)
 	{
 		path = newPath;
 		currentPathIndex = 0;
+	}
+
+	public void ChangeHealth(float healthChangeValue)
+	{
+		GD.Print($"HealthChange for PathFollower {Name} - CurrentHealth {_health} -> NewHealth {_health - healthChangeValue}");
+		_health -= healthChangeValue;
+		if (_health <= 0.0f)
+		{
+			GD.Print($"PathFollower {Name} died.");
+			QueueFree(); // TODO
+		}
 	}
 
 }

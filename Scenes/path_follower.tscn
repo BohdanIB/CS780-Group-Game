@@ -5,8 +5,7 @@
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_twpjy"]
 
-[node name="PathFollower" type="RigidBody2D" unique_id=142391362]
-gravity_scale = 0.0
+[node name="PathFollower" type="Area2D" unique_id=382514737]
 script = ExtResource("1_7x0sy")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1901836338]
