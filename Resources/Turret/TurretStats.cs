@@ -47,6 +47,11 @@ public partial class TurretStats : Resource
 		SpriteFrame = baseStats.SpriteFrame;
 	}
 
+	public static TurretStats GetBaseTurretStats(Category type)
+	{
+		return new TurretStats(type);
+	}
+
 	public override string ToString()
 	{
 		return $"{_type} - AggroRadius: {AggroRadius} - Health: {Health} - FireRate: {FireRate} - Projectile: [{ProjectileStats}]";

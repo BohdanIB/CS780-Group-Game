@@ -7,7 +7,8 @@ using System.Collections.Generic;
 public partial class Turret : Area2D
 {
 	// [Export] private TurretStats.Category _turretType = TurretStats.Category.Balista;
-	[Export] private bool targetClosest = true; // Todo: WIP Targeting priority. Closest or farthest should be changable, maybe random targeting also as an option
+	[Export] private bool _disabled = false;
+	[Export] private bool _targetClosest = true; // Todo: WIP Targeting priority. Closest or farthest should be changable, maybe random targeting also as an option
 	private TurretStats _stats;
 
 	// Scene Children
@@ -36,11 +37,17 @@ public partial class Turret : Area2D
 
 	public override void _Ready()
 	{
+		// Some cases where _Ready gets called before Initialize, just set to some value for now and it will get reset later.
+		if (_stats == null)
+		{
+			Initialize(TurretStats.Category.Balista);
+		}
+
 		_collisionShape2D = GetNode<CollisionShape2D>("CollisionShape2D");
-		((CircleShape2D)_collisionShape2D.Shape).Radius = _stats.AggroRadius; // TODO: Better way of doing this?
+		UpdateTurretRadius(_stats.AggroRadius);
 
 		_sprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
-		_sprite.Frame = _stats.SpriteFrame;
+		UpdateTurretSprite(_stats.SpriteFrame);
 		// _sprite2D. // todo: Load proper tile from turret tilemap
 
 		_shotCooldownTimer = GetNode<Timer>("ShotCooldownTimer");
@@ -48,6 +55,9 @@ public partial class Turret : Area2D
 		// {
 		// 	GD.Print($"Turret {Name} ready to shoot again!");
 		// };
+
+		// Todo: Primarily to support ghost mode turret in TurretPlacer.
+		if (_disabled) { return; }
 
 		// AreaShapeEntered += (rid, area, areaShapeIndex, localShapeIndex) => {
 		AreaEntered += (area) => {
@@ -72,6 +82,8 @@ public partial class Turret : Area2D
 
 	public override void _PhysicsProcess(double delta)
 	{
+		// Todo: Primarily to support ghost mode turret in TurretPlacer.
+		if (_disabled) { return; }
 
 		// Check if something is in area of turret
 		// If something is in area, start shooting at target (spawn Projectile?)
@@ -88,12 +100,12 @@ public partial class Turret : Area2D
 			{
 				var enemy = _enemiesInRange[i];
 				float enemyDistance = Position.DistanceTo(enemy.Position);
-				if (targetClosest && enemyDistance < currTargetDistance)
+				if (_targetClosest && enemyDistance < currTargetDistance)
 				{
 					currTargetEnemy = enemy;
 					currTargetDistance = enemyDistance;
 				}
-				if (!targetClosest && currTargetDistance < enemyDistance)
+				if (!_targetClosest && currTargetDistance < enemyDistance)
 				{
 					currTargetEnemy = enemy;
 					currTargetDistance = enemyDistance;
@@ -110,6 +122,18 @@ public partial class Turret : Area2D
 			projectile.Initialize(currTargetEnemy, _stats.ProjectileStats);
 			GetTree().GetRoot().AddChild(projectile);
 		}
+	}
+
+	public void UpdateTurretRadius(float newRadius)
+	{
+		_stats.AggroRadius = newRadius;
+		((CircleShape2D)_collisionShape2D.Shape).Radius = newRadius; // TODO: Better way of doing this?
+	}
+
+	public void UpdateTurretSprite(int newFrame)
+	{
+		_stats.SpriteFrame = newFrame;
+		_sprite.Frame = newFrame;
 	}
 
 	public override string ToString()

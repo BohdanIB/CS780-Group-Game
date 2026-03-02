@@ -68,7 +68,22 @@ public partial class Projectile : Area2D
 			_targetLastKnownLocation = _target.Position;
 		}
 
+		// Todo: Make movement a little easier to expand
 		Position = Position.MoveToward(_targetLastKnownLocation, (float)delta * _stats.Speed);
+		switch (_stats.Type) {
+			case ProjectileStats.Category.Bolt:
+				LookAt(_targetLastKnownLocation);
+				RotationDegrees += 90f; // Rotate 90 degrees to the right to look at -Y instead of +X
+				break;
+			case ProjectileStats.Category.Blade:
+				const float ROTATION_SPEED_DEGREES = 270f;
+				GlobalRotationDegrees += (float)delta * ROTATION_SPEED_DEGREES;
+				break;
+			default:
+				GD.Print($"WARNING: Projectile type {_stats.Type} special movement is UNDEFINED.");
+				break;
+		}
+
 		if (Position.DistanceTo(_targetLastKnownLocation) < MIN_TARGET_DISTANCE)
 		{
 			if (!IsInstanceValid(_target))

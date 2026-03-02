@@ -1,4 +1,5 @@
 using Godot;
+using System;
 using System.Collections.Generic;
 
 /// <summary>
@@ -6,6 +7,7 @@ using System.Collections.Generic;
 /// Idea: Projectiles of different types can exist and potentially have different effects.
 /// - When a projectile makes an impact, it may play through a set of frames from a sprite sheet, specific to its type.
 /// - Projectiles can potentially be expanded to have different properties, or take some turret stat points (damage, etc.)
+/// - ProjectileStats could dictate how projectiles move? (blade spins while moving towards enemy, bolt faces enemy, etc.)
 /// </summary>
 [GlobalClass]
 public partial class ProjectileStats : Resource
@@ -23,6 +25,14 @@ public partial class ProjectileStats : Resource
 		{Category.Blade, 
 			new ProjectileBaseStats(Speed: 100f, Damage: 20f, SpriteFrame: 1)},
 	};
+	// private record ProjectileBaseStats(float Speed, float Damage, int SpriteFrame, Func<Vector2, Vector2, float, (Vector2, float)> MovementHandler);
+	// private static readonly Dictionary<Category, ProjectileBaseStats> PROJECTILE_BASE_STATS = new()
+	// {
+	// 	{Category.Bolt, 
+	// 		new ProjectileBaseStats(Speed: 100f, Damage: 10f, SpriteFrame: 0, MovementDirect)},
+	// 	{Category.Blade, 
+	// 		new ProjectileBaseStats(Speed: 100f, Damage: 20f, SpriteFrame: 1, MovementSpin)},
+	// };
 
 	// Projectile Stats
 	private Category _type;
@@ -43,6 +53,17 @@ public partial class ProjectileStats : Resource
 		Damage = baseStats.Damage;
 		SpriteFrame = baseStats.SpriteFrame;
 	}
+
+	// private static (Vector2, float) MovementDirect(Vector2 position, Vector2 target, float delta)
+	// {
+	// 	return(position.MoveToward(target, delta * Speed), );
+	// }
+	// private static (Vector2, float) MovementSpin(Vector2 position, Vector2 target, float delta)
+	// {
+	// 	const float SPIN_SPEED = 5f;
+	// }
+	
+
 
 	public override string ToString()
 	{

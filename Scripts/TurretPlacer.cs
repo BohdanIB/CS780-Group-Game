@@ -6,11 +6,10 @@ using System;
 /// </summary>
 public partial class TurretPlacer : Node2D
 {
-	private GridRenderer _gridRenderer;
-
 	private bool _turretPlacerEnabled = false;
 	private TurretStats.Category _currentTurretType = TurretStats.Category.Balista;
 	private GenericGrid<GroundTile> _grid;
+	private Turret _ghostTurret;
 	private Vector2I _currentOriginCoordinates = new();
 
 	[Signal] 
@@ -23,7 +22,9 @@ public partial class TurretPlacer : Node2D
 
 	public override void _Ready()
 	{
-		_gridRenderer = GetNode<GridRenderer>("GridRenderer");
+		_ghostTurret = GetNode<Turret>("GhostHoverTurret");
+		_ghostTurret.Initialize(_currentTurretType);
+		_ghostTurret.Visible = false;
 	}
 
 	public override void _Process(double delta)
@@ -46,19 +47,38 @@ public partial class TurretPlacer : Node2D
 			GD.Print($"Current turret type for placement: {_currentTurretType}");
 		}
 
-		// Place turret
-		if (_turretPlacerEnabled && Input.IsActionJustPressed("Left Click") && GetTileIfPlacementValid() is GroundTile tile && tile != null)
+		
+		if (_turretPlacerEnabled && GetTileIfPlacementValid() is GroundTile tile && tile != null)
 		{
-			GD.Print($"Placing turret of type {_currentTurretType}");
-			var turretScene = GD.Load<PackedScene>("res://Scenes/Turret.tscn");
-			var turret = turretScene.Instantiate<Turret>();
-			tile.Turret = turret;
-			turret.GlobalPosition = _grid.GetCentralGridCellPositionPixels(tile.position);
-			turret.Initialize(_currentTurretType);
-			GetTree().GetRoot().AddChild(turret);
-		}
+			// Turret Placement
+			if (Input.IsActionJustPressed("Left Click"))
+			{
+				GD.Print($"Placing turret of type {_currentTurretType}");
+				var turretScene = GD.Load<PackedScene>("res://Scenes/Turret.tscn");
+				var turret = turretScene.Instantiate<Turret>();
+				tile.Turret = turret;
+				turret.GlobalPosition = _grid.GetCentralGridCellPositionPixels(tile.position);
+				turret.Initialize(_currentTurretType);
+				GetTree().GetRoot().AddChild(turret);
+			}
+			// Display "ghost" turret to show where it's going to go and radius
+			// Ghost turret hover
+			else
+			{
+				_ghostTurret.Visible = true;
+				_ghostTurret.GlobalPosition = _grid.GetCentralGridCellPositionPixels(tile.position);
+				TurretStats baseStats = TurretStats.GetBaseTurretStats(_currentTurretType);
+				_ghostTurret.UpdateTurretSprite(baseStats.SpriteFrame);
+				_ghostTurret.UpdateTurretRadius(baseStats.AggroRadius);
 
-		// Todo: Display ghost of turret to place along with radius
+				GD.Print($"Ghost Turret: {_ghostTurret}");
+				// TODO: Update radius for ghost turret properly
+			}
+		}
+		else
+		{
+			_ghostTurret.Visible = false;
+		}
 	}
 
 	private GroundTile GetTileIfPlacementValid()
@@ -68,7 +88,7 @@ public partial class TurretPlacer : Node2D
 		if (_grid.GetGridValueOrDefault(_currentOriginCoordinates.X, _currentOriginCoordinates.Y) is GroundTile tile && 
 			tile != null && !tile.HasRoadConnection() && !tile.HasTurret())
 		{
-			GD.Print($"Turret placement valid for tile: {tile}");
+			// GD.Print($"Turret placement valid for tile: {tile}");
 			return tile;
 		}
 		return null;
