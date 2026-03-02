@@ -40,7 +40,7 @@ public partial class Turret : Area2D
 		// Some cases where _Ready gets called before Initialize, just set to some value for now and it will get reset later.
 		if (_stats == null)
 		{
-			Initialize(TurretStats.Category.Balista);
+			Initialize(TurretStats.Category.Ballista);
 		}
 
 		_collisionShape2D = GetNode<CollisionShape2D>("CollisionShape2D");

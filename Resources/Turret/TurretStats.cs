@@ -9,13 +9,13 @@ public partial class TurretStats : Resource
 {
 	public enum Category
 	{
-		Balista,
+		Ballista,
 		Blade,
 	};
 	private record TurretBaseStats(float AggroRadius, float Health, float FireRate, ProjectileStats ProjectileStats, int SpriteFrame);
 	private static readonly Dictionary<Category, TurretBaseStats> TURRET_BASE_STATS = new()
 	{
-		{Category.Balista, 
+		{Category.Ballista, 
 			new TurretBaseStats(AggroRadius: 100f, Health: 100f, FireRate: 2f, ProjectileStats: new ProjectileStats(ProjectileStats.Category.Bolt), SpriteFrame: 0)},
 		{Category.Blade, 
 			new TurretBaseStats(AggroRadius: 50f, Health: 100f, FireRate: 5f, ProjectileStats: new ProjectileStats(ProjectileStats.Category.Blade), SpriteFrame: 1)},

@@ -7,7 +7,7 @@ using System;
 public partial class TurretPlacer : Node2D
 {
 	private bool _turretPlacerEnabled = false;
-	private TurretStats.Category _currentTurretType = TurretStats.Category.Balista;
+	private TurretStats.Category _currentTurretType = TurretStats.Category.Ballista;
 	private GenericGrid<GroundTile> _grid;
 	private Turret _ghostTurret;
 	private Vector2I _currentOriginCoordinates = new();
