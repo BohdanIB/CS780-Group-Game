@@ -100,4 +100,9 @@ public class GenericGrid<TGridObject>
 	{
 		return new Vector2I(width, height);
 	}
+	
+	public Vector2 GetCentralGridCellPositionPixels(Vector2I pos)
+	{
+		return new Vector2((pos.X * cellSize) + (cellSize / 2), (pos.Y * cellSize) + (cellSize / 2));
+	}
 }

@@ -4,12 +4,14 @@ public partial class Main : Node2D
 {
 	public override void _Ready()
 	{
-		GridRenderer gr = GetNode<GridRenderer>("GridRenderer");
-
-
 
 		GenericGrid<GroundTile> grid = WorldGenerator.GenerateWorldAStar(new Vector2I(21, 21), new Vector2I(10, 10));
+
+		GridRenderer gr = GetNode<GridRenderer>("GridRenderer");
 		gr.RenderGrid(grid);
+
+		TurretPlacer turretPlacer = GetNode<TurretPlacer>("TurretPlacer");
+		turretPlacer.Initialize(grid);
 
 		// GridAStarPathfinder<GroundTile> pathfinder = new GridAStarPathfinder<GroundTile>(grid, (tile) => tile == null ? -1 : 1, (x, y) =>
 		// {

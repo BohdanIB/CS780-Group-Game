@@ -1,31 +1,43 @@
 using Godot;
 using System.Collections.Generic;
-using System.Linq;
 
 /// <summary>
 /// 
 /// </summary>
 public partial class Turret : Area2D
 {
-	[Export] private TurretStats.Category _turretType = TurretStats.Category.Balista;
+	// [Export] private TurretStats.Category _turretType = TurretStats.Category.Balista;
 	[Export] private bool targetClosest = true; // Todo: WIP Targeting priority. Closest or farthest should be changable, maybe random targeting also as an option
-	private TurretStats _turretStats;
+	private TurretStats _stats;
 
 	// Scene Children
 	private CollisionShape2D _collisionShape2D;
 	private Sprite2D _sprite2D;
 	private Timer _shotCooldownTimer;
 
-	// Book-keeping members
 	private List<PathFollower> _enemiesInRange = new();
-	private float _timeSinceLastFire = 0.0f;
+
+	/// <summary>
+	/// Initializes turret with custom stats.
+	/// </summary>
+	/// <param name="turretStats"></param>
+	public void Initialize(TurretStats turretStats)
+	{
+		_stats = turretStats;
+	}
+	/// <summary>
+	/// Initializes turret with "generic" base stats for given type.
+	/// </summary>
+	/// <param name="turretType"></param>
+	public void Initialize(TurretStats.Category turretType)
+	{
+		Initialize(new TurretStats(turretType));
+	}
 
 	public override void _Ready()
 	{
-		_turretStats = new(_turretType);
-
 		_collisionShape2D = GetNode<CollisionShape2D>("CollisionShape2D");
-		((CircleShape2D)_collisionShape2D.Shape).Radius = _turretStats.AggroRadius; // TODO: Better way of doing this?
+		((CircleShape2D)_collisionShape2D.Shape).Radius = _stats.AggroRadius; // TODO: Better way of doing this?
 
 		_sprite2D = GetNode<Sprite2D>("Sprite2D");
 		// _sprite2D. // todo: Load proper tile from turret tilemap
@@ -38,22 +50,22 @@ public partial class Turret : Area2D
 
 		// AreaShapeEntered += (rid, area, areaShapeIndex, localShapeIndex) => {
 		AreaEntered += (area) => {
-            if (area is PathFollower pf)
-            {
-                GD.Print($"TURRET BODY ENTERED: {pf.Name}");
-                _enemiesInRange.Add(pf);
-            }
-        };
+			if (area is PathFollower pf)
+			{
+				GD.Print($"TURRET BODY ENTERED: {pf.Name}");
+				_enemiesInRange.Add(pf);
+			}
+		};
 		AreaExited += (area) => // todo: Case where path follower dies within area? Does it still send exit signal?
 		{
-            if (area is PathFollower pf)
-            {
-                GD.Print($"TURRET BODY EXITED: {pf.Name}");
-                _enemiesInRange.Remove(pf);
-            }
-        };
+			if (area is PathFollower pf)
+			{
+				GD.Print($"TURRET BODY EXITED: {pf.Name}");
+				_enemiesInRange.Remove(pf);
+			}
+		};
 
-		GD.Print($"Turret Stats: {_turretStats}");
+		GD.Print($"Turret Stats: {_stats}");
 
 	}
 
@@ -87,17 +99,21 @@ public partial class Turret : Area2D
 				}
 			}
 			
-			GD.Print($"Turret {Name} firing Projectile at target {currTargetEnemy} with stats: Damage - {_turretStats.Damage}, Speed - {_turretStats.ProjectileSpeed}");
+			GD.Print($"Turret {Name} firing Projectile at target {currTargetEnemy} with stats: {_stats.ProjectileStats}");
 
-			_shotCooldownTimer.Start(1/_turretStats.FireRate);
-			var ProjectileScene = GD.Load<PackedScene>("res://Scenes/Projectile.tscn");
-			var Projectile = ProjectileScene.Instantiate<Projectile>();
+			_shotCooldownTimer.Start(1 / _stats.FireRate);
+			var projectileScene = GD.Load<PackedScene>("res://Scenes/Projectile.tscn");
+			var projectile = projectileScene.Instantiate<Projectile>();
 			
-			Projectile.GlobalPosition = GlobalPosition;
-			Projectile.AssignTarget(currTargetEnemy, _turretStats.Damage, _turretStats.ProjectileSpeed);
-			// Owner.AddChild(Projectile);
-			GetTree().GetRoot().AddChild(Projectile);
+			projectile.GlobalPosition = GlobalPosition;
+			projectile.Initialize(currTargetEnemy, _stats.ProjectileStats);
+			GetTree().GetRoot().AddChild(projectile);
 		}
+	}
+
+	public override string ToString()
+	{
+		return $"{Name}: {_stats}";
 	}
 
 }

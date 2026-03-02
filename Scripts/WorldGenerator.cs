@@ -17,7 +17,7 @@ public partial class WorldGenerator : Node
         };
 
 
-        GenericGrid<GroundTile> newWorld = new GenericGrid<GroundTile>(dimensions.X, dimensions.Y, (g, x, y) => new GroundTile(defaultTerrain, new Vector2I(x, y)));
+        GenericGrid<GroundTile> newWorld = new GenericGrid<GroundTile>(dimensions.X, dimensions.Y, (g, x, y) => new GroundTile(defaultTerrain, new Vector2I(x, y)), 16);
 
         GridAStarPathfinder<GroundTile> pathfinder = new GridAStarPathfinder<GroundTile>(newWorld, 
                 (tile) =>

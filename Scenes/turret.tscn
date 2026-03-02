@@ -7,7 +7,7 @@
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_hskch"]
 atlas = ExtResource("2_hskch")
-region = Rect2(0, 0, 32, 0)
+region = Rect2(0, 0, 32, 32)
 
 [node name="Turret" type="Area2D" unique_id=1985475119]
 script = ExtResource("1_fcprl")
@@ -16,6 +16,7 @@ script = ExtResource("1_fcprl")
 shape = SubResource("CircleShape2D_hskch")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=657102081]
+scale = Vector2(0.5, 0.5)
 texture = SubResource("AtlasTexture_hskch")
 
 [node name="ShotCooldownTimer" type="Timer" parent="." unique_id=1683080775]

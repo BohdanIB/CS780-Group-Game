@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://caafjqfx010mq"]
+
+[ext_resource type="Script" uid="uid://bwyae206qebn8" path="res://Scripts/TurretPlacer.cs" id="1_00fsi"]
+[ext_resource type="PackedScene" uid="uid://tw6j84txs1a1" path="res://Scenes/grid_renderer.tscn" id="2_f3ru2"]
+
+[node name="TurretPlacer" type="Node2D" unique_id=1881251108]
+script = ExtResource("1_00fsi")
+
+[node name="GridRenderer" parent="." unique_id=76182152 instance=ExtResource("2_f3ru2")]

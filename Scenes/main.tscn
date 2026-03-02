@@ -2,19 +2,16 @@
 
 [ext_resource type="Script" uid="uid://cuir3nismmvnr" path="res://Scripts/Main.cs" id="1_jjgbg"]
 [ext_resource type="PackedScene" uid="uid://tw6j84txs1a1" path="res://Scenes/grid_renderer.tscn" id="2_bo1nx"]
-[ext_resource type="PackedScene" uid="uid://cktkmwqovsjyc" path="res://Scenes/turret.tscn" id="3_8gbba"]
 [ext_resource type="PackedScene" uid="uid://dtv7kt7wo8omt" path="res://Scenes/path_follower.tscn" id="4_jjvhh"]
+[ext_resource type="PackedScene" uid="uid://caafjqfx010mq" path="res://Scenes/turret_placer.tscn" id="5_kry3j"]
 
 [node name="Main" type="Node2D" unique_id=1822167308]
 script = ExtResource("1_jjgbg")
 
 [node name="GridRenderer" parent="." unique_id=76182152 instance=ExtResource("2_bo1nx")]
 
-[node name="Test_Turret" parent="." unique_id=814766381 instance=ExtResource("3_8gbba")]
-position = Vector2(194, 177)
+[node name="TurretPlacer" parent="." unique_id=1881251108 instance=ExtResource("5_kry3j")]
 
 [node name="Test_Follower" parent="." unique_id=142391362 instance=ExtResource("4_jjvhh")]
 position = Vector2(380, 190)
 movementSpeed = 100.0
-
-[node name="TurretPlacer" type="Node2D" parent="." unique_id=951368110]
