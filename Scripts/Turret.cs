@@ -12,7 +12,7 @@ public partial class Turret : Area2D
 
 	// Scene Children
 	private CollisionShape2D _collisionShape2D;
-	private Sprite2D _sprite2D;
+	private AnimatedSprite2D _sprite;
 	private Timer _shotCooldownTimer;
 
 	private List<PathFollower> _enemiesInRange = new();
@@ -39,7 +39,8 @@ public partial class Turret : Area2D
 		_collisionShape2D = GetNode<CollisionShape2D>("CollisionShape2D");
 		((CircleShape2D)_collisionShape2D.Shape).Radius = _stats.AggroRadius; // TODO: Better way of doing this?
 
-		_sprite2D = GetNode<Sprite2D>("Sprite2D");
+		_sprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
+		_sprite.Frame = _stats.SpriteFrame;
 		// _sprite2D. // todo: Load proper tile from turret tilemap
 
 		_shotCooldownTimer = GetNode<Timer>("ShotCooldownTimer");

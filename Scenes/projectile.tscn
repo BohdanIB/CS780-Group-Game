@@ -1,10 +1,32 @@
 [gd_scene format=3 uid="uid://b1picus170nmk"]
 
 [ext_resource type="Script" uid="uid://bca40tiktvab7" path="res://Scripts/Projectile.cs" id="1_yr2qt"]
-[ext_resource type="Texture2D" uid="uid://g7frsjygfur" path="res://Assets/Sprites/temp_bullet.png" id="2_tl4hk"]
+[ext_resource type="Texture2D" uid="uid://djpqivk2pwl35" path="res://Assets/Sprites/temp_projectiles.png" id="2_yr2qt"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_xjght"]
-radius = 4.0
+radius = 5.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tl4hk"]
+atlas = ExtResource("2_yr2qt")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_d4467"]
+atlas = ExtResource("2_yr2qt")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_f8cdk"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tl4hk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_d4467")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
 
 [node name="Projectile" type="Area2D" unique_id=196749450]
 script = ExtResource("1_yr2qt")
@@ -12,5 +34,6 @@ script = ExtResource("1_yr2qt")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1960296799]
 shape = SubResource("CircleShape2D_xjght")
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=764759586]
-texture = ExtResource("2_tl4hk")
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=225913893]
+scale = Vector2(0.5, 0.5)
+sprite_frames = SubResource("SpriteFrames_f8cdk")

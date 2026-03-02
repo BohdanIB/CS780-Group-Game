@@ -15,25 +15,25 @@ public partial class ProjectileStats : Resource
 		Bolt,
 		Blade,
 	};
-	private record ProjectileBaseStats(float Speed, float Damage, Vector2I AtlasCoordinates);
+	private record ProjectileBaseStats(float Speed, float Damage, int SpriteFrame);
 	private static readonly Dictionary<Category, ProjectileBaseStats> PROJECTILE_BASE_STATS = new()
 	{
 		{Category.Bolt, 
-			new ProjectileBaseStats(Speed: 100f, Damage: 10f, AtlasCoordinates: new Vector2I(0, 0))},
+			new ProjectileBaseStats(Speed: 100f, Damage: 10f, SpriteFrame: 0)},
 		{Category.Blade, 
-			new ProjectileBaseStats(Speed: 100f, Damage: 20f, AtlasCoordinates: new Vector2I(1, 0))},
+			new ProjectileBaseStats(Speed: 100f, Damage: 20f, SpriteFrame: 1)},
 	};
 
 	// Projectile Stats
 	private Category _type;
 	private float _speed, _damage;
-	private Vector2I _atlasCoordinates;
+	private int _spriteFrame;
 
 	// Getters + Setters
 	public Category Type { get => _type; set => _type = value; }
 	public float Speed { get => _speed; set => _speed = value; }
 	public float Damage { get => _damage; set => _damage = value; }
-	public Vector2I AtlasCoordinates { get => _atlasCoordinates; set => _atlasCoordinates = value; }
+	public int SpriteFrame { get => _spriteFrame; set => _spriteFrame = value; }
 
 	public ProjectileStats(Category type)
 	{
@@ -41,7 +41,7 @@ public partial class ProjectileStats : Resource
 		ProjectileBaseStats baseStats = PROJECTILE_BASE_STATS[Type];
 		Speed = baseStats.Speed;
 		Damage = baseStats.Damage;
-		AtlasCoordinates = baseStats.AtlasCoordinates;
+		SpriteFrame = baseStats.SpriteFrame;
 	}
 
 	public override string ToString()
