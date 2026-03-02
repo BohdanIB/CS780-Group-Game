@@ -5,12 +5,12 @@ using System.Collections.Generic;
 public class GridAStarPathfinder<TGridObject>
 {
     private GenericGrid<TGridObject> terrainGrid;
-    private Func<TGridObject, int> traversibilityFunction;
+    private Func<TGridObject, float> traversibilityFunction;
     private Func<int, int, Vector2I[]> neighborFunction;
 
     private GenericGrid<PathfindingNode> nodeGrid;
 
-    public GridAStarPathfinder(GenericGrid<TGridObject> terrainGrid, Func<TGridObject, int> traversibilityFunction, Func<int, int, Vector2I[]> neighborFunction)
+    public GridAStarPathfinder(GenericGrid<TGridObject> terrainGrid, Func<TGridObject, float> traversibilityFunction, Func<int, int, Vector2I[]> neighborFunction)
     {
         this.terrainGrid = terrainGrid;
         this.traversibilityFunction = traversibilityFunction;
@@ -22,7 +22,7 @@ public class GridAStarPathfinder<TGridObject>
     {
         nodeGrid = new GenericGrid<PathfindingNode>(terrainGrid.GetWidth(), terrainGrid.GetHeight(), (g, x, y) =>
         {
-            int traversalCost = traversibilityFunction(terrainGrid.GetGridValueOrDefault(x, y));
+            float traversalCost = traversibilityFunction(terrainGrid.GetGridValueOrDefault(x, y));
             if (traversalCost < 0) return null;
             
             PathfindingNode newNode = new(x, y, neighborFunction(x, y));
@@ -100,7 +100,7 @@ public class GridAStarPathfinder<TGridObject>
                     continue;
                 }
                     
-                int tentative_gScore = currentNode.gCost + neighborNode.traversalCost;
+                float tentative_gScore = currentNode.gCost + neighborNode.traversalCost;
                 if (tentative_gScore < neighborNode.gCost)
                 {
                     neighborNode.previousNode = currentNode;
@@ -126,13 +126,13 @@ public class GridAStarPathfinder<TGridObject>
 
     private class PathfindingNode
     {
-        public int traversalCost = -1;
+        public float traversalCost = -1;
         public int x, y;
-        public int gCost = int.MaxValue, hCost;
+        public float gCost = int.MaxValue, hCost;
         public PathfindingNode previousNode;
         public Vector2I[] neighborCoordinates;
 
-        public int GetFCost()
+        public float GetFCost()
         {
             return gCost + hCost;
         }
