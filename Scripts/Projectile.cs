@@ -10,7 +10,7 @@ public partial class Projectile : Area2D
 	[Signal]
 	public delegate void OnProjectileImpactEventHandler(Vector2 Position, ProjectileStats Stats);
 
-	private ProjectileStats _stats;
+	[Export] private ProjectileStats _stats;
 
 	private AnimatedSprite2D _sprite;
 

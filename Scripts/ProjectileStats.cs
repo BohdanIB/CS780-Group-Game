@@ -35,9 +35,9 @@ public partial class ProjectileStats : Resource
 	// };
 
 	// Projectile Stats
-	private Category _type;
-	private float _speed, _damage;
-	private int _spriteFrame;
+	[Export] private Category _type;
+	[Export] private float _speed, _damage;
+	[Export] private int _spriteFrame;
 
 	// Getters + Setters
 	public Category Type { get => _type; set => _type = value; }
@@ -47,8 +47,8 @@ public partial class ProjectileStats : Resource
 
 	public ProjectileStats(Category type)
 	{
+		ProjectileBaseStats baseStats = PROJECTILE_BASE_STATS[type];
 		Type = type;
-		ProjectileBaseStats baseStats = PROJECTILE_BASE_STATS[Type];
 		Speed = baseStats.Speed;
 		Damage = baseStats.Damage;
 		SpriteFrame = baseStats.SpriteFrame;

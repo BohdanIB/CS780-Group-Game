@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://bl7a37uc0ye6u" path="res://Assets/Sprites/temp_turrets.png" id="2_hskch"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_hskch"]
+resource_local_to_scene = true
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_hskch"]
 atlas = ExtResource("2_hskch")
@@ -14,6 +15,7 @@ atlas = ExtResource("2_hskch")
 region = Rect2(32, 0, 32, 32)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_fcprl"]
+resource_local_to_scene = true
 animations = [{
 "frames": [{
 "duration": 1.0,

@@ -22,10 +22,10 @@ public partial class TurretStats : Resource
 	};
 
 	// Turret Stats
-	private Category _type;
-	private float _aggroRadius, _health, _fireRate, _projectileSpeed, _damage;
-	private ProjectileStats _projectileStats;
-	private int _spriteFrame;
+	[Export] private Category _type;
+	[Export] private float _aggroRadius, _health, _fireRate, _projectileSpeed, _damage;
+	[Export] private ProjectileStats _projectileStats;
+	[Export] private int _spriteFrame;
 
 	// Getters + Setters
 	public Category Type { get => _type; set => _type = value; }
@@ -38,8 +38,8 @@ public partial class TurretStats : Resource
 
 	public TurretStats(Category type)
 	{
+		TurretBaseStats baseStats = TURRET_BASE_STATS[type];
 		Type = type;
-		TurretBaseStats baseStats = TURRET_BASE_STATS[Type];
 		AggroRadius = baseStats.AggroRadius;
 		Health = baseStats.Health;
 		FireRate = baseStats.FireRate;

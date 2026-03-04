@@ -9,7 +9,7 @@ public partial class Turret : Area2D
 	// [Export] private TurretStats.Category _turretType = TurretStats.Category.Balista;
 	[Export] private bool _disabled = false;
 	[Export] private bool _targetClosest = true; // Todo: WIP Targeting priority. Closest or farthest should be changable, maybe random targeting also as an option
-	private TurretStats _stats;
+	[Export] private TurretStats _stats;
 
 	// Scene Children
 	private CollisionShape2D _collisionShape2D;
@@ -123,6 +123,11 @@ public partial class Turret : Area2D
 			GetTree().GetRoot().AddChild(projectile);
 		}
 	}
+
+	// public void UpdateStats(TurretStats stats)
+	// {
+
+	// }
 
 	public void UpdateTurretRadius(float newRadius)
 	{

@@ -57,8 +57,8 @@ public partial class TurretPlacer : Node2D
 				var turretScene = GD.Load<PackedScene>("res://Scenes/Turret.tscn");
 				var turret = turretScene.Instantiate<Turret>();
 				tile.Turret = turret;
-				turret.GlobalPosition = _grid.GetCentralGridCellPositionPixels(tile.position);
 				turret.Initialize(_currentTurretType);
+				turret.GlobalPosition = _grid.GetCentralGridCellPositionPixels(tile.position);
 				GetTree().GetRoot().AddChild(turret);
 			}
 			// Display "ghost" turret to show where it's going to go and radius
@@ -71,7 +71,7 @@ public partial class TurretPlacer : Node2D
 				_ghostTurret.UpdateTurretSprite(baseStats.SpriteFrame);
 				_ghostTurret.UpdateTurretRadius(baseStats.AggroRadius);
 
-				GD.Print($"Ghost Turret: {_ghostTurret}");
+				// GD.Print($"Ghost Turret: {_ghostTurret}");
 				// TODO: Update radius for ghost turret properly
 			}
 		}

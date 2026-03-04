@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://djpqivk2pwl35" path="res://Assets/Sprites/temp_projectiles.png" id="2_yr2qt"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_xjght"]
+resource_local_to_scene = true
 radius = 5.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_tl4hk"]
@@ -15,6 +16,7 @@ atlas = ExtResource("2_yr2qt")
 region = Rect2(32, 0, 32, 32)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_f8cdk"]
+resource_local_to_scene = true
 animations = [{
 "frames": [{
 "duration": 1.0,
