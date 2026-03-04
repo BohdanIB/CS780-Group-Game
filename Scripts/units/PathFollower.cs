@@ -7,7 +7,7 @@ public partial class PathFollower : Area2D
 	private const float DISTANCE_THRESHOLD = 0.01f;
 
 	[Export] private float _health = 100.0f;
-	[Export] public float movementSpeed;
+	[Export] public float movementSpeed = 50.0f;
 
 	private List<Vector2> path;
 	private int currentPathIndex;

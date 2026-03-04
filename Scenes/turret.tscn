@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cktkmwqovsjyc"]
 
-[ext_resource type="Script" uid="uid://bk3drg0y2r1ku" path="res://Scripts/Turret.cs" id="1_fcprl"]
+[ext_resource type="Script" uid="uid://bk3drg0y2r1ku" path="res://Scripts/turrets/Turret.cs" id="1_fcprl"]
 [ext_resource type="Texture2D" uid="uid://bl7a37uc0ye6u" path="res://Assets/Sprites/temp_turrets.png" id="2_hskch"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_hskch"]
