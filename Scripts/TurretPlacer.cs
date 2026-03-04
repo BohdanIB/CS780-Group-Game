@@ -68,8 +68,7 @@ public partial class TurretPlacer : Node2D
 				_ghostTurret.Visible = true;
 				_ghostTurret.GlobalPosition = _grid.GetCentralGridCellPositionPixels(tile.position);
 				TurretStats baseStats = TurretStats.GetBaseTurretStats(_currentTurretType);
-				_ghostTurret.UpdateTurretSprite(baseStats.SpriteFrame);
-				_ghostTurret.UpdateTurretRadius(baseStats.AggroRadius);
+				_ghostTurret.UpdateStats(baseStats);
 
 				// GD.Print($"Ghost Turret: {_ghostTurret}");
 				// TODO: Update radius for ghost turret properly

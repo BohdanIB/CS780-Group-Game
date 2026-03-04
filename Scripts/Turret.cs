@@ -8,12 +8,13 @@ public partial class Turret : Area2D
 {
 	// [Export] private TurretStats.Category _turretType = TurretStats.Category.Balista;
 	[Export] private bool _disabled = false;
+	[Export] private bool _visibleTurretRadius = true;
 	[Export] private bool _targetClosest = true; // Todo: WIP Targeting priority. Closest or farthest should be changable, maybe random targeting also as an option
 	[Export] private TurretStats _stats;
 
 	// Scene Children
-	private CollisionShape2D _collisionShape2D;
-	private AnimatedSprite2D _sprite;
+	// private CollisionShape2D _collisionShape2D;
+	// private AnimatedSprite2D _sprite;
 	private Timer _shotCooldownTimer;
 
 	private List<PathFollower> _enemiesInRange = new();
@@ -37,29 +38,24 @@ public partial class Turret : Area2D
 
 	public override void _Ready()
 	{
-		// Some cases where _Ready gets called before Initialize, just set to some value for now and it will get reset later.
+		// Some cases where _Ready gets called before Initialize, just set to some value for now and it will get reinitialized later.
 		if (_stats == null)
 		{
 			Initialize(TurretStats.Category.Ballista);
 		}
+		UpdateStats(_stats);
 
-		_collisionShape2D = GetNode<CollisionShape2D>("CollisionShape2D");
-		UpdateTurretRadius(_stats.AggroRadius);
+		// _collisionShape2D = GetNode<CollisionShape2D>("CollisionShape2D");
+		// UpdateTurretRadius(_stats.AggroRadius);
 
-		_sprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
-		UpdateTurretSprite(_stats.SpriteFrame);
-		// _sprite2D. // todo: Load proper tile from turret tilemap
+		// _sprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
+		// UpdateTurretSprite(_stats.SpriteFrame);
 
 		_shotCooldownTimer = GetNode<Timer>("ShotCooldownTimer");
-		// _shotCooldownTimer.Timeout += () =>
-		// {
-		// 	GD.Print($"Turret {Name} ready to shoot again!");
-		// };
 
-		// Todo: Primarily to support ghost mode turret in TurretPlacer.
+		// Todo: Primarily to support ghost mode turret in TurretPlacer. Probably better way of doing this.
 		if (_disabled) { return; }
 
-		// AreaShapeEntered += (rid, area, areaShapeIndex, localShapeIndex) => {
 		AreaEntered += (area) => {
 			if (area is PathFollower pf)
 			{
@@ -76,8 +72,7 @@ public partial class Turret : Area2D
 			}
 		};
 
-		GD.Print($"Turret Stats: {_stats}");
-
+		// GD.Print($"Turret Stats: {_stats}");
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -112,7 +107,7 @@ public partial class Turret : Area2D
 				}
 			}
 			
-			GD.Print($"Turret {Name} firing Projectile at target {currTargetEnemy} with stats: {_stats.ProjectileStats}");
+			// GD.Print($"Turret {Name} firing Projectile at target {currTargetEnemy} with stats: {_stats.ProjectileStats}");
 
 			_shotCooldownTimer.Start(1 / _stats.FireRate);
 			var projectileScene = GD.Load<PackedScene>("res://Scenes/Projectile.tscn");
@@ -124,21 +119,36 @@ public partial class Turret : Area2D
 		}
 	}
 
-	// public void UpdateStats(TurretStats stats)
-	// {
-
-	// }
-
-	public void UpdateTurretRadius(float newRadius)
+	public override void _Draw()
 	{
-		_stats.AggroRadius = newRadius;
-		((CircleShape2D)_collisionShape2D.Shape).Radius = newRadius; // TODO: Better way of doing this?
+		if (_visibleTurretRadius)
+		{
+			DrawCircle(Vector2.Zero, _stats.AggroRadius, new Color(0xff000020), filled: true);
+		}
 	}
 
-	public void UpdateTurretSprite(int newFrame)
+	/// <summary>
+	/// Replace current stats with newStats, then update all necessary components which react to stat changes.
+	/// </summary>
+	/// <param name="newStats"></param>
+	public void UpdateStats(TurretStats newStats)
+	{
+		_stats = newStats;
+		UpdateTurretRadius(_stats.AggroRadius);
+		UpdateTurretSprite(_stats.SpriteFrame);
+	}
+	private void UpdateTurretRadius(float newRadius)
+	{
+		_stats.AggroRadius = newRadius;
+		// ((CircleShape2D)_collisionShape2D.Shape).Radius = newRadius; // TODO: Better way of doing this?
+		((CircleShape2D)GetNode<CollisionShape2D>("CollisionShape2D").Shape).Radius = newRadius; // TODO: Better way of doing this?
+	}
+	private void UpdateTurretSprite(int newFrame)
 	{
 		_stats.SpriteFrame = newFrame;
-		_sprite.Frame = newFrame;
+		// _sprite.Frame = newFrame;
+		GetNode<AnimatedSprite2D>("AnimatedSprite2D").Frame = newFrame;
+		QueueRedraw();
 	}
 
 	public override string ToString()

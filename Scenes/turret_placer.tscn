@@ -13,3 +13,4 @@ script = ExtResource("1_00fsi")
 modulate = Color(1, 1, 1, 0.49019608)
 monitoring = false
 monitorable = false
+_disabled = true
