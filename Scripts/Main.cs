@@ -1,11 +1,13 @@
+using System;
+using System.Collections.Generic;
 using Godot;
 
 public partial class Main : Node2D
 {
 	public override void _Ready()
 	{
-
-		GenericGrid<GroundTile> grid = WorldGenerator.GenerateWorldAStar(new Vector2I(21, 21), new Vector2I(10, 10));
+		var hubLocation = new Vector2I(10, 10);
+		GenericGrid<GroundTile> grid = WorldGenerator.GenerateWorldAStar(new Vector2I(21, 21), hubLocation);
 
 		GridRenderer gr = GetNode<GridRenderer>("GridRenderer");
 		gr.RenderGrid(grid);
@@ -25,6 +27,54 @@ public partial class Main : Node2D
 
 		// 	return [.. neighborCoordinates];
 		// });
+
+		// TODO: Temporary enemy testing with turrets
+		List<GroundTile> potentialSpawnPoints = [];
+		for (int x = 0; x < grid.GetWidth(); x++)
+		{
+			for (int y = 0; y < grid.GetHeight(); y++)
+			{
+				GroundTile t = grid.GetGridValueOrDefault(x, y);
+				if (t.HasRoadDeadEnd())
+				{
+					potentialSpawnPoints.Add(t);
+				}
+			}
+		}
+		GD.Print($"SpawnPoints: {potentialSpawnPoints}");
+
+		GridAStarPathfinder<GroundTile> pathfinder = new GridAStarPathfinder<GroundTile>(grid, 
+			(tile) =>
+			{
+				// TODO: wip
+				return tile.HasRoadConnection() ? 9 : (-(Math.Abs(tile.position.X - hubLocation.X) + Math.Abs(tile.position.Y - hubLocation.Y)) + grid.GetWidth() + grid.GetHeight());
+			},
+			(x,y) => {
+				List<Vector2I> neighborPositions = [];
+				if (grid.IsOnGrid(x, y-1)) neighborPositions.Add(new Vector2I(x, y-1)); 
+				if (grid.IsOnGrid(x+1, y)) neighborPositions.Add(new Vector2I(x+1, y)); 
+				if (grid.IsOnGrid(x, y+1)) neighborPositions.Add(new Vector2I(x, y+1)); 
+				if (grid.IsOnGrid(x-1, y)) neighborPositions.Add(new Vector2I(x-1, y)); 
+				return [.. neighborPositions];
+			}
+		);
+
+		List<Enemy> testEnemies = [
+			GetNode<Enemy>("Enemy1"),
+			GetNode<Enemy>("Enemy2"),
+			GetNode<Enemy>("Enemy3"),
+			GetNode<Enemy>("Enemy4"),
+		];
+
+		Random randomizer = new();
+		for (int i = 0; i < testEnemies.Count; i++)
+		{
+			var spawnPoint = potentialSpawnPoints[randomizer.Next(potentialSpawnPoints.Count)].position;
+			var path = pathfinder.GetPathInPositions(spawnPoint, hubLocation, grid.cellSize);
+			testEnemies[i].SetPath(path);
+			testEnemies[i].GlobalPosition = grid.GetCentralGridCellPositionPixels(spawnPoint);
+		}
+
 	}
 
 }

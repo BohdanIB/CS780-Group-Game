@@ -14,16 +14,19 @@ public partial class PathFollower : Area2D
 
     public override void _PhysicsProcess(double delta)
     {
-		Position = Position.MoveToward(new Vector2(0, 0), (float)delta * movementSpeed);
-        // if (path == null) return;
-		// if (Position.DistanceTo(path[currentPathIndex]) < DISTANCE_THRESHOLD)
-		// {
-		// 	currentPathIndex++;
-		// 	if (currentPathIndex >= path.Count) path = null;
-		// 	return;
-		// }
+		if (path == null) return;
+		if (Position.DistanceTo(path[currentPathIndex]) < DISTANCE_THRESHOLD)
+		{
+			currentPathIndex++;
+			if (currentPathIndex >= path.Count)
+			{
+				path = null;
+				GD.Print($"PathFollower {Name} reached end of path.");
+			}
+			return;
+		}
 
-		// Position = Position.MoveToward(path[currentPathIndex], (float) delta * movementSpeed);
+		Position = Position.MoveToward(path[currentPathIndex], (float) delta * movementSpeed);
 	}
 
 	public void SetPath(List<Vector2> newPath)

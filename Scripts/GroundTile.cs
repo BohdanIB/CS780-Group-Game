@@ -58,6 +58,18 @@ public class GroundTile
         return false;
     }
 
+    /// <summary>
+    /// TODO: Temporary dead end check function. Checks if this tile is a dead-end.
+    /// </summary>
+    /// <returns></returns>
+    public bool HasRoadDeadEnd()
+    {
+        return (roadConnections[0] && !roadConnections[1] && !roadConnections[2] && !roadConnections[3]) ||
+               (!roadConnections[0] && roadConnections[1] && !roadConnections[2] && !roadConnections[3]) ||
+               (!roadConnections[0] && !roadConnections[1] && roadConnections[2] && !roadConnections[3]) ||
+               (!roadConnections[0] && !roadConnections[1] && !roadConnections[2] && roadConnections[3]);
+    }
+
     public bool HasTurret()
     {
         return _turret != null;

@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" uid="uid://cuir3nismmvnr" path="res://Scripts/Main.cs" id="1_jjgbg"]
 [ext_resource type="PackedScene" uid="uid://tw6j84txs1a1" path="res://Scenes/grid_renderer.tscn" id="2_bo1nx"]
-[ext_resource type="PackedScene" uid="uid://dtv7kt7wo8omt" path="res://Scenes/path_follower.tscn" id="4_jjvhh"]
 [ext_resource type="PackedScene" uid="uid://cvx7nxyaghhrx" path="res://Scenes/enemy.tscn" id="5_21xkr"]
 [ext_resource type="PackedScene" uid="uid://caafjqfx010mq" path="res://Scenes/turret_placer.tscn" id="5_kry3j"]
 
@@ -13,10 +12,18 @@ script = ExtResource("1_jjgbg")
 
 [node name="TurretPlacer" parent="." unique_id=1881251108 instance=ExtResource("5_kry3j")]
 
-[node name="Test_Follower" parent="." unique_id=142391362 instance=ExtResource("4_jjvhh")]
-position = Vector2(380, 190)
-movementSpeed = 100.0
+[node name="Enemy1" parent="." unique_id=679157423 instance=ExtResource("5_21xkr")]
+position = Vector2(-153, 22)
+movementSpeed = 50.0
 
-[node name="Enemy" parent="." unique_id=2059608397 instance=ExtResource("5_21xkr")]
-position = Vector2(212, 226)
+[node name="Enemy2" parent="." unique_id=906437193 instance=ExtResource("5_21xkr")]
+position = Vector2(-123, 19)
+movementSpeed = 50.0
+
+[node name="Enemy3" parent="." unique_id=1122340263 instance=ExtResource("5_21xkr")]
+position = Vector2(-83, 19)
+movementSpeed = 50.0
+
+[node name="Enemy4" parent="." unique_id=627984032 instance=ExtResource("5_21xkr")]
+position = Vector2(-51, 23)
 movementSpeed = 50.0
