@@ -48,6 +48,11 @@ public partial class Turret : Area2D
 	{
 		Initialize(new TurretStats(turretType));
 	}
+	public void Initialize(TurretStats.Category turretType, TargetingMode targetingMode)
+	{
+		_targetingMode = targetingMode;
+		Initialize(turretType);
+	}
 
 	public override void _Ready()
 	{
@@ -136,7 +141,7 @@ public partial class Turret : Area2D
 			// Shoot at the target enemy
 			// GD.Print($"Turret {Name} firing Projectile at target {currTargetEnemy} with stats: {_stats.ProjectileStats}");
 			_shotCooldownTimer.Start(1 / _stats.FireRate);
-			var projectile = GD.Load<PackedScene>("res://Scenes/Projectile.tscn").Instantiate<Projectile>();
+			var projectile = GD.Load<PackedScene>("res://Scenes/projectile.tscn").Instantiate<Projectile>();
 			projectile.GlobalPosition = GlobalPosition;
 			projectile.Initialize(currTargetEnemy, _stats.ProjectileStats);
 			GetTree().GetRoot().AddChild(projectile);
@@ -175,6 +180,11 @@ public partial class Turret : Area2D
 		_stats.SpriteFrame = newFrame;
 		// _sprite.Frame = newFrame;
 		GetNode<AnimatedSprite2D>("AnimatedSprite2D").Frame = newFrame;
+	}
+
+	public void UpdateTargetingMode(TargetingMode newMode)
+	{
+		_targetingMode = newMode;
 	}
 
 	public override string ToString()

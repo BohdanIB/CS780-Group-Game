@@ -7,7 +7,6 @@ public class GroundTile
     public Vector2I position;
     public bool[] roadConnections = new bool[4]; // N,E,S,W
     private Turret _turret = null;
-
     public Turret Turret { get => _turret; set => _turret = value; }
 
     public GroundTile(TerrainType terrain, Vector2I position, bool[] roads = null, Turret turret = null)

@@ -8,6 +8,7 @@ public partial class TurretPlacer : Node2D
 {
 	private bool _turretPlacerEnabled = false;
 	private TurretStats.Category _currentTurretType = TurretStats.Category.Ballista;
+	private Turret.TargetingMode _currentTurretTargetMode = Turret.TargetingMode.First;
 	private GenericGrid<GroundTile> _grid;
 	private Turret _ghostTurret;
 	private Vector2I _currentOriginCoordinates = new();
@@ -46,17 +47,28 @@ public partial class TurretPlacer : Node2D
 			}
 			GD.Print($"Current turret type for placement: {_currentTurretType}");
 		}
+		if (Input.IsActionJustPressed("SwitchTurretTargetingMode"))
+		{
+			_currentTurretTargetMode++;
+			if (!Enum.IsDefined(typeof(Turret.TargetingMode), _currentTurretTargetMode))
+			{
+				_currentTurretTargetMode = 0;
+			}
+			GD.Print($"Current turret target mode for placement and changing: {_currentTurretTargetMode}");
+		}
 
-		
-		if (_turretPlacerEnabled && GetTileIfPlacementValid() is GroundTile tile && tile != null)
+		GroundTile tile;
+
+		tile = GetTileIfPlacementValid();
+		if (_turretPlacerEnabled && tile != null)
 		{
 			// Turret Placement
 			if (Input.IsActionJustPressed("Left Click"))
 			{
 				GD.Print($"Placing turret of type {_currentTurretType}");
-				var turret = GD.Load<PackedScene>("res://Scenes/Turret.tscn").Instantiate<Turret>();
+				var turret = GD.Load<PackedScene>("res://Scenes/turret.tscn").Instantiate<Turret>();
 				tile.Turret = turret;
-				turret.Initialize(_currentTurretType);
+				turret.Initialize(_currentTurretType, _currentTurretTargetMode);
 				turret.GlobalPosition = _grid.GetCentralGridCellPositionPixels(tile.position);
 				GetTree().GetRoot().AddChild(turret);
 			}
@@ -68,14 +80,21 @@ public partial class TurretPlacer : Node2D
 				_ghostTurret.GlobalPosition = _grid.GetCentralGridCellPositionPixels(tile.position);
 				TurretStats baseStats = TurretStats.GetBaseTurretStats(_currentTurretType);
 				_ghostTurret.UpdateStats(baseStats);
-
 				// GD.Print($"Ghost Turret: {_ghostTurret}");
-				// TODO: Update radius for ghost turret properly
 			}
 		}
 		else
 		{
 			_ghostTurret.Visible = false;
+		}
+
+		// Toggle turret targeting priority mode
+		tile = GetTile();
+		if (Input.IsActionJustPressed("Right Click") && tile != null && tile.HasTurret())
+		{
+			var t = tile.Turret;
+			GD.Print($"Updating turret {t.Name} targeting mode to {_currentTurretTargetMode}");
+			t.UpdateTargetingMode(_currentTurretTargetMode);
 		}
 	}
 
@@ -90,7 +109,15 @@ public partial class TurretPlacer : Node2D
 			return tile;
 		}
 		return null;
-		
+	}
+
+	/// <summary>
+	/// Can return null
+	/// </summary>
+	/// <returns></returns>
+	private GroundTile GetTile()
+	{
+		return _grid.GetGridValueOrDefault(_currentOriginCoordinates.X, _currentOriginCoordinates.Y);
 	}
 
 	private void FollowMouse()
