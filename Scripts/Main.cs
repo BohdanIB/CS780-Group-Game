@@ -28,7 +28,12 @@ public partial class Main : Node2D
 		// 	return [.. neighborCoordinates];
 		// });
 
-		// TODO: Temporary enemy testing with turrets
+
+
+		////////////////////////////////////////////////
+		// TODO: Temporary enemy testing with turrets //
+		////////////////////////////////////////////////
+
 		List<GroundTile> potentialSpawnPoints = [];
 		for (int x = 0; x < grid.GetWidth(); x++)
 		{
@@ -41,12 +46,11 @@ public partial class Main : Node2D
 				}
 			}
 		}
-		GD.Print($"SpawnPoints: {potentialSpawnPoints}");
+		// GD.Print($"SpawnPoints: {potentialSpawnPoints}");
 
 		GridAStarPathfinder<GroundTile> pathfinder = new GridAStarPathfinder<GroundTile>(grid, 
 			(tile) =>
 			{
-				// TODO: wip
 				return tile.HasRoadConnection() ? 9 : (-(Math.Abs(tile.position.X - hubLocation.X) + Math.Abs(tile.position.Y - hubLocation.Y)) + grid.GetWidth() + grid.GetHeight());
 			},
 			(x,y) => {
@@ -59,20 +63,25 @@ public partial class Main : Node2D
 			}
 		);
 
-		List<Enemy> testEnemies = [
-			GetNode<Enemy>("Enemy1"),
-			GetNode<Enemy>("Enemy2"),
-			GetNode<Enemy>("Enemy3"),
-			GetNode<Enemy>("Enemy4"),
-		];
+		// Spawn enemies
+		List<Enemy> testEnemies = [];
+		for (int i = 0; i < 5; i++)
+		{
+			var enemy = GD.Load<PackedScene>("res://Scenes/enemy.tscn").Instantiate<Enemy>();
+			enemy.movementSpeed = 25.0f;
+			testEnemies.Add(enemy);
+			GetTree().GetRoot().CallDeferred("add_child", enemy);
+		}
 
+		// Set enemy paths
 		Random randomizer = new();
 		for (int i = 0; i < testEnemies.Count; i++)
 		{
+			var enemy = testEnemies[i];
 			var spawnPoint = potentialSpawnPoints[randomizer.Next(potentialSpawnPoints.Count)].position;
 			var path = pathfinder.GetPathInPositions(spawnPoint, hubLocation, grid.cellSize);
-			testEnemies[i].SetPath(path);
-			testEnemies[i].GlobalPosition = grid.GetCentralGridCellPositionPixels(spawnPoint);
+			enemy.SetPath(path);
+			enemy.GlobalPosition = grid.GetCentralGridCellPositionPixels(spawnPoint);
 		}
 
 	}

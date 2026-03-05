@@ -110,9 +110,7 @@ public partial class Turret : Area2D
 			// GD.Print($"Turret {Name} firing Projectile at target {currTargetEnemy} with stats: {_stats.ProjectileStats}");
 
 			_shotCooldownTimer.Start(1 / _stats.FireRate);
-			var projectileScene = GD.Load<PackedScene>("res://Scenes/Projectile.tscn");
-			var projectile = projectileScene.Instantiate<Projectile>();
-			
+			var projectile = GD.Load<PackedScene>("res://Scenes/Projectile.tscn").Instantiate<Projectile>();
 			projectile.GlobalPosition = GlobalPosition;
 			projectile.Initialize(currTargetEnemy, _stats.ProjectileStats);
 			GetTree().GetRoot().AddChild(projectile);
