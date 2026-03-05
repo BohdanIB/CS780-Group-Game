@@ -1,4 +1,5 @@
 using Godot;
+using System;
 using System.Collections.Generic;
 
 /// <summary>
@@ -6,10 +7,21 @@ using System.Collections.Generic;
 /// </summary>
 public partial class Turret : Area2D
 {
+	// Stolen from BloonsTD; Targeting priorities for turret
+	public enum TargetingMode
+	{
+		Random, // Random
+		First,  // Furthest down path
+		Last,   // Closest to spawn
+		Close,  // Closest to tower
+		Weak,   // Weakest enemies
+		Strong, // Strongest enemies
+	}
+
 	// [Export] private TurretStats.Category _turretType = TurretStats.Category.Balista;
 	[Export] private bool _disabled = false;
 	[Export] private bool _visibleTurretRadius = true;
-	[Export] private bool _targetClosest = true; // Todo: WIP Targeting priority. Closest or farthest should be changable, maybe random targeting also as an option
+	[Export] private TargetingMode _targetingMode = TargetingMode.First;
 	[Export] private TurretStats _stats;
 
 	// Scene Children
@@ -17,6 +29,7 @@ public partial class Turret : Area2D
 	// private AnimatedSprite2D _sprite;
 	private Timer _shotCooldownTimer;
 
+	private Random _random = new();
 	private List<PathFollower> _enemiesInRange = new();
 
 	/// <summary>
@@ -89,26 +102,39 @@ public partial class Turret : Area2D
 		// TODO: Should target enemies based on how far they are along path.
 		if (_enemiesInRange.Count > 0 && _shotCooldownTimer.IsStopped())
 		{
-			PathFollower currTargetEnemy = _enemiesInRange[0];
-			float currTargetDistance = Position.DistanceTo(currTargetEnemy.Position);
-			for (int i = 1; i < _enemiesInRange.Count; i++)
+			PathFollower currTargetEnemy;
+			if (_targetingMode == TargetingMode.Random)
 			{
-				var enemy = _enemiesInRange[i];
-				float enemyDistance = Position.DistanceTo(enemy.Position);
-				if (_targetClosest && enemyDistance < currTargetDistance)
+				currTargetEnemy = _enemiesInRange[_random.Next(_enemiesInRange.Count)];
+			}
+			else
+			{
+				// Look for an appropriate enemy to shoot at within turret's radius given TargetingMode for turret.
+				currTargetEnemy = _enemiesInRange[0];
+				float currTargetDistanceFromTurret = Position.DistanceTo(currTargetEnemy.Position);
+				float currTargetDistanceFromGoal = currTargetEnemy.GetDistanceToGoalPixels();
+				float currTargetHealth = currTargetEnemy.GetCurrentHealth();
+				for (int i = 1; i < _enemiesInRange.Count; i++)
 				{
-					currTargetEnemy = enemy;
-					currTargetDistance = enemyDistance;
-				}
-				if (!_targetClosest && currTargetDistance < enemyDistance)
-				{
-					currTargetEnemy = enemy;
-					currTargetDistance = enemyDistance;
+					var enemy = _enemiesInRange[i];
+					float enemyDistanceFromTurret = Position.DistanceTo(enemy.Position);
+					float enemyDistanceFromGoal = enemy.GetDistanceToGoalPixels();
+					float enemyHealth = enemy.GetCurrentHealth();
+					if ((_targetingMode == TargetingMode.First  && enemyDistanceFromGoal < currTargetDistanceFromGoal) || 
+						(_targetingMode == TargetingMode.Last   && currTargetDistanceFromGoal < enemyDistanceFromGoal) || 
+						(_targetingMode == TargetingMode.Close  && enemyDistanceFromTurret < currTargetDistanceFromTurret) ||
+						(_targetingMode == TargetingMode.Weak   && enemyHealth < currTargetHealth) ||
+						(_targetingMode == TargetingMode.Strong && currTargetHealth < enemyHealth))
+					{
+						currTargetEnemy = enemy;
+						currTargetDistanceFromTurret = enemyDistanceFromTurret;
+						currTargetDistanceFromGoal = enemyDistanceFromGoal;
+						currTargetHealth = enemyHealth;
+					}
 				}
 			}
-			
+			// Shoot at the target enemy
 			// GD.Print($"Turret {Name} firing Projectile at target {currTargetEnemy} with stats: {_stats.ProjectileStats}");
-
 			_shotCooldownTimer.Start(1 / _stats.FireRate);
 			var projectile = GD.Load<PackedScene>("res://Scenes/Projectile.tscn").Instantiate<Projectile>();
 			projectile.GlobalPosition = GlobalPosition;
@@ -134,6 +160,9 @@ public partial class Turret : Area2D
 		_stats = newStats;
 		UpdateTurretRadius(_stats.AggroRadius);
 		UpdateTurretSprite(_stats.SpriteFrame);
+
+		// Redraw aggro radius
+		QueueRedraw();
 	}
 	private void UpdateTurretRadius(float newRadius)
 	{
@@ -146,7 +175,6 @@ public partial class Turret : Area2D
 		_stats.SpriteFrame = newFrame;
 		// _sprite.Frame = newFrame;
 		GetNode<AnimatedSprite2D>("AnimatedSprite2D").Frame = newFrame;
-		QueueRedraw();
 	}
 
 	public override string ToString()

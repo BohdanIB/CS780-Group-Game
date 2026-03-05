@@ -68,9 +68,9 @@ public partial class Main : Node2D
 		for (int i = 0; i < 5; i++)
 		{
 			var enemy = GD.Load<PackedScene>("res://Scenes/enemy.tscn").Instantiate<Enemy>();
-			enemy.movementSpeed = 25.0f;
+			enemy.Initialize(100.0f, 25.0f);
 			testEnemies.Add(enemy);
-			GetTree().GetRoot().CallDeferred("add_child", enemy);
+			GetTree().GetRoot().CallDeferred("add_child", enemy); // Cannot add children in _Ready()
 		}
 
 		// Set enemy paths
@@ -83,6 +83,8 @@ public partial class Main : Node2D
 			enemy.SetPath(path);
 			enemy.GlobalPosition = grid.GetCentralGridCellPositionPixels(spawnPoint);
 		}
+
+		// GD.Print($"Enemy {testEnemies[0].Name} distance to hub: {testEnemies[0].GetDistanceToGoalPixels()}");
 
 	}
 
