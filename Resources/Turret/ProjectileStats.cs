@@ -1,5 +1,5 @@
+
 using Godot;
-using System;
 using System.Collections.Generic;
 
 /// <summary>
@@ -54,6 +54,7 @@ public partial class ProjectileStats : Resource
 		SpriteFrame = baseStats.SpriteFrame;
 	}
 
+	// TODO: Define projectile movement behavior within ProjectileStats?
 	// private static (Vector2, float) MovementDirect(Vector2 position, Vector2 target, float delta)
 	// {
 	// 	return(position.MoveToward(target, delta * Speed), );
@@ -63,7 +64,10 @@ public partial class ProjectileStats : Resource
 	// 	const float SPIN_SPEED = 5f;
 	// }
 	
-
+	public static ProjectileStats GetBaseProjectileStats(Category type)
+	{
+		return new ProjectileStats(type);
+	}
 
 	public override string ToString()
 	{

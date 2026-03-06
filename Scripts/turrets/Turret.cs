@@ -1,3 +1,4 @@
+
 using Godot;
 using System;
 using System.Collections.Generic;
@@ -5,7 +6,8 @@ using System.Collections.Generic;
 /// <summary>
 /// 
 /// </summary>
-public partial class Turret : Area2D
+// public partial class Turret : GenericStructure<TurretStats.Category>
+public partial class Turret : GenericStructure
 {
 	// Stolen from BloonsTD; Targeting priorities for turret
 	public enum TargetingMode
@@ -18,27 +20,27 @@ public partial class Turret : Area2D
 		Strong, // Strongest enemies
 	}
 
-	// [Export] private TurretStats.Category _turretType = TurretStats.Category.Balista;
-	[Export] private bool _disabled = false;
-	[Export] private bool _visibleTurretRadius = true;
-	[Export] private TargetingMode _targetingMode = TargetingMode.First;
-	[Export] private TurretStats _stats;
+	private bool _disabled = false;
+	private bool _visibleTurretRadius = true;
+	private TargetingMode _targetingMode = TargetingMode.First;
+	private TurretStats _stats;
 
 	// Scene Children
-	// private CollisionShape2D _collisionShape2D;
-	// private AnimatedSprite2D _sprite;
-	private Timer _shotCooldownTimer;
+	[Export] private Timer _shotCooldownTimer;
+
+	// Preloaded Scenes
+	[Export] private PackedScene _projectileScene;
 
 	private Random _random = new();
 	private List<PathFollower> _enemiesInRange = new();
 
 	/// <summary>
-	/// Initializes turret with custom stats.
+	/// Initializes turret with given stats.
 	/// </summary>
 	/// <param name="turretStats"></param>
 	public void Initialize(TurretStats turretStats)
 	{
-		_stats = turretStats;
+		UpdateStats(turretStats);
 	}
 	/// <summary>
 	/// Initializes turret with "generic" base stats for given type.
@@ -50,8 +52,8 @@ public partial class Turret : Area2D
 	}
 	public void Initialize(TurretStats.Category turretType, TargetingMode targetingMode)
 	{
-		_targetingMode = targetingMode;
 		Initialize(turretType);
+		_targetingMode = targetingMode;
 	}
 
 	public override void _Ready()
@@ -63,21 +65,13 @@ public partial class Turret : Area2D
 		}
 		UpdateStats(_stats);
 
-		// _collisionShape2D = GetNode<CollisionShape2D>("CollisionShape2D");
-		// UpdateTurretRadius(_stats.AggroRadius);
-
-		// _sprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
-		// UpdateTurretSprite(_stats.SpriteFrame);
-
-		_shotCooldownTimer = GetNode<Timer>("ShotCooldownTimer");
-
 		// Todo: Primarily to support ghost mode turret in TurretPlacer. Probably better way of doing this.
 		if (_disabled) { return; }
 
 		AreaEntered += (area) => {
 			if (area is PathFollower pf)
 			{
-				GD.Print($"TURRET BODY ENTERED: {pf.Name}");
+				// GD.Print($"TURRET BODY ENTERED BY PATH FOLLOWER '{pf.Name}'");
 				_enemiesInRange.Add(pf);
 			}
 		};
@@ -85,7 +79,7 @@ public partial class Turret : Area2D
 		{
 			if (area is PathFollower pf)
 			{
-				GD.Print($"TURRET BODY EXITED: {pf.Name}");
+				// GD.Print($"TURRET BODY EXITED BY PATH FOLLOWER '{pf.Name}'");
 				_enemiesInRange.Remove(pf);
 			}
 		};
@@ -98,13 +92,7 @@ public partial class Turret : Area2D
 		// Todo: Primarily to support ghost mode turret in TurretPlacer.
 		if (_disabled) { return; }
 
-		// Check if something is in area of turret
-		// If something is in area, start shooting at target (spawn Projectile?)
-		//   Projectile should send signal to shot path follower when it gets hit (damage)
-		// Obey firerate restrictions
-
 		// Shoot at an enemy if there is one in range.
-		// TODO: Should target enemies based on how far they are along path.
 		if (_enemiesInRange.Count > 0 && _shotCooldownTimer.IsStopped())
 		{
 			PathFollower currTargetEnemy;
@@ -141,7 +129,7 @@ public partial class Turret : Area2D
 			// Shoot at the target enemy
 			// GD.Print($"Turret {Name} firing Projectile at target {currTargetEnemy} with stats: {_stats.ProjectileStats}");
 			_shotCooldownTimer.Start(1 / _stats.FireRate);
-			var projectile = GD.Load<PackedScene>("res://Scenes/projectile.tscn").Instantiate<Projectile>();
+			var projectile = _projectileScene.Instantiate<Projectile>();
 			projectile.GlobalPosition = GlobalPosition;
 			projectile.Initialize(currTargetEnemy, _stats.ProjectileStats);
 			GetTree().GetRoot().AddChild(projectile);
@@ -156,6 +144,11 @@ public partial class Turret : Area2D
 		}
 	}
 
+	public void UpdateTargetingMode(TargetingMode newMode)
+	{
+		_targetingMode = newMode;
+	}
+
 	/// <summary>
 	/// Replace current stats with newStats, then update all necessary components which react to stat changes.
 	/// </summary>
@@ -163,28 +156,31 @@ public partial class Turret : Area2D
 	public void UpdateStats(TurretStats newStats)
 	{
 		_stats = newStats;
-		UpdateTurretRadius(_stats.AggroRadius);
-		UpdateTurretSprite(_stats.SpriteFrame);
+		UpdateStats();
+	}
+	public void UpdateStats()
+	{
+		UpdateTurretRadius();
+		UpdateTurretSprite();
+
+		// Todo: Add more updates
+
+		UpdateTurretHealth();
 
 		// Redraw aggro radius
 		QueueRedraw();
 	}
-	private void UpdateTurretRadius(float newRadius)
+	private void UpdateTurretRadius()
 	{
-		_stats.AggroRadius = newRadius;
-		// ((CircleShape2D)_collisionShape2D.Shape).Radius = newRadius; // TODO: Better way of doing this?
-		((CircleShape2D)GetNode<CollisionShape2D>("CollisionShape2D").Shape).Radius = newRadius; // TODO: Better way of doing this?
+		((CircleShape2D)_collisionShape2D.Shape).Radius = _stats.AggroRadius; // TODO: Better way of doing this?
 	}
-	private void UpdateTurretSprite(int newFrame)
+	private void UpdateTurretSprite()
 	{
-		_stats.SpriteFrame = newFrame;
-		// _sprite.Frame = newFrame;
-		GetNode<AnimatedSprite2D>("AnimatedSprite2D").Frame = newFrame;
+		_animatedSprite2D.Frame = _stats.SpriteFrame;
 	}
-
-	public void UpdateTargetingMode(TargetingMode newMode)
+	private void UpdateTurretHealth()
 	{
-		_targetingMode = newMode;
+		_health = _stats.Health;
 	}
 
 	public override string ToString()
