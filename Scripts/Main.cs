@@ -74,24 +74,15 @@ public partial class Main : Node2D
 				enemy.Initialize(i == 0 ? EnemyStats.Category.Strong : EnemyStats.Category.Regular); // Make one 'strong' enemy for testing
 				testEnemies.Add(enemy);
 				GetTree().GetRoot().CallDeferred("add_child", enemy); // Cannot add children in _Ready()
-			}
 
-			// Set enemy paths
-			for (int i = 0; i < testEnemies.Count; i++)
-			{
-				var enemy = testEnemies[i];
+				// Set enemy paths
 				var spawnPoint = potentialEnemySpawnPoints[randomizer.Next(potentialEnemySpawnPoints.Count)].position;
 				var path = enemyPathfinder.GetPathInPositions(spawnPoint, hubLocation, grid.cellSize);
 				enemy.SetPath(path);
 				enemy.GlobalPosition = grid.GetCentralGridCellPositionPixels(spawnPoint);
-			}
 
-			// GD.Print("~~~Printing enemy stats~~~");
-			// foreach (var enemy in testEnemies)
-			// {
 				// GD.Print($"{enemy}");
-			// }
-			// GD.Print($"Enemy {testEnemies[0].Name} distance to hub: {testEnemies[0].GetDistanceToGoalPixels()}");
+			}
 		}
 
 		// Spawn friendlies
@@ -131,21 +122,13 @@ public partial class Main : Node2D
 				friendly.Initialize(i == 0 ? FriendlyStats.Category.Loaded : FriendlyStats.Category.Regular); // Make one 'loaded' enemy for testing
 				testFriendlies.Add(friendly);
 				GetTree().GetRoot().CallDeferred("add_child", friendly); // Cannot add children in _Ready()
-			}
 
-			// Set friendly paths
-			for (int i = 0; i < testFriendlies.Count; i++)
-			{
-				var friendly = testFriendlies[i];
+				// Set path
 				var endPoint = potentialFriendlyEndpoints[randomizer.Next(potentialFriendlyEndpoints.Count)].position;
 				var path = friendlyPathfinder.GetPathInPositions(hubLocation, endPoint, grid.cellSize);
 				friendly.SetPath(path);
 				friendly.GlobalPosition = grid.GetCentralGridCellPositionPixels(hubLocation);
-			}
 
-			GD.Print("~~~Printing friendly stats~~~");
-			foreach (var friendly in testFriendlies)
-			{
 				GD.Print($"{friendly}");
 			}
 		}
