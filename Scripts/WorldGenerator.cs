@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 public partial class WorldGenerator : Node
 {
+    private const float ROAD_TRAVERSAL_COST = 1, PARTIAL_ROAD_COST = .3f, ELEVATION_COST_SCALAR = 3;
+
 
     public static GenericGrid<GroundTile> GenerateWorldAStar(Vector2I dimensions, Vector2I hubLocation, int seed = 42)
     {
@@ -18,25 +20,48 @@ public partial class WorldGenerator : Node
             groundTileAtlasCoords = new Vector2I(2, 0)  
         };
 
-        float[,] noise = GenerateNoiseMatrix(dimensions.X, dimensions.Y, seed: randomizer.Next());
+        float[,] elevationNoise = GenerateNoiseMatrix(dimensions.X, dimensions.Y, seed: randomizer.Next());
 
 
-        GenericGrid<GroundTile> newWorld = new GenericGrid<GroundTile>(dimensions.X, dimensions.Y, (g, x, y) => new GroundTile((noise[x,y] < .5f) ? defaultTerrain : alternateTerrain, new Vector2I(x, y)));
+        GenericGrid<GroundTile> newWorld = new GenericGrid<GroundTile>(dimensions.X, dimensions.Y, (g, x, y) => new GroundTile((elevationNoise[x,y] < .5f) ? defaultTerrain : alternateTerrain, new Vector2I(x, y)));
 
         GridAStarPathfinder<GroundTile> pathfinder = new GridAStarPathfinder<GroundTile>(newWorld, 
-                (tile) =>
-                {
-                    return 1 + (tile.HasRoadConnection() ? 0 : (1 + (4 * noise[tile.position.X, tile.position.Y])));
-                    // Distance from hub metric: (-(Math.Abs(tile.position.X - hubLocation.X) + Math.Abs(tile.position.Y - hubLocation.Y)) + dimensions.X+dimensions.Y)
-                },
                 (x,y) => {
                     List<Vector2I> neighborPositions = [];
-                    if (newWorld.IsOnGrid(x, y-1)) neighborPositions.Add(new Vector2I(x, y-1)); 
-                    if (newWorld.IsOnGrid(x+1, y)) neighborPositions.Add(new Vector2I(x+1, y)); 
-                    if (newWorld.IsOnGrid(x, y+1)) neighborPositions.Add(new Vector2I(x, y+1)); 
-                    if (newWorld.IsOnGrid(x-1, y)) neighborPositions.Add(new Vector2I(x-1, y)); 
-                    return [.. neighborPositions];
+                    if (newWorld.IsOnGrid(x, y-1)) neighborPositions.Add(new Vector2I(x, y-1)); // UP
+                    if (newWorld.IsOnGrid(x+1, y)) neighborPositions.Add(new Vector2I(x+1, y)); // RIGHT
+                    if (newWorld.IsOnGrid(x, y+1)) neighborPositions.Add(new Vector2I(x, y+1)); // DOWN
+                    if (newWorld.IsOnGrid(x-1, y)) neighborPositions.Add(new Vector2I(x-1, y)); // LEFT
+
+                    Dictionary<Vector2I, float> neighborCosts = [];
+
+                    GroundTile currentTile = newWorld.GetGridValueOrDefault(x, y);
+                    
+
+                    foreach (Vector2I coordinate in neighborPositions)
+                    {
+                        GroundTile nextTile = newWorld.GetGridValueOrDefault(coordinate.X, coordinate.Y);
+
+                        float cost = 0;
+
+                        if (currentTile.HasRoadConnection(nextTile.position - currentTile.position))
+                        {
+                            cost = ROAD_TRAVERSAL_COST;
+                        } 
+                        else
+                        {
+                            cost = (currentTile.HasRoadConnection() ? PARTIAL_ROAD_COST : (ELEVATION_COST_SCALAR * elevationNoise[currentTile.position.X, currentTile.position.Y])) 
+                                 + (nextTile.HasRoadConnection() ? PARTIAL_ROAD_COST : (ELEVATION_COST_SCALAR * elevationNoise[nextTile.position.X, nextTile.position.Y]));
+                            cost /= 2;
+                            cost += 1;
+                        }
+
+                        neighborCosts.Add(coordinate, cost);
                     }
+
+                    return neighborCosts;
+
+                }
             );
 
         List<Vector2I> targetPoints = [];
@@ -69,7 +94,7 @@ public partial class WorldGenerator : Node
 
         // Draw potential loops
 
-        for (int i = 0; i < 0; i++)
+        for (int i = 0; i < 1; i++)
         {
             Vector2I initialPoint = targetPoints[randomizer.Next(targetPoints.Count)];
             Vector2I finalPoint = targetPoints[randomizer.Next(targetPoints.Count)];
@@ -160,6 +185,5 @@ public partial class WorldGenerator : Node
             3 => Vector2I.Left,
             _ => Vector2I.Zero,
         };
-
     }
 }

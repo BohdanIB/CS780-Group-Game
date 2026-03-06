@@ -10,7 +10,7 @@ public partial class Main : Node2D
 
 
 
-		GenericGrid<GroundTile> grid = WorldGenerator.GenerateWorldAStar(new Vector2I(66, 40), new Vector2I(33, 20), seed:82);
+		GenericGrid<GroundTile> grid = WorldGenerator.GenerateWorldAStar(new Vector2I(66, 40), new Vector2I(33, 20), seed:19);
 		gr.RenderGrid(grid);
 	}
 
