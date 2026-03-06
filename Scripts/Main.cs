@@ -65,10 +65,10 @@ public partial class Main : Node2D
 
 		// Spawn enemies
 		List<Enemy> testEnemies = [];
-		for (int i = 0; i < 5; i++)
+		for (int i = 0; i < 6; i++)
 		{
 			var enemy = GD.Load<PackedScene>("res://Scenes/enemy.tscn").Instantiate<Enemy>();
-			enemy.Initialize(100.0f, 25.0f);
+			enemy.Initialize(i == 0 ? EnemyStats.Category.Strong : EnemyStats.Category.Regular); // Make one 'strong' enemy for testing
 			testEnemies.Add(enemy);
 			GetTree().GetRoot().CallDeferred("add_child", enemy); // Cannot add children in _Ready()
 		}
@@ -84,6 +84,11 @@ public partial class Main : Node2D
 			enemy.GlobalPosition = grid.GetCentralGridCellPositionPixels(spawnPoint);
 		}
 
+		GD.Print("~~~Printing enemy stats~~~");
+		foreach (var enemy in testEnemies)
+		{
+			GD.Print($"Enemy {enemy.Name}: {enemy}");
+		}
 		// GD.Print($"Enemy {testEnemies[0].Name} distance to hub: {testEnemies[0].GetDistanceToGoalPixels()}");
 
 	}

@@ -30,7 +30,7 @@ public partial class Turret : Area2D
 	private Timer _shotCooldownTimer;
 
 	private Random _random = new();
-	private List<PathFollower> _enemiesInRange = new();
+	private List<Enemy> _enemiesInRange = new();
 
 	/// <summary>
 	/// Initializes turret with custom stats.
@@ -75,7 +75,7 @@ public partial class Turret : Area2D
 		if (_disabled) { return; }
 
 		AreaEntered += (area) => {
-			if (area is PathFollower pf)
+			if (area is Enemy pf)
 			{
 				GD.Print($"TURRET BODY ENTERED: {pf.Name}");
 				_enemiesInRange.Add(pf);
@@ -83,7 +83,7 @@ public partial class Turret : Area2D
 		};
 		AreaExited += (area) => // todo: Case where path follower dies within area? Does it still send exit signal?
 		{
-			if (area is PathFollower pf)
+			if (area is Enemy pf)
 			{
 				GD.Print($"TURRET BODY EXITED: {pf.Name}");
 				_enemiesInRange.Remove(pf);
@@ -107,7 +107,7 @@ public partial class Turret : Area2D
 		// TODO: Should target enemies based on how far they are along path.
 		if (_enemiesInRange.Count > 0 && _shotCooldownTimer.IsStopped())
 		{
-			PathFollower currTargetEnemy;
+			Enemy currTargetEnemy;
 			if (_targetingMode == TargetingMode.Random)
 			{
 				currTargetEnemy = _enemiesInRange[_random.Next(_enemiesInRange.Count)];

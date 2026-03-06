@@ -1,24 +1,33 @@
+
 using Godot;
 using System.Collections.Generic;
 
-public partial class PathFollower : Area2D
+public partial class GenericPathFollower : Area2D
 {
-	private const float DISTANCE_THRESHOLD = 0.01f;
+	protected const float DISTANCE_THRESHOLD = 0.01f;
 
-	[Export] private float _health = 100.0f;
-	[Export] private float _movementSpeed = 50.0f;
+	[Export] protected CollisionShape2D _hitboxCollisionShape2D, _aggroCollisionShape2D;
+	[Export] protected AnimatedSprite2D _animatedSprite2D;
 
-	private List<Vector2> _path;
-	private int _currentPathIndex;
+	protected float _health = 100.0f;
+	protected float _movementSpeed = 50.0f;
 
-	public virtual void Initialize(float health, float movementSpeed)
+	protected List<Vector2> _path;
+	protected int _currentPathIndex;
+
+	// public virtual void Initialize(float health, float movementSpeed)
+	// {
+	// 	_health = health;
+	// 	_movementSpeed = movementSpeed;
+	// }
+
+	public override void _PhysicsProcess(double delta)
 	{
-		_health = health;
-		_movementSpeed = movementSpeed;
+		FollowCurrentPath(delta);
 	}
 
-    public override void _PhysicsProcess(double delta)
-    {
+	protected void FollowCurrentPath(double delta)
+	{
 		if (_path == null) return;
 		if (Position.DistanceTo(_path[_currentPathIndex]) < DISTANCE_THRESHOLD)
 		{
