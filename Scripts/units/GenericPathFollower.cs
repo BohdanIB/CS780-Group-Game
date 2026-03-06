@@ -6,8 +6,13 @@ public partial class GenericPathFollower : Area2D
 {
 	protected const float DISTANCE_THRESHOLD = 0.01f;
 
+	// Scene Children
 	[Export] protected CollisionShape2D _hitboxCollisionShape2D, _aggroCollisionShape2D;
 	[Export] protected AnimatedSprite2D _animatedSprite2D;
+	[Export] private Timer _shotCooldownTimer;
+
+	// Preloaded Scenes
+	[Export] private PackedScene _projectileScene;
 
 	protected float _health = 100.0f;
 	protected float _movementSpeed = 50.0f;

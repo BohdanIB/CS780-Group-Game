@@ -5,24 +5,24 @@ using System.Collections.Generic;
 /// <summary>
 /// 
 /// </summary>
-public partial class EnemyStats : Resource
+public partial class FriendlyStats : Resource
 {
 	public enum Category
 	{
 		Regular,
-		Strong, // Creative, I know. Truly my genius knows no bounds
+		Loaded, // todo
 	};
 
 	private record BaseStats(float HitboxRadius, float AggroRadius, float Health, float FireRate, float MovementSpeed, ProjectileStats ProjectileStats, int SpriteFrame);
 	private static readonly Dictionary<Category, BaseStats> BASE_STATS = new()
 	{
 		{Category.Regular, 
-			new BaseStats(HitboxRadius: 5f, AggroRadius: 50f, Health: 50, FireRate: 2f, MovementSpeed: 15f, ProjectileStats: new ProjectileStats(ProjectileStats.Category.Bolt), SpriteFrame: 0)},
-		{Category.Strong, 
-			new BaseStats(HitboxRadius: 5f, AggroRadius: 25f, Health: 100f, FireRate: 4f, MovementSpeed: 10f, ProjectileStats: new ProjectileStats(ProjectileStats.Category.Bolt), SpriteFrame: 1)},
+			new BaseStats(HitboxRadius: 5f, AggroRadius: 25f, Health: 50, FireRate: 2f, MovementSpeed: 10f, ProjectileStats: new ProjectileStats(ProjectileStats.Category.Bolt), SpriteFrame: 0)},
+		{Category.Loaded, 
+			new BaseStats(HitboxRadius: 5f, AggroRadius: 10f, Health: 50f, FireRate: 2f, MovementSpeed: 5f, ProjectileStats: new ProjectileStats(ProjectileStats.Category.Bolt), SpriteFrame: 1)},
 	};
 
-	// Enemy Stats
+	// Friendly Stats
 	[Export] private Category _type;
 	[Export] private float _hitboxRadius, _aggroRadius, _health, _fireRate, _movementSpeed;
 	[Export] private ProjectileStats _projectileStats;
@@ -40,7 +40,7 @@ public partial class EnemyStats : Resource
 	public ProjectileStats ProjectileStats { get => _projectileStats; set => _projectileStats = value; } 
 	public int SpriteFrame { get => _spriteFrame; set => _spriteFrame = value; }
 
-	public EnemyStats(Category type)
+	public FriendlyStats(Category type)
 	{
 		BaseStats baseStats = BASE_STATS[type];
 		Type = type;
@@ -53,9 +53,9 @@ public partial class EnemyStats : Resource
 		SpriteFrame = baseStats.SpriteFrame;
 	}
 
-	public static EnemyStats GetBaseEnemyStats(Category type)
+	public static FriendlyStats GetBaseFriendlyStats(Category type)
 	{
-		return new EnemyStats(type);
+		return new FriendlyStats(type);
 	}
 	public override string ToString()
 	{

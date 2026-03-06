@@ -7,12 +7,6 @@ using Godot;
 /// </summary>
 public partial class Enemy : GenericPathFollower
 {
-	// Scene Children
-	[Export] private Timer _shotCooldownTimer;
-
-	// Preloaded Scenes
-	[Export] private PackedScene _projectileScene;
-
 	private EnemyStats _stats;
 
 	/// <summary>
@@ -76,7 +70,7 @@ public partial class Enemy : GenericPathFollower
 	}
 	public override string ToString()
 	{
-		return $"{Name}: {_stats}";
+		return $"Enemy '{Name}': {_stats}";
 	}
 
 }

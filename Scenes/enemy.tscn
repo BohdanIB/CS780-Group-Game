@@ -33,7 +33,7 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="PackedScene" id="PackedScene_1dp5w"]
+[sub_resource type="PackedScene" id="PackedScene_0830c"]
 resource_local_to_scene = true
 _bundled = {
 "conn_count": 0,
@@ -49,11 +49,11 @@ _bundled = {
 "version": 3
 }
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_auwsv"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_ghaa6"]
 resource_local_to_scene = true
 radius = 5.0
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_8uf12"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_1dp5w"]
 resource_local_to_scene = true
 radius = 5.0
 
@@ -79,21 +79,16 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="Enemy" unique_id=382514737 node_paths=PackedStringArray("_shotCooldownTimer") instance=ExtResource("1_hghv2")]
+[node name="Enemy" unique_id=382514737 instance=ExtResource("1_hghv2")]
 script = ExtResource("2_1f0kj")
-_shotCooldownTimer = NodePath("ShotCooldownTimer")
-_projectileScene = SubResource("PackedScene_1dp5w")
+_projectileScene = SubResource("PackedScene_0830c")
 
 [node name="HitboxCollisionShape2D" parent="." index="0" unique_id=1358123789]
-shape = SubResource("CircleShape2D_auwsv")
+shape = SubResource("CircleShape2D_ghaa6")
 
 [node name="AggroCollisionShape2D" parent="AggroArea2D" parent_id_path=PackedInt32Array(1396697523) index="0" unique_id=1901836338]
-shape = SubResource("CircleShape2D_8uf12")
+shape = SubResource("CircleShape2D_1dp5w")
 
 [node name="AnimatedSprite2D" parent="." index="2" unique_id=1606845345]
 scale = Vector2(0.25, 0.25)
 sprite_frames = SubResource("SpriteFrames_1dp5w")
-
-[node name="ShotCooldownTimer" type="Timer" parent="." index="3" unique_id=269299884]
-process_callback = 0
-one_shot = true

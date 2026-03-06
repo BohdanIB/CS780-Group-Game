@@ -1,6 +1,51 @@
 [gd_scene format=3 uid="uid://dtv7kt7wo8omt"]
 
 [ext_resource type="Script" uid="uid://c6iit2ynd856b" path="res://Scripts/units/GenericPathFollower.cs" id="1_atuyi"]
+[ext_resource type="Script" uid="uid://bca40tiktvab7" path="res://Scripts/turrets/Projectile.cs" id="2_f0inm"]
+[ext_resource type="Texture2D" uid="uid://djpqivk2pwl35" path="res://Assets/Sprites/temp_projectiles.png" id="3_w7rg7"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_xjght"]
+resource_local_to_scene = true
+radius = 5.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tl4hk"]
+atlas = ExtResource("3_w7rg7")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_d4467"]
+atlas = ExtResource("3_w7rg7")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_f8cdk"]
+resource_local_to_scene = true
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tl4hk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_d4467")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="PackedScene" id="PackedScene_iqd36"]
+resource_local_to_scene = true
+_bundled = {
+"conn_count": 0,
+"conns": PackedInt32Array(),
+"editable_instances": [],
+"id_paths": [PackedInt32Array(), PackedInt32Array()],
+"names": PackedStringArray("Projectile", "Area2D", "script", "CollisionShape2D", "CollisionShape2D", "shape", "AnimatedSprite2D", "AnimatedSprite2D", "scale", "sprite_frames"),
+"node_count": 3,
+"node_ids": PackedInt32Array(196749450, 1960296799, 225913893),
+"node_paths": [NodePath("."), NodePath(".")],
+"nodes": PackedInt32Array(-1, -1, 1, 0, -1, 1, 2, 0, 0, 1073741824, 0, 4, 3, -1, 1, 5, 1, 0, 1073741825, 0, 7, 6, -1, 2, 8, 2, 9, 3, 0),
+"variants": [ExtResource("2_f0inm"), SubResource("CircleShape2D_xjght"), Vector2(0.5, 0.5), SubResource("SpriteFrames_f8cdk")],
+"version": 3
+}
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_atuyi"]
 resource_local_to_scene = true
@@ -8,11 +53,13 @@ resource_local_to_scene = true
 [sub_resource type="CircleShape2D" id="CircleShape2D_twpjy"]
 resource_local_to_scene = true
 
-[node name="GenericPathFollower" type="Area2D" unique_id=382514737 node_paths=PackedStringArray("_hitboxCollisionShape2D", "_aggroCollisionShape2D", "_animatedSprite2D")]
+[node name="GenericPathFollower" type="Area2D" unique_id=382514737 node_paths=PackedStringArray("_hitboxCollisionShape2D", "_aggroCollisionShape2D", "_animatedSprite2D", "_shotCooldownTimer")]
 script = ExtResource("1_atuyi")
 _hitboxCollisionShape2D = NodePath("HitboxCollisionShape2D")
 _aggroCollisionShape2D = NodePath("AggroArea2D/AggroCollisionShape2D")
 _animatedSprite2D = NodePath("AnimatedSprite2D")
+_shotCooldownTimer = NodePath("ShotCooldownTimer")
+_projectileScene = SubResource("PackedScene_iqd36")
 
 [node name="HitboxCollisionShape2D" type="CollisionShape2D" parent="." unique_id=1358123789]
 shape = SubResource("CircleShape2D_atuyi")
@@ -24,3 +71,7 @@ shape = SubResource("CircleShape2D_twpjy")
 debug_color = Color(0.99215686, 0, 0.26666668, 0.19607843)
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1606845345]
+
+[node name="ShotCooldownTimer" type="Timer" parent="." unique_id=1239641386]
+process_callback = 0
+one_shot = true

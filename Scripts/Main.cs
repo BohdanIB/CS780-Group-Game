@@ -34,62 +34,121 @@ public partial class Main : Node2D
 		// TODO: Temporary enemy testing with turrets //
 		////////////////////////////////////////////////
 
-		List<GroundTile> potentialSpawnPoints = [];
-		for (int x = 0; x < grid.GetWidth(); x++)
-		{
-			for (int y = 0; y < grid.GetHeight(); y++)
-			{
-				GroundTile t = grid.GetGridValueOrDefault(x, y);
-				if (t.HasRoadDeadEnd())
-				{
-					potentialSpawnPoints.Add(t);
-				}
-			}
-		}
 		// GD.Print($"SpawnPoints: {potentialSpawnPoints}");
 
-		GridAStarPathfinder<GroundTile> pathfinder = new GridAStarPathfinder<GroundTile>(grid, 
-			(tile) =>
-			{
-				return tile.HasRoadConnection() ? 9 : (-(Math.Abs(tile.position.X - hubLocation.X) + Math.Abs(tile.position.Y - hubLocation.Y)) + grid.GetWidth() + grid.GetHeight());
-			},
-			(x,y) => {
-				List<Vector2I> neighborPositions = [];
-				if (grid.IsOnGrid(x, y-1)) neighborPositions.Add(new Vector2I(x, y-1)); 
-				if (grid.IsOnGrid(x+1, y)) neighborPositions.Add(new Vector2I(x+1, y)); 
-				if (grid.IsOnGrid(x, y+1)) neighborPositions.Add(new Vector2I(x, y+1)); 
-				if (grid.IsOnGrid(x-1, y)) neighborPositions.Add(new Vector2I(x-1, y)); 
-				return [.. neighborPositions];
-			}
-		);
-
-		// Spawn enemies
-		List<Enemy> testEnemies = [];
-		for (int i = 0; i < 6; i++)
-		{
-			var enemy = GD.Load<PackedScene>("res://Scenes/enemy.tscn").Instantiate<Enemy>();
-			enemy.Initialize(i == 0 ? EnemyStats.Category.Strong : EnemyStats.Category.Regular); // Make one 'strong' enemy for testing
-			testEnemies.Add(enemy);
-			GetTree().GetRoot().CallDeferred("add_child", enemy); // Cannot add children in _Ready()
-		}
-
-		// Set enemy paths
 		Random randomizer = new();
-		for (int i = 0; i < testEnemies.Count; i++)
+
+		// Spawn enemies and set paths towards hub
 		{
-			var enemy = testEnemies[i];
-			var spawnPoint = potentialSpawnPoints[randomizer.Next(potentialSpawnPoints.Count)].position;
-			var path = pathfinder.GetPathInPositions(spawnPoint, hubLocation, grid.cellSize);
-			enemy.SetPath(path);
-			enemy.GlobalPosition = grid.GetCentralGridCellPositionPixels(spawnPoint);
+			GridAStarPathfinder<GroundTile> enemyPathfinder = new GridAStarPathfinder<GroundTile>(grid, 
+				(tile) =>
+				{
+					return tile.HasRoadConnection() ? 9 : (-(Math.Abs(tile.position.X - hubLocation.X) + Math.Abs(tile.position.Y - hubLocation.Y)) + grid.GetWidth() + grid.GetHeight());
+				},
+				(x,y) => {
+					List<Vector2I> neighborPositions = [];
+					if (grid.IsOnGrid(x, y-1)) neighborPositions.Add(new Vector2I(x, y-1)); 
+					if (grid.IsOnGrid(x+1, y)) neighborPositions.Add(new Vector2I(x+1, y)); 
+					if (grid.IsOnGrid(x, y+1)) neighborPositions.Add(new Vector2I(x, y+1)); 
+					if (grid.IsOnGrid(x-1, y)) neighborPositions.Add(new Vector2I(x-1, y)); 
+					return [.. neighborPositions];
+				}
+			);
+			List<GroundTile> potentialEnemySpawnPoints = [];
+			for (int x = 0; x < grid.GetWidth(); x++)
+			{
+				for (int y = 0; y < grid.GetHeight(); y++)
+				{
+					GroundTile t = grid.GetGridValueOrDefault(x, y);
+					if (t.HasRoadDeadEnd())
+					{
+						potentialEnemySpawnPoints.Add(t);
+					}
+				}
+			}
+
+			List<Enemy> testEnemies = [];
+			for (int i = 0; i < 6; i++)
+			{
+				var enemy = GD.Load<PackedScene>("res://Scenes/enemy.tscn").Instantiate<Enemy>();
+				enemy.Initialize(i == 0 ? EnemyStats.Category.Strong : EnemyStats.Category.Regular); // Make one 'strong' enemy for testing
+				testEnemies.Add(enemy);
+				GetTree().GetRoot().CallDeferred("add_child", enemy); // Cannot add children in _Ready()
+			}
+
+			// Set enemy paths
+			for (int i = 0; i < testEnemies.Count; i++)
+			{
+				var enemy = testEnemies[i];
+				var spawnPoint = potentialEnemySpawnPoints[randomizer.Next(potentialEnemySpawnPoints.Count)].position;
+				var path = enemyPathfinder.GetPathInPositions(spawnPoint, hubLocation, grid.cellSize);
+				enemy.SetPath(path);
+				enemy.GlobalPosition = grid.GetCentralGridCellPositionPixels(spawnPoint);
+			}
+
+			// GD.Print("~~~Printing enemy stats~~~");
+			// foreach (var enemy in testEnemies)
+			// {
+				// GD.Print($"{enemy}");
+			// }
+			// GD.Print($"Enemy {testEnemies[0].Name} distance to hub: {testEnemies[0].GetDistanceToGoalPixels()}");
 		}
 
-		GD.Print("~~~Printing enemy stats~~~");
-		foreach (var enemy in testEnemies)
+		// Spawn friendlies
 		{
-			GD.Print($"Enemy {enemy.Name}: {enemy}");
+			GridAStarPathfinder<GroundTile> friendlyPathfinder = new GridAStarPathfinder<GroundTile>(grid, 
+				(tile) =>
+				{
+					return tile.HasRoadConnection() ? 9 : (-(Math.Abs(tile.position.X - hubLocation.X) + Math.Abs(tile.position.Y - hubLocation.Y)) + grid.GetWidth() + grid.GetHeight());
+				},
+				(x,y) => {
+					List<Vector2I> neighborPositions = [];
+					if (grid.IsOnGrid(x, y-1)) neighborPositions.Add(new Vector2I(x, y-1)); 
+					if (grid.IsOnGrid(x+1, y)) neighborPositions.Add(new Vector2I(x+1, y)); 
+					if (grid.IsOnGrid(x, y+1)) neighborPositions.Add(new Vector2I(x, y+1)); 
+					if (grid.IsOnGrid(x-1, y)) neighborPositions.Add(new Vector2I(x-1, y)); 
+					return [.. neighborPositions];
+				}
+			);
+			GroundTile friendlySpawnPoint = grid.GetGridValueOrDefault(hubLocation.X, hubLocation.Y);
+			List<GroundTile> potentialFriendlyEndpoints = [];
+			for (int x = 0; x < grid.GetWidth(); x++)
+			{
+				for (int y = 0; y < grid.GetHeight(); y++)
+				{
+					GroundTile t = grid.GetGridValueOrDefault(x, y);
+					if (t.HasRoadDeadEnd())
+					{
+						potentialFriendlyEndpoints.Add(t);
+					}
+				}
+			}
+
+			List<Friendly> testFriendlies = [];
+			for (int i = 0; i < 3; i++)
+			{
+				var friendly = GD.Load<PackedScene>("res://Scenes/friendly.tscn").Instantiate<Friendly>();
+				friendly.Initialize(i == 0 ? FriendlyStats.Category.Loaded : FriendlyStats.Category.Regular); // Make one 'loaded' enemy for testing
+				testFriendlies.Add(friendly);
+				GetTree().GetRoot().CallDeferred("add_child", friendly); // Cannot add children in _Ready()
+			}
+
+			// Set friendly paths
+			for (int i = 0; i < testFriendlies.Count; i++)
+			{
+				var friendly = testFriendlies[i];
+				var endPoint = potentialFriendlyEndpoints[randomizer.Next(potentialFriendlyEndpoints.Count)].position;
+				var path = friendlyPathfinder.GetPathInPositions(hubLocation, endPoint, grid.cellSize);
+				friendly.SetPath(path);
+				friendly.GlobalPosition = grid.GetCentralGridCellPositionPixels(hubLocation);
+			}
+
+			GD.Print("~~~Printing friendly stats~~~");
+			foreach (var friendly in testFriendlies)
+			{
+				GD.Print($"{friendly}");
+			}
 		}
-		// GD.Print($"Enemy {testEnemies[0].Name} distance to hub: {testEnemies[0].GetDistanceToGoalPixels()}");
 
 	}
 
