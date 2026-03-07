@@ -23,7 +23,7 @@ public partial class WorldGenerator : Node
         float[,] elevationNoise = GenerateNoiseMatrix(dimensions.X, dimensions.Y, seed: randomizer.Next());
 
 
-        GenericGrid<GroundTile> newWorld = new GenericGrid<GroundTile>(dimensions.X, dimensions.Y, (g, x, y) => new GroundTile((elevationNoise[x,y] < .5f) ? defaultTerrain : alternateTerrain, new Vector2I(x, y)));
+        GenericGrid<GroundTile> newWorld = new GenericGrid<GroundTile>(dimensions.X, dimensions.Y, (g, x, y) => new GroundTile((elevationNoise[x,y] < .5f) ? defaultTerrain : alternateTerrain, new Vector2I(x, y)), 16);
 
         GridAStarPathfinder<GroundTile> pathfinder = new GridAStarPathfinder<GroundTile>(newWorld, 
                 (x,y) => {

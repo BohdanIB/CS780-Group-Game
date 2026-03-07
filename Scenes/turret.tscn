@@ -1,0 +1,44 @@
+[gd_scene format=3 uid="uid://cktkmwqovsjyc"]
+
+[ext_resource type="Script" uid="uid://bk3drg0y2r1ku" path="res://Scripts/turrets/Turret.cs" id="1_fcprl"]
+[ext_resource type="Texture2D" uid="uid://bl7a37uc0ye6u" path="res://Assets/Sprites/temp_turrets.png" id="2_hskch"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_hskch"]
+resource_local_to_scene = true
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hskch"]
+atlas = ExtResource("2_hskch")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6spbj"]
+atlas = ExtResource("2_hskch")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_fcprl"]
+resource_local_to_scene = true
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hskch")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6spbj")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="Turret" type="Area2D" unique_id=1985475119]
+script = ExtResource("1_fcprl")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=786318106]
+shape = SubResource("CircleShape2D_hskch")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=870016364]
+scale = Vector2(0.5, 0.5)
+sprite_frames = SubResource("SpriteFrames_fcprl")
+
+[node name="ShotCooldownTimer" type="Timer" parent="." unique_id=1683080775]
+process_callback = 0
+one_shot = true
