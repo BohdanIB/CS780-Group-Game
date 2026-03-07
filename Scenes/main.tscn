@@ -4,6 +4,12 @@
 [ext_resource type="PackedScene" uid="uid://tw6j84txs1a1" path="res://Scenes/grid_renderer.tscn" id="2_bo1nx"]
 [ext_resource type="PackedScene" uid="uid://cundji84oafs3" path="res://Scenes/tile_shape_placer.tscn" id="3_jjvhh"]
 [ext_resource type="PackedScene" uid="uid://dtv7kt7wo8omt" path="res://Scenes/path_follower.tscn" id="4_jjvhh"]
+<<<<<<< Updated upstream
+=======
+[ext_resource type="Texture2D" uid="uid://cds56pxx7bnih" path="res://Assets/Sprites/skull (3).png" id="5_kry3j"]
+[ext_resource type="Texture2D" uid="uid://dwkxkagqql27x" path="res://Assets/Sprites/heart pixel art 32x32.png" id="6_21xkr"]
+[ext_resource type="Texture2D" uid="uid://did4qqhay3op1" path="res://Assets/Sprites/coin.png" id="7_6bp64"]
+>>>>>>> Stashed changes
 
 [node name="Main" type="Node2D" unique_id=1822167308]
 script = ExtResource("1_jjgbg")
@@ -14,3 +20,56 @@ script = ExtResource("1_jjgbg")
 
 [node name="PathFollower" parent="." unique_id=142391362 instance=ExtResource("4_jjvhh")]
 movementSpeed = 10.0
+<<<<<<< Updated upstream
+=======
+
+[node name="UI" type="CanvasLayer" parent="." unique_id=1647125894]
+
+[node name="Kill Count" type="HBoxContainer" parent="UI" unique_id=1977930891]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Skull Icon" type="TextureRect" parent="UI/Kill Count" unique_id=141658676]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+texture = ExtResource("5_kry3j")
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="UI/Kill Count" unique_id=850785247]
+layout_mode = 2
+text = "0"
+
+[node name="BaseHealth" type="HBoxContainer" parent="UI" unique_id=1780004036]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_right = 20.0
+offset_bottom = 40.0
+grow_horizontal = 2
+
+[node name="TextureRect" type="TextureRect" parent="UI/BaseHealth" unique_id=1774667681]
+layout_mode = 2
+texture = ExtResource("6_21xkr")
+stretch_mode = 3
+
+[node name="Label" type="Label" parent="UI/BaseHealth" unique_id=652891888]
+layout_mode = 2
+text = "100"
+
+[node name="Coin Count" type="HBoxContainer" parent="UI" unique_id=6330876]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -40.0
+offset_bottom = 40.0
+grow_horizontal = 0
+
+[node name="TextureRect" type="TextureRect" parent="UI/Coin Count" unique_id=751063038]
+layout_mode = 2
+texture = ExtResource("7_6bp64")
+
+[node name="Label" type="Label" parent="UI/Coin Count" unique_id=46534726]
+layout_mode = 2
+text = "0"
+>>>>>>> Stashed changes
