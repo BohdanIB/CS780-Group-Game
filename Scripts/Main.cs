@@ -51,19 +51,19 @@ public partial class Main : Node2D
 		GridAStarPathfinder<GroundTile> pathfinder = new GridAStarPathfinder<GroundTile>(grid, 
 			(x,y) => {
 					List<Vector2I> neighborPositions = [];
-                    if (newWorld.IsOnGrid(x, y-1)) neighborPositions.Add(new Vector2I(x, y-1)); // UP
-                    if (newWorld.IsOnGrid(x+1, y)) neighborPositions.Add(new Vector2I(x+1, y)); // RIGHT
-                    if (newWorld.IsOnGrid(x, y+1)) neighborPositions.Add(new Vector2I(x, y+1)); // DOWN
-                    if (newWorld.IsOnGrid(x-1, y)) neighborPositions.Add(new Vector2I(x-1, y)); // LEFT
+                    if (grid.IsOnGrid(x, y-1)) neighborPositions.Add(new Vector2I(x, y-1)); // UP
+                    if (grid.IsOnGrid(x+1, y)) neighborPositions.Add(new Vector2I(x+1, y)); // RIGHT
+                    if (grid.IsOnGrid(x, y+1)) neighborPositions.Add(new Vector2I(x, y+1)); // DOWN
+                    if (grid.IsOnGrid(x-1, y)) neighborPositions.Add(new Vector2I(x-1, y)); // LEFT
 
                     Dictionary<Vector2I, float> neighborCosts = [];
 
-                    GroundTile currentTile = newWorld.GetGridValueOrDefault(x, y);
+                    GroundTile currentTile = grid.GetGridValueOrDefault(x, y);
                     
 
                     foreach (Vector2I coordinate in neighborPositions)
                     {
-                        GroundTile nextTile = newWorld.GetGridValueOrDefault(coordinate.X, coordinate.Y);
+                        GroundTile nextTile = grid.GetGridValueOrDefault(coordinate.X, coordinate.Y);
 
 
                         if (currentTile.HasRoadConnection(nextTile.position - currentTile.position))
