@@ -2,20 +2,18 @@ using Godot;
 
 public partial class GridRenderer : Node2D
 {
-	public TileMapLayer terrainMap, roadMap, turretMap;
+	public TileMapLayer terrainMap, roadMap;
 
 	public override void _Ready()
 	{
 		terrainMap = GetNode<TileMapLayer>("TerrainMap");
 		roadMap = GetNode<TileMapLayer>("RoadMap");
-		// turretMap = GetNode<TileMapLayer>("TurretMap");
 	}
 
 	public void RenderGrid(GenericGrid<GroundTile> grid)
 	{
 		terrainMap.Clear();
 		roadMap.Clear();
-		// turretMap.Clear();
 
 		for (int x = 0; x < grid.GetWidth(); x++)
 		{
