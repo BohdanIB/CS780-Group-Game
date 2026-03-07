@@ -5,15 +5,20 @@ using System.Collections.Generic;
 public class GridAStarPathfinder<TGridObject>
 {
     private GenericGrid<TGridObject> terrainGrid;
-    private Func<TGridObject, int> traversibilityFunction;
-    private Func<int, int, Vector2I[]> neighborFunction;
+
+    Func<int, int, Dictionary<Vector2I, float>> neighborFunction;
 
     private GenericGrid<PathfindingNode> nodeGrid;
 
-    public GridAStarPathfinder(GenericGrid<TGridObject> terrainGrid, Func<TGridObject, int> traversibilityFunction, Func<int, int, Vector2I[]> neighborFunction)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="terrainGrid">The grid that paths are navigating through</param>
+    /// <param name="neighborFunction">Defines the valid neighbors of a cell and the traversal cost of reaching each one</param>
+
+    public GridAStarPathfinder(GenericGrid<TGridObject> terrainGrid, Func<int, int, Dictionary<Vector2I, float>> neighborFunction)
     {
         this.terrainGrid = terrainGrid;
-        this.traversibilityFunction = traversibilityFunction;
         this.neighborFunction = neighborFunction;
 
         UpdateGrid();
@@ -22,11 +27,8 @@ public class GridAStarPathfinder<TGridObject>
     {
         nodeGrid = new GenericGrid<PathfindingNode>(terrainGrid.GetWidth(), terrainGrid.GetHeight(), (g, x, y) =>
         {
-            int traversalCost = traversibilityFunction(terrainGrid.GetGridValueOrDefault(x, y));
-            if (traversalCost < 0) return null;
             
             PathfindingNode newNode = new(x, y, neighborFunction(x, y));
-            newNode.traversalCost = traversalCost;
 
             return newNode;
 
@@ -88,19 +90,15 @@ public class GridAStarPathfinder<TGridObject>
             }
 
             openList.Remove(currentNode);
-            foreach (Vector2I neighborCoordinate in currentNode.neighborCoordinates)
+            foreach (Vector2I neighborCoordinate in currentNode.neighbors.Keys)
             {
                 PathfindingNode neighborNode = nodeGrid.GetGridValueOrDefault(neighborCoordinate.X, neighborCoordinate.Y);
                 if (neighborNode == null)
                 {
                     continue;
                 }
-                if (!neighborNode.IsTraversible())
-                {
-                    continue;
-                }
                     
-                int tentative_gScore = currentNode.gCost + neighborNode.traversalCost;
+                float tentative_gScore = currentNode.gCost + currentNode.neighbors[neighborCoordinate];
                 if (tentative_gScore < neighborNode.gCost)
                 {
                     neighborNode.previousNode = currentNode;
@@ -126,27 +124,21 @@ public class GridAStarPathfinder<TGridObject>
 
     private class PathfindingNode
     {
-        public int traversalCost = -1;
         public int x, y;
-        public int gCost = int.MaxValue, hCost;
+        public float gCost = int.MaxValue, hCost;
         public PathfindingNode previousNode;
-        public Vector2I[] neighborCoordinates;
+        public Dictionary<Vector2I, float> neighbors;
 
-        public int GetFCost()
+        public float GetFCost()
         {
             return gCost + hCost;
         }
 
-        public PathfindingNode(int x, int y, Vector2I[] neighborCoordinates)
+        public PathfindingNode(int x, int y, Dictionary<Vector2I, float> neighbors)
         {
             this.x = x;
             this.y = y;
-            this.neighborCoordinates = neighborCoordinates;
-        }
-
-        public bool IsTraversible()
-        {
-            return traversalCost >= 0;
+            this.neighbors = neighbors;
         }
 
         public void Reset()
