@@ -49,17 +49,32 @@ public partial class Main : Node2D
 		// GD.Print($"SpawnPoints: {potentialSpawnPoints}");
 
 		GridAStarPathfinder<GroundTile> pathfinder = new GridAStarPathfinder<GroundTile>(grid, 
-			(tile) =>
-			{
-				return tile.HasRoadConnection() ? 9 : (-(Math.Abs(tile.position.X - hubLocation.X) + Math.Abs(tile.position.Y - hubLocation.Y)) + grid.GetWidth() + grid.GetHeight());
-			},
 			(x,y) => {
-				List<Vector2I> neighborPositions = [];
-				if (grid.IsOnGrid(x, y-1)) neighborPositions.Add(new Vector2I(x, y-1)); 
-				if (grid.IsOnGrid(x+1, y)) neighborPositions.Add(new Vector2I(x+1, y)); 
-				if (grid.IsOnGrid(x, y+1)) neighborPositions.Add(new Vector2I(x, y+1)); 
-				if (grid.IsOnGrid(x-1, y)) neighborPositions.Add(new Vector2I(x-1, y)); 
-				return [.. neighborPositions];
+					List<Vector2I> neighborPositions = [];
+                    if (newWorld.IsOnGrid(x, y-1)) neighborPositions.Add(new Vector2I(x, y-1)); // UP
+                    if (newWorld.IsOnGrid(x+1, y)) neighborPositions.Add(new Vector2I(x+1, y)); // RIGHT
+                    if (newWorld.IsOnGrid(x, y+1)) neighborPositions.Add(new Vector2I(x, y+1)); // DOWN
+                    if (newWorld.IsOnGrid(x-1, y)) neighborPositions.Add(new Vector2I(x-1, y)); // LEFT
+
+                    Dictionary<Vector2I, float> neighborCosts = [];
+
+                    GroundTile currentTile = newWorld.GetGridValueOrDefault(x, y);
+                    
+
+                    foreach (Vector2I coordinate in neighborPositions)
+                    {
+                        GroundTile nextTile = newWorld.GetGridValueOrDefault(coordinate.X, coordinate.Y);
+
+
+                        if (currentTile.HasRoadConnection(nextTile.position - currentTile.position))
+                        {
+							neighborCosts.Add(coordinate, 1);
+                        } 
+
+                        
+                    }
+
+                    return neighborCosts;
 			}
 		);
 
