@@ -51,6 +51,8 @@ public class GridAStarPathfinder<TGridObject>
     {
         if (!nodeGrid.IsOnGrid(origin.X, origin.Y) || !nodeGrid.IsOnGrid(destination.X, destination.Y)) return null;
 
+        nodeGrid.ForEach((node) => node.Reset());
+
         PathfindingNode startNode = nodeGrid.GetGridValueOrDefault(origin.X, origin.Y);
         PathfindingNode endNode = nodeGrid.GetGridValueOrDefault(destination.X, destination.Y);
 
@@ -145,6 +147,12 @@ public class GridAStarPathfinder<TGridObject>
         public bool IsTraversible()
         {
             return traversalCost >= 0;
+        }
+
+        public void Reset()
+        {
+            gCost = int.MaxValue;
+            previousNode = null;
         }
     }
 }

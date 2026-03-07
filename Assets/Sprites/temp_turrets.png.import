@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://7qwbeijvhmly"
-path="res://.godot/imported/RoadTiles-export.png-b006fdbfda61c8c4b16ac23b2eb6edeb.ctex"
+uid="uid://bl7a37uc0ye6u"
+path="res://.godot/imported/temp_turrets.png-427faeec9f1c2fab49ef9c0cbe1821da.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Sprites/RoadTiles-export.png"
-dest_files=["res://.godot/imported/RoadTiles-export.png-b006fdbfda61c8c4b16ac23b2eb6edeb.ctex"]
+source_file="res://Assets/Sprites/temp_turrets.png"
+dest_files=["res://.godot/imported/temp_turrets.png-427faeec9f1c2fab49ef9c0cbe1821da.ctex"]
 
 [params]
 
