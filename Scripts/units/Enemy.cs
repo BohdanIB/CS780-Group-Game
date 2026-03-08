@@ -1,5 +1,7 @@
 
 using Godot;
+using System;
+using System.Collections.Generic;
 
 /// <summary>
 /// TODO: Merge functionality between turrets and enemies somehow (shooter component which gets plugged into enemy and turret?)
@@ -72,5 +74,70 @@ public partial class Enemy : GenericPathFollower
 	{
 		return $"Enemy '{Name}': {_stats}";
 	}
+
+	/// <summary>
+	/// TODO - This is a temporary function for testing enemy functionality on the game. This should go away at some point.
+	/// 
+	/// Spawn enemies at random tiles with dead-end roads to head towards hub
+	/// </summary>
+	/// <param name="parent"></param>
+	/// <param name="grid"></param>
+	/// <param name="hub"></param>
+	/// <param name="randomizer"></param>
+	public static void TempEnemyDemo(Node parent, GenericGrid<GroundTile> grid, Vector2I hub, Random randomizer)
+	{
+		GridAStarPathfinder<GroundTile> pathfinder = new GridAStarPathfinder<GroundTile>(grid, 
+			(x,y) => {
+				List<Vector2I> neighborPositions = [];
+				if (grid.IsOnGrid(x, y-1)) neighborPositions.Add(new Vector2I(x, y-1)); // UP
+				if (grid.IsOnGrid(x+1, y)) neighborPositions.Add(new Vector2I(x+1, y)); // RIGHT
+				if (grid.IsOnGrid(x, y+1)) neighborPositions.Add(new Vector2I(x, y+1)); // DOWN
+				if (grid.IsOnGrid(x-1, y)) neighborPositions.Add(new Vector2I(x-1, y)); // LEFT
+
+				const float ROAD_COST = 0f;
+				Dictionary<Vector2I, float> neighborCosts = [];
+
+				GroundTile currentTile = grid.GetGridValueOrDefault(x, y);
+				foreach (Vector2I coordinate in neighborPositions)
+				{
+					GroundTile nextTile = grid.GetGridValueOrDefault(coordinate.X, coordinate.Y);
+					neighborCosts.Add(coordinate, currentTile.HasRoadConnection(nextTile.position - currentTile.position) ? ROAD_COST : int.MaxValue);
+				}
+
+				return neighborCosts;
+			}
+		);
+
+		List<GroundTile> potentialEnemySpawnPoints = [];
+		for (int x = 0; x < grid.GetWidth(); x++)
+		{
+			for (int y = 0; y < grid.GetHeight(); y++)
+			{
+				GroundTile t = grid.GetGridValueOrDefault(x, y);
+				if (t.HasRoadDeadEnd())
+				{
+					potentialEnemySpawnPoints.Add(t);
+				}
+			}
+		}
+
+		List<Enemy> testEnemies = [];
+		for (int i = 0; i < 6; i++)
+		{
+			var enemy = GD.Load<PackedScene>("res://Scenes/enemy.tscn").Instantiate<Enemy>();
+			enemy.Initialize(i == 0 ? EnemyStats.Category.Strong : EnemyStats.Category.Regular); // Make one 'strong' enemy for testing
+			testEnemies.Add(enemy);
+			parent.GetTree().GetRoot().CallDeferred("add_child", enemy); // Cannot add children in _Ready() calls
+
+			// Set enemy paths
+			var spawnPoint = potentialEnemySpawnPoints[randomizer.Next(potentialEnemySpawnPoints.Count)].position;
+			var path = pathfinder.GetPathInPositions(spawnPoint, hub, grid.cellSize);
+			enemy.SetPath(path);
+			enemy.GlobalPosition = grid.GetCentralGridCellPositionPixels(spawnPoint);
+
+			// GD.Print($"{enemy}");
+		}
+	}
+
 
 }
