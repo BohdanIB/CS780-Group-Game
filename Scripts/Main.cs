@@ -7,7 +7,7 @@ public partial class Main : Node2D
 	public override void _Ready()
 	{
 		var hubLocation = new Vector2I(10, 10);
-		GenericGrid<GroundTile> grid = WorldGenerator.GenerateWorldAStar(new Vector2I(21, 21), hubLocation);
+		GenericGrid<GroundTile> grid = WorldGenerator.GenerateWorldAStar(new Vector2I(41, 41), hubLocation);
 
 		GridRenderer gr = GetNode<GridRenderer>("GridRenderer");
 		gr.RenderGrid(grid);

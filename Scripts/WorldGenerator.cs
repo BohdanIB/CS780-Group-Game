@@ -6,24 +6,21 @@ public partial class WorldGenerator : Node
 {
     private const float ROAD_TRAVERSAL_COST = 1, PARTIAL_ROAD_COST = .3f, ELEVATION_COST_SCALAR = 3;
 
+    private const string TERRAIN_DIRECTORY_PATH = "res://Resources/Terrain/";
+
 
     public static GenericGrid<GroundTile> GenerateWorldAStar(Vector2I dimensions, Vector2I hubLocation, int seed = 42)
     {
         Random randomizer = new(seed);
 
-        TerrainType defaultTerrain = new TerrainType()
-        {
-            groundTileAtlasCoords = new Vector2I(1, 0)  
-        };
-        TerrainType alternateTerrain = new TerrainType()
-        {
-            groundTileAtlasCoords = new Vector2I(2, 0)  
-        };
-
         float[,] elevationNoise = GenerateNoiseMatrix(dimensions.X, dimensions.Y, seed: randomizer.Next());
+        float[,] humidityNoise = GenerateNoiseMatrix(dimensions.X, dimensions.Y, seed: randomizer.Next());
+        float[,] temperatureNoise = GenerateNoiseMatrix(dimensions.X, dimensions.Y, seed: randomizer.Next());
+
+        TerrainType[] loadedTerrains = LoadTerrains();
 
 
-        GenericGrid<GroundTile> newWorld = new GenericGrid<GroundTile>(dimensions.X, dimensions.Y, (g, x, y) => new GroundTile((elevationNoise[x,y] < .5f) ? defaultTerrain : alternateTerrain, new Vector2I(x, y)), 16);
+        GenericGrid<GroundTile> newWorld = new GenericGrid<GroundTile>(dimensions.X, dimensions.Y, (g, x, y) => new GroundTile(SelectTerrain(elevationNoise[x, y], humidityNoise[x, y], temperatureNoise[x, y], loadedTerrains), new Vector2I(x, y)), 16);
 
         GridAStarPathfinder<GroundTile> pathfinder = new GridAStarPathfinder<GroundTile>(newWorld, 
                 (x,y) => {
@@ -124,15 +121,56 @@ public partial class WorldGenerator : Node
         return newWorld;
     }
 
-    public static float[,] GenerateNoiseMatrix(int width, int height, int seed = 42, float zoom = 1, bool normalize = true) {
+    public static TerrainType SelectTerrain(float elevation, float humidity, float temperature, TerrainType[] terrainTypes)
+    {
+        float bestPriority = -1;
+        TerrainType selectedTerrain = null;
+
+        foreach (TerrainType terrain in terrainTypes)
+        {
+            if (elevation >= terrain.elevationGenerationRange.X && elevation <= terrain.elevationGenerationRange.Y
+             && humidity >= terrain.humidityGenerationRange.X && humidity <= terrain.humidityGenerationRange.Y
+             && temperature >= terrain.temperatureGenerationRange.X && temperature <= terrain.temperatureGenerationRange.Y)
+            {
+                if (terrain.generationPriority > bestPriority) 
+                {
+                    selectedTerrain = terrain;
+                    bestPriority = terrain.generationPriority;
+                }
+            }
+        }
+
+        return selectedTerrain;
+    }
+
+    public static TerrainType[] LoadTerrains()
+    {
+        DirAccess directory = DirAccess.Open(TERRAIN_DIRECTORY_PATH);
+        if (directory == null) return null;
+
+        List<TerrainType> loadedTerrains = [];
+
+        directory.ListDirBegin();
+
+        foreach (string terrainFileName in directory.GetFiles())
+        {
+            loadedTerrains.Add(ResourceLoader.Load<TerrainType>($"{TERRAIN_DIRECTORY_PATH}/{terrainFileName}"));
+        }
+
+        directory.ListDirEnd();
+
+        return [.. loadedTerrains];
+    }
+
+    public static float[,] GenerateNoiseMatrix(int width, int height, int seed = 42, float zoom = 1, bool normalize = true, float frequency = 0.06f, int octaves = 6, float lucanarity = 1.5f) {
         float minValue = 1, maxValue = -1;
         FastNoiseLite noiseGenerator = new()
         {
             NoiseType = FastNoiseLite.NoiseTypeEnum.Perlin,
             FractalType = FastNoiseLite.FractalTypeEnum.Fbm,
-            Frequency = 0.06f,
-            FractalOctaves = 6,
-            FractalLacunarity = 1.5f,
+            Frequency = frequency,
+            FractalOctaves = octaves,
+            FractalLacunarity = lucanarity,
             Seed = seed
         };
 
