@@ -53,10 +53,11 @@ resource_local_to_scene = true
 [sub_resource type="CircleShape2D" id="CircleShape2D_twpjy"]
 resource_local_to_scene = true
 
-[node name="GenericPathFollower" type="Area2D" unique_id=382514737 node_paths=PackedStringArray("_hitboxCollisionShape2D", "_aggroCollisionShape2D", "_animatedSprite2D", "_shotCooldownTimer")]
+[node name="GenericPathFollower" type="Area2D" unique_id=382514737 node_paths=PackedStringArray("_aggroArea2D", "_aggroCollisionShape2D", "_hitboxCollisionShape2D", "_animatedSprite2D", "_shotCooldownTimer")]
 script = ExtResource("1_atuyi")
-_hitboxCollisionShape2D = NodePath("HitboxCollisionShape2D")
+_aggroArea2D = NodePath("AggroArea2D")
 _aggroCollisionShape2D = NodePath("AggroArea2D/AggroCollisionShape2D")
+_hitboxCollisionShape2D = NodePath("HitboxCollisionShape2D")
 _animatedSprite2D = NodePath("AnimatedSprite2D")
 _shotCooldownTimer = NodePath("ShotCooldownTimer")
 _projectileScene = SubResource("PackedScene_iqd36")

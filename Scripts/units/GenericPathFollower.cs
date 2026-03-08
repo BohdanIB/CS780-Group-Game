@@ -1,5 +1,6 @@
 
 using Godot;
+using System;
 using System.Collections.Generic;
 
 public partial class GenericPathFollower : Area2D
@@ -7,24 +8,20 @@ public partial class GenericPathFollower : Area2D
 	protected const float DISTANCE_THRESHOLD = 0.01f;
 
 	// Scene Children
-	[Export] protected CollisionShape2D _hitboxCollisionShape2D, _aggroCollisionShape2D;
+	[Export] protected Area2D _aggroArea2D;
+	[Export] protected CollisionShape2D _aggroCollisionShape2D, _hitboxCollisionShape2D;
 	[Export] protected AnimatedSprite2D _animatedSprite2D;
-	[Export] private Timer _shotCooldownTimer;
+	[Export] protected Timer _shotCooldownTimer;
 
 	// Preloaded Scenes
-	[Export] private PackedScene _projectileScene;
+	[Export] protected PackedScene _projectileScene;
 
 	protected float _health = 100.0f;
 	protected float _movementSpeed = 50.0f;
 
+	protected Random _random = new();
 	protected List<Vector2> _path;
 	protected int _currentPathIndex;
-
-	// public virtual void Initialize(float health, float movementSpeed)
-	// {
-	// 	_health = health;
-	// 	_movementSpeed = movementSpeed;
-	// }
 
 	public override void _PhysicsProcess(double delta)
 	{

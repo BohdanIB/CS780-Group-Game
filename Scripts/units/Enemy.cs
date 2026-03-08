@@ -7,9 +7,23 @@ using System.Collections.Generic;
 /// TODO: Merge functionality between turrets and enemies somehow (shooter component which gets plugged into enemy and turret?)
 ///   - Shares a lot of functions with turret honestly...
 /// </summary>
-public partial class Enemy : GenericPathFollower
+public partial class Enemy: GenericPathFollower
 {
+	// Stolen from BloonsTD; Targeting priorities for turret
+	public enum TargetingMode
+	{
+		Random, // Random
+		First,  // Furthest down path
+		Last,   // Closest to spawn
+		Close,  // Closest to tower
+		Weak,   // Weakest enemies
+		Strong, // Strongest enemies
+	}
+
 	private EnemyStats _stats;
+	private TargetingMode _targetingMode = TargetingMode.Weak;
+
+	protected List<Friendly> _targetsInRange = new(); // todo
 
 	/// <summary>
 	/// Initializes enemy with "generic" base stats for given type.
@@ -28,15 +42,33 @@ public partial class Enemy : GenericPathFollower
 		UpdateStats(stats);
 	}
 
-	// public override void _Ready()
-	// {
-	// 	base._Ready();
-	// }
+	public override void _Ready()
+	{
+		base._Ready();
+
+		_aggroArea2D.AreaEntered += (area) => 
+		{
+			if (area is Friendly t)
+			{
+				// GD.Print($"ENEMY '{Name}' AGGRO RANGE ENTERED BY {t.Name}");
+				_targetsInRange.Add(t);
+			}
+		};
+		_aggroArea2D.AreaExited += (area) =>
+		{
+			if (area is Friendly t)
+			{
+				// GD.Print($"ENEMY '{Name}' AGGRO RANGE EXITED BY {t.Name}");
+				_targetsInRange.Remove(t);
+			}
+		};
+	}
 
 	public override void _PhysicsProcess(double delta)
 	{
 		base._PhysicsProcess(delta);
 		// Todo: Shoot at friendlies in range. Components?
+		FireAtValidTarget();
 	}
 
 	public void UpdateStats(EnemyStats newStats)
@@ -136,6 +168,55 @@ public partial class Enemy : GenericPathFollower
 			enemy.GlobalPosition = grid.GetCentralGridCellPositionPixels(spawnPoint);
 
 			// GD.Print($"{enemy}");
+		}
+	}
+
+	/// <summary>
+	/// If there is a valid target in range of current PathFollower, choose and fire at target given TargetingMode.
+	/// </summary>
+	private void FireAtValidTarget()
+	{
+		if (_targetsInRange.Count > 0 && _shotCooldownTimer.IsStopped())
+		{
+			Friendly currTarget;
+			if (_targetingMode == TargetingMode.Random)
+			{
+				currTarget = _targetsInRange[_random.Next(_targetsInRange.Count)];
+			}
+			else
+			{
+				// Look for an appropriate target to shoot at within PathFollower's radius given TargetingMode.
+				currTarget = _targetsInRange[0];
+				float currTargetDistanceFromSelf = Position.DistanceTo(currTarget.Position);
+				float currTargetDistanceFromGoal = currTarget.GetDistanceToGoalPixels();
+				float currTargetHealth = currTarget.GetCurrentHealth();
+				for (int i = 1; i < _targetsInRange.Count; i++)
+				{
+					var target = _targetsInRange[i];
+					float targetDistanceFromSelf = Position.DistanceTo(target.Position);
+					float targetDistanceFromGoal = target.GetDistanceToGoalPixels();
+					float targetHealth = target.GetCurrentHealth();
+					if ((_targetingMode == TargetingMode.First  && targetDistanceFromGoal < currTargetDistanceFromGoal) || 
+						(_targetingMode == TargetingMode.Last   && currTargetDistanceFromGoal < targetDistanceFromGoal) || 
+						(_targetingMode == TargetingMode.Close  && targetDistanceFromSelf < currTargetDistanceFromSelf) ||
+						(_targetingMode == TargetingMode.Weak   && targetHealth < currTargetHealth) ||
+						(_targetingMode == TargetingMode.Strong && currTargetHealth < targetHealth))
+					{
+						currTarget = target;
+						currTargetDistanceFromSelf = targetDistanceFromSelf;
+						currTargetDistanceFromGoal = targetDistanceFromGoal;
+						currTargetHealth = targetHealth;
+					}
+				}
+			}
+
+			// Shoot at the target
+			GD.Print($"Enemy {Name} firing Projectile at target {currTarget} with stats: {_stats.ProjectileStats}");
+			_shotCooldownTimer.Start(1 / _stats.FireRate);
+			var projectile = _projectileScene.Instantiate<Projectile>();
+			projectile.GlobalPosition = GlobalPosition;
+			projectile.Initialize(currTarget, _stats.ProjectileStats);
+			GetTree().GetRoot().AddChild(projectile);
 		}
 	}
 

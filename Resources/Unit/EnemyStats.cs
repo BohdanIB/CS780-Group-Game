@@ -17,7 +17,7 @@ public partial class EnemyStats : Resource
 	private static readonly Dictionary<Category, BaseStats> BASE_STATS = new()
 	{
 		{Category.Regular, 
-			new BaseStats(HitboxRadius: 5f, AggroRadius: 50f, Health: 50, FireRate: 2f, MovementSpeed: 15f, ProjectileStats: new ProjectileStats(ProjectileStats.Category.Bolt), SpriteFrame: 0)},
+			new BaseStats(HitboxRadius: 5f, AggroRadius: 50f, Health: 50, FireRate: 4f, MovementSpeed: 15f, ProjectileStats: new ProjectileStats(ProjectileStats.Category.Bolt), SpriteFrame: 0)},
 		{Category.Strong, 
 			new BaseStats(HitboxRadius: 5f, AggroRadius: 25f, Health: 100f, FireRate: 4f, MovementSpeed: 10f, ProjectileStats: new ProjectileStats(ProjectileStats.Category.Bolt), SpriteFrame: 1)},
 	};
