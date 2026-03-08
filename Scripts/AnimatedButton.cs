@@ -46,7 +46,7 @@ public partial class AnimatedButton : Button
 
 		_tween.TweenProperty(this, "scale", new Vector2(0.9f, 0.9f), 0.08f)
 	  		.SetEase(Tween.EaseType.In)
-	  .		SetTrans(Tween.TransitionType.Cubic);
+	  		.SetTrans(Tween.TransitionType.Cubic);
 
 		_tween.TweenProperty(this, "scale", Vector2.One, 0.12f)
 	  		.SetEase(Tween.EaseType.Out)

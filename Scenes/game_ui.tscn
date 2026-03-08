@@ -1,0 +1,182 @@
+[gd_scene format=3 uid="uid://bxnekokl8stoa"]
+
+[ext_resource type="Script" uid="uid://bsj066idkmqi8" path="res://Scripts/SideMenuContainer.cs" id="1_bw2rt"]
+[ext_resource type="Script" uid="uid://ckkvwrabsbiar" path="res://Scripts/ToggleMenuButton.cs" id="2_xjnnq"]
+[ext_resource type="Texture2D" uid="uid://xstgnisi5lhl" path="res://Assets/[1] Normal.png" id="3_3t1kc"]
+[ext_resource type="Texture2D" uid="uid://cpobui6wfjvkf" path="res://Sprites/skull (3).png" id="3_gjn1n"]
+[ext_resource type="Texture2D" uid="uid://dwkxkagqql27x" path="res://Assets/Sprites/heart pixel art 32x32.png" id="4_1t2s1"]
+[ext_resource type="Texture2D" uid="uid://did4qqhay3op1" path="res://Assets/Sprites/coin.png" id="5_3t1kc"]
+
+[sub_resource type="Theme" id="Theme_bw2rt"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_gjn1n"]
+load_path = "res://.godot/imported/Parchment.jpg-6b7657cd5e0849ed9a3137c8cf763e01.ctex"
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_3t1kc"]
+texture = SubResource("CompressedTexture2D_gjn1n")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_rxsu6"]
+texture = ExtResource("3_3t1kc")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_y8vuf"]
+texture = ExtResource("3_3t1kc")
+
+[node name="GameUI" type="Control" unique_id=892076605]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SideMenuContainer" type="PanelContainer" parent="." unique_id=1423852120]
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -250.0
+theme = SubResource("Theme_bw2rt")
+theme_override_styles/panel = SubResource("StyleBoxTexture_3t1kc")
+script = ExtResource("1_bw2rt")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SideMenuContainer" unique_id=1335139940]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SideMenuContainer/VBoxContainer" unique_id=180445247]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="SideMenuContainer/VBoxContainer/HBoxContainer" unique_id=1127094194]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_rxsu6")
+text = "Turret 1
+"
+
+[node name="Button3" type="Button" parent="SideMenuContainer/VBoxContainer/HBoxContainer" unique_id=613986699]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_styles/normal = SubResource("StyleBoxTexture_y8vuf")
+text = "Turret 3
+"
+
+[node name="Button4" type="Button" parent="SideMenuContainer/VBoxContainer/HBoxContainer" unique_id=978132700]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_rxsu6")
+text = "Turret 1
+"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="SideMenuContainer/VBoxContainer" unique_id=1093850489]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="SideMenuContainer/VBoxContainer/HBoxContainer2" unique_id=851918959]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_rxsu6")
+text = "Turret 1
+"
+
+[node name="Button4" type="Button" parent="SideMenuContainer/VBoxContainer/HBoxContainer2" unique_id=1410888525]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_rxsu6")
+text = "Turret 1
+"
+
+[node name="Button2" type="Button" parent="SideMenuContainer/VBoxContainer/HBoxContainer2" unique_id=1097724392]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_rxsu6")
+text = "Turret 1
+"
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=288390893]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=68244084]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -2290.0
+offset_top = -1479.0
+offset_right = -2290.0
+offset_bottom = -1479.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ToggleMenuButton" type="Button" parent="." unique_id=1290876495]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -4.0
+offset_top = -8.0
+offset_right = 4.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "Menu
+"
+script = ExtResource("2_xjnnq")
+
+[node name="UI" type="CanvasLayer" parent="." unique_id=384932]
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UI" unique_id=2119936225]
+offset_left = 50.0
+offset_right = 50.0
+offset_bottom = 40.0
+size_flags_vertical = 0
+
+[node name="Kill Count" type="HBoxContainer" parent="UI" unique_id=2068956033]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Skull Icon" type="TextureRect" parent="UI/Kill Count" unique_id=1326603523]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+texture = ExtResource("3_gjn1n")
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="UI/Kill Count" unique_id=1643478985]
+layout_mode = 2
+text = "0"
+
+[node name="BaseHealth" type="HBoxContainer" parent="UI" unique_id=231965292]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_right = 20.0
+offset_bottom = 40.0
+grow_horizontal = 2
+
+[node name="TextureRect" type="TextureRect" parent="UI/BaseHealth" unique_id=848130792]
+layout_mode = 2
+texture = ExtResource("4_1t2s1")
+stretch_mode = 3
+
+[node name="Label" type="Label" parent="UI/BaseHealth" unique_id=1183692357]
+layout_mode = 2
+text = "100"
+
+[node name="Coin Count" type="HBoxContainer" parent="UI" unique_id=1027251394]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -40.0
+offset_bottom = 40.0
+grow_horizontal = 0
+
+[node name="TextureRect" type="TextureRect" parent="UI/Coin Count" unique_id=985502370]
+layout_mode = 2
+texture = ExtResource("5_3t1kc")
+
+[node name="Label" type="Label" parent="UI/Coin Count" unique_id=1692703589]
+layout_mode = 2
+text = "0"
