@@ -4,10 +4,15 @@ using Godot;
 
 public partial class Main : Node2D
 {
+	[Export] public int MAIN_SEED = 12345;
+	
+
 	public override void _Ready()
 	{
-		var hubLocation = new Vector2I(10, 10);
-		GenericGrid<GroundTile> grid = WorldGenerator.GenerateWorldAStar(new Vector2I(21, 21), hubLocation);
+		Random randomizer = new(MAIN_SEED); // todo: might just want a global seeded randomizer singleton kicking around somewhere?
+
+		var hubLocation = new Vector2I(20, 10);
+		GenericGrid<GroundTile> grid = WorldGenerator.GenerateWorldAStar(new Vector2I(41, 21), hubLocation, MAIN_SEED);
 
 		GridRenderer gr = GetNode<GridRenderer>("GridRenderer");
 		gr.RenderGrid(grid);
@@ -35,25 +40,30 @@ public partial class Main : Node2D
 		////////////////////////////////////////////////
 
 		// GD.Print($"SpawnPoints: {potentialSpawnPoints}");
+		GridAStarPathfinder<GroundTile> pathFollower_Pathfinder = new GridAStarPathfinder<GroundTile>(grid, 
+			(x,y) => {
+				List<Vector2I> neighborPositions = [];
+				if (grid.IsOnGrid(x, y-1)) neighborPositions.Add(new Vector2I(x, y-1)); // UP
+				if (grid.IsOnGrid(x+1, y)) neighborPositions.Add(new Vector2I(x+1, y)); // RIGHT
+				if (grid.IsOnGrid(x, y+1)) neighborPositions.Add(new Vector2I(x, y+1)); // DOWN
+				if (grid.IsOnGrid(x-1, y)) neighborPositions.Add(new Vector2I(x-1, y)); // LEFT
 
-		Random randomizer = new();
+				const float ROAD_COST = 0f;
+				Dictionary<Vector2I, float> neighborCosts = [];
+
+				GroundTile currentTile = grid.GetGridValueOrDefault(x, y);
+				foreach (Vector2I coordinate in neighborPositions)
+				{
+					GroundTile nextTile = grid.GetGridValueOrDefault(coordinate.X, coordinate.Y);
+					neighborCosts.Add(coordinate, currentTile.HasRoadConnection(nextTile.position - currentTile.position) ? ROAD_COST : int.MaxValue);
+				}
+
+				return neighborCosts;
+			}
+		);
 
 		// Spawn enemies and set paths towards hub
 		{
-			GridAStarPathfinder<GroundTile> enemyPathfinder = new GridAStarPathfinder<GroundTile>(grid, 
-				(tile) =>
-				{
-					return tile.HasRoadConnection() ? 9 : (-(Math.Abs(tile.position.X - hubLocation.X) + Math.Abs(tile.position.Y - hubLocation.Y)) + grid.GetWidth() + grid.GetHeight());
-				},
-				(x,y) => {
-					List<Vector2I> neighborPositions = [];
-					if (grid.IsOnGrid(x, y-1)) neighborPositions.Add(new Vector2I(x, y-1)); 
-					if (grid.IsOnGrid(x+1, y)) neighborPositions.Add(new Vector2I(x+1, y)); 
-					if (grid.IsOnGrid(x, y+1)) neighborPositions.Add(new Vector2I(x, y+1)); 
-					if (grid.IsOnGrid(x-1, y)) neighborPositions.Add(new Vector2I(x-1, y)); 
-					return [.. neighborPositions];
-				}
-			);
 			List<GroundTile> potentialEnemySpawnPoints = [];
 			for (int x = 0; x < grid.GetWidth(); x++)
 			{
@@ -77,7 +87,7 @@ public partial class Main : Node2D
 
 				// Set enemy paths
 				var spawnPoint = potentialEnemySpawnPoints[randomizer.Next(potentialEnemySpawnPoints.Count)].position;
-				var path = enemyPathfinder.GetPathInPositions(spawnPoint, hubLocation, grid.cellSize);
+				var path = pathFollower_Pathfinder.GetPathInPositions(spawnPoint, hubLocation, grid.cellSize);
 				enemy.SetPath(path);
 				enemy.GlobalPosition = grid.GetCentralGridCellPositionPixels(spawnPoint);
 
@@ -87,20 +97,6 @@ public partial class Main : Node2D
 
 		// Spawn friendlies
 		{
-			GridAStarPathfinder<GroundTile> friendlyPathfinder = new GridAStarPathfinder<GroundTile>(grid, 
-				(tile) =>
-				{
-					return tile.HasRoadConnection() ? 9 : (-(Math.Abs(tile.position.X - hubLocation.X) + Math.Abs(tile.position.Y - hubLocation.Y)) + grid.GetWidth() + grid.GetHeight());
-				},
-				(x,y) => {
-					List<Vector2I> neighborPositions = [];
-					if (grid.IsOnGrid(x, y-1)) neighborPositions.Add(new Vector2I(x, y-1)); 
-					if (grid.IsOnGrid(x+1, y)) neighborPositions.Add(new Vector2I(x+1, y)); 
-					if (grid.IsOnGrid(x, y+1)) neighborPositions.Add(new Vector2I(x, y+1)); 
-					if (grid.IsOnGrid(x-1, y)) neighborPositions.Add(new Vector2I(x-1, y)); 
-					return [.. neighborPositions];
-				}
-			);
 			GroundTile friendlySpawnPoint = grid.GetGridValueOrDefault(hubLocation.X, hubLocation.Y);
 			List<GroundTile> potentialFriendlyEndpoints = [];
 			for (int x = 0; x < grid.GetWidth(); x++)
@@ -125,11 +121,11 @@ public partial class Main : Node2D
 
 				// Set path
 				var endPoint = potentialFriendlyEndpoints[randomizer.Next(potentialFriendlyEndpoints.Count)].position;
-				var path = friendlyPathfinder.GetPathInPositions(hubLocation, endPoint, grid.cellSize);
+				var path = pathFollower_Pathfinder.GetPathInPositions(hubLocation, endPoint, grid.cellSize);
 				friendly.SetPath(path);
 				friendly.GlobalPosition = grid.GetCentralGridCellPositionPixels(hubLocation);
 
-				GD.Print($"{friendly}");
+				// GD.Print($"{friendly}");
 			}
 		}
 
