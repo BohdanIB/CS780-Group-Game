@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://cundji84oafs3" path="res://Scenes/tile_shape_placer.tscn" id="3_jjvhh"]
 [ext_resource type="PackedScene" uid="uid://dtv7kt7wo8omt" path="res://Scenes/path_follower.tscn" id="4_jjvhh"]
 [ext_resource type="PackedScene" uid="uid://bxnekokl8stoa" path="res://Scenes/game_ui.tscn" id="5_kry3j"]
+[ext_resource type="PackedScene" uid="uid://caafjqfx010mq" path="res://Scenes/turret_placer.tscn" id="5_kry3j"]
 
 [node name="Main" type="Node2D" unique_id=1822167308]
 script = ExtResource("1_jjgbg")
@@ -17,3 +18,4 @@ script = ExtResource("1_jjgbg")
 movementSpeed = 10.0
 
 [node name="GameUI" parent="." unique_id=892076605 instance=ExtResource("5_kry3j")]
+[node name="TurretPlacer" parent="." unique_id=1881251108 instance=ExtResource("5_kry3j")]

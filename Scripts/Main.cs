@@ -1,62 +1,106 @@
-using Godot;
 using System;
 using System.Collections.Generic;
+using Godot;
 
 public partial class Main : Node2D
 {
 	public override void _Ready()
 	{
-		PathFollower pf = GetNode<PathFollower>("PathFollower");
+		var hubLocation = new Vector2I(10, 10);
+		GenericGrid<GroundTile> grid = WorldGenerator.GenerateWorldAStar(new Vector2I(21, 21), hubLocation);
 
-		Vector2I startingPosition = new Vector2I(0, 0);
-		Vector2I endingPosition = new Vector2I(10, 10);
 		GridRenderer gr = GetNode<GridRenderer>("GridRenderer");
-		GenericGrid<GroundTile> grid = new(11, 11, (g, x, y) => null, cellSize: 16);
-		grid.SetGridValue(startingPosition.X, startingPosition.Y, new GroundTile(new Vector2I(2, 0), [true, true, false, false]));
-		grid.SetGridValue(endingPosition.X, endingPosition.Y, new GroundTile(new Vector2I(2, 0), [false, false, true, true]));
-
-
 		gr.RenderGrid(grid);
-		GridAStarPathfinder<GroundTile> pathfinder = new GridAStarPathfinder<GroundTile>(grid, (tile) => tile == null ? -1 : 1, (x, y) =>
+
+		TurretPlacer turretPlacer = GetNode<TurretPlacer>("TurretPlacer");
+		turretPlacer.Initialize(grid);
+
+		// GridAStarPathfinder<GroundTile> pathfinder = new GridAStarPathfinder<GroundTile>(grid, (tile) => tile == null ? -1 : 1, (x, y) =>
+		// {
+		// 	GroundTile tile = grid.GetGridValueOrDefault(x, y);
+		// 	if (!tile.HasRoadConnection()) return [];
+		// 	List<Vector2I> neighborCoordinates = [];
+		// 	if (tile.HasRoadConnection(Vector2I.Up)) neighborCoordinates.Add(new Vector2I(x, y)+Vector2I.Up);
+		// 	if (tile.HasRoadConnection(Vector2I.Right)) neighborCoordinates.Add(new Vector2I(x, y)+Vector2I.Right);
+		// 	if (tile.HasRoadConnection(Vector2I.Down)) neighborCoordinates.Add(new Vector2I(x, y)+Vector2I.Down);
+		// 	if (tile.HasRoadConnection(Vector2I.Left)) neighborCoordinates.Add(new Vector2I(x, y)+Vector2I.Left);
+
+		// 	return [.. neighborCoordinates];
+		// });
+
+
+
+		////////////////////////////////////////////////
+		// TODO: Temporary enemy testing with turrets //
+		////////////////////////////////////////////////
+
+		List<GroundTile> potentialSpawnPoints = [];
+		for (int x = 0; x < grid.GetWidth(); x++)
 		{
-			GroundTile tile = grid.GetGridValueOrDefault(x, y);
-			if (!tile.HasRoadConnection()) return [];
-			List<Vector2I> neighborCoordinates = [];
-			if (tile.HasRoadConnection(Vector2I.Up)) neighborCoordinates.Add(new Vector2I(x, y)+Vector2I.Up);
-			if (tile.HasRoadConnection(Vector2I.Right)) neighborCoordinates.Add(new Vector2I(x, y)+Vector2I.Right);
-			if (tile.HasRoadConnection(Vector2I.Down)) neighborCoordinates.Add(new Vector2I(x, y)+Vector2I.Down);
-			if (tile.HasRoadConnection(Vector2I.Left)) neighborCoordinates.Add(new Vector2I(x, y)+Vector2I.Left);
-
-			return [.. neighborCoordinates];
-		});
-		pathfinder.UpdateGrid();
-
-		GenericGrid<GroundTile> shapeGrid = new GenericGrid<GroundTile>(4, 2, (g, x, y) => null, cellSize: 16);
-		shapeGrid.SetGridValue(0, 0, new GroundTile(new Vector2I(1, 0), roads:[false, true, false, true]));
-		shapeGrid.SetGridValue(1, 0, new GroundTile(new Vector2I(1, 0), roads:[true, true, true, true]));
-		shapeGrid.SetGridValue(2, 0, new GroundTile(new Vector2I(1, 0), roads:[false, true, false, true]));
-		shapeGrid.SetGridValue(3, 0, new GroundTile(new Vector2I(1, 0), roads:[true, true, true, true]));
-		shapeGrid.SetGridValue(1, 1, new GroundTile(new Vector2I(1, 0), roads:[true, false, true, false]));
-
-		TileShape shape = new(shapeGrid);
-
-		TileShapePlacer placer = GetNode<TileShapePlacer>("TileShapePlacer");
-		placer.Initialize(shape, grid);
-
-		placer.OnShapePlaced += () => 
+			for (int y = 0; y < grid.GetHeight(); y++)
 			{
-				gr.RenderGrid(grid); 
-				pathfinder.UpdateGrid();
-				List<Vector2> path = pathfinder.GetPathInPositions(startingPosition, endingPosition, 16);
-				if (path != null)
+				GroundTile t = grid.GetGridValueOrDefault(x, y);
+				if (t.HasRoadDeadEnd())
 				{
-					foreach (Vector2 node in path)
-					{
-						GD.Print($" - {node}");
-					}
-					pf.SetPath(path);
+					potentialSpawnPoints.Add(t);
 				}
-			};
+			}
+		}
+		// GD.Print($"SpawnPoints: {potentialSpawnPoints}");
+
+		GridAStarPathfinder<GroundTile> pathfinder = new GridAStarPathfinder<GroundTile>(grid, 
+			(x,y) => {
+					List<Vector2I> neighborPositions = [];
+                    if (grid.IsOnGrid(x, y-1)) neighborPositions.Add(new Vector2I(x, y-1)); // UP
+                    if (grid.IsOnGrid(x+1, y)) neighborPositions.Add(new Vector2I(x+1, y)); // RIGHT
+                    if (grid.IsOnGrid(x, y+1)) neighborPositions.Add(new Vector2I(x, y+1)); // DOWN
+                    if (grid.IsOnGrid(x-1, y)) neighborPositions.Add(new Vector2I(x-1, y)); // LEFT
+
+                    Dictionary<Vector2I, float> neighborCosts = [];
+
+                    GroundTile currentTile = grid.GetGridValueOrDefault(x, y);
+                    
+
+                    foreach (Vector2I coordinate in neighborPositions)
+                    {
+                        GroundTile nextTile = grid.GetGridValueOrDefault(coordinate.X, coordinate.Y);
+
+
+                        if (currentTile.HasRoadConnection(nextTile.position - currentTile.position))
+                        {
+							neighborCosts.Add(coordinate, 1);
+                        } 
+
+                        
+                    }
+
+                    return neighborCosts;
+			}
+		);
+
+		// Spawn enemies
+		List<Enemy> testEnemies = [];
+		for (int i = 0; i < 5; i++)
+		{
+			var enemy = GD.Load<PackedScene>("res://Scenes/enemy.tscn").Instantiate<Enemy>();
+			enemy.Initialize(100.0f, 25.0f);
+			testEnemies.Add(enemy);
+			GetTree().GetRoot().CallDeferred("add_child", enemy); // Cannot add children in _Ready()
+		}
+
+		// Set enemy paths
+		Random randomizer = new();
+		for (int i = 0; i < testEnemies.Count; i++)
+		{
+			var enemy = testEnemies[i];
+			var spawnPoint = potentialSpawnPoints[randomizer.Next(potentialSpawnPoints.Count)].position;
+			var path = pathfinder.GetPathInPositions(spawnPoint, hubLocation, grid.cellSize);
+			enemy.SetPath(path);
+			enemy.GlobalPosition = grid.GetCentralGridCellPositionPixels(spawnPoint);
+		}
+
+		// GD.Print($"Enemy {testEnemies[0].Name} distance to hub: {testEnemies[0].GetDistanceToGoalPixels()}");
+
 	}
 
 }

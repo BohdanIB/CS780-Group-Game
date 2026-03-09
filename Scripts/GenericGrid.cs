@@ -10,11 +10,11 @@ public class GenericGrid<TGridObject>
 	public GenericGrid(int width, int height, Func<GenericGrid<TGridObject>, int, int, TGridObject> createGridObject, float cellSize = 1) {
 		this.width = width;
 		this.height = height;
-		gridArray = new TGridObject[height, width];
+		gridArray = new TGridObject[width, height];
 
-		for (int y = 0; y < gridArray.GetLength(0); y++) {
-			for (int x = 0; x < gridArray.GetLength(1); x++) {
-				gridArray[y, x] = createGridObject(this, x, y);
+		for (int y = 0; y < height; y++) {
+			for (int x = 0; x < width; x++) {
+				gridArray[x, y] = createGridObject(this, x, y);
 			}
 		} 
 
@@ -34,14 +34,14 @@ public class GenericGrid<TGridObject>
 
 		int assignmentIndex = 0;
 
-		outArray[assignmentIndex++] = GetGridValueOrDefault(x, y+1);
-		if (considerDiagonals) outArray[assignmentIndex++] = GetGridValueOrDefault(x+1, y+1);
-		outArray[assignmentIndex++] = GetGridValueOrDefault(x+1, y);
-		if (considerDiagonals) outArray[assignmentIndex++] = GetGridValueOrDefault(x+1, y-1);
 		outArray[assignmentIndex++] = GetGridValueOrDefault(x, y-1);
-		if (considerDiagonals) outArray[assignmentIndex++] = GetGridValueOrDefault(x-1, y-1);
-		outArray[assignmentIndex++] = GetGridValueOrDefault(x-1, y);
+		if (considerDiagonals) outArray[assignmentIndex++] = GetGridValueOrDefault(x+1, y-1);
+		outArray[assignmentIndex++] = GetGridValueOrDefault(x+1, y);
+		if (considerDiagonals) outArray[assignmentIndex++] = GetGridValueOrDefault(x+1, y+1);
+		outArray[assignmentIndex++] = GetGridValueOrDefault(x, y+1);
 		if (considerDiagonals) outArray[assignmentIndex++] = GetGridValueOrDefault(x-1, y+1);
+		outArray[assignmentIndex++] = GetGridValueOrDefault(x-1, y);
+		if (considerDiagonals) outArray[assignmentIndex++] = GetGridValueOrDefault(x-1, y-1);
 
 		return outArray;
 	}
@@ -52,7 +52,7 @@ public class GenericGrid<TGridObject>
 
 	public TGridObject GetGridValueOrDefault(int x, int y) {
 		if (!IsOnGrid(x, y)) return default;
-		return gridArray[y,x];
+		return gridArray[x,y];
 	}
 
 	public void SetGridValue(int x, int y, TGridObject newValue) {
@@ -72,15 +72,15 @@ public class GenericGrid<TGridObject>
 	public void ForEach(Action<TGridObject> action) {
 		 for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width; x++) {
-				action(gridArray[y, x]);
+				action(gridArray[x, y]);
 			}
 		 }
 	}
 
 	public void ForEach(Action<TGridObject> action, Vector2I start, Vector2I end) {
-		 for (int y = (int) start.Y; y < end.Y; y++) {
-			for (int x = (int) start.X; x < end.X; x++) {
-				action(gridArray[y, x]);
+		 for (int y = start.Y; y < end.Y; y++) {
+			for (int x = start.X; x < end.X; x++) {
+				action(gridArray[x, y]);
 			}
 		 }
 	}
@@ -99,5 +99,10 @@ public class GenericGrid<TGridObject>
 	public Vector2I GetGridDimensions()
 	{
 		return new Vector2I(width, height);
+	}
+	
+	public Vector2 GetCentralGridCellPositionPixels(Vector2I pos)
+	{
+		return new Vector2((pos.X * cellSize) + (cellSize / 2), (pos.Y * cellSize) + (cellSize / 2));
 	}
 }
