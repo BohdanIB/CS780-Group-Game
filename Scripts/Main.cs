@@ -12,6 +12,14 @@ public partial class Main : Node2D
 		GridRenderer gr = GetNode<GridRenderer>("GridRenderer");
 		gr.RenderGrid(grid);
 
+/*added this to make it sync with ui*/
+		var tileSize = gr.terrainMap.TileSet.TileSize;
+		var center = new Vector2(
+		21 * tileSize.X / 2f,
+		21 * tileSize.Y / 2f);
+		//end of stuff I added
+GetNode<Camera2D>("Camera2D").Position = center;
+
 		TurretPlacer turretPlacer = GetNode<TurretPlacer>("TurretPlacer");
 		turretPlacer.Initialize(grid);
 
@@ -51,30 +59,30 @@ public partial class Main : Node2D
 		GridAStarPathfinder<GroundTile> pathfinder = new GridAStarPathfinder<GroundTile>(grid, 
 			(x,y) => {
 					List<Vector2I> neighborPositions = [];
-                    if (grid.IsOnGrid(x, y-1)) neighborPositions.Add(new Vector2I(x, y-1)); // UP
-                    if (grid.IsOnGrid(x+1, y)) neighborPositions.Add(new Vector2I(x+1, y)); // RIGHT
-                    if (grid.IsOnGrid(x, y+1)) neighborPositions.Add(new Vector2I(x, y+1)); // DOWN
-                    if (grid.IsOnGrid(x-1, y)) neighborPositions.Add(new Vector2I(x-1, y)); // LEFT
+					if (grid.IsOnGrid(x, y-1)) neighborPositions.Add(new Vector2I(x, y-1)); // UP
+					if (grid.IsOnGrid(x+1, y)) neighborPositions.Add(new Vector2I(x+1, y)); // RIGHT
+					if (grid.IsOnGrid(x, y+1)) neighborPositions.Add(new Vector2I(x, y+1)); // DOWN
+					if (grid.IsOnGrid(x-1, y)) neighborPositions.Add(new Vector2I(x-1, y)); // LEFT
 
-                    Dictionary<Vector2I, float> neighborCosts = [];
+					Dictionary<Vector2I, float> neighborCosts = [];
 
-                    GroundTile currentTile = grid.GetGridValueOrDefault(x, y);
-                    
+					GroundTile currentTile = grid.GetGridValueOrDefault(x, y);
+					
 
-                    foreach (Vector2I coordinate in neighborPositions)
-                    {
-                        GroundTile nextTile = grid.GetGridValueOrDefault(coordinate.X, coordinate.Y);
+					foreach (Vector2I coordinate in neighborPositions)
+					{
+						GroundTile nextTile = grid.GetGridValueOrDefault(coordinate.X, coordinate.Y);
 
 
-                        if (currentTile.HasRoadConnection(nextTile.position - currentTile.position))
-                        {
+						if (currentTile.HasRoadConnection(nextTile.position - currentTile.position))
+						{
 							neighborCosts.Add(coordinate, 1);
-                        } 
+						} 
 
-                        
-                    }
+						
+					}
 
-                    return neighborCosts;
+					return neighborCosts;
 			}
 		);
 

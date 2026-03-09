@@ -2,10 +2,10 @@
 
 [ext_resource type="Script" uid="uid://cuir3nismmvnr" path="res://Scripts/Main.cs" id="1_jjgbg"]
 [ext_resource type="PackedScene" uid="uid://tw6j84txs1a1" path="res://Scenes/grid_renderer.tscn" id="2_bo1nx"]
-[ext_resource type="PackedScene" uid="uid://cundji84oafs3" path="res://Scenes/tile_shape_placer.tscn" id="3_jjvhh"]
+[ext_resource type="PackedScene" uid="uid://cundji84oafs3" path="res://Scenes/legacy/tile_shape_placer.tscn" id="3_jjvhh"]
 [ext_resource type="PackedScene" uid="uid://dtv7kt7wo8omt" path="res://Scenes/path_follower.tscn" id="4_jjvhh"]
-[ext_resource type="PackedScene" uid="uid://bxnekokl8stoa" path="res://Scenes/game_ui.tscn" id="5_kry3j"]
 [ext_resource type="PackedScene" uid="uid://caafjqfx010mq" path="res://Scenes/turret_placer.tscn" id="5_kry3j"]
+[ext_resource type="PackedScene" uid="uid://bxnekokl8stoa" path="res://Scenes/game_ui.tscn" id="6_21xkr"]
 
 [node name="Main" type="Node2D" unique_id=1822167308]
 script = ExtResource("1_jjgbg")
@@ -15,7 +15,13 @@ script = ExtResource("1_jjgbg")
 [node name="TileShapePlacer" parent="." unique_id=1636893986 instance=ExtResource("3_jjvhh")]
 
 [node name="PathFollower" parent="." unique_id=142391362 instance=ExtResource("4_jjvhh")]
-movementSpeed = 10.0
 
 [node name="GameUI" parent="." unique_id=892076605 instance=ExtResource("5_kry3j")]
+
 [node name="TurretPlacer" parent="." unique_id=1881251108 instance=ExtResource("5_kry3j")]
+
+[node name="GameUI2" parent="." unique_id=556209750 instance=ExtResource("6_21xkr")]
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=607524974]
+position = Vector2(1500, 300)
+zoom = Vector2(3.2, 3.2)
