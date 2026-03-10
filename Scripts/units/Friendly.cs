@@ -3,7 +3,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public partial class Friendly : GenericPathFollower
+public partial class Friendly : PathFollower
 {
 	private FriendlyStats _stats;
 

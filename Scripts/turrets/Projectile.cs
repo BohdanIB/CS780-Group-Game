@@ -14,7 +14,7 @@ public partial class Projectile : Area2D
 
 	private AnimatedSprite2D _sprite;
 
-	private GenericPathFollower _target;
+	private PathFollower _target;
 	private Vector2 _targetLastKnownLocation;
 
 	/// <summary>
@@ -22,7 +22,7 @@ public partial class Projectile : Area2D
 	/// </summary>
 	/// <param name="target"></param>
 	/// <param name="projectileStats"></param>
-	public void Initialize(GenericPathFollower target, ProjectileStats projectileStats)
+	public void Initialize(PathFollower target, ProjectileStats projectileStats)
 	{
 		_target = target;
 		if (!IsInstanceValid(_target))
@@ -39,7 +39,7 @@ public partial class Projectile : Area2D
 	/// </summary>
 	/// <param name="target"></param>
 	/// <param name="projectileType"></param>
-	public void Initialize(GenericPathFollower target, ProjectileStats.Category projectileType)
+	public void Initialize(PathFollower target, ProjectileStats.Category projectileType)
 	{
 		Initialize(target, new ProjectileStats(projectileType));
 	}
@@ -51,7 +51,7 @@ public partial class Projectile : Area2D
 
 		AreaEntered += (area) =>
 		{
-			if (area is GenericPathFollower pf && pf == _target)
+			if (area is PathFollower pf && pf == _target)
 			{
 				ProjectileImpact();
 			}

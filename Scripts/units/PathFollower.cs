@@ -3,7 +3,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public partial class GenericPathFollower : Area2D
+public partial class PathFollower : Area2D
 {
 	protected const float DISTANCE_THRESHOLD = 0.01f;
 

@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dtv7kt7wo8omt"]
 
-[ext_resource type="Script" uid="uid://c6iit2ynd856b" path="res://Scripts/units/GenericPathFollower.cs" id="1_atuyi"]
+[ext_resource type="Script" uid="uid://c6iit2ynd856b" path="res://Scripts/units/PathFollower.cs" id="1_atuyi"]
 [ext_resource type="Script" uid="uid://bca40tiktvab7" path="res://Scripts/turrets/Projectile.cs" id="2_f0inm"]
 [ext_resource type="Texture2D" uid="uid://djpqivk2pwl35" path="res://Assets/Sprites/temp_projectiles.png" id="3_w7rg7"]
 

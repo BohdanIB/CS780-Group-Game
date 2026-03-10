@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://braeaociys3xn"]
 
-[ext_resource type="PackedScene" uid="uid://dtv7kt7wo8omt" path="res://Scenes/generic_path_follower.tscn" id="1_jgycc"]
+[ext_resource type="PackedScene" uid="uid://dtv7kt7wo8omt" path="res://Scenes/path_follower.tscn" id="1_jgycc"]
 [ext_resource type="Script" uid="uid://bs25gk004xjd8" path="res://Scripts/units/Friendly.cs" id="2_50fos"]
 [ext_resource type="Script" uid="uid://bca40tiktvab7" path="res://Scripts/turrets/Projectile.cs" id="3_ljipm"]
 [ext_resource type="Texture2D" uid="uid://cn7d6ij73r2i" path="res://Assets/Sprites/temp_friendly.png" id="3_ub8j0"]
@@ -33,7 +33,7 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="PackedScene" id="PackedScene_r8675"]
+[sub_resource type="PackedScene" id="PackedScene_ljipm"]
 resource_local_to_scene = true
 _bundled = {
 "conn_count": 0,
@@ -49,11 +49,11 @@ _bundled = {
 "version": 3
 }
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_bxj72"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_r41ou"]
 resource_local_to_scene = true
 radius = 5.0
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_404pq"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_f2s7q"]
 resource_local_to_scene = true
 radius = 5.0
 
@@ -81,13 +81,13 @@ animations = [{
 
 [node name="Friendly" unique_id=382514737 instance=ExtResource("1_jgycc")]
 script = ExtResource("2_50fos")
-_projectileScene = SubResource("PackedScene_r8675")
+_projectileScene = SubResource("PackedScene_ljipm")
 
 [node name="HitboxCollisionShape2D" parent="." index="0" unique_id=1358123789]
-shape = SubResource("CircleShape2D_bxj72")
+shape = SubResource("CircleShape2D_r41ou")
 
 [node name="AggroCollisionShape2D" parent="AggroArea2D" parent_id_path=PackedInt32Array(1396697523) index="0" unique_id=1901836338]
-shape = SubResource("CircleShape2D_404pq")
+shape = SubResource("CircleShape2D_f2s7q")
 
 [node name="AnimatedSprite2D" parent="." index="2" unique_id=1606845345]
 scale = Vector2(0.25, 0.25)

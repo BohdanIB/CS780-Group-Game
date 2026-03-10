@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// TODO: Merge functionality between turrets and enemies somehow (shooter component which gets plugged into enemy and turret?)
 ///   - Shares a lot of functions with turret honestly...
 /// </summary>
-public partial class Enemy: GenericPathFollower
+public partial class Enemy: PathFollower
 {
 	// Stolen from BloonsTD; Targeting priorities for turret
 	public enum TargetingMode

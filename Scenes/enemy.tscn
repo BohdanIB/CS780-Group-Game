@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cvx7nxyaghhrx"]
 
-[ext_resource type="PackedScene" uid="uid://dtv7kt7wo8omt" path="res://Scenes/generic_path_follower.tscn" id="1_hghv2"]
+[ext_resource type="PackedScene" uid="uid://dtv7kt7wo8omt" path="res://Scenes/path_follower.tscn" id="1_hghv2"]
 [ext_resource type="Script" uid="uid://c21fjsrl23hps" path="res://Scripts/units/Enemy.cs" id="2_1f0kj"]
 [ext_resource type="Script" uid="uid://bca40tiktvab7" path="res://Scripts/turrets/Projectile.cs" id="3_0830c"]
 [ext_resource type="Texture2D" uid="uid://bdd0jbwygdyav" path="res://Assets/Sprites/temp_enemy.png" id="4_287tu"]
