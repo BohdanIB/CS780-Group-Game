@@ -1,3 +1,4 @@
+
 using Godot;
 using System.Collections.Generic;
 
@@ -22,10 +23,10 @@ public partial class TurretStats : Resource
 	};
 
 	// Turret Stats
-	[Export] private Category _type;
-	[Export] private float _aggroRadius, _health, _fireRate, _projectileSpeed, _damage;
-	[Export] private ProjectileStats _projectileStats;
-	[Export] private int _spriteFrame;
+	private Category _type;
+	private float _aggroRadius, _health, _fireRate, _projectileSpeed, _damage;
+	private ProjectileStats _projectileStats;
+	private int _spriteFrame;
 
 	// Getters + Setters
 	public Category Type { get => _type; set => _type = value; }
