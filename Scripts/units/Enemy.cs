@@ -9,6 +9,10 @@ using System.Collections.Generic;
 /// </summary>
 public partial class Enemy: PathFollower
 {
+	// Components //
+	[Export] private HurtComponent _hurtComponent;
+	[Export] private HealthComponent _healthComponent;
+
 	// Stolen from BloonsTD; Targeting priorities for turret
 	public enum TargetingMode
 	{
@@ -61,6 +65,13 @@ public partial class Enemy: PathFollower
 				// GD.Print($"ENEMY '{Name}' AGGRO RANGE EXITED BY {t.Name}");
 				_targetsInRange.Remove(t);
 			}
+		};
+
+		_hurtComponent.OnHurt += _healthComponent.ApplyDamage;
+		_healthComponent.OnNoHealthLeft += () 
+		{
+			GD.Print($"Enemy {Name} died.");
+			// TODO: ENEMY DEAD
 		};
 	}
 

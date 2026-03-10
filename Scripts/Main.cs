@@ -20,7 +20,7 @@ public partial class Main : Node2D
 		TurretPlacer turretPlacer = GetNode<TurretPlacer>("TurretPlacer");
 		turretPlacer.Initialize(grid);
 
-		Enemy.TempEnemyDemo(this, grid, hubLocation, randomizer);
-		Friendly.TempFriendlyDemo(this, grid, hubLocation, randomizer);
+		// Enemy.TempEnemyDemo(this, grid, hubLocation, randomizer);
+		// Friendly.TempFriendlyDemo(this, grid, hubLocation, randomizer);
 	}
 }
