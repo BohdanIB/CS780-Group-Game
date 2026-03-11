@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public partial class WorldGenerator : Node
 {
-    private const float ROAD_TRAVERSAL_COST = 1, PARTIAL_ROAD_COST = .3f, ELEVATION_COST_SCALAR = 3;
+    private const float ROAD_TRAVERSAL_COST = 1, ROAD_CONSTRUCTION_COST = .3f, ELEVATION_COST_SCALAR = 3;
 
     private const string TERRAIN_DIRECTORY_PATH = "res://Resources/Terrain/";
 
@@ -14,10 +14,10 @@ public partial class WorldGenerator : Node
         Random randomizer = new(seed);
 
         float[,] elevationNoise = GenerateNoiseMatrix(dimensions.X, dimensions.Y, seed: randomizer.Next());
-        float[,] humidityNoise = GenerateNoiseMatrix(dimensions.X, dimensions.Y, seed: randomizer.Next());
-        float[,] temperatureNoise = GenerateNoiseMatrix(dimensions.X, dimensions.Y, seed: randomizer.Next());
+        float[,] humidityNoise = GenerateNoiseMatrix(dimensions.X, dimensions.Y, seed: randomizer.Next(), frequency:0.03f);
+        float[,] temperatureNoise = GenerateNoiseMatrix(dimensions.X, dimensions.Y, seed: randomizer.Next(), lucanarity:1);
 
-        TerrainType[] loadedTerrains = LoadTerrains();
+        BiomeType[] loadedTerrains = LoadTerrains();
 
 
         GenericGrid<GroundTile> newWorld = new GenericGrid<GroundTile>(dimensions.X, dimensions.Y, (g, x, y) => new GroundTile(SelectTerrain(elevationNoise[x, y], humidityNoise[x, y], temperatureNoise[x, y], loadedTerrains), new Vector2I(x, y)), 16);
@@ -47,10 +47,10 @@ public partial class WorldGenerator : Node
                         } 
                         else
                         {
-                            cost = (currentTile.HasRoadConnection() ? PARTIAL_ROAD_COST : (ELEVATION_COST_SCALAR * elevationNoise[currentTile.position.X, currentTile.position.Y])) 
-                                 + (nextTile.HasRoadConnection() ? PARTIAL_ROAD_COST : (ELEVATION_COST_SCALAR * elevationNoise[nextTile.position.X, nextTile.position.Y]));
+                            cost = (currentTile.HasRoadConnection() ? ROAD_CONSTRUCTION_COST : (ROAD_CONSTRUCTION_COST + (ELEVATION_COST_SCALAR * elevationNoise[currentTile.position.X, currentTile.position.Y]))) 
+                                 + (nextTile.HasRoadConnection() ? ROAD_CONSTRUCTION_COST : (ROAD_CONSTRUCTION_COST + (ELEVATION_COST_SCALAR * elevationNoise[nextTile.position.X, nextTile.position.Y])));
                             cost /= 2;
-                            cost += 1;
+                            cost += ROAD_TRAVERSAL_COST;
                         }
 
                         neighborCosts.Add(coordinate, cost);
@@ -91,7 +91,7 @@ public partial class WorldGenerator : Node
 
         // Draw potential loops
 
-        for (int i = 0; i < 1; i++)
+        for (int i = 0; i < 8; i++)
         {
             Vector2I initialPoint = targetPoints[randomizer.Next(targetPoints.Count)];
             Vector2I finalPoint = targetPoints[randomizer.Next(targetPoints.Count)];
@@ -121,12 +121,12 @@ public partial class WorldGenerator : Node
         return newWorld;
     }
 
-    public static TerrainType SelectTerrain(float elevation, float humidity, float temperature, TerrainType[] terrainTypes)
+    public static BiomeType SelectTerrain(float elevation, float humidity, float temperature, BiomeType[] terrainTypes)
     {
         float bestPriority = -1;
-        TerrainType selectedTerrain = null;
+        BiomeType selectedTerrain = null;
 
-        foreach (TerrainType terrain in terrainTypes)
+        foreach (BiomeType terrain in terrainTypes)
         {
             if (elevation >= terrain.elevationGenerationRange.X && elevation <= terrain.elevationGenerationRange.Y
              && humidity >= terrain.humidityGenerationRange.X && humidity <= terrain.humidityGenerationRange.Y
@@ -143,18 +143,18 @@ public partial class WorldGenerator : Node
         return selectedTerrain;
     }
 
-    public static TerrainType[] LoadTerrains()
+    public static BiomeType[] LoadTerrains()
     {
         DirAccess directory = DirAccess.Open(TERRAIN_DIRECTORY_PATH);
         if (directory == null) return null;
 
-        List<TerrainType> loadedTerrains = [];
+        List<BiomeType> loadedTerrains = [];
 
         directory.ListDirBegin();
 
         foreach (string terrainFileName in directory.GetFiles())
         {
-            loadedTerrains.Add(ResourceLoader.Load<TerrainType>($"{TERRAIN_DIRECTORY_PATH}/{terrainFileName}"));
+            loadedTerrains.Add(ResourceLoader.Load<BiomeType>($"{TERRAIN_DIRECTORY_PATH}/{terrainFileName}"));
         }
 
         directory.ListDirEnd();

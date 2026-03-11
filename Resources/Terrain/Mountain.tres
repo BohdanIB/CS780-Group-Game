@@ -1,10 +1,10 @@
 [gd_resource type="Resource" script_class="TerrainType" format=3 uid="uid://dxmt4lkaw6sf1"]
 
-[ext_resource type="Script" uid="uid://dff1fbgdyals4" path="res://Scripts/TerrainType.cs" id="1_uscgg"]
+[ext_resource type="Script" uid="uid://dff1fbgdyals4" path="res://Scripts/World/BiomeType.cs" id="1_uscgg"]
 
 [resource]
 script = ExtResource("1_uscgg")
 groundTileAtlasCoords = Vector2i(1, 2)
 elevationGenerationRange = Vector2(0.8, 1)
-generationPriority = 0.2
+generationPriority = 0.5
 metadata/_custom_type_script = "uid://dff1fbgdyals4"
