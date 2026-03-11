@@ -16,11 +16,9 @@ script = ExtResource("1_jjgbg")
 
 [node name="PathFollower" parent="." unique_id=142391362 instance=ExtResource("4_jjvhh")]
 
-[node name="GameUI" parent="." unique_id=892076605 instance=ExtResource("5_kry3j")]
-
 [node name="TurretPlacer" parent="." unique_id=1881251108 instance=ExtResource("5_kry3j")]
 
-[node name="GameUI2" parent="." unique_id=556209750 instance=ExtResource("6_21xkr")]
+[node name="GameUI" parent="." unique_id=556209750 instance=ExtResource("6_21xkr")]
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=607524974]
 position = Vector2(1500, 300)
