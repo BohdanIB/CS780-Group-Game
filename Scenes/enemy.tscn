@@ -5,8 +5,6 @@
 [ext_resource type="Script" uid="uid://bca40tiktvab7" path="res://Scripts/turrets/Projectile.cs" id="3_0830c"]
 [ext_resource type="Texture2D" uid="uid://bdd0jbwygdyav" path="res://Assets/Sprites/temp_enemy.png" id="4_287tu"]
 [ext_resource type="Texture2D" uid="uid://djpqivk2pwl35" path="res://Assets/Sprites/temp_projectiles.png" id="4_ghaa6"]
-[ext_resource type="PackedScene" uid="uid://e5vy6kbwqw12" path="res://Scenes/Components/health_component.tscn" id="6_ghaa6"]
-[ext_resource type="PackedScene" uid="uid://bu5bt5d2jv3iu" path="res://Scenes/Components/hurt_component.tscn" id="7_1dp5w"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_0830c"]
 resource_local_to_scene = true
@@ -35,7 +33,7 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="PackedScene" id="PackedScene_1dp5w"]
+[sub_resource type="PackedScene" id="PackedScene_0830c"]
 resource_local_to_scene = true
 _bundled = {
 "conn_count": 0,
@@ -51,11 +49,7 @@ _bundled = {
 "version": 3
 }
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_auwsv"]
-resource_local_to_scene = true
-radius = 5.0
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_8uf12"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_ghaa6"]
 resource_local_to_scene = true
 radius = 5.0
 
@@ -81,21 +75,19 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="Enemy" unique_id=382514737 instance=ExtResource("1_hghv2")]
+[node name="Enemy" unique_id=382514737 node_paths=PackedStringArray("_hurtComponent", "_healthComponent") instance=ExtResource("1_hghv2")]
 script = ExtResource("2_1f0kj")
-_projectileScene = SubResource("PackedScene_1dp5w")
-
-[node name="HitboxCollisionShape2D" parent="." index="0" unique_id=1358123789]
-shape = SubResource("CircleShape2D_auwsv")
+_debugCategory = 0
+_hurtComponent = NodePath("HurtComponent")
+_healthComponent = NodePath("HealthComponent")
+_projectileScene = SubResource("PackedScene_0830c")
 
 [node name="AggroCollisionShape2D" parent="AggroArea2D" parent_id_path=PackedInt32Array(1396697523) index="0" unique_id=1901836338]
-shape = SubResource("CircleShape2D_8uf12")
+shape = SubResource("CircleShape2D_ghaa6")
 
-[node name="AnimatedSprite2D" parent="." index="2" unique_id=1606845345]
+[node name="AnimatedSprite2D" parent="." index="1" unique_id=1606845345]
 scale = Vector2(0.25, 0.25)
 sprite_frames = SubResource("SpriteFrames_1dp5w")
 
-[node name="HealthComponent" parent="." index="4" unique_id=1408774868 instance=ExtResource("6_ghaa6")]
-_startingHealth = 5.0
-
-[node name="HurtComponent" parent="." index="5" unique_id=495543674 instance=ExtResource("7_1dp5w")]
+[node name="HurtComponent" parent="." index="4" unique_id=495543674]
+_entityGroup = 1

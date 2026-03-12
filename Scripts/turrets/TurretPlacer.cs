@@ -1,3 +1,5 @@
+
+using CS780GroupProject.Scripts.Utils;
 using Godot;
 using System;
 
@@ -8,7 +10,7 @@ public partial class TurretPlacer : Node2D
 {
 	private bool _turretPlacerEnabled = false;
 	private TurretStats.Category _currentTurretType = TurretStats.Category.Ballista;
-	private Turret.TargetingMode _currentTurretTargetMode = Turret.TargetingMode.First;
+	private TargetingMode _currentTurretTargetMode = TargetingMode.First;
 	private GenericGrid<GroundTile> _grid;
 	private Vector2I _currentOriginCoordinates = new();
 
@@ -54,7 +56,7 @@ public partial class TurretPlacer : Node2D
 		if (Input.IsActionJustPressed("SwitchTurretTargetingMode"))
 		{
 			_currentTurretTargetMode++;
-			if (!Enum.IsDefined(typeof(Turret.TargetingMode), _currentTurretTargetMode))
+			if (!Enum.IsDefined(typeof(TargetingMode), _currentTurretTargetMode))
 			{
 				_currentTurretTargetMode = 0;
 			}

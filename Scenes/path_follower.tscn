@@ -3,6 +3,8 @@
 [ext_resource type="Script" uid="uid://c6iit2ynd856b" path="res://Scripts/units/PathFollower.cs" id="1_atuyi"]
 [ext_resource type="Script" uid="uid://bca40tiktvab7" path="res://Scripts/turrets/Projectile.cs" id="2_f0inm"]
 [ext_resource type="Texture2D" uid="uid://djpqivk2pwl35" path="res://Assets/Sprites/temp_projectiles.png" id="3_w7rg7"]
+[ext_resource type="PackedScene" uid="uid://e5vy6kbwqw12" path="res://Scenes/Components/health_component.tscn" id="4_43wju"]
+[ext_resource type="PackedScene" uid="uid://bu5bt5d2jv3iu" path="res://Scenes/Components/hurt_component.tscn" id="5_rbq3h"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_xjght"]
 resource_local_to_scene = true
@@ -47,23 +49,16 @@ _bundled = {
 "version": 3
 }
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_atuyi"]
-resource_local_to_scene = true
-
 [sub_resource type="CircleShape2D" id="CircleShape2D_twpjy"]
 resource_local_to_scene = true
 
-[node name="PathFollower" type="Area2D" unique_id=382514737 node_paths=PackedStringArray("_aggroArea2D", "_aggroCollisionShape2D", "_hitboxCollisionShape2D", "_animatedSprite2D", "_shotCooldownTimer")]
+[node name="PathFollower" type="Node2D" unique_id=1740221814 node_paths=PackedStringArray("_aggroArea2D", "_aggroCollisionShape2D", "_animatedSprite2D", "_shotCooldownTimer")]
 script = ExtResource("1_atuyi")
 _aggroArea2D = NodePath("AggroArea2D")
 _aggroCollisionShape2D = NodePath("AggroArea2D/AggroCollisionShape2D")
-_hitboxCollisionShape2D = NodePath("HitboxCollisionShape2D")
 _animatedSprite2D = NodePath("AnimatedSprite2D")
 _shotCooldownTimer = NodePath("ShotCooldownTimer")
 _projectileScene = SubResource("PackedScene_iqd36")
-
-[node name="HitboxCollisionShape2D" type="CollisionShape2D" parent="." unique_id=1358123789]
-shape = SubResource("CircleShape2D_atuyi")
 
 [node name="AggroArea2D" type="Area2D" parent="." unique_id=1396697523]
 
@@ -76,3 +71,7 @@ debug_color = Color(0.99215686, 0, 0.26666668, 0.19607843)
 [node name="ShotCooldownTimer" type="Timer" parent="." unique_id=1239641386]
 process_callback = 0
 one_shot = true
+
+[node name="HealthComponent" parent="." unique_id=1408774868 instance=ExtResource("4_43wju")]
+
+[node name="HurtComponent" parent="." unique_id=495543674 instance=ExtResource("5_rbq3h")]

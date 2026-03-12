@@ -7,14 +7,13 @@ public partial class Projectile : Area2D
 {
 	public const float MIN_TARGET_DISTANCE = 0.01f;
 
-	[Signal]
-	public delegate void OnProjectileImpactEventHandler(Vector2 Position, ProjectileStats Stats);
+	[Signal] public delegate void OnProjectileImpactEventHandler(Vector2 Position, ProjectileStats Stats);
 
 	[Export] private ProjectileStats _stats;
 
 	private AnimatedSprite2D _sprite;
 
-	private PathFollower _target;
+	private HurtComponent _target;
 	private Vector2 _targetLastKnownLocation;
 
 	/// <summary>
@@ -22,7 +21,7 @@ public partial class Projectile : Area2D
 	/// </summary>
 	/// <param name="target"></param>
 	/// <param name="projectileStats"></param>
-	public void Initialize(PathFollower target, ProjectileStats projectileStats)
+	public void Initialize(HurtComponent target, ProjectileStats projectileStats) // TODO: Give projectile a vector to target instead of target?
 	{
 		_target = target;
 		if (!IsInstanceValid(_target))
@@ -39,7 +38,7 @@ public partial class Projectile : Area2D
 	/// </summary>
 	/// <param name="target"></param>
 	/// <param name="projectileType"></param>
-	public void Initialize(PathFollower target, ProjectileStats.Category projectileType)
+	public void Initialize(HurtComponent target, ProjectileStats.Category projectileType)
 	{
 		Initialize(target, new ProjectileStats(projectileType));
 	}
@@ -51,7 +50,7 @@ public partial class Projectile : Area2D
 
 		AreaEntered += (area) =>
 		{
-			if (area is PathFollower pf && pf == _target)
+			if (area is HurtComponent hurtComponent && hurtComponent == _target)
 			{
 				ProjectileImpact();
 			}
@@ -106,7 +105,8 @@ public partial class Projectile : Area2D
 		if (IsInstanceValid(_target))
 		{
 			GD.Print($"Projectile hit target {_target.Name} for {_stats.Damage} damage");
-			_target.ChangeHealth(_stats.Damage);
+			// _target.ChangeHealth(_stats.Damage);
+			// TODO
 		}
 		QueueFree(); // TODO: FREEING AND DISCONNECTION OF SIGNALS? https://docs.godotengine.org/en/stable/tutorials/scripting/c_sharp/c_sharp_signals.html
 	}

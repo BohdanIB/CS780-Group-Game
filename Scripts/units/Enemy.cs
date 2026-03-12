@@ -1,4 +1,5 @@
 
+using CS780GroupProject.Scripts.Utils;
 using Godot;
 using System;
 using System.Collections.Generic;
@@ -9,25 +10,12 @@ using System.Collections.Generic;
 /// </summary>
 public partial class Enemy: PathFollower
 {
-	// Components //
-	[Export] private HurtComponent _hurtComponent;
-	[Export] private HealthComponent _healthComponent;
-
-	// Stolen from BloonsTD; Targeting priorities for turret
-	public enum TargetingMode
-	{
-		Random, // Random
-		First,  // Furthest down path
-		Last,   // Closest to spawn
-		Close,  // Closest to tower
-		Weak,   // Weakest enemies
-		Strong, // Strongest enemies
-	}
+	[Export] private EnemyStats.Category _debugCategory = EnemyStats.Category.UNDEFINED; // used strictly for debug
 
 	private EnemyStats _stats;
 	private TargetingMode _targetingMode = TargetingMode.Weak;
 
-	protected List<Friendly> _targetsInRange = new(); // todo
+	protected List<Area2D> _targetsInRange = new(); // todo - enemy needs a list of valid target types? (hit component probably deals with this)
 
 	/// <summary>
 	/// Initializes enemy with "generic" base stats for given type.
@@ -50,36 +38,41 @@ public partial class Enemy: PathFollower
 	{
 		base._Ready();
 
-		_aggroArea2D.AreaEntered += (area) => 
+		// Used for creating enemies outside of instantiation for testing.
+		if (_debugCategory != EnemyStats.Category.UNDEFINED)
 		{
-			if (area is Friendly t)
-			{
-				// GD.Print($"ENEMY '{Name}' AGGRO RANGE ENTERED BY {t.Name}");
-				_targetsInRange.Add(t);
-			}
-		};
-		_aggroArea2D.AreaExited += (area) =>
-		{
-			if (area is Friendly t)
-			{
-				// GD.Print($"ENEMY '{Name}' AGGRO RANGE EXITED BY {t.Name}");
-				_targetsInRange.Remove(t);
-			}
-		};
+			Initialize(_debugCategory);
+		}
 
-		_hurtComponent.OnHurt += _healthComponent.ApplyDamage;
-		_healthComponent.OnNoHealthLeft += () 
-		{
-			GD.Print($"Enemy {Name} died.");
-			// TODO: ENEMY DEAD
-		};
+		// _aggroArea2D.AreaEntered += (area) => 
+		// {
+		// 	if (area is Friendly t)
+		// 	{
+		// 		// GD.Print($"ENEMY '{Name}' AGGRO RANGE ENTERED BY {t.Name}");
+		// 		_targetsInRange.Add(t);
+		// 	}
+		// };
+		// _aggroArea2D.AreaExited += (area) =>
+		// {
+		// 	if (area is Friendly t)
+		// 	{
+		// 		// GD.Print($"ENEMY '{Name}' AGGRO RANGE EXITED BY {t.Name}");
+		// 		_targetsInRange.Remove(t);
+		// 	}
+		// };
+
+		// _healthComponent.OnNoHealthLeft += () =>
+		// {
+		// 	GD.Print($"Enemy {Name} died.");
+		// 	// TODO: ENEMY DEAD
+		// };
 	}
 
 	public override void _PhysicsProcess(double delta)
 	{
 		base._PhysicsProcess(delta);
 		// Todo: Shoot at friendlies in range. Components?
-		FireAtValidTarget();
+		// FireAtValidTarget();
 	}
 
 	public void UpdateStats(EnemyStats newStats)
@@ -89,29 +82,29 @@ public partial class Enemy: PathFollower
 	}
 	public void UpdateStats()
 	{
-		UpdateEnemyHitboxRadius();
-		UpdateEnemyAggroRadius();
-		UpdateEnemySprite();
+		UpdateHitboxRadius();
+		UpdateAggroRadius();
+		UpdateSprite();
 
 		// Todo: Add more updates
 
-		UpdateEnemyHealth();
+		UpdateHealth();
 	}
-	private void UpdateEnemyHitboxRadius()
+	private void UpdateHitboxRadius()
 	{
-		((CircleShape2D)_hitboxCollisionShape2D.Shape).Radius = _stats.HitboxRadius; // TODO: Better way of doing this?
+		_hurtComponent.ModifyCollisionShapeRadius(_stats.HitboxRadius);
 	}
-	private void UpdateEnemyAggroRadius()
+	private void UpdateAggroRadius()
 	{
 		((CircleShape2D)_aggroCollisionShape2D.Shape).Radius = _stats.AggroRadius; // TODO: Better way of doing this?
 	}
-	private void UpdateEnemySprite()
+	private void UpdateSprite()
 	{
 		_animatedSprite2D.Frame = _stats.SpriteFrame;
 	}
-	private void UpdateEnemyHealth()
+	private void UpdateHealth()
 	{
-		_health = _stats.Health;
+		_healthComponent.SetHealth(_stats.Health);
 	}
 	public override string ToString()
 	{
@@ -182,54 +175,53 @@ public partial class Enemy: PathFollower
 		}
 	}
 
-	/// <summary>
-	/// If there is a valid target in range of current PathFollower, choose and fire at target given TargetingMode.
-	/// </summary>
-	private void FireAtValidTarget()
-	{
-		if (_targetsInRange.Count > 0 && _shotCooldownTimer.IsStopped())
-		{
-			Friendly currTarget;
-			if (_targetingMode == TargetingMode.Random)
-			{
-				currTarget = _targetsInRange[_random.Next(_targetsInRange.Count)];
-			}
-			else
-			{
-				// Look for an appropriate target to shoot at within PathFollower's radius given TargetingMode.
-				currTarget = _targetsInRange[0];
-				float currTargetDistanceFromSelf = Position.DistanceTo(currTarget.Position);
-				float currTargetDistanceFromGoal = currTarget.GetDistanceToGoalPixels();
-				float currTargetHealth = currTarget.GetCurrentHealth();
-				for (int i = 1; i < _targetsInRange.Count; i++)
-				{
-					var target = _targetsInRange[i];
-					float targetDistanceFromSelf = Position.DistanceTo(target.Position);
-					float targetDistanceFromGoal = target.GetDistanceToGoalPixels();
-					float targetHealth = target.GetCurrentHealth();
-					if ((_targetingMode == TargetingMode.First  && targetDistanceFromGoal < currTargetDistanceFromGoal) || 
-						(_targetingMode == TargetingMode.Last   && currTargetDistanceFromGoal < targetDistanceFromGoal) || 
-						(_targetingMode == TargetingMode.Close  && targetDistanceFromSelf < currTargetDistanceFromSelf) ||
-						(_targetingMode == TargetingMode.Weak   && targetHealth < currTargetHealth) ||
-						(_targetingMode == TargetingMode.Strong && currTargetHealth < targetHealth))
-					{
-						currTarget = target;
-						currTargetDistanceFromSelf = targetDistanceFromSelf;
-						currTargetDistanceFromGoal = targetDistanceFromGoal;
-						currTargetHealth = targetHealth;
-					}
-				}
-			}
+	// /// <summary>
+	// /// If there is a valid target in range of current PathFollower, choose and fire at target given TargetingMode.
+	// /// </summary>
+	// private void FireAtValidTarget()
+	// {
+	// 	if (_targetsInRange.Count > 0 && _shotCooldownTimer.IsStopped())
+	// 	{
+	// 		Friendly currTarget;
+	// 		if (_targetingMode == TargetingMode.Random)
+	// 		{
+	// 			currTarget = _targetsInRange[_random.Next(_targetsInRange.Count)];
+	// 		}
+	// 		else
+	// 		{
+	// 			// Look for an appropriate target to shoot at within PathFollower's radius given TargetingMode.
+	// 			currTarget = _targetsInRange[0];
+	// 			float currTargetDistanceFromSelf = Position.DistanceTo(currTarget.Position);
+	// 			float currTargetDistanceFromGoal = currTarget.GetDistanceToGoalPixels();
+	// 			float currTargetHealth = currTarget.GetCurrentHealth();
+	// 			for (int i = 1; i < _targetsInRange.Count; i++)
+	// 			{
+	// 				var target = _targetsInRange[i];
+	// 				float targetDistanceFromSelf = Position.DistanceTo(target.Position);
+	// 				float targetDistanceFromGoal = target.GetDistanceToGoalPixels();
+	// 				float targetHealth = target.GetCurrentHealth();
+	// 				if ((_targetingMode == TargetingMode.First  && targetDistanceFromGoal < currTargetDistanceFromGoal) || 
+	// 					(_targetingMode == TargetingMode.Last   && currTargetDistanceFromGoal < targetDistanceFromGoal) || 
+	// 					(_targetingMode == TargetingMode.Close  && targetDistanceFromSelf < currTargetDistanceFromSelf) ||
+	// 					(_targetingMode == TargetingMode.Weak   && targetHealth < currTargetHealth) ||
+	// 					(_targetingMode == TargetingMode.Strong && currTargetHealth < targetHealth))
+	// 				{
+	// 					currTarget = target;
+	// 					currTargetDistanceFromSelf = targetDistanceFromSelf;
+	// 					currTargetDistanceFromGoal = targetDistanceFromGoal;
+	// 					currTargetHealth = targetHealth;
+	// 				}
+	// 			}
+	// 		}
 
-			// Shoot at the target
-			GD.Print($"Enemy {Name} firing Projectile at target {currTarget} with stats: {_stats.ProjectileStats}");
-			_shotCooldownTimer.Start(1 / _stats.FireRate);
-			var projectile = _projectileScene.Instantiate<Projectile>();
-			projectile.GlobalPosition = GlobalPosition;
-			projectile.Initialize(currTarget, _stats.ProjectileStats);
-			GetTree().GetRoot().AddChild(projectile);
-		}
-	}
-
+	// 		// Shoot at the target
+	// 		GD.Print($"Enemy {Name} firing Projectile at target {currTarget} with stats: {_stats.ProjectileStats}");
+	// 		_shotCooldownTimer.Start(1 / _stats.FireRate);
+	// 		var projectile = _projectileScene.Instantiate<Projectile>();
+	// 		projectile.GlobalPosition = GlobalPosition;
+	// 		projectile.Initialize(currTarget, _stats.ProjectileStats);
+	// 		GetTree().GetRoot().AddChild(projectile);
+	// 	}
+	// }
 
 }

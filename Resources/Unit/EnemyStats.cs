@@ -9,6 +9,7 @@ public partial class EnemyStats : Resource
 {
 	public enum Category
 	{
+		UNDEFINED,
 		Regular,
 		Strong, // Creative, I know. Truly my genius knows no bounds
 	};

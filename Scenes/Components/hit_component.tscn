@@ -2,5 +2,13 @@
 
 [ext_resource type="Script" uid="uid://fik12gudsvgb" path="res://Scripts/HitComponent.cs" id="1_fiq8u"]
 
-[node name="HitComponent" type="Area2D" unique_id=610990885]
+[sub_resource type="CircleShape2D" id="CircleShape2D_fiq8u"]
+resource_local_to_scene = true
+
+[node name="HitComponent" type="Area2D" unique_id=610990885 node_paths=PackedStringArray("_hitCollisionShape2D")]
 script = ExtResource("1_fiq8u")
+_hitCollisionShape2D = NodePath("HitCollisionShape2D")
+
+[node name="HitCollisionShape2D" type="CollisionShape2D" parent="." unique_id=1104527660]
+shape = SubResource("CircleShape2D_fiq8u")
+debug_color = Color(0.8881527, 0.0002795434, 0.801441, 0.41960785)

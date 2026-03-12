@@ -42,29 +42,29 @@ public partial class Friendly : PathFollower
 	}
 	public void UpdateStats()
 	{
-		UpdateFriendlyHitboxRadius();
-		UpdateFriendlyAggroRadius();
-		UpdateFriendlySprite();
+		UpdateHitboxRadius();
+		UpdateAggroRadius();
+		UpdateSprite();
 
 		// Todo: Add more updates
 
-		UpdateFriendlyHealth();
+		UpdateHealth();
 	}
-	private void UpdateFriendlyHitboxRadius()
+	private void UpdateHitboxRadius()
 	{
-		((CircleShape2D)_hitboxCollisionShape2D.Shape).Radius = _stats.HitboxRadius; // TODO: Better way of doing this?
+		_hurtComponent.ModifyCollisionShapeRadius(_stats.HitboxRadius);
 	}
-	private void UpdateFriendlyAggroRadius()
+	private void UpdateAggroRadius()
 	{
 		((CircleShape2D)_aggroCollisionShape2D.Shape).Radius = _stats.AggroRadius; // TODO: Better way of doing this?
 	}
-	private void UpdateFriendlySprite()
+	private void UpdateSprite()
 	{
 		_animatedSprite2D.Frame = _stats.SpriteFrame;
 	}
-	private void UpdateFriendlyHealth()
+	private void UpdateHealth()
 	{
-		_health = _stats.Health;
+		_healthComponent.SetHealth(_stats.Health);
 	}
 	public override string ToString()
 	{

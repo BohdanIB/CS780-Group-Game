@@ -3,31 +3,47 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public partial class PathFollower : Area2D
+public partial class PathFollower : Node2D
 {
 	protected const float DISTANCE_THRESHOLD = 0.01f;
 
-	// Scene Children
+	// Components //
+	[Export] protected HurtComponent _hurtComponent;
+	[Export] protected HealthComponent _healthComponent;
+
+	// Scene Children //
 	[Export] protected Area2D _aggroArea2D;
-	[Export] protected CollisionShape2D _aggroCollisionShape2D, _hitboxCollisionShape2D;
+	[Export] protected CollisionShape2D _aggroCollisionShape2D;//, _hitboxCollisionShape2D;
 	[Export] protected AnimatedSprite2D _animatedSprite2D;
 	[Export] protected Timer _shotCooldownTimer;
 
-	// Preloaded Scenes
+	// Preloaded Scenes //
 	[Export] protected PackedScene _projectileScene;
 
-	protected float _health = 100.0f;
-	protected float _movementSpeed = 50.0f;
+	// protected float _health = 100.0f;
+	// protected float _movementSpeed = 50.0f;
 
 	protected Random _random = new();
 	protected List<Vector2> _path;
 	protected int _currentPathIndex;
 
-	public override void _PhysicsProcess(double delta)
+	public override void _Ready()
 	{
-		FollowCurrentPath(delta);
+		_hurtComponent.OnHurt += _healthComponent.ApplyDamage;
+		_healthComponent.OnNoHealthLeft += () =>
+		{
+			GD.Print($"PathFollower {Name} died.");
+			QueueFree();
+		};
 	}
 
+
+	public override void _PhysicsProcess(double delta)
+	{
+		// FollowCurrentPath(delta);
+	}
+
+	// Todo
 	protected void FollowCurrentPath(double delta)
 	{
 		if (_path == null) return;
@@ -42,7 +58,7 @@ public partial class PathFollower : Area2D
 			return;
 		}
 
-		Position = Position.MoveToward(_path[_currentPathIndex], (float) delta * _movementSpeed);
+		// Position = Position.MoveToward(_path[_currentPathIndex], (float) delta * _movementSpeed);
 	}
 
 	public void SetPath(List<Vector2> newPath)
@@ -51,21 +67,21 @@ public partial class PathFollower : Area2D
 		_currentPathIndex = 0;
 	}
 
-	public void ChangeHealth(float healthChangeValue)
-	{
-		GD.Print($"HealthChange for PathFollower {Name} - CurrentHealth {_health} -> NewHealth {_health - healthChangeValue}");
-		_health -= healthChangeValue;
-		if (_health <= 0.0f)
-		{
-			GD.Print($"PathFollower {Name} died.");
-			QueueFree();
-		}
-	}
+	// public void ChangeHealth(float healthChangeValue)
+	// {
+		// GD.Print($"HealthChange for PathFollower {Name} - CurrentHealth {_health} -> NewHealth {_health - healthChangeValue}");
+		// _health -= healthChangeValue;
+		// if (_health <= 0.0f)
+		// {
+		// 	GD.Print($"PathFollower {Name} died.");
+		// 	QueueFree();
+		// }
+	// }
 
-	public float GetCurrentHealth()
-	{
-		return _health;
-	}
+	// public float GetCurrentHealth()
+	// {
+	// 	return _health;
+	// }
 
 	public float GetDistanceToGoalPixels()
 	{
