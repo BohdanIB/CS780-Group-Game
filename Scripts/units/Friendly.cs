@@ -52,7 +52,7 @@ public partial class Friendly : PathFollower
 	}
 	private void UpdateHitboxRadius()
 	{
-		_hurtComponent.ModifyCollisionShapeRadius(_stats.HitboxRadius);
+		_hurtComponent.ModifyHurtRadius(_stats.HitboxRadius);
 	}
 	private void UpdateAggroRadius()
 	{

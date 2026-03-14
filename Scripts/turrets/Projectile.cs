@@ -3,7 +3,7 @@ using Godot;
 /// <summary>
 /// TODO: For now, Projectiles always will hit their target and will move towards the target until
 /// </summary>
-public partial class Projectile : Area2D
+public partial class Projectile : Node2D
 {
 	public const float MIN_TARGET_DISTANCE = 0.01f;
 
@@ -48,13 +48,13 @@ public partial class Projectile : Area2D
 		_sprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
 		_sprite.Frame = _stats.SpriteFrame;
 
-		AreaEntered += (area) =>
-		{
-			if (area is HurtComponent hurtComponent && hurtComponent == _target)
-			{
-				ProjectileImpact();
-			}
-		};
+		// AreaEntered += (area) =>
+		// {
+		// 	if (area is HurtComponent hurtComponent && hurtComponent == _target)
+		// 	{
+		// 		ProjectileImpact();
+		// 	}
+		// };
 
 		// GD.Print($"Projectile ready with stats: {_stats}");
 	}

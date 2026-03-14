@@ -1,12 +1,17 @@
 [gd_scene format=3 uid="uid://27mmcge0cxrm"]
 
 [ext_resource type="Script" uid="uid://bg3usi07e1a27" path="res://Scripts/GenericStructure.cs" id="1_4h5ic"]
+[ext_resource type="PackedScene" uid="uid://e5vy6kbwqw12" path="res://Scenes/Components/health_component.tscn" id="2_nkylo"]
+[ext_resource type="PackedScene" uid="uid://bu5bt5d2jv3iu" path="res://Scenes/Components/hurt_component.tscn" id="3_305qt"]
+[ext_resource type="PackedScene" uid="uid://c43d2uh68714x" path="res://Scenes/Components/detection_component.tscn" id="4_abu07"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_nkylo"]
 resource_local_to_scene = true
 
-[node name="GenericStructure" type="Area2D" unique_id=440596787 node_paths=PackedStringArray("_collisionShape2D", "_animatedSprite2D")]
+[node name="GenericStructure" type="Area2D" unique_id=440596787 node_paths=PackedStringArray("_hurtComponent", "_healthComponent", "_collisionShape2D", "_animatedSprite2D")]
 script = ExtResource("1_4h5ic")
+_hurtComponent = NodePath("HurtComponent")
+_healthComponent = NodePath("HealthComponent")
 _collisionShape2D = NodePath("CollisionShape2D")
 _animatedSprite2D = NodePath("AnimatedSprite2D")
 
@@ -14,3 +19,9 @@ _animatedSprite2D = NodePath("AnimatedSprite2D")
 shape = SubResource("CircleShape2D_nkylo")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=440445772]
+
+[node name="HealthComponent" parent="." unique_id=1408774868 instance=ExtResource("2_nkylo")]
+
+[node name="HurtComponent" parent="." unique_id=495543674 instance=ExtResource("3_305qt")]
+
+[node name="DetectionComponent" parent="." unique_id=1835049866 instance=ExtResource("4_abu07")]

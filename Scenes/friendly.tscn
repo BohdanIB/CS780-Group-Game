@@ -6,7 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://cn7d6ij73r2i" path="res://Assets/Sprites/temp_friendly.png" id="3_ub8j0"]
 [ext_resource type="Texture2D" uid="uid://djpqivk2pwl35" path="res://Assets/Sprites/temp_projectiles.png" id="4_r41ou"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_j3gts"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_ljipm"]
 resource_local_to_scene = true
 radius = 5.0
 
@@ -18,7 +18,7 @@ region = Rect2(0, 0, 32, 32)
 atlas = ExtResource("4_r41ou")
 region = Rect2(32, 0, 32, 32)
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_f2s7q"]
+[sub_resource type="SpriteFrames" id="SpriteFrames_j3gts"]
 resource_local_to_scene = true
 animations = [{
 "frames": [{
@@ -33,7 +33,7 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="PackedScene" id="PackedScene_ljipm"]
+[sub_resource type="PackedScene" id="PackedScene_f2s7q"]
 resource_local_to_scene = true
 _bundled = {
 "conn_count": 0,
@@ -45,11 +45,11 @@ _bundled = {
 "node_ids": PackedInt32Array(196749450, 1960296799, 225913893),
 "node_paths": [NodePath("."), NodePath(".")],
 "nodes": PackedInt32Array(-1, -1, 1, 0, -1, 1, 2, 0, 0, 1073741824, 0, 4, 3, -1, 1, 5, 1, 0, 1073741825, 0, 7, 6, -1, 2, 8, 2, 9, 3, 0),
-"variants": [ExtResource("3_ljipm"), SubResource("CircleShape2D_j3gts"), Vector2(0.5, 0.5), SubResource("SpriteFrames_f2s7q")],
+"variants": [ExtResource("3_ljipm"), SubResource("CircleShape2D_ljipm"), Vector2(0.5, 0.5), SubResource("SpriteFrames_j3gts")],
 "version": 3
 }
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_r41ou"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_r8675"]
 resource_local_to_scene = true
 radius = 5.0
 
@@ -77,10 +77,10 @@ animations = [{
 
 [node name="Friendly" unique_id=382514737 instance=ExtResource("1_jgycc")]
 script = ExtResource("2_50fos")
-_projectileScene = SubResource("PackedScene_ljipm")
+_projectileScene = SubResource("PackedScene_f2s7q")
 
 [node name="AggroCollisionShape2D" parent="AggroArea2D" parent_id_path=PackedInt32Array(1396697523) index="0" unique_id=1901836338]
-shape = SubResource("CircleShape2D_r41ou")
+shape = SubResource("CircleShape2D_r8675")
 
 [node name="AnimatedSprite2D" parent="." index="1" unique_id=1606845345]
 scale = Vector2(0.25, 0.25)

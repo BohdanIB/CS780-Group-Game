@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bca40tiktvab7" path="res://Scripts/turrets/Projectile.cs" id="1_yr2qt"]
 [ext_resource type="Texture2D" uid="uid://djpqivk2pwl35" path="res://Assets/Sprites/temp_projectiles.png" id="2_yr2qt"]
+[ext_resource type="PackedScene" uid="uid://7n3xh2bxsdyb" path="res://Scenes/Components/hit_component.tscn" id="3_tl4hk"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_xjght"]
 resource_local_to_scene = true
@@ -30,7 +31,7 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="Projectile" type="Area2D" unique_id=196749450]
+[node name="Projectile" type="Node2D" unique_id=1257787249]
 script = ExtResource("1_yr2qt")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1960296799]
@@ -39,3 +40,5 @@ shape = SubResource("CircleShape2D_xjght")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=225913893]
 scale = Vector2(0.5, 0.5)
 sprite_frames = SubResource("SpriteFrames_f8cdk")
+
+[node name="HitComponent" parent="." unique_id=610990885 instance=ExtResource("3_tl4hk")]

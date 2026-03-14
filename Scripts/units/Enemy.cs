@@ -92,7 +92,7 @@ public partial class Enemy: PathFollower
 	}
 	private void UpdateHitboxRadius()
 	{
-		_hurtComponent.ModifyCollisionShapeRadius(_stats.HitboxRadius);
+		_hurtComponent.ModifyHurtRadius(_stats.HitboxRadius);
 	}
 	private void UpdateAggroRadius()
 	{

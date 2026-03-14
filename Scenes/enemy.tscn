@@ -2,52 +2,10 @@
 
 [ext_resource type="PackedScene" uid="uid://dtv7kt7wo8omt" path="res://Scenes/path_follower.tscn" id="1_hghv2"]
 [ext_resource type="Script" uid="uid://c21fjsrl23hps" path="res://Scripts/units/Enemy.cs" id="2_1f0kj"]
-[ext_resource type="Script" uid="uid://bca40tiktvab7" path="res://Scripts/turrets/Projectile.cs" id="3_0830c"]
 [ext_resource type="Texture2D" uid="uid://bdd0jbwygdyav" path="res://Assets/Sprites/temp_enemy.png" id="4_287tu"]
-[ext_resource type="Texture2D" uid="uid://djpqivk2pwl35" path="res://Assets/Sprites/temp_projectiles.png" id="4_ghaa6"]
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_0830c"]
-resource_local_to_scene = true
-radius = 5.0
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_tl4hk"]
-atlas = ExtResource("4_ghaa6")
-region = Rect2(0, 0, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_d4467"]
-atlas = ExtResource("4_ghaa6")
-region = Rect2(32, 0, 32, 32)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_ghaa6"]
-resource_local_to_scene = true
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_tl4hk")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_d4467")
-}],
-"loop": true,
-"name": &"default",
-"speed": 5.0
-}]
-
-[sub_resource type="PackedScene" id="PackedScene_0830c"]
-resource_local_to_scene = true
-_bundled = {
-"conn_count": 0,
-"conns": PackedInt32Array(),
-"editable_instances": [],
-"id_paths": [PackedInt32Array(), PackedInt32Array()],
-"names": PackedStringArray("Projectile", "Area2D", "script", "CollisionShape2D", "CollisionShape2D", "shape", "AnimatedSprite2D", "AnimatedSprite2D", "scale", "sprite_frames"),
-"node_count": 3,
-"node_ids": PackedInt32Array(196749450, 1960296799, 225913893),
-"node_paths": [NodePath("."), NodePath(".")],
-"nodes": PackedInt32Array(-1, -1, 1, 0, -1, 1, 2, 0, 0, 1073741824, 0, 4, 3, -1, 1, 5, 1, 0, 1073741825, 0, 7, 6, -1, 2, 8, 2, 9, 3, 0),
-"variants": [ExtResource("3_0830c"), SubResource("CircleShape2D_0830c"), Vector2(0.5, 0.5), SubResource("SpriteFrames_ghaa6")],
-"version": 3
-}
+[ext_resource type="PackedScene" uid="uid://27mmcge0cxrm" path="res://Scenes/generic_structure.tscn" id="6_auwsv"]
+[ext_resource type="PackedScene" uid="uid://b2w8csm5vypb0" path="res://Scenes/turret.tscn" id="7_8uf12"]
+[ext_resource type="PackedScene" uid="uid://braeaociys3xn" path="res://Scenes/friendly.tscn" id="8_po0sg"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_ghaa6"]
 resource_local_to_scene = true
@@ -75,12 +33,9 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="Enemy" unique_id=382514737 node_paths=PackedStringArray("_hurtComponent", "_healthComponent") instance=ExtResource("1_hghv2")]
+[node name="Enemy" unique_id=382514737 instance=ExtResource("1_hghv2")]
 script = ExtResource("2_1f0kj")
 _debugCategory = 0
-_hurtComponent = NodePath("HurtComponent")
-_healthComponent = NodePath("HealthComponent")
-_projectileScene = SubResource("PackedScene_0830c")
 
 [node name="AggroCollisionShape2D" parent="AggroArea2D" parent_id_path=PackedInt32Array(1396697523) index="0" unique_id=1901836338]
 shape = SubResource("CircleShape2D_ghaa6")
@@ -90,4 +45,7 @@ scale = Vector2(0.25, 0.25)
 sprite_frames = SubResource("SpriteFrames_1dp5w")
 
 [node name="HurtComponent" parent="." index="4" unique_id=495543674]
-_entityGroup = 1
+_allowedToHurtEntity = Array[PackedScene]([ExtResource("7_8uf12")])
+
+[node name="DetectionComponent" parent="." index="5" unique_id=1835049866]
+_detectableScenes = Array[PackedScene]([ExtResource("6_auwsv"), ExtResource("7_8uf12"), ExtResource("8_po0sg")])

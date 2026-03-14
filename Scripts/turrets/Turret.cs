@@ -10,10 +10,12 @@ using System.Collections.Generic;
 // public partial class Turret : GenericStructure<TurretStats.Category>
 public partial class Turret : GenericStructure
 {
+	[Export] private TurretStats.Category _debugCategory = TurretStats.Category.UNDEFINED; // used strictly for debug
+
 	private bool _disabled = false;
 	private bool _visibleTurretRadius = true;
-	private TargetingMode _targetingMode = TargetingMode.First;
 	private TurretStats _stats;
+	private TargetingMode _targetingMode = TargetingMode.First;
 
 	// Scene Children
 	[Export] private Timer _shotCooldownTimer;
@@ -48,8 +50,13 @@ public partial class Turret : GenericStructure
 
 	public override void _Ready()
 	{
+		// Used for creating turrets outside of instantiation for testing.
+		if (_debugCategory != TurretStats.Category.UNDEFINED)
+		{
+			Initialize(_debugCategory);
+		}
 		// Some cases where _Ready gets called before Initialize, just set to some value for now and it will get reinitialized later.
-		if (_stats == null)
+		else if (_stats == null)
 		{
 			Initialize(TurretStats.Category.Ballista);
 		}

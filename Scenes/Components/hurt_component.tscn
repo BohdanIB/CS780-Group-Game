@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bu5bt5d2jv3iu"]
 
-[ext_resource type="Script" uid="uid://bb8d7xw6upqyu" path="res://Scripts/HurtComponent.cs" id="1_rg2b0"]
+[ext_resource type="Script" uid="uid://bb8d7xw6upqyu" path="res://Scripts/Components/HurtComponent.cs" id="1_rg2b0"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_f3fu7"]
 resource_local_to_scene = true

@@ -1,0 +1,69 @@
+[gd_scene format=3 uid="uid://ch00055ip72s0"]
+
+[ext_resource type="PackedScene" uid="uid://cvx7nxyaghhrx" path="res://Scenes/enemy.tscn" id="1_0cfo2"]
+[ext_resource type="Script" uid="uid://dpdoqjtnrwi8b" path="res://Scripts/Testing/ECS/EnemySight.cs" id="1_bsodh"]
+[ext_resource type="Script" uid="uid://bca40tiktvab7" path="res://Scripts/turrets/Projectile.cs" id="2_bsodh"]
+[ext_resource type="Script" uid="uid://bk3drg0y2r1ku" path="res://Scripts/turrets/Turret.cs" id="2_wd7cv"]
+[ext_resource type="Script" uid="uid://bg3usi07e1a27" path="res://Scripts/GenericStructure.cs" id="3_7u720"]
+[ext_resource type="Texture2D" uid="uid://djpqivk2pwl35" path="res://Assets/Sprites/temp_projectiles.png" id="3_wd7cv"]
+[ext_resource type="PackedScene" uid="uid://27mmcge0cxrm" path="res://Scenes/generic_structure.tscn" id="4_ahouh"]
+[ext_resource type="PackedScene" uid="uid://b2w8csm5vypb0" path="res://Scenes/turret.tscn" id="5_bsodh"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ahouh"]
+resource_local_to_scene = true
+radius = 5.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tl4hk"]
+atlas = ExtResource("3_wd7cv")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_d4467"]
+atlas = ExtResource("3_wd7cv")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_grv06"]
+resource_local_to_scene = true
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tl4hk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_d4467")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="PackedScene" id="PackedScene_ahouh"]
+resource_local_to_scene = true
+_bundled = {
+"conn_count": 0,
+"conns": PackedInt32Array(),
+"editable_instances": [],
+"id_paths": [PackedInt32Array(), PackedInt32Array()],
+"names": PackedStringArray("Projectile", "Area2D", "script", "CollisionShape2D", "CollisionShape2D", "shape", "AnimatedSprite2D", "AnimatedSprite2D", "scale", "sprite_frames"),
+"node_count": 3,
+"node_ids": PackedInt32Array(196749450, 1960296799, 225913893),
+"node_paths": [NodePath("."), NodePath(".")],
+"nodes": PackedInt32Array(-1, -1, 1, 0, -1, 1, 2, 0, 0, 1073741824, 0, 4, 3, -1, 1, 5, 1, 0, 1073741825, 0, 7, 6, -1, 2, 8, 2, 9, 3, 0),
+"variants": [ExtResource("2_bsodh"), SubResource("CircleShape2D_ahouh"), Vector2(0.5, 0.5), SubResource("SpriteFrames_grv06")],
+"version": 3
+}
+
+[node name="EnemySight" type="Node2D" unique_id=726302098 node_paths=PackedStringArray("_enemy", "_turret")]
+script = ExtResource("1_bsodh")
+_enemy = NodePath("Enemy")
+_turret = NodePath("Turret")
+types = Array[CSharpScript]([ExtResource("2_wd7cv"), ExtResource("3_7u720")])
+resources = Array[Resource]([ExtResource("5_bsodh"), ExtResource("4_ahouh")])
+
+[node name="Enemy" parent="." unique_id=382514737 instance=ExtResource("1_0cfo2")]
+position = Vector2(27, 26)
+_debugCategory = 1
+_projectileScene = SubResource("PackedScene_ahouh")
+
+[node name="Turret" parent="." unique_id=440596787 instance=ExtResource("5_bsodh")]
+position = Vector2(192, 26)
+_debugCategory = 0

@@ -10,6 +10,7 @@ public partial class TurretStats : Resource
 {
 	public enum Category
 	{
+		UNDEFINED,
 		Ballista,
 		Blade,
 	};
