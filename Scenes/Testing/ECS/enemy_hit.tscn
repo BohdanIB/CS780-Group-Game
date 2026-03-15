@@ -2,64 +2,24 @@
 
 [ext_resource type="Script" uid="uid://eekqpng6vmct" path="res://Scripts/Testing/ECS/EnemyHit.cs" id="1_w8jki"]
 [ext_resource type="PackedScene" uid="uid://cvx7nxyaghhrx" path="res://Scenes/enemy.tscn" id="2_eyd4g"]
-[ext_resource type="Script" uid="uid://bca40tiktvab7" path="res://Scripts/turrets/Projectile.cs" id="3_lso6e"]
-[ext_resource type="Texture2D" uid="uid://djpqivk2pwl35" path="res://Assets/Sprites/temp_projectiles.png" id="4_uy65s"]
-[ext_resource type="PackedScene" uid="uid://7n3xh2bxsdyb" path="res://Scenes/Components/hit_component.tscn" id="5_it4f8"]
+[ext_resource type="PackedScene" uid="uid://b1picus170nmk" path="res://Scenes/projectile.tscn" id="5_w8jki"]
+[ext_resource type="Script" uid="uid://db7kn4h7v1jqa" path="res://Resources/Turret/ProjectileStats.cs" id="6_eyd4g"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_w8jki"]
+[sub_resource type="Resource" id="Resource_1y3xj"]
 resource_local_to_scene = true
-radius = 5.0
+script = ExtResource("6_eyd4g")
+_speed = 40.0
+_damage = 5.0
+metadata/_custom_type_script = "uid://db7kn4h7v1jqa"
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_tl4hk"]
-atlas = ExtResource("4_uy65s")
-region = Rect2(0, 0, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_d4467"]
-atlas = ExtResource("4_uy65s")
-region = Rect2(32, 0, 32, 32)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_eyd4g"]
-resource_local_to_scene = true
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_tl4hk")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_d4467")
-}],
-"loop": true,
-"name": &"default",
-"speed": 5.0
-}]
-
-[sub_resource type="PackedScene" id="PackedScene_lso6e"]
-resource_local_to_scene = true
-_bundled = {
-"conn_count": 0,
-"conns": PackedInt32Array(),
-"editable_instances": [],
-"id_paths": [PackedInt32Array(), PackedInt32Array()],
-"names": PackedStringArray("Projectile", "Area2D", "script", "CollisionShape2D", "CollisionShape2D", "shape", "AnimatedSprite2D", "AnimatedSprite2D", "scale", "sprite_frames"),
-"node_count": 3,
-"node_ids": PackedInt32Array(196749450, 1960296799, 225913893),
-"node_paths": [NodePath("."), NodePath(".")],
-"nodes": PackedInt32Array(-1, -1, 1, 0, -1, 1, 2, 0, 0, 1073741824, 0, 4, 3, -1, 1, 5, 1, 0, 1073741825, 0, 7, 6, -1, 2, 8, 2, 9, 3, 0),
-"variants": [ExtResource("3_lso6e"), SubResource("CircleShape2D_w8jki"), Vector2(0.5, 0.5), SubResource("SpriteFrames_eyd4g")],
-"version": 3
-}
-
-[node name="EnemyHit" type="Node2D" unique_id=465030601 node_paths=PackedStringArray("_enemy", "_hitComponent")]
+[node name="EnemyHit" type="Node2D" unique_id=465030601]
 script = ExtResource("1_w8jki")
-_enemy = NodePath("Enemy")
-_hitComponent = NodePath("HitComponent")
 
 [node name="Enemy" parent="." unique_id=382514737 instance=ExtResource("2_eyd4g")]
 position = Vector2(27, 26)
 _debugCategory = 1
-_projectileScene = SubResource("PackedScene_lso6e")
 
-[node name="HitComponent" parent="." unique_id=610990885 instance=ExtResource("5_it4f8")]
-position = Vector2(300, 26)
-_hitDamage = 80.0
-_hitableScenes = Array[PackedScene]([ExtResource("2_eyd4g")])
+[node name="Projectile" parent="." unique_id=1257787249 node_paths=PackedStringArray("_target") instance=ExtResource("5_w8jki")]
+position = Vector2(132, 25)
+_stats = SubResource("Resource_1y3xj")
+_target = NodePath("../Enemy")

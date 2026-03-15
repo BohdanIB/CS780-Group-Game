@@ -3,11 +3,9 @@
 [ext_resource type="PackedScene" uid="uid://dtv7kt7wo8omt" path="res://Scenes/path_follower.tscn" id="1_hghv2"]
 [ext_resource type="Script" uid="uid://c21fjsrl23hps" path="res://Scripts/units/Enemy.cs" id="2_1f0kj"]
 [ext_resource type="Texture2D" uid="uid://bdd0jbwygdyav" path="res://Assets/Sprites/temp_enemy.png" id="4_287tu"]
-[ext_resource type="PackedScene" uid="uid://27mmcge0cxrm" path="res://Scenes/generic_structure.tscn" id="6_auwsv"]
-[ext_resource type="PackedScene" uid="uid://b2w8csm5vypb0" path="res://Scenes/turret.tscn" id="7_8uf12"]
-[ext_resource type="PackedScene" uid="uid://braeaociys3xn" path="res://Scenes/friendly.tscn" id="8_po0sg"]
+[ext_resource type="Script" uid="uid://dj1ghvji6ekg5" path="res://Resources/SceneFilePathRes.cs" id="4_0830c"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_ghaa6"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_287tu"]
 resource_local_to_scene = true
 radius = 5.0
 
@@ -33,19 +31,28 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="Resource" id="Resource_0830c"]
+resource_local_to_scene = true
+script = ExtResource("4_0830c")
+ScenePath = "uid://b2w8csm5vypb0"
+metadata/_custom_type_script = "uid://dj1ghvji6ekg5"
+
+[sub_resource type="Resource" id="Resource_ghaa6"]
+resource_local_to_scene = true
+script = ExtResource("4_0830c")
+ScenePath = "uid://b1picus170nmk"
+metadata/_custom_type_script = "uid://dj1ghvji6ekg5"
+
 [node name="Enemy" unique_id=382514737 instance=ExtResource("1_hghv2")]
 script = ExtResource("2_1f0kj")
 _debugCategory = 0
 
 [node name="AggroCollisionShape2D" parent="AggroArea2D" parent_id_path=PackedInt32Array(1396697523) index="0" unique_id=1901836338]
-shape = SubResource("CircleShape2D_ghaa6")
+shape = SubResource("CircleShape2D_287tu")
 
 [node name="AnimatedSprite2D" parent="." index="1" unique_id=1606845345]
 scale = Vector2(0.25, 0.25)
 sprite_frames = SubResource("SpriteFrames_1dp5w")
 
 [node name="HurtComponent" parent="." index="4" unique_id=495543674]
-_allowedToHurtEntity = Array[PackedScene]([ExtResource("7_8uf12")])
-
-[node name="DetectionComponent" parent="." index="5" unique_id=1835049866]
-_detectableScenes = Array[PackedScene]([ExtResource("6_auwsv"), ExtResource("7_8uf12"), ExtResource("8_po0sg")])
+_allowedToHurtEntity = Array[Object]([SubResource("Resource_0830c"), SubResource("Resource_ghaa6")])

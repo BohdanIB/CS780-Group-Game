@@ -1,16 +1,17 @@
 
-using CS780GroupProject.Scripts.Utils;
 using Godot;
 
 /// <summary>
 /// The ability for parent entity to hit other entities.
+/// 
+/// TODO: This component is unfortuantely coupled with HurtComponent. Not sure about a good solution to this coupling.
 /// </summary>
 public partial class HitComponent : Area2D
 {
-	[Signal] public delegate void OnHitEventHandler();
+	[Signal] public delegate void OnHitEventHandler(Node hurtOwnerNode, float damage);
 
 	[Export] private float _hitDamage = 1f;
-	[Export] private Godot.Collections.Array<PackedScene> _hitableScenes = null;
+	[Export] private SceneFilePathRes[] _hitableScenes = []; // Valid scenes for this component to be able to hit.
 	[Export] private Node _target;
 
 	[Export] private CollisionShape2D _hitCollisionShape2D;
@@ -18,14 +19,15 @@ public partial class HitComponent : Area2D
 	public float Damage { get => _hitDamage; }
 
 	/// <summary>
-	/// Damage and potential target for hit.
+	/// Damage and potential target for hit. If there is no specific target to hit, then a general set of hitable targets can be defined.
 	/// </summary>
-	/// <param name="damage">Damage to be dealt OnHit</param>
-	/// <param name="target">Target of hit. If null, then any Hurt-able entity can get hit.</param>
-	public void Initialize(float damage, PackedScene[] validTargetGroups = null, Node target = null)
+	/// <param name="damage"></param>
+	/// <param name="validTargetGroups"></param>
+	/// <param name="target"></param>
+	public void Initialize(float damage, SceneFilePathRes[] validTargetGroups = null, Node target = null)
 	{
 		_hitDamage = damage;
-		_hitableScenes = new(validTargetGroups);
+		_hitableScenes = validTargetGroups;
 		_target = target;
 	}
 
@@ -33,11 +35,17 @@ public partial class HitComponent : Area2D
 	{
 		AreaEntered += (area) =>
 		{
-			if (this.CanHit(area))
+			// if (area is HurtComponent h)
+			// {
+			// 	GD.Print("Entered hurt component.");
+			// 	return;
+			// }
+
+			if (HitableHurtComponent(area) is var hurtComponent && hurtComponent != null)
 			{
-				GD.Print($"HitComponent made contact with {area.Name} and dealt {_hitDamage} damage. Emitting OnHit signal.");
-				EmitSignal(SignalName.OnHit);
-				QueueFree();
+				GD.Print($"HitComponent made contact with {area.Owner.Name} and is attempting to deal {_hitDamage} damage. Emitting OnHit signal.");
+				hurtComponent.Hit(this.Owner, _hitDamage);
+				EmitSignal(SignalName.OnHit, area.Owner, _hitDamage);
 			}
 		};
 	}
@@ -48,7 +56,7 @@ public partial class HitComponent : Area2D
 		((CircleShape2D)_hitCollisionShape2D.Shape).Radius = newRadius;
 	}
 
-	public bool CanHit(Node node)
+	public HurtComponent HitableHurtComponent(Area2D area)
 	{
 		// if (_target != null && _target == hurtComponent) { return true; } // This hurt component is the target.
 		// if (_target == null && _validTargetTypes == null) { return true; }                   // Hit any hurt component.
@@ -81,11 +89,31 @@ public partial class HitComponent : Area2D
 		// // Check if hurtComponent's EntityGroup is contained within valid target groups.
 		// return (_validTargetGroups & hurtComponent.EntityGroup) != EntityGroups.None;
 
-		if (_target == null)
+
+		// if (_target == null)
+		// {
+		// 	return SceneType.EntitySharesSceneType(node.Owner, _hitableScenes);
+		// }
+		// return node == _target;
+
+
+		if (area is HurtComponent hurt) // Todo: Unfortunate coupling, but can't wizard up a better way without getting godot layers or groups involved.
 		{
-			return SceneType.NodeSharesSceneType(node, _hitableScenes);
+			GD.Print("AREA IS HURT COMPONENT.");
+			// return hurt;
+			Node entity = hurt.Owner;
+			// Going for specific target
+			if (_target != null && _target == entity)
+			{
+				return hurt;
+			}
+			// Check if the owner scene for area is hitable by this component.
+			else if (SceneFilePathRes.EntitySharesScenePath(entity, _hitableScenes))
+			{
+				return hurt;
+			}
 		}
-		return node == _target;
+		return null;
 	}
 
 }

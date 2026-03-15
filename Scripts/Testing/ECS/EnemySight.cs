@@ -7,8 +7,6 @@ public partial class EnemySight : Node2D
 	[Export] private Enemy _enemy;
 	[Export] private Turret _turret;
 
-	[Export] private Godot.Collections.Array<PackedScene> scenes;
-
 	public override void _Ready()
 	{
 		// GD.Print($"Types: ");
@@ -26,13 +24,14 @@ public partial class EnemySight : Node2D
 		// // GD.Print($"Turret script: {_turret.GetScript()}");
 		// GD.Print($"Turret resource: {_turret.SceneFilePath}");
 
-		foreach (var s in scenes)
-		{
-			if (SceneType.SameType(_turret, s))
-			{
-				GD.Print($"EnemySight contains type of {_turret.Name} and should do stuff because of that.");
-			}
-		}
+
+		// foreach (var s in scenes)
+		// {
+		// 	if (SceneType.SameType(_turret, s))
+		// 	{
+		// 		GD.Print($"EnemySight contains type of {_turret.Name} and should do stuff because of that.");
+		// 	}
+		// }
 
 	}
 

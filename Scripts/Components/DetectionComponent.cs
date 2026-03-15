@@ -6,7 +6,8 @@ public partial class DetectionComponent : Area2D
 {
 	[Signal] public delegate void OnDetectEventHandler(Area2D area);
 
-	[Export] private Godot.Collections.Array<PackedScene> _detectableScenes;
+	// [Export] private Godot.Collections.Array<PackedScene> _detectableScenes;
+	[Export] private SceneFilePathRes[] _detectableScenes = [];
 
 	[Export] private CollisionShape2D _detectionCollisionShape2D;
 
@@ -33,6 +34,7 @@ public partial class DetectionComponent : Area2D
 
 	public bool IsValidDetection(Area2D area)
 	{
-		return SceneType.NodeSharesSceneType(area, _detectableScenes);
+		return SceneFilePathRes.EntitySharesScenePath(area.Owner, _detectableScenes);
+		// return SceneType.EntitySharesSceneType(area.Owner, _detectableScenes);
 	}
 }

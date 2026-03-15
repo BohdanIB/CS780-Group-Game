@@ -53,6 +53,13 @@ public partial class ProjectileStats : Resource
 		Damage = baseStats.Damage;
 		SpriteFrame = baseStats.SpriteFrame;
 	}
+	public ProjectileStats()
+	{
+		ProjectileBaseStats baseStats = PROJECTILE_BASE_STATS[Type];
+		Speed = baseStats.Speed;
+		Damage = baseStats.Damage;
+		SpriteFrame = baseStats.SpriteFrame;
+	}
 
 	// TODO: Define projectile movement behavior within ProjectileStats?
 	// private static (Vector2, float) MovementDirect(Vector2 position, Vector2 target, float delta)

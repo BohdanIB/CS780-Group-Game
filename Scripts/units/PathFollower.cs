@@ -30,12 +30,12 @@ public partial class PathFollower : Node2D
 
 	public override void _Ready()
 	{
-		_hurtComponent.OnHurt += _healthComponent.ApplyDamage;
-		_healthComponent.OnNoHealthLeft += () =>
-		{
-			GD.Print($"PathFollower {Name} died.");
-			QueueFree();
-		};
+		// _hurtComponent.OnHurt += _healthComponent.ApplyDamage;
+		// _healthComponent.OnNoHealthLeft += () =>
+		// {
+		// 	GD.Print($"PathFollower {Name} died.");
+		// 	QueueFree();
+		// };
 	}
 
 

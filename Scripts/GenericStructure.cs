@@ -23,7 +23,10 @@ public partial class GenericStructure: Area2D
 
 	public override void _Ready()
 	{
-		_hurtComponent.OnHurt += _healthComponent.ApplyDamage;
+		_hurtComponent.OnHurt += (hitOwnerNode, damage) =>
+		{
+			_healthComponent.ApplyDamage(damage);
+		};
 		_healthComponent.OnNoHealthLeft += () =>
 		{
 			GD.Print($"Structure {Name} died.");

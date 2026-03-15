@@ -66,6 +66,20 @@ public partial class Enemy: PathFollower
 		// 	GD.Print($"Enemy {Name} died.");
 		// 	// TODO: ENEMY DEAD
 		// };
+
+
+
+
+		_hurtComponent.OnHurt += (hitOwnerNode, damage) =>
+		{
+			_healthComponent.ApplyDamage(damage);
+		}; 
+		_healthComponent.OnNoHealthLeft += () =>
+		{
+			GD.Print($"Enemy {Name} died.");
+			QueueFree();
+		};
+
 	}
 
 	public override void _PhysicsProcess(double delta)

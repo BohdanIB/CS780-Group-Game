@@ -39,34 +39,6 @@ namespace CS780GroupProject.Scripts.Utils
 	// 	}
 	// }
 
-	///
-	/// TODO: This whole thing is a mess. Need renames and put this class somewhere else.
-	public class SceneType
-	{
-		public static bool SameType(PackedScene scene1, PackedScene scene2)
-		{
-			return scene1.ResourcePath == scene2.ResourcePath;
-		}
-	
-		public static bool SameType(Node node, Resource resource)
-		{
-			return node.SceneFilePath == resource.ResourcePath;
-		}
-
-		public static bool NodeSharesSceneType(Node node, Godot.Collections.Array<PackedScene> scenes)
-		{
-			foreach (var scene in scenes)
-			{
-				if (SameType(node, scene))
-				{
-					return true;
-				}
-			}
-			return false;
-		}
-
-	}
-
 	/// <summary>
 	/// Stolen from BloonsTD! Targeting priorities for entities that can shoot or need to choose entities within influence.
 	/// </summary>
@@ -79,5 +51,4 @@ namespace CS780GroupProject.Scripts.Utils
 		Weak,   // Weakest enemies
 		Strong, // Strongest enemies
 	}
-
 }

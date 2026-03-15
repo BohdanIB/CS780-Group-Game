@@ -7,21 +7,21 @@ public partial class Projectile : Node2D
 {
 	public const float MIN_TARGET_DISTANCE = 0.01f;
 
-	[Signal] public delegate void OnProjectileImpactEventHandler(Vector2 Position, ProjectileStats Stats);
+	// [Signal] public delegate void OnProjectileImpactEventHandler(Vector2 Position, ProjectileStats Stats);
 
 	[Export] private ProjectileStats _stats;
+	[Export] private Node2D _target;
+	[Export] private HitComponent _hitComponent;
 
-	private AnimatedSprite2D _sprite;
-
-	private HurtComponent _target;
 	private Vector2 _targetLastKnownLocation;
+	private AnimatedSprite2D _sprite;
 
 	/// <summary>
 	/// Initializes projectile with custom stats.
 	/// </summary>
 	/// <param name="target"></param>
 	/// <param name="projectileStats"></param>
-	public void Initialize(HurtComponent target, ProjectileStats projectileStats) // TODO: Give projectile a vector to target instead of target?
+	public void Initialize(Node2D target, ProjectileStats projectileStats) // TODO: Give projectile a vector to target instead of target?
 	{
 		_target = target;
 		if (!IsInstanceValid(_target))
@@ -32,21 +32,31 @@ public partial class Projectile : Node2D
 		}
 		_targetLastKnownLocation = _target.Position;
 		_stats = projectileStats;
+
+		_hitComponent.Initialize(_stats.Damage, target: _target);
 	}
 	/// <summary>
 	/// Initializes projectile with "generic" base stats for given type.
 	/// </summary>
 	/// <param name="target"></param>
 	/// <param name="projectileType"></param>
-	public void Initialize(HurtComponent target, ProjectileStats.Category projectileType)
+	public void Initialize(Node2D target, ProjectileStats.Category projectileType)
 	{
 		Initialize(target, new ProjectileStats(projectileType));
 	}
 
 	public override void _Ready()
 	{
-		_sprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
+		Initialize(_target, _stats);
+
+		_sprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D"); // Todo: Nix this for export (or component?)
 		_sprite.Frame = _stats.SpriteFrame;
+
+
+		_hitComponent.OnHit += (hurtOwnerNode, damage) =>
+		{
+			ProjectileImpact();
+		};
 
 		// AreaEntered += (area) =>
 		// {
@@ -92,7 +102,7 @@ public partial class Projectile : Node2D
 			}
 			else
 			{
-				GD.Print($"\tProjectile reached target's last known location without colliding with target AND THE TARGET STILL EXISTS. Performing normal hit on target.");
+				GD.Print($"\tProjectile reached target's last known location without colliding with target AND THE TARGET STILL EXISTS. Impacting without damaging target.");
 				ProjectileImpact();
 			}
 		}
@@ -100,14 +110,15 @@ public partial class Projectile : Node2D
 
 	private void ProjectileImpact()
 	{
-		// Todo: WIP - Potentially add animation or some other effects to projectile on impact? May want to incorporate signal somehow.
-		EmitSignal(SignalName.OnProjectileImpact, Position, _stats);
-		if (IsInstanceValid(_target))
-		{
-			GD.Print($"Projectile hit target {_target.Name} for {_stats.Damage} damage");
-			// _target.ChangeHealth(_stats.Damage);
-			// TODO
-		}
+		// // Todo: WIP - Potentially add animation or some other effects to projectile on impact? May want to incorporate signal somehow.
+		// EmitSignal(SignalName.OnProjectileImpact, Position, _stats);
+		// if (IsInstanceValid(_target))
+		// {
+		// 	// GD.Print($"Projectile hit target {_target.Name} for {_stats.Damage} damage");
+		// 	// _target.ChangeHealth(_stats.Damage);
+		// 	// TODO
+		// }
+		GD.Print("Freeing Projectile.");
 		QueueFree(); // TODO: FREEING AND DISCONNECTION OF SIGNALS? https://docs.godotengine.org/en/stable/tutorials/scripting/c_sharp/c_sharp_signals.html
 	}
 
