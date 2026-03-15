@@ -3,21 +3,18 @@ using System;
 
 public partial class EnemyHit : Node2D
 {
-	private Enemy _enemy;
-	private Projectile _projectile;
+	[Export] private Enemy _enemy;
+	[Export] private Projectile 
+	_projectileTargeted,     // Specifically targets enemy (should hit enemy)
+	_projectileTargetScenes, // No target, Enemy is part of hitableScenes (should hit enemy)
+	_projectileNone,         // No target, no hitableScenes (should not hit enemy)
+	_projectileKiller;       // Targets enemy, kills enemy
 
-	public override void _Ready()
-	{
-		_enemy = GetNode<Enemy>("Enemy");
-		_projectile = GetNode<Projectile>("Projectile");
-	}
+	// public override void _Ready()
+	// {
+	// }
 
-	public override void _Process(double delta)
-	{
-		// const float MOVEMENT_SPEED = 200f;
-		// if (IsInstanceValid(_projectile))
-		// {
-		// 	_projectile.Position += new Vector2(-MOVEMENT_SPEED * (float)delta, 0);
-		// }
-	}
+	// public override void _Process(double delta)
+	// {
+	// }
 }

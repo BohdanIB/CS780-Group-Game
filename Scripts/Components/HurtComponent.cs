@@ -12,6 +12,7 @@ public partial class HurtComponent : Area2D
 	// [Export] private Godot.Collections.Array<PackedScene> _allowedToHurtEntity = null;
 	[Export] private SceneFilePathRes[] _allowedToHurtEntity = []; // Valid scenes for this component to be hurt by.
 
+	[ExportGroup("Exported Child Nodes")]
 	[Export] private CollisionShape2D _hurtCollisionShape2D;
 
 	public override void _Ready()

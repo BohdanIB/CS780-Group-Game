@@ -8,18 +8,20 @@ public partial class PathFollower : Node2D
 	protected const float DISTANCE_THRESHOLD = 0.01f;
 
 	// Components //
+	[ExportGroup("Exported Components")]
 	[Export] protected HealthComponent _healthComponent;
 	[Export] protected HurtComponent _hurtComponent;
 	[Export] protected DetectionComponent _detectionComponent;
 
 	// Scene Children //
+	[ExportGroup("Exported Child Nodes")]
 	[Export] protected Area2D _aggroArea2D;
 	[Export] protected CollisionShape2D _aggroCollisionShape2D;
 	[Export] protected AnimatedSprite2D _animatedSprite2D;
 	[Export] protected Timer _shotCooldownTimer;
 
 	// Preloaded Scenes //
-	[Export] protected PackedScene _projectileScene;
+	// [Export] protected PackedScene _projectileScene;
 
 	// protected float _health = 100.0f;
 	// protected float _movementSpeed = 50.0f;

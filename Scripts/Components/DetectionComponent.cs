@@ -9,6 +9,7 @@ public partial class DetectionComponent : Area2D
 	// [Export] private Godot.Collections.Array<PackedScene> _detectableScenes;
 	[Export] private SceneFilePathRes[] _detectableScenes = [];
 
+	[ExportGroup("Exported Child Nodes")]
 	[Export] private CollisionShape2D _detectionCollisionShape2D;
 
 	public override void _Ready()

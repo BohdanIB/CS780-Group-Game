@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://dtv7kt7wo8omt"]
 
 [ext_resource type="Script" uid="uid://c6iit2ynd856b" path="res://Scripts/units/PathFollower.cs" id="1_atuyi"]
-[ext_resource type="PackedScene" uid="uid://b1picus170nmk" path="res://Scenes/projectile.tscn" id="2_43wju"]
 [ext_resource type="PackedScene" uid="uid://e5vy6kbwqw12" path="res://Scenes/Components/health_component.tscn" id="4_43wju"]
 [ext_resource type="PackedScene" uid="uid://bu5bt5d2jv3iu" path="res://Scenes/Components/hurt_component.tscn" id="5_rbq3h"]
 [ext_resource type="PackedScene" uid="uid://c43d2uh68714x" path="res://Scenes/Components/detection_component.tscn" id="6_rbq3h"]
@@ -18,7 +17,6 @@ _aggroArea2D = NodePath("AggroArea2D")
 _aggroCollisionShape2D = NodePath("AggroArea2D/AggroCollisionShape2D")
 _animatedSprite2D = NodePath("AnimatedSprite2D")
 _shotCooldownTimer = NodePath("ShotCooldownTimer")
-_projectileScene = ExtResource("2_43wju")
 
 [node name="AggroArea2D" type="Area2D" parent="." unique_id=1396697523]
 

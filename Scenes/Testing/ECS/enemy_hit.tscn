@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://eekqpng6vmct" path="res://Scripts/Testing/ECS/EnemyHit.cs" id="1_w8jki"]
 [ext_resource type="PackedScene" uid="uid://cvx7nxyaghhrx" path="res://Scenes/enemy.tscn" id="2_eyd4g"]
+[ext_resource type="Script" uid="uid://dj1ghvji6ekg5" path="res://Resources/SceneFilePathRes.cs" id="5_eyd4g"]
 [ext_resource type="PackedScene" uid="uid://b1picus170nmk" path="res://Scenes/projectile.tscn" id="5_w8jki"]
 [ext_resource type="Script" uid="uid://db7kn4h7v1jqa" path="res://Resources/Turret/ProjectileStats.cs" id="6_eyd4g"]
 
@@ -12,14 +13,63 @@ _speed = 40.0
 _damage = 5.0
 metadata/_custom_type_script = "uid://db7kn4h7v1jqa"
 
-[node name="EnemyHit" type="Node2D" unique_id=465030601]
+[sub_resource type="Resource" id="Resource_w8jki"]
+resource_local_to_scene = true
+script = ExtResource("6_eyd4g")
+_speed = 40.0
+_damage = 5.0
+metadata/_custom_type_script = "uid://db7kn4h7v1jqa"
+
+[sub_resource type="Resource" id="Resource_lso6e"]
+resource_local_to_scene = true
+script = ExtResource("5_eyd4g")
+ScenePath = "uid://cvx7nxyaghhrx"
+metadata/_custom_type_script = "uid://dj1ghvji6ekg5"
+
+[sub_resource type="Resource" id="Resource_eyd4g"]
+resource_local_to_scene = true
+script = ExtResource("6_eyd4g")
+_speed = 40.0
+_damage = 5.0
+metadata/_custom_type_script = "uid://db7kn4h7v1jqa"
+
+[sub_resource type="Resource" id="Resource_uy65s"]
+resource_local_to_scene = true
+script = ExtResource("6_eyd4g")
+_speed = 40.0
+_damage = 400.0
+metadata/_custom_type_script = "uid://db7kn4h7v1jqa"
+
+[node name="EnemyHit" type="Node2D" unique_id=465030601 node_paths=PackedStringArray("_enemy", "_projectileTargeted", "_projectileTargetScenes", "_projectileNone", "_projectileKiller")]
 script = ExtResource("1_w8jki")
+_enemy = NodePath("Enemy")
+_projectileTargeted = NodePath("ProjectileTargeted")
+_projectileTargetScenes = NodePath("ProjectileTargetScenes")
+_projectileNone = NodePath("ProjectileNone")
+_projectileKiller = NodePath("ProjectileKiller")
 
 [node name="Enemy" parent="." unique_id=382514737 instance=ExtResource("2_eyd4g")]
-position = Vector2(27, 26)
+position = Vector2(32, 32)
 _debugCategory = 1
 
-[node name="Projectile" parent="." unique_id=1257787249 node_paths=PackedStringArray("_target") instance=ExtResource("5_w8jki")]
-position = Vector2(132, 25)
+[node name="ProjectileTargeted" parent="." unique_id=1257787249 node_paths=PackedStringArray("_target") instance=ExtResource("5_w8jki")]
+position = Vector2(128, 32)
 _stats = SubResource("Resource_1y3xj")
+_target = NodePath("../Enemy")
+
+[node name="ProjectileTargetScenes" parent="." unique_id=1724838360 instance=ExtResource("5_w8jki")]
+position = Vector2(200, 32)
+_stats = SubResource("Resource_w8jki")
+_targetLocation = Vector2(0, 32)
+_targetScenes = [SubResource("Resource_lso6e")]
+
+[node name="ProjectileNone" parent="." unique_id=1304734510 instance=ExtResource("5_w8jki")]
+position = Vector2(272, 32)
+_stats = SubResource("Resource_eyd4g")
+_targetLocation = Vector2(0, 32)
+
+[node name="ProjectileKiller" parent="." unique_id=708984260 node_paths=PackedStringArray("_target") instance=ExtResource("5_w8jki")]
+position = Vector2(344, 32)
+_stats = SubResource("Resource_uy65s")
+_targetLocation = Vector2(0, 32)
 _target = NodePath("../Enemy")

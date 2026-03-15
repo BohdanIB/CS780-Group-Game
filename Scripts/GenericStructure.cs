@@ -10,10 +10,12 @@ public partial class GenericStructure: Area2D
 {
 
 	// Components //
+	[ExportGroup("Exported Components")]
 	[Export] protected HurtComponent _hurtComponent;
 	[Export] protected HealthComponent _healthComponent;
 
 	// Nodes
+	[ExportGroup("Exported Child Nodes")]
 	[Export] protected CollisionShape2D _collisionShape2D;
 	[Export] protected AnimatedSprite2D _animatedSprite2D;
 

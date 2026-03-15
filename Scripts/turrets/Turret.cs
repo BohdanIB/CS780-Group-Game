@@ -18,10 +18,11 @@ public partial class Turret : GenericStructure
 	private TargetingMode _targetingMode = TargetingMode.First;
 
 	// Scene Children
+	[ExportGroup("Exported Child Nodes")]
 	[Export] private Timer _shotCooldownTimer;
 
 	// Preloaded Scenes
-	[Export] private PackedScene _projectileScene;
+	// [Export] private PackedScene _projectileScene;
 
 	private Random _random = new();
 	private List<Enemy> _enemiesInRange = new();
