@@ -1,8 +1,6 @@
+
 using Godot;
 
-/// <summary>
-/// TODO: For now, Projectiles always will hit their target and will move towards the target until
-/// </summary>
 public partial class Projectile : Node2D
 {
 	public const float MIN_TARGET_DISTANCE = 0.01f;
@@ -17,7 +15,6 @@ public partial class Projectile : Node2D
 	[ExportGroup("Exported Components")]
 	[Export] private HitComponent _hitComponent;
 
-	// private Vector2 _targetLastKnownLocation;
 	private AnimatedSprite2D _sprite; // todo: export
 	private bool _wasInitialized = false;
 
@@ -100,7 +97,7 @@ public partial class Projectile : Node2D
 		_sprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D"); // Todo: Nix this for export (or component?)
 		_sprite.Frame = _stats.SpriteFrame;
 
-		_hitComponent.OnHit += (hurtOwnerNode, damage) =>
+		_hitComponent.OnHit += (entity, area, damage) =>
 		{
 			ProjectileImpact();
 		};

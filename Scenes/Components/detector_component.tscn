@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://c43d2uh68714x"]
+
+[ext_resource type="Script" uid="uid://boic0r5cs1163" path="res://Scripts/Components/DetectorComponent.cs" id="1_ishsp"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_3vasr"]
+resource_local_to_scene = true
+
+[node name="DetectorComponent" type="Area2D" unique_id=1835049866 node_paths=PackedStringArray("_detectorCollisionShape2D")]
+script = ExtResource("1_ishsp")
+_detectorCollisionShape2D = NodePath("DetectorCollisionShape2D")
+
+[node name="DetectorCollisionShape2D" type="CollisionShape2D" parent="." unique_id=970892799]
+shape = SubResource("CircleShape2D_3vasr")
+debug_color = Color(0.8805896, 0.33030102, 0.5029933, 0.41960785)

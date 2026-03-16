@@ -6,7 +6,7 @@ using Godot;
 /// 
 /// Should have a redefined Initialize and ToString whenever a new structure is contrived.
 /// </summary>
-public partial class GenericStructure: Area2D
+public partial class GenericStructure: Node2D
 {
 
 	// Components //
@@ -16,7 +16,6 @@ public partial class GenericStructure: Area2D
 
 	// Nodes
 	[ExportGroup("Exported Child Nodes")]
-	[Export] protected CollisionShape2D _collisionShape2D;
 	[Export] protected AnimatedSprite2D _animatedSprite2D;
 
 	protected float _health;
@@ -25,15 +24,15 @@ public partial class GenericStructure: Area2D
 
 	public override void _Ready()
 	{
-		_hurtComponent.OnHurt += (hitOwnerNode, damage) =>
-		{
-			_healthComponent.ApplyDamage(damage);
-		};
-		_healthComponent.OnNoHealthLeft += () =>
-		{
-			GD.Print($"Structure {Name} died.");
-			QueueFree();
-		};
+		// _hurtComponent.OnHurt += (hitOwnerNode, damage) =>
+		// {
+		// 	_healthComponent.ApplyDamage(damage);
+		// };
+		// _healthComponent.OnNoHealthLeft += () =>
+		// {
+		// 	GD.Print($"Structure {Name} died.");
+		// 	QueueFree();
+		// };
 	}
 
 

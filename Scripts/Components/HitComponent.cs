@@ -8,7 +8,7 @@ using Godot;
 /// </summary>
 public partial class HitComponent : Area2D
 {
-	[Signal] public delegate void OnHitEventHandler(Node hurtOwnerNode, float damage);
+	[Signal] public delegate void OnHitEventHandler(Node HurtOwnerNode, Area2D HurtArea, float Damage);
 
 	[Export] private float _hitDamage = 1f;
 	[Export] private Node _target;
@@ -45,9 +45,10 @@ public partial class HitComponent : Area2D
 		{
 			if (HitableHurtComponent(area) is var hurtComponent && hurtComponent != null)
 			{
-				GD.Print($"HitComponent made contact with {area.Owner.Name} and is attempting to deal {_hitDamage} damage. Emitting OnHit signal.");
-				hurtComponent.Hit(this.Owner, _hitDamage);
-				EmitSignal(SignalName.OnHit, area.Owner, _hitDamage);
+				Node entity = area.Owner;
+				GD.Print($"HitComponent made contact with {entity.Name} and is attempting to deal {_hitDamage} damage. Emitting OnHit signal.");
+				hurtComponent.Hit(this.Owner, this, _hitDamage);
+				EmitSignal(SignalName.OnHit, entity, area, _hitDamage);
 			}
 		};
 	}
@@ -63,7 +64,7 @@ public partial class HitComponent : Area2D
 		if (area is HurtComponent hurt) // Todo: Unfortunate coupling, but can't wizard up a better way without getting godot layers or groups involved.
 		{
 			// GD.Print("AREA IS HURT COMPONENT.");
-			Node entity = hurt.Owner;
+			var entity = hurt.Owner;
 			// Going for specific target
 			if (_target != null && _target == entity)
 			{

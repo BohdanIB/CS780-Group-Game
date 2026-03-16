@@ -10,77 +10,81 @@ using System.Collections.Generic;
 // public partial class Turret : GenericStructure<TurretStats.Category>
 public partial class Turret : GenericStructure
 {
-	[Export] private TurretStats.Category _debugCategory = TurretStats.Category.UNDEFINED; // used strictly for debug
+	[Export] private TurretStats _stats;
+	[Export] private TargetingMode _targetingMode = TargetingMode.First;
 
-	private bool _disabled = false;
-	private bool _visibleTurretRadius = true;
-	private TurretStats _stats;
-	private TargetingMode _targetingMode = TargetingMode.First;
+	[ExportGroup("Exported Components")]
+	[Export] private DetectableComponent _detectableComponent;
+	[Export] private DetectorComponent _detectorComponent;
 
-	// Scene Children
 	[ExportGroup("Exported Child Nodes")]
 	[Export] private Timer _shotCooldownTimer;
+
+	private bool _disabled = false; // todo: Get rid of this; this is garbage code
+	private bool _visibleTurretRadius = true; // todo
+	private bool _wasInitialized = false;
 
 	// Preloaded Scenes
 	// [Export] private PackedScene _projectileScene;
 
 	private Random _random = new();
-	private List<Enemy> _enemiesInRange = new();
-
+	private Godot.Collections.Array<Area2D> _targetsInRange = [];
+	
 	/// <summary>
-	/// Initializes turret with given stats.
-	/// </summary>
-	/// <param name="turretStats"></param>
-	public void Initialize(TurretStats turretStats)
-	{
-		UpdateStats(turretStats);
-	}
-	/// <summary>
-	/// Initializes turret with "generic" base stats for given type.
+	/// Initializes generic turret.
 	/// </summary>
 	/// <param name="turretType"></param>
 	public void Initialize(TurretStats.Category turretType)
 	{
 		Initialize(new TurretStats(turretType));
 	}
+	/// <summary>
+	/// Initialize generic turret with specific targeting mode.
+	/// </summary>
+	/// <param name="turretType"></param>
+	/// <param name="targetingMode"></param>
 	public void Initialize(TurretStats.Category turretType, TargetingMode targetingMode)
 	{
 		Initialize(turretType);
 		_targetingMode = targetingMode;
 	}
+	/// <summary>
+	/// Initialize turret with specific stats
+	/// </summary>
+	/// <param name="turretStats"></param>
+	public void Initialize(TurretStats turretStats)
+	{
+		UpdateStats(turretStats);
+	}
 
 	public override void _Ready()
 	{
-		// Used for creating turrets outside of instantiation for testing.
-		if (_debugCategory != TurretStats.Category.UNDEFINED)
+		if (_stats != null)
 		{
-			Initialize(_debugCategory);
+			Initialize(_stats.Type);
 		}
-		// Some cases where _Ready gets called before Initialize, just set to some value for now and it will get reinitialized later.
-		else if (_stats == null)
-		{
-			Initialize(TurretStats.Category.Ballista);
-		}
-		UpdateStats(_stats);
 
 		// Todo: Primarily to support ghost mode turret in TurretPlacer. Probably better way of doing this.
 		if (_disabled) { return; }
 
-		// AreaEntered += (area) => {
-		// 	if (area is Enemy pf)
-		// 	{
-		// 		// GD.Print($"TURRET BODY ENTERED BY PATH FOLLOWER '{pf.Name}'");
-		// 		_enemiesInRange.Add(pf);
-		// 	}
-		// };
-		// AreaExited += (area) => // todo: Case where path follower dies within area? Does it still send exit signal?
-		// {
-		// 	if (area is Enemy pf)
-		// 	{
-		// 		// GD.Print($"TURRET BODY EXITED BY PATH FOLLOWER '{pf.Name}'");
-		// 		_enemiesInRange.Remove(pf);
-		// 	}
-		// };
+		_hurtComponent.OnHurt += (entity, area, damage) =>
+		{
+			_healthComponent.ApplyDamage(damage);
+		};
+		_healthComponent.OnNoHealthLeft += () =>
+		{
+			GD.Print($"Turret {Name} died.");
+			QueueFree();
+		};
+
+		_detectorComponent.OnEnterDetector += (entity, area, areasInDetectorRadius) =>
+		{
+			_targetsInRange = areasInDetectorRadius;
+		};
+		_detectorComponent.OnExitDetector += (entity, area, areasInDetectorRadius) =>
+		{
+			_targetsInRange = areasInDetectorRadius;
+		};
 
 		// GD.Print($"Turret Stats: {_stats}");
 	}
@@ -163,27 +167,38 @@ public partial class Turret : GenericStructure
 	}
 	public void UpdateStats()
 	{
-		UpdateTurretRadius();
+		// UpdateHitboxRadius(_stats.HitboxRadius); // todo
+		UpdateDetectorRadius(_stats.AggroRadius);
+		UpdateDetectableRadius(1); // todo
 		UpdateTurretSprite();
 
 		// Todo: Add more updates
 
-		UpdateTurretHealth();
+		UpdateTurretHealth(_stats.Health);
 
-		// Redraw aggro radius
+		// Redraw detector radius
 		QueueRedraw();
 	}
-	private void UpdateTurretRadius()
+	protected void UpdateHitboxRadius(float newRadius)
 	{
-		((CircleShape2D)_collisionShape2D.Shape).Radius = _stats.AggroRadius; // TODO: Better way of doing this?
+		_hurtComponent.ModifyHurtRadius(newRadius);
+	}
+	protected void UpdateDetectorRadius(float newRadius)
+	{
+		_detectorComponent.ModifyDetectorRadius(newRadius);
+	}
+	protected void UpdateDetectableRadius(float newRadius)
+	{
+		_detectableComponent.ModifyDetectableRadius(newRadius);
 	}
 	private void UpdateTurretSprite()
 	{
 		_animatedSprite2D.Frame = _stats.SpriteFrame;
 	}
-	private void UpdateTurretHealth()
+	private void UpdateTurretHealth(float newHealth)
 	{
-		_health = _stats.Health;
+		// _health = _stats.Health;
+		_healthComponent.SetHealth(newHealth);
 	}
 
 	public override string ToString()

@@ -70,7 +70,7 @@ public partial class Enemy: PathFollower
 
 
 
-		_hurtComponent.OnHurt += (hitOwnerNode, damage) =>
+		_hurtComponent.OnHurt += (entity, area, damage) =>
 		{
 			_healthComponent.ApplyDamage(damage);
 		}; 
@@ -96,29 +96,18 @@ public partial class Enemy: PathFollower
 	}
 	public void UpdateStats()
 	{
-		UpdateHitboxRadius();
-		UpdateAggroRadius();
-		UpdateSprite();
+		UpdateHitboxRadius(_stats.HitboxRadius);
+		UpdateDetectorRadius(_stats.AggroRadius);
+		UpdateDetectableRadius(1); // todo
+		UpdateSprite(); // todo: should be a component?
 
 		// Todo: Add more updates
 
-		UpdateHealth();
-	}
-	private void UpdateHitboxRadius()
-	{
-		_hurtComponent.ModifyHurtRadius(_stats.HitboxRadius);
-	}
-	private void UpdateAggroRadius()
-	{
-		((CircleShape2D)_aggroCollisionShape2D.Shape).Radius = _stats.AggroRadius; // TODO: Better way of doing this?
+		UpdateHealth(_stats.Health);
 	}
 	private void UpdateSprite()
 	{
 		_animatedSprite2D.Frame = _stats.SpriteFrame;
-	}
-	private void UpdateHealth()
-	{
-		_healthComponent.SetHealth(_stats.Health);
 	}
 	public override string ToString()
 	{

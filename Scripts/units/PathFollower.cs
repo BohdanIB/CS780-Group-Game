@@ -11,12 +11,11 @@ public partial class PathFollower : Node2D
 	[ExportGroup("Exported Components")]
 	[Export] protected HealthComponent _healthComponent;
 	[Export] protected HurtComponent _hurtComponent;
-	[Export] protected DetectionComponent _detectionComponent;
+	[Export] protected DetectorComponent _detectorComponent;
+	[Export] protected DetectableComponent _detectableComponent;
 
 	// Scene Children //
 	[ExportGroup("Exported Child Nodes")]
-	[Export] protected Area2D _aggroArea2D;
-	[Export] protected CollisionShape2D _aggroCollisionShape2D;
 	[Export] protected AnimatedSprite2D _animatedSprite2D;
 	[Export] protected Timer _shotCooldownTimer;
 
@@ -47,7 +46,7 @@ public partial class PathFollower : Node2D
 	}
 
 	// Todo
-	protected void FollowCurrentPath(double delta)
+	protected void FollowCurrentPath(float movementSpeed, double delta)
 	{
 		if (_path == null) return;
 		if (Position.DistanceTo(_path[_currentPathIndex]) < DISTANCE_THRESHOLD)
@@ -60,8 +59,7 @@ public partial class PathFollower : Node2D
 			}
 			return;
 		}
-
-		// Position = Position.MoveToward(_path[_currentPathIndex], (float) delta * _movementSpeed);
+		Position = Position.MoveToward(_path[_currentPathIndex], (float) delta * movementSpeed);
 	}
 
 	public void SetPath(List<Vector2> newPath)
@@ -106,4 +104,22 @@ public partial class PathFollower : Node2D
 		return distance;
 	}
 
+
+	protected void UpdateHitboxRadius(float newRadius)
+	{
+		_hurtComponent.ModifyHurtRadius(newRadius);
+	}
+	protected void UpdateDetectorRadius(float newRadius)
+	{
+		_detectorComponent.ModifyDetectorRadius(newRadius);
+	}
+	protected void UpdateDetectableRadius(float newRadius)
+	{
+		_detectableComponent.ModifyDetectableRadius(newRadius);
+	}
+	// Todo
+	protected void UpdateHealth(float newHealth)
+	{
+		_healthComponent.SetHealth(newHealth);
+	}
 }
