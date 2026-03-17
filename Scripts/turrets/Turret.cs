@@ -2,7 +2,6 @@
 using CS780GroupProject.Scripts.Utils;
 using Godot;
 using System;
-using System.Collections.Generic;
 
 /// <summary>
 /// 
@@ -14,8 +13,8 @@ public partial class Turret : GenericStructure
 	[Export] private TargetingMode _targetingMode = TargetingMode.First;
 
 	[ExportGroup("Exported Components")]
-	[Export] private DetectableComponent _detectableComponent;
 	[Export] private DetectorComponent _detectorComponent;
+	[Export] private DetectableComponent _detectableComponent;
 
 	[ExportGroup("Exported Child Nodes")]
 	[Export] private Timer _shotCooldownTimer;
@@ -61,7 +60,7 @@ public partial class Turret : GenericStructure
 	{
 		if (_stats != null)
 		{
-			Initialize(_stats.Type);
+			Initialize(_stats);
 		}
 
 		// Todo: Primarily to support ghost mode turret in TurretPlacer. Probably better way of doing this.

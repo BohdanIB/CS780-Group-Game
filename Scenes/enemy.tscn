@@ -36,22 +36,22 @@ metadata/_custom_type_script = "uid://dj1ghvji6ekg5"
 [sub_resource type="Resource" id="Resource_0830c"]
 resource_local_to_scene = true
 script = ExtResource("4_0830c")
-ScenePath = "uid://b1picus170nmk"
-metadata/_custom_type_script = "uid://dj1ghvji6ekg5"
-
-[sub_resource type="Resource" id="Resource_ghaa6"]
-resource_local_to_scene = true
-script = ExtResource("4_0830c")
 ScenePath = "uid://b2w8csm5vypb0"
 metadata/_custom_type_script = "uid://dj1ghvji6ekg5"
 
-[sub_resource type="Resource" id="Resource_1dp5w"]
+[sub_resource type="Resource" id="Resource_ghaa6"]
 resource_local_to_scene = true
 script = ExtResource("4_0830c")
 ScenePath = "uid://braeaociys3xn"
 metadata/_custom_type_script = "uid://dj1ghvji6ekg5"
 
 [sub_resource type="Resource" id="Resource_auwsv"]
+resource_local_to_scene = true
+script = ExtResource("4_0830c")
+ScenePath = "uid://cvx7nxyaghhrx"
+metadata/_custom_type_script = "uid://dj1ghvji6ekg5"
+
+[sub_resource type="Resource" id="Resource_1dp5w"]
 resource_local_to_scene = true
 script = ExtResource("4_0830c")
 ScenePath = "uid://b2w8csm5vypb0"
@@ -66,10 +66,11 @@ scale = Vector2(0.25, 0.25)
 sprite_frames = SubResource("SpriteFrames_1dp5w")
 
 [node name="HurtComponent" parent="." index="3" unique_id=495543674]
-_allowedToHurtEntity = [SubResource("Resource_287tu"), SubResource("Resource_0830c")]
+_allowedToHurtEntity = [SubResource("Resource_287tu")]
 
 [node name="DetectorComponent" parent="." index="4" unique_id=1835049866]
-_detectableScenes = [SubResource("Resource_ghaa6"), SubResource("Resource_1dp5w")]
+_detectableScenes = [SubResource("Resource_0830c"), SubResource("Resource_ghaa6")]
+_detectorScene = SubResource("Resource_auwsv")
 
 [node name="DetectableComponent" parent="." index="5" unique_id=734681606]
-_allowedToDetectEntity = [SubResource("Resource_auwsv")]
+_allowedToDetectEntity = [SubResource("Resource_1dp5w")]

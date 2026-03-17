@@ -13,6 +13,7 @@ public partial class HitComponent : Area2D
 	[Export] private float _hitDamage = 1f;
 	[Export] private Node _target;
 	[Export] private SceneFilePathRes[] _hitableScenes = []; // Valid scenes for this component to be able to hit.
+	[Export] private SceneFilePathRes _senderScene;
 
 	[ExportGroup("Exported Child Nodes")]
 	[Export] private CollisionShape2D _hitCollisionShape2D;
@@ -25,9 +26,10 @@ public partial class HitComponent : Area2D
 	/// <param name="damage"></param>
 	/// <param name="validTargetGroups"></param>
 	/// <param name="target"></param>
-	public void Initialize(float damage, Node target = null, SceneFilePathRes[] validTargetGroups = null)
+	public void Initialize(float damage, SceneFilePathRes sender, Node target = null, SceneFilePathRes[] validTargetGroups = null)
 	{
 		_hitDamage = damage;
+		_senderScene = sender;
 		_target = target;
 		if (validTargetGroups != null)
 		{
@@ -45,10 +47,9 @@ public partial class HitComponent : Area2D
 		{
 			if (HitableHurtComponent(area) is var hurtComponent && hurtComponent != null)
 			{
-				Node entity = area.Owner;
-				GD.Print($"HitComponent made contact with {entity.Name} and is attempting to deal {_hitDamage} damage. Emitting OnHit signal.");
-				hurtComponent.Hit(this.Owner, this, _hitDamage);
-				EmitSignal(SignalName.OnHit, entity, area, _hitDamage);
+				GD.Print($"HitComponent made contact with {area.Owner.Name} and is attempting to deal {_hitDamage} damage. Emitting OnHit signal.");
+				hurtComponent.Hit(Owner, this, _senderScene, _hitDamage);
+				EmitSignal(SignalName.OnHit, area.Owner, area, _hitDamage);
 			}
 		};
 	}

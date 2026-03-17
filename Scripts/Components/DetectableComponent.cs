@@ -15,21 +15,32 @@ public partial class DetectableComponent : Area2D
 	/// DetectorComponents can detect detectable components.
 	/// </summary>
 	/// <param name="detectorOwner"></param>
-	public void Detect(Node detectorOwner, Area2D detector)
+	public void Detect(Node detectorOwner, Area2D detector, SceneFilePathRes detectorScene)
 	{
-		GD.Print($"DetectableComponent was detected by {detectorOwner.Name}. Emitting OnDetected signal.");
-		EmitSignal(SignalName.OnDetected, detectorOwner, detector);
+		if (CanBeDetectedBy(detectorScene))
+		{
+			GD.Print($"DetectableComponent was detected by {detectorOwner.Name}. Emitting OnDetected signal.");
+			EmitSignal(SignalName.OnDetected, detectorOwner, detector);
+		}
 	}
 
-	public void UnDetect(Node detectorOwner, Area2D detector)
+	public void UnDetect(Node detectorOwner, Area2D detector, SceneFilePathRes detectorScene)
 	{
-		GD.Print($"DetectableComponent lost the detection of {detectorOwner.Name}. Emitting OnUnDetected signal.");
-		EmitSignal(SignalName.OnUnDetected, detectorOwner, detector);
+		if (CanBeDetectedBy(detectorScene))
+		{
+			GD.Print($"DetectableComponent lost the detection of {detectorOwner.Name}. Emitting OnUnDetected signal.");
+			EmitSignal(SignalName.OnUnDetected, detectorOwner, detector);
+		}
 	}
 
 	// Todo: Handle shapes other than circles in future?
 	public void ModifyDetectableRadius(float newRadius)
 	{
 		((CircleShape2D)_detectableCollisionShape2D.Shape).Radius = newRadius;
+	}
+
+	protected bool CanBeDetectedBy(SceneFilePathRes scene)
+	{
+		return SceneFilePathRes.SceneSharesScenePath(scene, _allowedToDetectEntity);
 	}
 }

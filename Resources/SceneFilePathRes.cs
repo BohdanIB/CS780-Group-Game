@@ -28,21 +28,32 @@ public partial class SceneFilePathRes : Resource
 	/// </summary>
 	[Export(PropertyHint.File, "*.tscn")] string ScenePath { get; set; }
 
-	private static bool SameType(Node node, SceneFilePathRes sceneFilePath)
+	public override string ToString()
 	{
-		// return node.SceneFilePath == sceneFilePath.ScenePath;
-		return ResourceUid.PathToUid(node.SceneFilePath) == sceneFilePath.ScenePath;
+		return ScenePath;
 	}
 
 	public static bool EntitySharesScenePath(Node entity, SceneFilePathRes[] scenes)
 	{
 		foreach (var scene in scenes)
 		{
-			if (SameType(entity, scene))
+			if (ResourceUid.PathToUid(entity.SceneFilePath) == scene.ScenePath)
 			{
 				return true;
 			}
 		}
 		return false;
 	}
+	public static bool SceneSharesScenePath(SceneFilePathRes s, SceneFilePathRes[] scenes)
+	{
+		foreach (var scene in scenes)
+		{
+			if (s.ScenePath == scene.ScenePath)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
 }

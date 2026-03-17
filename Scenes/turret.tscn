@@ -29,7 +29,7 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="Resource" id="Resource_628tr"]
+[sub_resource type="Resource" id="Resource_ku01o"]
 resource_local_to_scene = true
 script = ExtResource("6_ku01o")
 ScenePath = "uid://cvx7nxyaghhrx"
@@ -41,18 +41,24 @@ script = ExtResource("6_ku01o")
 ScenePath = "uid://cvx7nxyaghhrx"
 metadata/_custom_type_script = "uid://dj1ghvji6ekg5"
 
-[sub_resource type="Resource" id="Resource_ku01o"]
+[sub_resource type="Resource" id="Resource_hxjjt"]
+resource_local_to_scene = true
+script = ExtResource("6_ku01o")
+ScenePath = "uid://b2w8csm5vypb0"
+metadata/_custom_type_script = "uid://dj1ghvji6ekg5"
+
+[sub_resource type="Resource" id="Resource_628tr"]
 resource_local_to_scene = true
 script = ExtResource("6_ku01o")
 ScenePath = "uid://cvx7nxyaghhrx"
 metadata/_custom_type_script = "uid://dj1ghvji6ekg5"
 
-[node name="Turret" unique_id=440596787 node_paths=PackedStringArray("_detectableComponent", "_detectorComponent", "_shotCooldownTimer") instance=ExtResource("1_hskch")]
+[node name="Turret" unique_id=440596787 node_paths=PackedStringArray("_detectorComponent", "_detectableComponent", "_shotCooldownTimer") instance=ExtResource("1_hskch")]
 script = ExtResource("1_fcprl")
 _stats = null
 _targetingMode = 1
-_detectableComponent = NodePath("DetectableComponent")
 _detectorComponent = NodePath("DetectorComponent")
+_detectableComponent = NodePath("DetectableComponent")
 _shotCooldownTimer = NodePath("ShotCooldownTimer")
 
 [node name="AnimatedSprite2D" parent="." index="0" unique_id=440445772]
@@ -64,10 +70,11 @@ process_callback = 0
 one_shot = true
 
 [node name="HurtComponent" parent="." index="3" unique_id=495543674]
-_allowedToHurtEntity = [SubResource("Resource_628tr")]
+_allowedToHurtEntity = [SubResource("Resource_ku01o")]
 
-[node name="DetectableComponent" parent="." index="4" unique_id=1835049866 instance=ExtResource("5_ku01o")]
-_allowedToDetectEntity = [SubResource("Resource_74mb1")]
+[node name="DetectorComponent" parent="." index="4" unique_id=1994671651 instance=ExtResource("6_628tr")]
+_detectableScenes = [SubResource("Resource_74mb1")]
+_detectorScene = SubResource("Resource_hxjjt")
 
-[node name="DetectorComponent" parent="." index="5" unique_id=1994671651 instance=ExtResource("6_628tr")]
-_detectableScenes = [SubResource("Resource_ku01o")]
+[node name="DetectableComponent" parent="." index="5" unique_id=1835049866 instance=ExtResource("5_ku01o")]
+_allowedToDetectEntity = [SubResource("Resource_628tr")]

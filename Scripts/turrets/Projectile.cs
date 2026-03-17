@@ -5,12 +5,13 @@ public partial class Projectile : Node2D
 {
 	public const float MIN_TARGET_DISTANCE = 0.01f;
 
-	[Signal] public delegate void OnProjectileImpactEventHandler(Vector2 Position, ProjectileStats Stats); // todo: May need more dev; Explosive shots AOE?
+	[Signal] public delegate void OnProjectileImpactEventHandler(Vector2 Position, ProjectileStats Stats, SceneFilePathRes SenderScene); // todo: May need more dev; Explosive shots AOE?
 
 	[Export] private ProjectileStats _stats;
 	[Export] private Vector2 _targetLocation; // Either the target's last known position, or a position given at initialization.
 	[Export] private Node2D _target;
 	[Export] private SceneFilePathRes[] _targetScenes = []; // Valid scenes for this component to target.
+	[Export] private SceneFilePathRes _senderScene; // Scene which sent projectile (used for valid scene checks).
 
 	[ExportGroup("Exported Components")]
 	[Export] private HitComponent _hitComponent;
@@ -24,19 +25,19 @@ public partial class Projectile : Node2D
 	/// </summary>
 	/// <param name="targetPosition"></param>
 	/// <param name="category"></param>
-	public void Initialize(Vector2 targetPosition, ProjectileStats.Category category)
+	public void Initialize(Vector2 targetPosition, ProjectileStats.Category category, SceneFilePathRes senderScene)
 	{
-		Initialize(targetPosition, new ProjectileStats(category));
+		Initialize(targetPosition, new ProjectileStats(category), senderScene);
 	}
 	/// <summary>
 	/// Initialize projectile to target specific position with specific stats.
 	/// </summary>
 	/// <param name="targetPosition"></param>
 	/// <param name="projectileStats"></param>
-	public void Initialize(Vector2 targetPosition, ProjectileStats projectileStats)
+	public void Initialize(Vector2 targetPosition, ProjectileStats projectileStats, SceneFilePathRes senderScene)
 	{
 		_targetLocation = targetPosition;
-		Initialize(projectileStats);
+		Initialize(projectileStats, senderScene);
 	}
 
 	/// <summary>
@@ -44,16 +45,16 @@ public partial class Projectile : Node2D
 	/// </summary>
 	/// <param name="targetEntity"></param>
 	/// <param name="category"></param>
-	public void Initialize(Node2D targetEntity, ProjectileStats.Category category)
+	public void Initialize(Node2D targetEntity, ProjectileStats.Category category, SceneFilePathRes senderScene)
 	{
-		Initialize(targetEntity, new ProjectileStats(category));
+		Initialize(targetEntity, new ProjectileStats(category), senderScene);
 	}
 	/// <summary>
 	/// Initialize projectile to target specific entity with specific stats.
 	/// </summary>
 	/// <param name="targetEntity"></param>
 	/// <param name="projectileStats"></param>
-	public void Initialize(Node2D targetEntity, ProjectileStats projectileStats)
+	public void Initialize(Node2D targetEntity, ProjectileStats projectileStats, SceneFilePathRes senderScene)
 	{
 		_target = targetEntity;
 		if (!IsInstanceValid(_target))
@@ -63,7 +64,7 @@ public partial class Projectile : Node2D
 			return;
 		}
 		_targetLocation = _target.Position;
-		Initialize(projectileStats);
+		Initialize(projectileStats, senderScene);
 	}
 
 	/// <summary>
@@ -72,10 +73,11 @@ public partial class Projectile : Node2D
 	/// Last layer of initilization for any type of initialization for projectile.
 	/// </summary>
 	/// <param name="projectileStats"></param>
-	private void Initialize(ProjectileStats projectileStats)
+	private void Initialize(ProjectileStats projectileStats, SceneFilePathRes senderScene)
 	{
 		_stats = projectileStats;
-		_hitComponent.Initialize(_stats.Damage, _target, _targetScenes);
+		_senderScene = senderScene;
+		_hitComponent.Initialize(_stats.Damage, _senderScene, _target, _targetScenes);
 		_wasInitialized = true;
 	}
 
@@ -84,13 +86,17 @@ public partial class Projectile : Node2D
 		// Debug
 		if (_stats != null && !_wasInitialized)
 		{
-			if (_target != null)
+			if (_target != null && _senderScene != null)
 			{
-				Initialize(_target, _stats);
+				Initialize(_target, _stats, _senderScene);
+			}
+			else if (_senderScene != null)
+			{
+				Initialize(_targetLocation, _stats, _senderScene);
 			}
 			else
 			{
-				Initialize(_targetLocation, _stats);
+				GD.Print($"WARNING - Projectile {Name} could not initialized on _Ready with given values {{ Stats: {_stats}, Target: {_target}, SenderScene: {_senderScene}}}");
 			}
 		}
 
@@ -145,7 +151,7 @@ public partial class Projectile : Node2D
 	private void ProjectileImpact()
 	{
 		// // Todo: WIP - Potentially add animation or some other effects to projectile on impact? May want to incorporate signal somehow.
-		EmitSignal(SignalName.OnProjectileImpact, Position, _stats);
+		EmitSignal(SignalName.OnProjectileImpact, Position, _stats, _senderScene);
 		// if (IsInstanceValid(_target))
 		// {
 		// 	// GD.Print($"Projectile hit target {_target.Name} for {_stats.Damage} damage");
