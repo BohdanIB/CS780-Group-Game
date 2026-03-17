@@ -67,7 +67,7 @@ public partial class Enemy: PathFollower
 	{
 		UpdateHitboxRadius(_stats.HitboxRadius);
 		UpdateDetectorRadius(_stats.AggroRadius);
-		UpdateDetectableRadius(1); // todo
+		UpdateDetectableRadius(_stats.DetectableRadius);
 		UpdateSprite(); // todo: should be a component?
 
 		// Todo: Add more updates

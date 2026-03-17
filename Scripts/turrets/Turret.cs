@@ -166,9 +166,9 @@ public partial class Turret : GenericStructure
 	}
 	public void UpdateStats()
 	{
-		// UpdateHitboxRadius(_stats.HitboxRadius); // todo
+		UpdateHitboxRadius(_stats.HitboxRadius);
 		UpdateDetectorRadius(_stats.AggroRadius);
-		UpdateDetectableRadius(1); // todo
+		UpdateDetectableRadius(_stats.DetectableRadius);
 		UpdateTurretSprite();
 
 		// Todo: Add more updates
@@ -196,7 +196,6 @@ public partial class Turret : GenericStructure
 	}
 	private void UpdateTurretHealth(float newHealth)
 	{
-		// _health = _stats.Health;
 		_healthComponent.SetHealth(newHealth);
 	}
 

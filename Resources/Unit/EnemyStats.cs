@@ -14,18 +14,18 @@ public partial class EnemyStats : Resource
 		Strong, // Creative, I know. Truly my genius knows no bounds
 	};
 
-	private record BaseStats(float HitboxRadius, float AggroRadius, float Health, float FireRate, float MovementSpeed, ProjectileStats ProjectileStats, int SpriteFrame);
+	private record BaseStats(float HitboxRadius, float AggroRadius, float DetectableRadius, float Health, float FireRate, float MovementSpeed, ProjectileStats ProjectileStats, int SpriteFrame);
 	private static readonly Dictionary<Category, BaseStats> BASE_STATS = new()
 	{
 		{Category.Regular, 
-			new BaseStats(HitboxRadius: 5f, AggroRadius: 50f, Health: 50, FireRate: 4f, MovementSpeed: 15f, ProjectileStats: new ProjectileStats(ProjectileStats.Category.Bolt), SpriteFrame: 0)},
+			new BaseStats(HitboxRadius: 16f, AggroRadius: 50f, DetectableRadius: 16f, Health: 50, FireRate: 4f, MovementSpeed: 15f, ProjectileStats: new ProjectileStats(ProjectileStats.Category.Bolt), SpriteFrame: 0)},
 		{Category.Strong, 
-			new BaseStats(HitboxRadius: 5f, AggroRadius: 25f, Health: 100f, FireRate: 4f, MovementSpeed: 10f, ProjectileStats: new ProjectileStats(ProjectileStats.Category.Bolt), SpriteFrame: 1)},
+			new BaseStats(HitboxRadius: 16f, AggroRadius: 32f, DetectableRadius: 16f, Health: 100f, FireRate: 4f, MovementSpeed: 10f, ProjectileStats: new ProjectileStats(ProjectileStats.Category.Bolt), SpriteFrame: 1)},
 	};
 
 	// Enemy Stats
 	[Export] private Category _type;
-	[Export] private float _hitboxRadius, _aggroRadius, _health, _fireRate, _movementSpeed;
+	[Export] private float _hitboxRadius, _aggroRadius, _detectableRadius, _health, _fireRate, _movementSpeed;
 	[Export] private ProjectileStats _projectileStats;
 	[Export] private int _spriteFrame;
 
@@ -33,6 +33,7 @@ public partial class EnemyStats : Resource
 	public Category Type { get => _type; set => _type = value; }
 	public float HitboxRadius { get => _hitboxRadius; set => _hitboxRadius = value; }
 	public float AggroRadius { get => _aggroRadius; set => _aggroRadius = value; }
+	public float DetectableRadius { get => _detectableRadius; set => _detectableRadius = value; }
 	public float Health { get => _health; set => _health = value; }
 	// Shots per second, so (1/FireRate) will give you the time between shots for this enemy.
 	public float FireRate { get => _fireRate; set => _fireRate = value; }
@@ -47,6 +48,7 @@ public partial class EnemyStats : Resource
 		Type = type;
 		HitboxRadius = baseStats.HitboxRadius;
 		AggroRadius = baseStats.AggroRadius;
+		DetectableRadius = baseStats.DetectableRadius;
 		Health = baseStats.Health;
 		FireRate = baseStats.FireRate;
 		MovementSpeed = baseStats.MovementSpeed;
@@ -58,6 +60,7 @@ public partial class EnemyStats : Resource
 		BaseStats baseStats = BASE_STATS[Type];
 		HitboxRadius = baseStats.HitboxRadius;
 		AggroRadius = baseStats.AggroRadius;
+		DetectableRadius = baseStats.DetectableRadius;
 		Health = baseStats.Health;
 		FireRate = baseStats.FireRate;
 		MovementSpeed = baseStats.MovementSpeed;
@@ -71,7 +74,7 @@ public partial class EnemyStats : Resource
 	}
 	public override string ToString()
 	{
-		return $"{Type} - HitboxRadius: {HitboxRadius} - AggroRadius: {AggroRadius} - Health: {Health} - FireRate: {FireRate} - MovementSpeed: {MovementSpeed} - Projectile: [{ProjectileStats}]";
+		return $"{Type} - HitboxRadius: {HitboxRadius} - AggroRadius: {AggroRadius} - DetectableRadius: {DetectableRadius} - Health: {Health} - FireRate: {FireRate} - MovementSpeed: {MovementSpeed} - Projectile: [{ProjectileStats}]";
 	}
 
 }

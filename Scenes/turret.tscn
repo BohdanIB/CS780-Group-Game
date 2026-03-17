@@ -35,19 +35,19 @@ script = ExtResource("6_ku01o")
 ScenePath = "uid://cvx7nxyaghhrx"
 metadata/_custom_type_script = "uid://dj1ghvji6ekg5"
 
-[sub_resource type="Resource" id="Resource_74mb1"]
+[sub_resource type="Resource" id="Resource_628tr"]
 resource_local_to_scene = true
 script = ExtResource("6_ku01o")
 ScenePath = "uid://cvx7nxyaghhrx"
 metadata/_custom_type_script = "uid://dj1ghvji6ekg5"
 
-[sub_resource type="Resource" id="Resource_hxjjt"]
+[sub_resource type="Resource" id="Resource_74mb1"]
 resource_local_to_scene = true
 script = ExtResource("6_ku01o")
 ScenePath = "uid://b2w8csm5vypb0"
 metadata/_custom_type_script = "uid://dj1ghvji6ekg5"
 
-[sub_resource type="Resource" id="Resource_628tr"]
+[sub_resource type="Resource" id="Resource_hxjjt"]
 resource_local_to_scene = true
 script = ExtResource("6_ku01o")
 ScenePath = "uid://cvx7nxyaghhrx"
@@ -73,8 +73,8 @@ one_shot = true
 _allowedToHurtEntity = [SubResource("Resource_ku01o")]
 
 [node name="DetectorComponent" parent="." index="4" unique_id=1994671651 instance=ExtResource("6_628tr")]
-_detectableScenes = [SubResource("Resource_74mb1")]
-_detectorScene = SubResource("Resource_hxjjt")
+_detectableScenes = [SubResource("Resource_628tr")]
+_detectorScene = SubResource("Resource_74mb1")
 
 [node name="DetectableComponent" parent="." index="5" unique_id=1835049866 instance=ExtResource("5_ku01o")]
-_allowedToDetectEntity = [SubResource("Resource_628tr")]
+_allowedToDetectEntity = [SubResource("Resource_hxjjt")]

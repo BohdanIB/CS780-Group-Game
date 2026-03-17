@@ -7,7 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://b2w8csm5vypb0" path="res://Scenes/turret.tscn" id="5_bsodh"]
 [ext_resource type="Script" uid="uid://db7kn4h7v1jqa" path="res://Resources/Turret/ProjectileStats.cs" id="6_7u720"]
 
-[sub_resource type="Resource" id="Resource_ahouh"]
+[sub_resource type="Resource" id="Resource_wd7cv"]
 resource_local_to_scene = true
 script = ExtResource("6_7u720")
 _speed = 20.0
@@ -18,28 +18,31 @@ metadata/_custom_type_script = "uid://db7kn4h7v1jqa"
 resource_local_to_scene = true
 script = ExtResource("3_wd7cv")
 _type = 1
-_hitboxRadius = 10.0
+_hitboxRadius = 16.0
 _aggroRadius = 50.0
+_detectableRadius = 16.0
 _health = 50.0
 _fireRate = 2.0
 _movementSpeed = 20.0
-_projectileStats = SubResource("Resource_ahouh")
+_projectileStats = SubResource("Resource_wd7cv")
 metadata/_custom_type_script = "uid://c35fcs4mhqjbm"
 
-[sub_resource type="Resource" id="Resource_bsodh"]
+[sub_resource type="Resource" id="Resource_ahouh"]
 resource_local_to_scene = true
 script = ExtResource("6_7u720")
 _speed = 20.0
 _damage = 10.0
 metadata/_custom_type_script = "uid://db7kn4h7v1jqa"
 
-[sub_resource type="Resource" id="Resource_wd7cv"]
+[sub_resource type="Resource" id="Resource_grv06"]
 resource_local_to_scene = true
 script = ExtResource("4_0cfo2")
+_hitboxRadius = 16.0
 _aggroRadius = 100.0
+_detectableRadius = 16.0
 _health = 10.0
 _fireRate = 2.0
-_projectileStats = SubResource("Resource_bsodh")
+_projectileStats = SubResource("Resource_ahouh")
 metadata/_custom_type_script = "uid://bawwkshhg5psh"
 
 [node name="EnemySight" type="Node2D" unique_id=726302098 node_paths=PackedStringArray("_enemy", "_turret")]
@@ -53,5 +56,5 @@ _stats = SubResource("Resource_7u720")
 _targetingMode = 4
 
 [node name="Turret" parent="." unique_id=440596787 instance=ExtResource("5_bsodh")]
-position = Vector2(185, 46)
-_stats = SubResource("Resource_wd7cv")
+position = Vector2(181, 45)
+_stats = SubResource("Resource_grv06")
