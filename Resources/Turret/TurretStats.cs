@@ -10,7 +10,6 @@ public partial class TurretStats : Resource
 {
 	public enum Category
 	{
-		UNDEFINED,
 		Ballista,
 		Blade,
 	};
@@ -24,10 +23,10 @@ public partial class TurretStats : Resource
 	};
 
 	// Turret Stats
-	private Category _type;
-	private float _aggroRadius, _health, _fireRate, _projectileSpeed, _damage;
-	private ProjectileStats _projectileStats;
-	private int _spriteFrame;
+	[Export] private Category _type;
+	[Export] private float _aggroRadius, _health, _fireRate;
+	[Export] private ProjectileStats _projectileStats;
+	[Export] private int _spriteFrame;
 
 	// Getters + Setters
 	public Category Type { get => _type; set => _type = value; }

@@ -19,7 +19,7 @@ public partial class DetectableComponent : Area2D
 	{
 		if (CanBeDetectedBy(detectorScene))
 		{
-			GD.Print($"DetectableComponent was detected by {detectorOwner.Name}. Emitting OnDetected signal.");
+			GD.Print($"DetectableComponent for {Owner} was detected by {detectorOwner.Name}. Emitting OnDetected signal.");
 			EmitSignal(SignalName.OnDetected, detectorOwner, detector);
 		}
 	}
@@ -28,7 +28,7 @@ public partial class DetectableComponent : Area2D
 	{
 		if (CanBeDetectedBy(detectorScene))
 		{
-			GD.Print($"DetectableComponent lost the detection of {detectorOwner.Name}. Emitting OnUnDetected signal.");
+			GD.Print($"DetectableComponent for {Owner} lost the detection of {detectorOwner.Name}. Emitting OnUnDetected signal.");
 			EmitSignal(SignalName.OnUnDetected, detectorOwner, detector);
 		}
 	}

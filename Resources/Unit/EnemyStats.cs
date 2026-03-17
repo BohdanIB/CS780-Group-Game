@@ -5,11 +5,11 @@ using System.Collections.Generic;
 /// <summary>
 /// 
 /// </summary>
+[GlobalClass]
 public partial class EnemyStats : Resource
 {
 	public enum Category
 	{
-		UNDEFINED,
 		Regular,
 		Strong, // Creative, I know. Truly my genius knows no bounds
 	};
@@ -45,6 +45,17 @@ public partial class EnemyStats : Resource
 	{
 		BaseStats baseStats = BASE_STATS[type];
 		Type = type;
+		HitboxRadius = baseStats.HitboxRadius;
+		AggroRadius = baseStats.AggroRadius;
+		Health = baseStats.Health;
+		FireRate = baseStats.FireRate;
+		MovementSpeed = baseStats.MovementSpeed;
+		ProjectileStats = baseStats.ProjectileStats;
+		SpriteFrame = baseStats.SpriteFrame;
+	}
+	public EnemyStats()
+	{
+		BaseStats baseStats = BASE_STATS[Type];
 		HitboxRadius = baseStats.HitboxRadius;
 		AggroRadius = baseStats.AggroRadius;
 		Health = baseStats.Health;

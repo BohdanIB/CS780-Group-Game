@@ -10,10 +10,8 @@ using System.Collections.Generic;
 /// </summary>
 public partial class Enemy: PathFollower
 {
-	[Export] private EnemyStats.Category _debugCategory = EnemyStats.Category.UNDEFINED; // used strictly for debug
-
-	private EnemyStats _stats;
-	private TargetingMode _targetingMode = TargetingMode.Weak;
+	[Export] private EnemyStats _stats;
+	[Export] private TargetingMode _targetingMode = TargetingMode.Weak;
 
 	protected List<Area2D> _targetsInRange = new(); // todo - enemy needs a list of valid target types? (hit component probably deals with this)
 
@@ -36,39 +34,10 @@ public partial class Enemy: PathFollower
 
 	public override void _Ready()
 	{
-		base._Ready();
-
-		// Used for creating enemies outside of instantiation for testing.
-		if (_debugCategory != EnemyStats.Category.UNDEFINED)
+		if (_stats != null)
 		{
-			Initialize(_debugCategory);
+			Initialize(_stats);
 		}
-
-		// _aggroArea2D.AreaEntered += (area) => 
-		// {
-		// 	if (area is Friendly t)
-		// 	{
-		// 		// GD.Print($"ENEMY '{Name}' AGGRO RANGE ENTERED BY {t.Name}");
-		// 		_targetsInRange.Add(t);
-		// 	}
-		// };
-		// _aggroArea2D.AreaExited += (area) =>
-		// {
-		// 	if (area is Friendly t)
-		// 	{
-		// 		// GD.Print($"ENEMY '{Name}' AGGRO RANGE EXITED BY {t.Name}");
-		// 		_targetsInRange.Remove(t);
-		// 	}
-		// };
-
-		// _healthComponent.OnNoHealthLeft += () =>
-		// {
-		// 	GD.Print($"Enemy {Name} died.");
-		// 	// TODO: ENEMY DEAD
-		// };
-
-
-
 
 		_hurtComponent.OnHurt += (entity, area, damage) =>
 		{
