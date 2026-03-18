@@ -39,7 +39,7 @@ public partial class Enemy: PathFollower
 			Initialize(_stats);
 		}
 
-		_hurtComponent.OnHurt += (entity, area, damage) =>
+		_hurtComponent.OnHurt += (area, damage) =>
 		{
 			_healthComponent.ApplyDamage(damage);
 		}; 

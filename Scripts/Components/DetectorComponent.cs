@@ -3,16 +3,14 @@ using Godot;
 
 public partial class DetectorComponent : Area2D
 {
-	[Signal] public delegate void OnEnterDetectorEventHandler(Node DetectedOwnerNode, Area2D DetectedArea, Godot.Collections.Array<Area2D> AreasInDetectorRadius);
-	[Signal] public delegate void OnExitDetectorEventHandler(Node DetectedOwnerNode, Area2D DetectedArea, Godot.Collections.Array<Area2D> AreasInDetectorRadius);
+	[Signal] public delegate void OnEnterDetectorEventHandler(Area2D DetectedArea);
+	[Signal] public delegate void OnExitDetectorEventHandler(Area2D DetectedArea);
 
 	[Export] private SceneFilePathRes[] _detectableScenes = [];
 	[Export] private SceneFilePathRes _detectorScene; // Scene which is doing the detecting
 
 	[ExportGroup("Exported Child Nodes")]
 	[Export] private CollisionShape2D _detectorCollisionShape2D;
-
-	private Godot.Collections.Array<Area2D> _areasInDetectorRadius = [];
 
 	public void Initialize(SceneFilePathRes detectorScene, SceneFilePathRes[] detectableScenes = null)
 	{
@@ -33,22 +31,18 @@ public partial class DetectorComponent : Area2D
 		{
 			if (IsValidDetection(area) is var detectableComponent && detectableComponent != null)
 			{
-				Node entity = area.Owner;
-				GD.Print($"DetectorComponent for {this.Owner} made contact with {entity.Name}. Emitting OnEnterDetector signal.");
-				detectableComponent.Detect(this.Owner, this, _detectorScene);
-				_areasInDetectorRadius.Add(area);
-				EmitSignal(SignalName.OnEnterDetector, entity, area, _areasInDetectorRadius);
+				GD.Print($"DetectorComponent for {this.Owner} made contact with {area.Owner.Name}. Emitting OnEnterDetector signal.");
+				detectableComponent.Detect(this, _detectorScene);
+				EmitSignal(SignalName.OnEnterDetector, area);
 			}
 		};
 		AreaExited += (area) =>
 		{
-			if (_areasInDetectorRadius.Contains(area) && area is DetectableComponent detectableComponent && detectableComponent != null)
+			if (area is DetectableComponent detectableComponent && detectableComponent != null)
 			{
-				Node entity = area.Owner;
-				GD.Print($"DetectorComponent for {this.Owner} lost detection of {entity.Name}. Emitting OnExitDetector signal.");
-				detectableComponent.UnDetect(this.Owner, this, _detectorScene);
-				_areasInDetectorRadius.Remove(area);
-				EmitSignal(SignalName.OnExitDetector, entity, area, _areasInDetectorRadius);
+				GD.Print($"DetectorComponent for {this.Owner} lost detection of {area.Owner.Name}. Emitting OnExitDetector signal.");
+				detectableComponent.UnDetect(this, _detectorScene);
+				EmitSignal(SignalName.OnExitDetector, area);
 			}
 		};
 	}

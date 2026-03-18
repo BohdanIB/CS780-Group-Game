@@ -8,7 +8,7 @@ using Godot;
 /// </summary>
 public partial class HitComponent : Area2D
 {
-	[Signal] public delegate void OnHitEventHandler(Node HurtOwnerNode, Area2D HurtArea, float Damage);
+	[Signal] public delegate void OnHitEventHandler(Area2D HurtArea, float Damage);
 
 	[Export] private float _hitDamage = 1f;
 	[Export] private Node _target;
@@ -48,8 +48,8 @@ public partial class HitComponent : Area2D
 			if (HitableHurtComponent(area) is var hurtComponent && hurtComponent != null)
 			{
 				GD.Print($"HitComponent made contact with {area.Owner.Name} and is attempting to deal {_hitDamage} damage. Emitting OnHit signal.");
-				hurtComponent.Hit(Owner, this, _senderScene, _hitDamage);
-				EmitSignal(SignalName.OnHit, area.Owner, area, _hitDamage);
+				hurtComponent.Hit(this, _senderScene, _hitDamage);
+				EmitSignal(SignalName.OnHit, area, _hitDamage);
 			}
 		};
 	}

@@ -26,7 +26,7 @@ public partial class SceneFilePathRes : Resource
 	/// This is the UID path of the given PackedScene file. This allows for changes to scene dynamically updating 
 	/// the path given to this resource.
 	/// </summary>
-	[Export(PropertyHint.File, "*.tscn")] string ScenePath { get; set; }
+	[Export(PropertyHint.File, "*.tscn")] public string ScenePath { get; set; }
 
 	public override string ToString()
 	{
@@ -37,7 +37,7 @@ public partial class SceneFilePathRes : Resource
 	{
 		foreach (var scene in scenes)
 		{
-			if (ResourceUid.PathToUid(entity.SceneFilePath) == scene.ScenePath)
+			if (RidToUid(entity.SceneFilePath) == scene.ScenePath)
 			{
 				return true;
 			}
@@ -54,6 +54,14 @@ public partial class SceneFilePathRes : Resource
 			}
 		}
 		return false;
+	}
+	public static string UidToRid(string uid)
+	{
+		return ResourceUid.UidToPath(uid);
+	}
+	public static string RidToUid(string rid)
+	{
+		return ResourceUid.PathToUid(rid);
 	}
 
 }

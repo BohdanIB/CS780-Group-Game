@@ -6,7 +6,7 @@ using Godot;
 /// </summary>
 public partial class HurtComponent : Area2D
 {
-	[Signal] public delegate void OnHurtEventHandler(Node HitterOwnerNode, Area2D HitterArea, float Damage);
+	[Signal] public delegate void OnHurtEventHandler(Area2D HitterArea, float Damage);
 
 	[Export] private SceneFilePathRes[] _allowedToHurtEntity = []; // todo?: Valid scenes for this component to be hurt by.
 
@@ -18,12 +18,12 @@ public partial class HurtComponent : Area2D
 	/// </summary>
 	/// <param name="hitterOwner"></param>
 	/// <param name="damage"></param>
-	public void Hit(Node hitterOwner, Area2D hitterArea, SceneFilePathRes senderScene, float damage)
+	public void Hit(Area2D hitterArea, SceneFilePathRes senderScene, float damage)
 	{
 		if (CanBeHurtBy(senderScene))
 		{
-			GD.Print($"HurtComponent was hit by {hitterOwner.Name} and was dealt {damage} damage. Emitting OnHurt signal.");
-			EmitSignal(SignalName.OnHurt, hitterOwner, hitterArea, damage);
+			GD.Print($"HurtComponent was hit by {hitterArea.Owner.Name} and was dealt {damage} damage. Emitting OnHurt signal.");
+			EmitSignal(SignalName.OnHurt, hitterArea, damage);
 		}
 	}
 

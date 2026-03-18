@@ -15,6 +15,7 @@ public partial class Turret : GenericStructure
 	[ExportGroup("Exported Components")]
 	[Export] private DetectorComponent _detectorComponent;
 	[Export] private DetectableComponent _detectableComponent;
+	[Export] private SpawnerComponent _projectileSpawnerComponent;
 
 	[ExportGroup("Exported Child Nodes")]
 	[Export] private Timer _shotCooldownTimer;
@@ -66,7 +67,7 @@ public partial class Turret : GenericStructure
 		// Todo: Primarily to support ghost mode turret in TurretPlacer. Probably better way of doing this.
 		if (_disabled) { return; }
 
-		_hurtComponent.OnHurt += (entity, area, damage) =>
+		_hurtComponent.OnHurt += (area, damage) =>
 		{
 			_healthComponent.ApplyDamage(damage);
 		};
@@ -76,14 +77,14 @@ public partial class Turret : GenericStructure
 			QueueFree();
 		};
 
-		_detectorComponent.OnEnterDetector += (entity, area, areasInDetectorRadius) =>
-		{
-			_targetsInRange = areasInDetectorRadius;
-		};
-		_detectorComponent.OnExitDetector += (entity, area, areasInDetectorRadius) =>
-		{
-			_targetsInRange = areasInDetectorRadius;
-		};
+		// _detectorComponent.OnEnterDetector += (area) =>
+		// {
+		// 	// _targetsInRange = areasInDetectorRadius;
+		// };
+		// _detectorComponent.OnExitDetector += (area) =>
+		// {
+		// 	// _targetsInRange = areasInDetectorRadius;
+		// };
 
 		// GD.Print($"Turret Stats: {_stats}");
 	}

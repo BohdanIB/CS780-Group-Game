@@ -103,7 +103,7 @@ public partial class Projectile : Node2D
 		_sprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D"); // Todo: Nix this for export (or component?)
 		_sprite.Frame = _stats.SpriteFrame;
 
-		_hitComponent.OnHit += (entity, area, damage) =>
+		_hitComponent.OnHit += (area, damage) =>
 		{
 			ProjectileImpact();
 		};

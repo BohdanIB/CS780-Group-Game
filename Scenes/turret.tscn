@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://cbnk8jcd7c4v3" path="res://Scenes/Components/detectable_component.tscn" id="5_ku01o"]
 [ext_resource type="PackedScene" uid="uid://c43d2uh68714x" path="res://Scenes/Components/detector_component.tscn" id="6_628tr"]
 [ext_resource type="Script" uid="uid://dj1ghvji6ekg5" path="res://Resources/SceneFilePathRes.cs" id="6_ku01o"]
+[ext_resource type="PackedScene" uid="uid://bxnd3hgmx5vi6" path="res://Scenes/Components/spawner_component.tscn" id="7_628tr"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_6spbj"]
 atlas = ExtResource("2_hskch")
@@ -53,12 +54,19 @@ script = ExtResource("6_ku01o")
 ScenePath = "uid://cvx7nxyaghhrx"
 metadata/_custom_type_script = "uid://dj1ghvji6ekg5"
 
-[node name="Turret" unique_id=440596787 node_paths=PackedStringArray("_detectorComponent", "_detectableComponent", "_shotCooldownTimer") instance=ExtResource("1_hskch")]
+[sub_resource type="Resource" id="Resource_hpwha"]
+resource_local_to_scene = true
+script = ExtResource("6_ku01o")
+ScenePath = "uid://b1picus170nmk"
+metadata/_custom_type_script = "uid://dj1ghvji6ekg5"
+
+[node name="Turret" unique_id=440596787 node_paths=PackedStringArray("_detectorComponent", "_detectableComponent", "_projectileSpawnerComponent", "_shotCooldownTimer") instance=ExtResource("1_hskch")]
 script = ExtResource("1_fcprl")
 _stats = null
 _targetingMode = 1
 _detectorComponent = NodePath("DetectorComponent")
 _detectableComponent = NodePath("DetectableComponent")
+_projectileSpawnerComponent = NodePath("ProjectileSpawnerComponent")
 _shotCooldownTimer = NodePath("ShotCooldownTimer")
 
 [node name="AnimatedSprite2D" parent="." index="0" unique_id=440445772]
@@ -78,3 +86,7 @@ _detectorScene = SubResource("Resource_74mb1")
 
 [node name="DetectableComponent" parent="." index="5" unique_id=1835049866 instance=ExtResource("5_ku01o")]
 _allowedToDetectEntity = [SubResource("Resource_hxjjt")]
+
+[node name="ProjectileSpawnerComponent" parent="." index="6" unique_id=391563213 instance=ExtResource("7_628tr")]
+position = Vector2(0, -3)
+_scenePath = SubResource("Resource_hpwha")
