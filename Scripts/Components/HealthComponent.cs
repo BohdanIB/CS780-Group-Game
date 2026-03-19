@@ -21,6 +21,10 @@ public partial class HealthComponent : Node2D
 		_currentHealth = health;
 		CheckHealthLeft();
 	}
+	public float GetHealth()
+	{
+		return _currentHealth;
+	}
 
 	public void ApplyDamage(float damage)
 	{
