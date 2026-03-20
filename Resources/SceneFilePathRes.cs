@@ -28,6 +28,12 @@ public partial class SceneFilePathRes : Resource
 	/// </summary>
 	[Export(PropertyHint.File, "*.tscn")] public string ScenePath { get; set; }
 
+	public SceneFilePathRes() {}
+	public SceneFilePathRes(Node n)
+	{
+		ScenePath = n.SceneFilePath;
+	}
+
 	public override string ToString()
 	{
 		return ScenePath;

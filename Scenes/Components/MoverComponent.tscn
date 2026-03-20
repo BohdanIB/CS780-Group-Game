@@ -1,6 +1,0 @@
-[gd_scene format=3 uid="uid://b2gul37s1mgww"]
-
-[ext_resource type="Script" uid="uid://dfob4mtmx6rlg" path="res://Scripts/Components/MoverComponent.cs" id="1_70g1e"]
-
-[node name="MoverComponent" type="Node2D" unique_id=1123220688]
-script = ExtResource("1_70g1e")

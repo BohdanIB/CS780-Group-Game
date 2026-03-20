@@ -3,6 +3,7 @@ using CS780GroupProject.Scripts.Utils;
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 /// <summary>
 /// TODO: Merge functionality between turrets and enemies somehow (shooter component which gets plugged into enemy and turret?)
@@ -39,16 +40,19 @@ public partial class Enemy: PathFollower
 			Initialize(_stats);
 		}
 
-		_hurtComponent.OnHurt += (area, damage) =>
-		{
-			_healthComponent.ApplyDamage(damage);
-		}; 
 		_healthComponent.OnNoHealthLeft += () =>
 		{
 			GD.Print($"Enemy {Name} died.");
 			QueueFree();
 		};
+		_hurtComponent.OnHurt += (area, damage)      => { _healthComponent.ApplyDamage(damage); }; 
 
+		_detectableComponent.OnDetected += (area)    => { GD.Print($"Enemy '{Name}' detected by '{area.Owner.Name}'."); };
+		_detectableComponent.OnUnDetected += (area)  => { GD.Print($"Enemy '{Name}' UNdetected by '{area.Owner.Name}'."); };
+
+		_moverComponent.OnPathCompleted += ()        => { GD.Print($"Enemy '{Name}' completed their path."); };
+
+		// _shooter
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -56,6 +60,11 @@ public partial class Enemy: PathFollower
 		base._PhysicsProcess(delta);
 		// Todo: Shoot at friendlies in range. Components?
 		// FireAtValidTarget();
+	}
+
+	public void SetPath(Vector2[] path)
+	{
+		_moverComponent.SetPath(path);
 	}
 
 	public void UpdateStats(EnemyStats newStats)
@@ -83,6 +92,7 @@ public partial class Enemy: PathFollower
 		return $"Enemy '{Name}': {_stats}";
 	}
 
+/*
 	/// <summary>
 	/// TODO - This is a temporary function for testing enemy functionality on the game. This should go away at some point.
 	/// 
@@ -146,6 +156,7 @@ public partial class Enemy: PathFollower
 			// GD.Print($"{enemy}");
 		}
 	}
+*/
 
 	// /// <summary>
 	// /// If there is a valid target in range of current PathFollower, choose and fire at target given TargetingMode.

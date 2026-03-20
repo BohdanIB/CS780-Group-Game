@@ -4,6 +4,9 @@
 [ext_resource type="Script" uid="uid://c21fjsrl23hps" path="res://Scripts/units/Enemy.cs" id="2_1f0kj"]
 [ext_resource type="Texture2D" uid="uid://bdd0jbwygdyav" path="res://Assets/Sprites/temp_enemy.png" id="4_287tu"]
 [ext_resource type="Script" uid="uid://dj1ghvji6ekg5" path="res://Resources/SceneFilePathRes.cs" id="4_0830c"]
+[ext_resource type="PackedScene" uid="uid://1xnv73ih3ekh" path="res://Scenes/Components/shooter_component.tscn" id="5_0830c"]
+[ext_resource type="PackedScene" uid="uid://cxvwrh12elf1m" path="res://Scenes/Components/targeting_component.tscn" id="6_1dp5w"]
+[ext_resource type="PackedScene" uid="uid://bxnd3hgmx5vi6" path="res://Scenes/Components/spawner_component.tscn" id="7_auwsv"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_0830c"]
 atlas = ExtResource("4_287tu")
@@ -45,32 +48,53 @@ script = ExtResource("4_0830c")
 ScenePath = "uid://braeaociys3xn"
 metadata/_custom_type_script = "uid://dj1ghvji6ekg5"
 
-[sub_resource type="Resource" id="Resource_auwsv"]
+[sub_resource type="Resource" id="Resource_1dp5w"]
 resource_local_to_scene = true
 script = ExtResource("4_0830c")
 ScenePath = "uid://cvx7nxyaghhrx"
 metadata/_custom_type_script = "uid://dj1ghvji6ekg5"
 
-[sub_resource type="Resource" id="Resource_1dp5w"]
+[sub_resource type="Resource" id="Resource_auwsv"]
 resource_local_to_scene = true
 script = ExtResource("4_0830c")
 ScenePath = "uid://b2w8csm5vypb0"
 metadata/_custom_type_script = "uid://dj1ghvji6ekg5"
 
+[sub_resource type="Resource" id="Resource_8uf12"]
+resource_local_to_scene = true
+script = ExtResource("4_0830c")
+ScenePath = "uid://b1picus170nmk"
+metadata/_custom_type_script = "uid://dj1ghvji6ekg5"
+
 [node name="Enemy" unique_id=382514737 instance=ExtResource("1_hghv2")]
 script = ExtResource("2_1f0kj")
-_debugCategory = 0
+_stats = null
+_targetingMode = 4
 
 [node name="AnimatedSprite2D" parent="." index="0" unique_id=1606845345]
 scale = Vector2(0.25, 0.25)
 sprite_frames = SubResource("SpriteFrames_1dp5w")
 
-[node name="HurtComponent" parent="." index="3" unique_id=495543674]
+[node name="HurtComponent" parent="." index="2" unique_id=495543674]
 _allowedToHurtEntity = [SubResource("Resource_287tu")]
 
-[node name="DetectorComponent" parent="." index="4" unique_id=1835049866]
+[node name="DetectorComponent" parent="." index="3" unique_id=1835049866]
 _detectableScenes = [SubResource("Resource_0830c"), SubResource("Resource_ghaa6")]
-_detectorScene = SubResource("Resource_auwsv")
+_detectorScene = SubResource("Resource_1dp5w")
 
-[node name="DetectableComponent" parent="." index="5" unique_id=734681606]
-_allowedToDetectEntity = [SubResource("Resource_1dp5w")]
+[node name="DetectableComponent" parent="." index="4" unique_id=734681606]
+_allowedToDetectEntity = [SubResource("Resource_auwsv")]
+
+[node name="ShooterComponent" parent="." index="6" unique_id=1054008556 node_paths=PackedStringArray("_projectileSpawner", "_targeting", "_shotCooldown") instance=ExtResource("5_0830c")]
+_projectileSpawner = NodePath("SpawnerComponent")
+_targeting = NodePath("TargetingComponent")
+_shotCooldown = NodePath("ShotCooldown")
+
+[node name="TargetingComponent" parent="ShooterComponent" index="0" unique_id=564942499 node_paths=PackedStringArray("_detector") instance=ExtResource("6_1dp5w")]
+_detector = NodePath("../../DetectorComponent")
+
+[node name="SpawnerComponent" parent="ShooterComponent" index="1" unique_id=391563213 instance=ExtResource("7_auwsv")]
+_scenePath = SubResource("Resource_8uf12")
+
+[node name="ShotCooldown" type="Timer" parent="ShooterComponent" index="2" unique_id=1150597860]
+one_shot = true

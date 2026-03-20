@@ -2,10 +2,11 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 public partial class PathFollower : Node2D
 {
-	protected const float DISTANCE_THRESHOLD = 0.01f;
+	// protected const float DISTANCE_THRESHOLD = 0.01f;
 
 	// Components //
 	[ExportGroup("Exported Components")]
@@ -13,11 +14,11 @@ public partial class PathFollower : Node2D
 	[Export] protected HurtComponent _hurtComponent;
 	[Export] protected DetectorComponent _detectorComponent;
 	[Export] protected DetectableComponent _detectableComponent;
+	[Export] protected MoverComponent _moverComponent;
 
 	// Scene Children //
 	[ExportGroup("Exported Child Nodes")]
 	[Export] protected AnimatedSprite2D _animatedSprite2D;
-	[Export] protected Timer _shotCooldownTimer;
 
 	// Preloaded Scenes //
 	// [Export] protected PackedScene _projectileScene;
@@ -26,19 +27,16 @@ public partial class PathFollower : Node2D
 	// protected float _movementSpeed = 50.0f;
 
 	protected Random _random = new();
-	protected List<Vector2> _path;
-	protected int _currentPathIndex;
+	// protected List<Area2D> _detectedEntities = new();
 
 	public override void _Ready()
 	{
-		// _hurtComponent.OnHurt += _healthComponent.ApplyDamage;
-		// _healthComponent.OnNoHealthLeft += () =>
-		// {
-		// 	GD.Print($"PathFollower {Name} died.");
-		// 	QueueFree();
-		// };
+		Debug.Assert(IsInstanceValid(_healthComponent));
+		Debug.Assert(IsInstanceValid(_hurtComponent));
+		Debug.Assert(IsInstanceValid(_detectorComponent));
+		Debug.Assert(IsInstanceValid(_detectableComponent));
+		Debug.Assert(IsInstanceValid(_moverComponent));
 	}
-
 
 	public override void _PhysicsProcess(double delta)
 	{
@@ -46,27 +44,27 @@ public partial class PathFollower : Node2D
 	}
 
 	// Todo
-	protected void FollowCurrentPath(float movementSpeed, double delta)
-	{
-		if (_path == null) return;
-		if (Position.DistanceTo(_path[_currentPathIndex]) < DISTANCE_THRESHOLD)
-		{
-			_currentPathIndex++;
-			if (_currentPathIndex >= _path.Count)
-			{
-				_path = null;
-				GD.Print($"PathFollower {Name} reached end of path.");
-			}
-			return;
-		}
-		Position = Position.MoveToward(_path[_currentPathIndex], (float) delta * movementSpeed);
-	}
+	// protected void FollowCurrentPath(float movementSpeed, double delta)
+	// {
+	// 	if (_path == null) return;
+	// 	if (Position.DistanceTo(_path[_currentPathIndex]) < DISTANCE_THRESHOLD)
+	// 	{
+	// 		_currentPathIndex++;
+	// 		if (_currentPathIndex >= _path.Count)
+	// 		{
+	// 			_path = null;
+	// 			GD.Print($"PathFollower {Name} reached end of path.");
+	// 		}
+	// 		return;
+	// 	}
+	// 	Position = Position.MoveToward(_path[_currentPathIndex], (float) delta * movementSpeed);
+	// }
 
-	public void SetPath(List<Vector2> newPath)
-	{
-		_path = newPath;
-		_currentPathIndex = 0;
-	}
+	// public void SetPath(List<Vector2> newPath)
+	// {
+	// 	_path = newPath;
+	// 	_currentPathIndex = 0;
+	// }
 
 	// public void ChangeHealth(float healthChangeValue)
 	// {
@@ -84,25 +82,25 @@ public partial class PathFollower : Node2D
 	// 	return _health;
 	// }
 
-	public float GetDistanceToGoalPixels()
-	{
-		if (_path == null)
-		{
-			return 0.0f; // todo?
-		}
-		else if (_currentPathIndex >= _path.Count)
-		{
-			return 0.0f;
-		}
+	// public float GetDistanceToGoalPixels()
+	// {
+	// 	if (_path == null)
+	// 	{
+	// 		return 0.0f; // todo?
+	// 	}
+	// 	else if (_currentPathIndex >= _path.Count)
+	// 	{
+	// 		return 0.0f;
+	// 	}
 
-		float distance = Position.DistanceTo(_path[_currentPathIndex]);
-		for (int i = _currentPathIndex+1; i < _path.Count; i++)
-		{
-			distance += _path[i-1].DistanceTo(_path[i]);
-		}
-		// GD.Print($"Follower {Name} distance to goal: {distance}");
-		return distance;
-	}
+	// 	float distance = Position.DistanceTo(_path[_currentPathIndex]);
+	// 	for (int i = _currentPathIndex+1; i < _path.Count; i++)
+	// 	{
+	// 		distance += _path[i-1].DistanceTo(_path[i]);
+	// 	}
+	// 	// GD.Print($"Follower {Name} distance to goal: {distance}");
+	// 	return distance;
+	// }
 
 
 	protected void UpdateHitboxRadius(float newRadius)

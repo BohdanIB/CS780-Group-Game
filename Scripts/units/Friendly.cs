@@ -60,6 +60,7 @@ public partial class Friendly : PathFollower
 		return $"Friendly '{Name}': {_stats}";
 	}
 
+	/*
 	/// <summary>
 	/// TODO - This is a temporary function for testing friendly functionality on the game. This should go away at some point.
 	/// 
@@ -125,5 +126,6 @@ public partial class Friendly : PathFollower
 		}
 		
 	}
+	*/
 
 }

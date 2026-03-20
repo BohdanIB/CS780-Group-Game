@@ -4,22 +4,19 @@
 [ext_resource type="PackedScene" uid="uid://e5vy6kbwqw12" path="res://Scenes/Components/health_component.tscn" id="4_43wju"]
 [ext_resource type="PackedScene" uid="uid://cbnk8jcd7c4v3" path="res://Scenes/Components/detectable_component.tscn" id="5_43wju"]
 [ext_resource type="PackedScene" uid="uid://bu5bt5d2jv3iu" path="res://Scenes/Components/hurt_component.tscn" id="5_rbq3h"]
+[ext_resource type="PackedScene" uid="uid://bm24bo2kifop0" path="res://Scenes/Components/mover_component.tscn" id="6_c3bam"]
 [ext_resource type="PackedScene" uid="uid://c43d2uh68714x" path="res://Scenes/Components/detector_component.tscn" id="6_rbq3h"]
 
-[node name="PathFollower" type="Node2D" unique_id=1740221814 node_paths=PackedStringArray("_healthComponent", "_hurtComponent", "_detectorComponent", "_detectableComponent", "_animatedSprite2D", "_shotCooldownTimer")]
+[node name="PathFollower" type="Node2D" unique_id=1740221814 node_paths=PackedStringArray("_healthComponent", "_hurtComponent", "_detectorComponent", "_detectableComponent", "_moverComponent", "_animatedSprite2D")]
 script = ExtResource("1_atuyi")
 _healthComponent = NodePath("HealthComponent")
 _hurtComponent = NodePath("HurtComponent")
 _detectorComponent = NodePath("DetectorComponent")
 _detectableComponent = NodePath("DetectableComponent")
+_moverComponent = NodePath("MoverComponent")
 _animatedSprite2D = NodePath("AnimatedSprite2D")
-_shotCooldownTimer = NodePath("ShotCooldownTimer")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1606845345]
-
-[node name="ShotCooldownTimer" type="Timer" parent="." unique_id=1239641386]
-process_callback = 0
-one_shot = true
 
 [node name="HealthComponent" parent="." unique_id=1408774868 instance=ExtResource("4_43wju")]
 
@@ -28,3 +25,5 @@ one_shot = true
 [node name="DetectorComponent" parent="." unique_id=1835049866 instance=ExtResource("6_rbq3h")]
 
 [node name="DetectableComponent" parent="." unique_id=734681606 instance=ExtResource("5_43wju")]
+
+[node name="MoverComponent" parent="." unique_id=1975334598 instance=ExtResource("6_c3bam")]
