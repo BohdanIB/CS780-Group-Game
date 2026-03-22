@@ -1,4 +1,5 @@
 
+using static CS780GroupProject.Scripts.Utils.NodeComponentChecking;
 using Godot;
 
 public partial class DetectorComponent : Area2D
@@ -6,15 +7,23 @@ public partial class DetectorComponent : Area2D
 	[Signal] public delegate void OnEnterDetectorEventHandler(Area2D DetectedArea);
 	[Signal] public delegate void OnExitDetectorEventHandler(Area2D DetectedArea);
 
+	private SceneFilePathRes _entityScene; // Scene which is doing the detecting
 	[Export] private SceneFilePathRes[] _detectableScenes = [];
-	[Export] private SceneFilePathRes _detectorScene; // Scene which is doing the detecting
 
 	[ExportGroup("Exported Child Nodes")]
 	[Export] private CollisionShape2D _detectorCollisionShape2D;
 
-	public void Initialize(SceneFilePathRes detectorScene, SceneFilePathRes[] detectableScenes = null)
+	public void Initialize(SceneFilePathRes[] detectableScenes = null)
 	{
-		_detectorScene = detectorScene;
+		if (GetParent() is var parent && IsInstanceValid(parent))
+		{
+			_entityScene = new SceneFilePathRes(parent);
+		}
+		else
+		{
+			_entityScene = new SceneFilePathRes(this);
+		}
+		
 		if (detectableScenes != null)
 		{
 			_detectableScenes = detectableScenes;
@@ -29,19 +38,38 @@ public partial class DetectorComponent : Area2D
 	{
 		AreaEntered += (area) =>
 		{
-			if (IsValidDetection(area) is var detectableComponent && detectableComponent != null)
+			// Todo: Should be a better way of excluding related nodes?
+			if (area.GetParent() == this.GetParent())
 			{
-				GD.Print($"DetectorComponent for {this.Owner} made contact with {area.Owner.Name}. Emitting OnEnterDetector signal.");
-				detectableComponent.Detect(this, _detectorScene);
+				return;
+			}
+			if (GetComponentOrNull<DetectableComponent>(area) is var detectable && IsInstanceValid(detectable))
+			{
+				// if (area.GetOwnerOrNull<Node>() is var owner && owner != null)
+				// {
+				// 	GD.Print($"DetectorComponent for {this.Owner.Name} made contact with {owner.Name}. Emitting OnEnterDetector signal.");
+				// }
+				// else
+				// {
+				// 	GD.Print($"DetectorComponent for {this.Owner.Name} made contact with {area.Name}. Emitting OnEnterDetector signal.");
+				// }
+				detectable.Detect(this, _entityScene);
 				EmitSignal(SignalName.OnEnterDetector, area);
 			}
 		};
 		AreaExited += (area) =>
 		{
-			if (area is DetectableComponent detectableComponent && detectableComponent != null)
+			if (GetComponentOrNull<DetectableComponent>(area) is var detectable && IsInstanceValid(detectable))
 			{
-				GD.Print($"DetectorComponent for {this.Owner} lost detection of {area.Owner.Name}. Emitting OnExitDetector signal.");
-				detectableComponent.UnDetect(this, _detectorScene);
+				// if (area.GetOwnerOrNull<Node>() is var owner && owner != null)
+				// {
+				// 	GD.Print($"DetectorComponent for {this.Owner.Name} lost detection of {area.Owner.Name}. Emitting OnExitDetector signal.");
+				// }
+				// else
+				// {
+				// 	GD.Print($"DetectorComponent for {Owner.Name} lost detection of {area.Name}. Emitting OnExitDetector signal.");
+				// }
+				detectable.UnDetect(this, _entityScene);
 				EmitSignal(SignalName.OnExitDetector, area);
 			}
 		};
@@ -53,7 +81,7 @@ public partial class DetectorComponent : Area2D
 		((CircleShape2D)_detectorCollisionShape2D.Shape).Radius = newRadius;
 	}
 
-	public DetectableComponent IsValidDetection(Area2D area)
+	private DetectableComponent IsValidDetection(Area2D area)
 	{
 		if (area is DetectableComponent detectable) // Todo: Unfortunate coupling, but can't wizard up a better way without getting godot layers or groups involved.
 		{
@@ -65,5 +93,16 @@ public partial class DetectorComponent : Area2D
 			}
 		}
 		return null;
+	}
+
+
+
+	public SceneFilePathRes GetEntityScene()
+	{
+		return _entityScene;
+	}
+	public SceneFilePathRes[] GetDetectableScenes()
+	{
+		return _detectableScenes;
 	}
 }

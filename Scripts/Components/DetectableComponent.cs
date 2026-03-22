@@ -6,10 +6,32 @@ public partial class DetectableComponent : Area2D
 	[Signal] public delegate void OnDetectedEventHandler(Area2D DetectorArea);
 	[Signal] public delegate void OnUnDetectedEventHandler(Area2D DetectorArea);
 
-	[Export] private SceneFilePathRes[] _allowedToDetectEntity = []; // Valid scenes for this component to be detected by.
+	private SceneFilePathRes _entityScene; // Scene being detected.
+	[Export] private SceneFilePathRes[] _detectorScenes = []; // Valid scenes for this component to be detected by.
 
 	[ExportGroup("Exported Child Nodes")]
 	[Export] private CollisionShape2D _detectableCollisionShape2D;
+
+	public void Initialize(SceneFilePathRes[] allowedToDetectScenes = null)
+	{
+		if (GetParent() is var parent && IsInstanceValid(parent))
+		{
+			_entityScene = new SceneFilePathRes(parent);
+		}
+		else
+		{
+			_entityScene = new SceneFilePathRes(this);
+		}
+
+		if (allowedToDetectScenes != null)
+		{
+			_detectorScenes = allowedToDetectScenes;
+		}
+		if (_detectorScenes.Length <= 0)
+		{
+			GD.Print($"WARNING - DetectableComponent for {Owner.Name}: No detectable scenes assigned!");
+		}
+	}
 
 	/// <summary>
 	/// DetectorComponents can detect detectable components.
@@ -39,8 +61,19 @@ public partial class DetectableComponent : Area2D
 		((CircleShape2D)_detectableCollisionShape2D.Shape).Radius = newRadius;
 	}
 
-	protected bool CanBeDetectedBy(SceneFilePathRes scene)
+	private bool CanBeDetectedBy(SceneFilePathRes scene)
 	{
-		return SceneFilePathRes.SceneSharesScenePath(scene, _allowedToDetectEntity);
+		return SceneFilePathRes.SceneSharesScenePath(scene, _detectorScenes);
+	}
+
+
+
+	public SceneFilePathRes GetEntityScene()
+	{
+		return _entityScene;
+	}
+	public SceneFilePathRes[] GetDetectorScenes()
+	{
+		return _detectorScenes;
 	}
 }

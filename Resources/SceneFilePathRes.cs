@@ -34,11 +34,6 @@ public partial class SceneFilePathRes : Resource
 		ScenePath = n.SceneFilePath;
 	}
 
-	public override string ToString()
-	{
-		return ScenePath;
-	}
-
 	public static bool EntitySharesScenePath(Node entity, SceneFilePathRes[] scenes)
 	{
 		foreach (var scene in scenes)
@@ -52,11 +47,14 @@ public partial class SceneFilePathRes : Resource
 	}
 	public static bool SceneSharesScenePath(SceneFilePathRes s, SceneFilePathRes[] scenes)
 	{
-		foreach (var scene in scenes)
+		if (s != null)
 		{
-			if (s.ScenePath == scene.ScenePath)
+			foreach (var scene in scenes)
 			{
-				return true;
+				if (s.ScenePath == scene.ScenePath)
+				{
+					return true;
+				}
 			}
 		}
 		return false;
@@ -70,4 +68,29 @@ public partial class SceneFilePathRes : Resource
 		return ResourceUid.PathToUid(rid);
 	}
 
+	public static string ScenesToString(SceneFilePathRes[] scenes)
+	{
+		if (scenes == null || scenes.Length == 0) {return "{ No Scenes }";}
+
+		var scenesStr = "{ ";
+		for (int i = 0; i < scenes.Length; i++)
+		{
+			scenesStr += $"{scenes[i]}";
+			if (i != scenes.Length-1) {scenesStr += ", ";}
+		}
+		scenesStr += " }";
+		return scenesStr;
+	}
+	public override string ToString()
+	{
+		return ScenePath;
+	}
+	// public static bool operator ==(SceneFilePathRes a, SceneFilePathRes b)
+	// {
+	// 	return a.ScenePath == b.ScenePath;
+	// }
+	// public static bool operator !=(SceneFilePathRes a, SceneFilePathRes b)
+	// {
+	// 	return a.ScenePath != b.ScenePath;
+	// }
 }

@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://b020svwod52yf"]
+
+[ext_resource type="Script" uid="uid://ep2jo3in524v" path="res://Testing/ECS/DetectorDetectable/DetectorDetectable.cs" id="1_ydfhw"]
+[ext_resource type="PackedScene" uid="uid://fhs48h31du53" path="res://Testing/ECS/DetectorDetectable/TestEntities/detector_parent.tscn" id="2_bbntb"]
+[ext_resource type="PackedScene" uid="uid://c43d2uh68714x" path="res://Scenes/Components/detector_component.tscn" id="2_x3dd8"]
+[ext_resource type="PackedScene" uid="uid://cbnk8jcd7c4v3" path="res://Scenes/Components/detectable_component.tscn" id="3_bbntb"]
+[ext_resource type="PackedScene" uid="uid://dyspdllvkvq4q" path="res://Testing/ECS/DetectorDetectable/TestEntities/detectable_parent.tscn" id="4_u20i3"]
+
+[node name="DetectorDetectable" type="Node2D" unique_id=1170001035 node_paths=PackedStringArray("_detectorParent", "_detectableParent")]
+script = ExtResource("1_ydfhw")
+_detectorParent = NodePath("DetectorParent")
+_detectableParent = NodePath("DetectableParent")
+
+[node name="DetectorParent" parent="." unique_id=1381552562 node_paths=PackedStringArray("DetectorComponent") instance=ExtResource("2_bbntb")]
+DetectorComponent = NodePath("DetectorComponent")
+
+[node name="DetectorComponent" parent="DetectorParent" unique_id=1835049866 instance=ExtResource("2_x3dd8")]
+
+[node name="DetectableParent" parent="." unique_id=909177676 node_paths=PackedStringArray("DetectectableComponent") instance=ExtResource("4_u20i3")]
+DetectectableComponent = NodePath("DetectableComponent")
+
+[node name="DetectableComponent" parent="DetectableParent" unique_id=614928940 instance=ExtResource("3_bbntb")]

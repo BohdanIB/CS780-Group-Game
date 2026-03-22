@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="CS780 Group Project"
-run/main_scene="uid://ch00055ip72s0"
+run/main_scene="uid://b020svwod52yf"
 config/features=PackedStringArray("4.6", "C#", "Mobile")
 config/icon="res://icon.svg"
 
@@ -24,7 +24,9 @@ project/assembly_name="CS780 Group Project"
 folder_colors={
 "res://Assets/": "orange",
 "res://Resources/": "blue",
-"res://Scenes/": "teal"
+"res://Scenes/": "teal",
+"res://Scripts/": "purple",
+"res://Testing/": "pink"
 }
 
 [input]

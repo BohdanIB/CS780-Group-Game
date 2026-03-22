@@ -14,6 +14,8 @@ public partial class Enemy: PathFollower
 	[Export] private EnemyStats _stats;
 	[Export] private TargetingMode _targetingMode = TargetingMode.Weak;
 
+	[Export] private ShooterComponent _shooterComponent;
+
 	protected List<Area2D> _targetsInRange = new(); // todo - enemy needs a list of valid target types? (hit component probably deals with this)
 
 	/// <summary>
@@ -45,14 +47,38 @@ public partial class Enemy: PathFollower
 			GD.Print($"Enemy {Name} died.");
 			QueueFree();
 		};
-		_hurtComponent.OnHurt += (area, damage)      => { _healthComponent.ApplyDamage(damage); }; 
+		_hurtComponent.OnHurt += (area, damage) => { _healthComponent.ApplyDamage(damage); }; 
 
-		_detectableComponent.OnDetected += (area)    => { GD.Print($"Enemy '{Name}' detected by '{area.Owner.Name}'."); };
-		_detectableComponent.OnUnDetected += (area)  => { GD.Print($"Enemy '{Name}' UNdetected by '{area.Owner.Name}'."); };
+		_detectableComponent.OnDetected += (area) => {
+			// if (area.GetOwnerOrNull<Node>() is var owner && owner != null)
+			// {
+			// 	GD.Print($"Enemy '{Name}' detected by '{owner.Name}'.");
+			// }
+			// else
+			// {
+			// 	GD.Print($"Enemy '{Name}' detected by '{area.Name}'.");
+			// }
+		};
+		_detectableComponent.OnUnDetected += (area) => {
+			// if (area.GetOwnerOrNull<Node>() is var owner && owner != null)
+			// {
+			// 	GD.Print($"Enemy '{Name}' UNdetected by '{owner.Name}'.");
+			// }
+			// else
+			// {
+			// 	GD.Print($"Enemy '{Name}' UNdetected by '{area.Name}'.");
+			// }
+		};
 
-		_moverComponent.OnPathCompleted += ()        => { GD.Print($"Enemy '{Name}' completed their path."); };
+		_moverComponent.OnPathCompleted += () => {
+			// GD.Print($"Enemy '{Name}' completed their path.");
+		};
 
-		// _shooter
+		_shooterComponent.OnShoot += () =>
+		{
+			GD.Print($"Shooter for enemy '{Name}' shooting");
+		};
+
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -77,11 +103,16 @@ public partial class Enemy: PathFollower
 		UpdateHitboxRadius(_stats.HitboxRadius);
 		UpdateDetectorRadius(_stats.AggroRadius);
 		UpdateDetectableRadius(_stats.DetectableRadius);
+		UpdateProjectileStats(_stats.ProjectileStats);
 		UpdateSprite(); // todo: should be a component?
 
 		// Todo: Add more updates
 
 		UpdateHealth(_stats.Health);
+	}
+	protected void UpdateProjectileStats(ProjectileStats newStats)
+	{
+		_shooterComponent.Initialize(this, newStats);
 	}
 	private void UpdateSprite()
 	{

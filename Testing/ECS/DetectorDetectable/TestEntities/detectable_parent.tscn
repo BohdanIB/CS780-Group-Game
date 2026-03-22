@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://dyspdllvkvq4q"]
+
+[ext_resource type="Script" uid="uid://c8q338ypt554q" path="res://Testing/ECS/DetectorDetectable/TestEntities/DetectableParent.cs" id="1_5loqg"]
+
+[node name="DetectableParent" type="Node2D" unique_id=909177676]
+script = ExtResource("1_5loqg")

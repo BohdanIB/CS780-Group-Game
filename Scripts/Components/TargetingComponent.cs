@@ -27,6 +27,11 @@ public partial class TargetingComponent : Node2D
 		};
 	}
 
+	public override void _PhysicsProcess(double delta)
+	{
+		PickTargetIfPossible();
+	}
+
 	public void PickTargetIfPossible()
 	{
 		if (_targets.Count > 0)

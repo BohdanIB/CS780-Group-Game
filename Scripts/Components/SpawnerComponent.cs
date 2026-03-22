@@ -13,13 +13,13 @@ public partial class SpawnerComponent : Node2D
 	{
 		if (_scenePath == null)
 		{
-			GD.Print($"SpawnerComponent for {Owner.Name} not given scene path to load from...");
+			GD.Print($"SpawnerComponent {this} not given scene path to load from...");
 			return;
 		}
 		_scene = ResourceLoader.Load<PackedScene>(SceneFilePathRes.UidToRid(_scenePath.ScenePath));
 		if (_scene == null)
 		{
-			GD.Print($"SpawnerComponent for {Owner.Name} unable to load scene for spawning...");
+			GD.Print($"SpawnerComponent {this} unable to load scene for spawning...");
 			return;
 		}
 	}

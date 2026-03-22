@@ -1,4 +1,5 @@
 
+using static CS780GroupProject.Scripts.Utils.NodeComponentChecking;
 using Godot;
 
 /// <summary>
@@ -45,10 +46,15 @@ public partial class HitComponent : Area2D
 	{
 		AreaEntered += (area) =>
 		{
-			if (HitableHurtComponent(area) is var hurtComponent && hurtComponent != null)
+			// Todo: Should be a better way of excluding related nodes?
+			if (area.GetParent() == this.GetParent())
 			{
-				GD.Print($"HitComponent made contact with {area.Owner.Name} and is attempting to deal {_hitDamage} damage. Emitting OnHit signal.");
-				hurtComponent.Hit(this, _senderScene, _hitDamage);
+				return;
+			}
+			if (GetComponentOrNull<HurtComponent>(area) is var hurt && IsInstanceValid(hurt) && IsHitableHurtComponent(hurt))
+			{
+				GD.Print($"HitComponent made contact with {area.Name} and is attempting to deal {_hitDamage} damage. Emitting OnHit signal.");
+				hurt.Hit(this, _senderScene, _hitDamage);
 				EmitSignal(SignalName.OnHit, area, _hitDamage);
 			}
 		};
@@ -60,24 +66,21 @@ public partial class HitComponent : Area2D
 		((CircleShape2D)_hitCollisionShape2D.Shape).Radius = newRadius;
 	}
 
-	public HurtComponent HitableHurtComponent(Area2D area)
+	public bool IsHitableHurtComponent(HurtComponent hurt)
 	{
-		if (area is HurtComponent hurt) // Todo: Unfortunate coupling, but can't wizard up a better way without getting godot layers or groups involved.
+		if (!IsInstanceValid(hurt)) { return false; }
+		var entity = hurt.Owner; // todo: Might break for some instantiations?
+		// Going for specific target
+		if (IsInstanceValid(_target) && _target == entity)
 		{
-			// GD.Print("AREA IS HURT COMPONENT.");
-			var entity = hurt.Owner;
-			// Going for specific target
-			if (_target != null && _target == entity)
-			{
-				return hurt;
-			}
-			// Check if the owner scene for area is hitable by this component.
-			else if (SceneFilePathRes.EntitySharesScenePath(entity, _hitableScenes))
-			{
-				return hurt;
-			}
+			return true;
 		}
-		return null;
+		// Check if the owner scene for area is hitable by this component generically.
+		else if (SceneFilePathRes.EntitySharesScenePath(entity, _hitableScenes))
+		{
+			return true;
+		}
+		return false;
 	}
 
 }

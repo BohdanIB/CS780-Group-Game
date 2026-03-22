@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://ch00055ip72s0"]
 
 [ext_resource type="PackedScene" uid="uid://cvx7nxyaghhrx" path="res://Scenes/enemy.tscn" id="1_0cfo2"]
-[ext_resource type="Script" uid="uid://dpdoqjtnrwi8b" path="res://Scripts/Testing/ECS/EnemySight.cs" id="1_bsodh"]
+[ext_resource type="Script" uid="uid://dpdoqjtnrwi8b" path="res://Testing/ECS/EnemySight.cs" id="1_bsodh"]
 [ext_resource type="Script" uid="uid://c35fcs4mhqjbm" path="res://Resources/Unit/EnemyStats.cs" id="3_wd7cv"]
 [ext_resource type="Script" uid="uid://bawwkshhg5psh" path="res://Resources/Turret/TurretStats.cs" id="4_0cfo2"]
 [ext_resource type="PackedScene" uid="uid://b2w8csm5vypb0" path="res://Scenes/turret.tscn" id="5_bsodh"]
@@ -38,7 +38,6 @@ metadata/_custom_type_script = "uid://db7kn4h7v1jqa"
 resource_local_to_scene = true
 script = ExtResource("4_0cfo2")
 _hitboxRadius = 16.0
-_aggroRadius = 100.0
 _detectableRadius = 16.0
 _health = 10.0
 _fireRate = 2.0
@@ -51,10 +50,9 @@ _enemy = NodePath("Enemy")
 _turret = NodePath("Turret")
 
 [node name="Enemy" parent="." unique_id=382514737 instance=ExtResource("1_0cfo2")]
-position = Vector2(19, 42)
+position = Vector2(404, 198)
 _stats = SubResource("Resource_7u720")
-_targetingMode = 4
 
 [node name="Turret" parent="." unique_id=440596787 instance=ExtResource("5_bsodh")]
-position = Vector2(181, 45)
+position = Vector2(457, 197)
 _stats = SubResource("Resource_grv06")

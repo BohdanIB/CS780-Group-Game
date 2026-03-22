@@ -1,4 +1,5 @@
 
+using static CS780GroupProject.Scripts.Utils.NodeComponentChecking;
 using Godot;
 
 public partial class Projectile : Node2D
@@ -63,7 +64,7 @@ public partial class Projectile : Node2D
 			QueueFree(); // todo: Might not be proper to queue a free before the _Ready call?
 			return;
 		}
-		_targetLocation = _target.Position;
+		_targetLocation = _target.GlobalPosition;
 		Initialize(projectileStats, senderScene);
 	}
 
@@ -105,6 +106,7 @@ public partial class Projectile : Node2D
 
 		_hitComponent.OnHit += (area, damage) =>
 		{
+			GD.Print($"PROJECTILE ONHIT: {area.Name} - Damage: {damage}");
 			ProjectileImpact();
 		};
 	}
@@ -114,7 +116,7 @@ public partial class Projectile : Node2D
 		// GD.Print($"Projectile stats: {_stats}");
 		if (IsInstanceValid(_target))
 		{
-			_targetLocation = _target.Position;
+			_targetLocation = _target.GlobalPosition;
 		}
 
 		// Todo: Make movement a little easier to expand
@@ -152,10 +154,11 @@ public partial class Projectile : Node2D
 	{
 		// // Todo: WIP - Potentially add animation or some other effects to projectile on impact? May want to incorporate signal somehow.
 		EmitSignal(SignalName.OnProjectileImpact, Position, _stats, _senderScene);
-		// if (IsInstanceValid(_target))
+		// if (IsInstanceValid(_target) && GetComponentOrNull<HurtComponent>(_target) is var hurt && IsInstanceValid(hurt))
 		// {
 		// 	// GD.Print($"Projectile hit target {_target.Name} for {_stats.Damage} damage");
 		// 	// _target.ChangeHealth(_stats.Damage);
+		// 	hurt.Hit(_hitComponent, _senderScene, _stats.Damage);
 		// 	// TODO
 		// }
 		// GD.Print("Freeing Projectile.");

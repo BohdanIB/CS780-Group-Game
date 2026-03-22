@@ -1,55 +1,56 @@
 [gd_scene format=3 uid="uid://bskv6rusyqggc"]
 
-[ext_resource type="Script" uid="uid://eekqpng6vmct" path="res://Scripts/Testing/ECS/EnemyHit.cs" id="1_w8jki"]
+[ext_resource type="Script" uid="uid://eekqpng6vmct" path="res://Testing/ECS/EnemyHit.cs" id="1_w8jki"]
 [ext_resource type="PackedScene" uid="uid://cvx7nxyaghhrx" path="res://Scenes/enemy.tscn" id="2_eyd4g"]
+[ext_resource type="Script" uid="uid://c35fcs4mhqjbm" path="res://Resources/Unit/EnemyStats.cs" id="3_eyd4g"]
 [ext_resource type="Script" uid="uid://dj1ghvji6ekg5" path="res://Resources/SceneFilePathRes.cs" id="5_eyd4g"]
 [ext_resource type="PackedScene" uid="uid://b1picus170nmk" path="res://Scenes/projectile.tscn" id="5_w8jki"]
 [ext_resource type="Script" uid="uid://db7kn4h7v1jqa" path="res://Resources/Turret/ProjectileStats.cs" id="6_eyd4g"]
 
-[sub_resource type="Resource" id="Resource_w8jki"]
+[sub_resource type="Resource" id="Resource_5ohfq"]
+script = ExtResource("3_eyd4g")
+_hitboxRadius = 10.0
+_health = 50.0
+metadata/_custom_type_script = "uid://c35fcs4mhqjbm"
+
+[sub_resource type="Resource" id="Resource_eyd4g"]
 resource_local_to_scene = true
 script = ExtResource("6_eyd4g")
 _speed = 40.0
 _damage = 5.0
 metadata/_custom_type_script = "uid://db7kn4h7v1jqa"
 
-[sub_resource type="Resource" id="Resource_eyd4g"]
+[sub_resource type="Resource" id="Resource_lso6e"]
 resource_local_to_scene = true
 script = ExtResource("5_eyd4g")
 ScenePath = "uid://b2w8csm5vypb0"
 metadata/_custom_type_script = "uid://dj1ghvji6ekg5"
 
-[sub_resource type="Resource" id="Resource_lso6e"]
+[sub_resource type="Resource" id="Resource_uy65s"]
 resource_local_to_scene = true
 script = ExtResource("6_eyd4g")
 _speed = 40.0
 _damage = 5.0
 metadata/_custom_type_script = "uid://db7kn4h7v1jqa"
-
-[sub_resource type="Resource" id="Resource_uy65s"]
-resource_local_to_scene = true
-script = ExtResource("5_eyd4g")
-ScenePath = "uid://cvx7nxyaghhrx"
-metadata/_custom_type_script = "uid://dj1ghvji6ekg5"
 
 [sub_resource type="Resource" id="Resource_it4f8"]
 resource_local_to_scene = true
 script = ExtResource("5_eyd4g")
-ScenePath = "uid://b2w8csm5vypb0"
+ScenePath = "uid://cvx7nxyaghhrx"
 metadata/_custom_type_script = "uid://dj1ghvji6ekg5"
 
 [sub_resource type="Resource" id="Resource_1bgk0"]
+resource_local_to_scene = true
+script = ExtResource("5_eyd4g")
+ScenePath = "uid://b2w8csm5vypb0"
+metadata/_custom_type_script = "uid://dj1ghvji6ekg5"
+
+[sub_resource type="Resource" id="Resource_pfqdf"]
 resource_local_to_scene = true
 script = ExtResource("6_eyd4g")
 _speed = 40.0
 _damage = 5.0
 metadata/_custom_type_script = "uid://db7kn4h7v1jqa"
-
-[sub_resource type="Resource" id="Resource_pfqdf"]
-resource_local_to_scene = true
-script = ExtResource("5_eyd4g")
-ScenePath = "uid://cvx7nxyaghhrx"
-metadata/_custom_type_script = "uid://dj1ghvji6ekg5"
 
 [sub_resource type="Resource" id="Resource_bkpqm"]
 resource_local_to_scene = true
@@ -59,25 +60,31 @@ metadata/_custom_type_script = "uid://dj1ghvji6ekg5"
 
 [sub_resource type="Resource" id="Resource_ithlx"]
 resource_local_to_scene = true
+script = ExtResource("5_eyd4g")
+ScenePath = "uid://cvx7nxyaghhrx"
+metadata/_custom_type_script = "uid://dj1ghvji6ekg5"
+
+[sub_resource type="Resource" id="Resource_ue72g"]
+resource_local_to_scene = true
 script = ExtResource("6_eyd4g")
 _speed = 40.0
 _damage = 5.0
 metadata/_custom_type_script = "uid://db7kn4h7v1jqa"
 
-[sub_resource type="Resource" id="Resource_ue72g"]
+[sub_resource type="Resource" id="Resource_pr8k4"]
 resource_local_to_scene = true
 script = ExtResource("5_eyd4g")
 ScenePath = "uid://b2w8csm5vypb0"
 metadata/_custom_type_script = "uid://dj1ghvji6ekg5"
 
-[sub_resource type="Resource" id="Resource_pr8k4"]
+[sub_resource type="Resource" id="Resource_1ife7"]
 resource_local_to_scene = true
 script = ExtResource("6_eyd4g")
 _speed = 40.0
 _damage = 400.0
 metadata/_custom_type_script = "uid://db7kn4h7v1jqa"
 
-[sub_resource type="Resource" id="Resource_1ife7"]
+[sub_resource type="Resource" id="Resource_k8th1"]
 resource_local_to_scene = true
 script = ExtResource("5_eyd4g")
 ScenePath = "uid://b2w8csm5vypb0"
@@ -94,39 +101,38 @@ _projectileKiller = NodePath("ProjectileKiller")
 
 [node name="Enemy" parent="." unique_id=382514737 instance=ExtResource("2_eyd4g")]
 position = Vector2(32, 32)
-_stats = null
-_targetingMode = 4
+_stats = SubResource("Resource_5ohfq")
 
 [node name="ProjectileTargeted" parent="." unique_id=1257787249 node_paths=PackedStringArray("_target") instance=ExtResource("5_w8jki")]
 position = Vector2(100, 32)
-_stats = SubResource("Resource_w8jki")
+_stats = SubResource("Resource_eyd4g")
 _target = NodePath("../Enemy")
-_senderScene = SubResource("Resource_eyd4g")
+_senderScene = SubResource("Resource_lso6e")
 
 [node name="ProjectileTargetScenes" parent="." unique_id=1724838360 instance=ExtResource("5_w8jki")]
 position = Vector2(150, 32)
-_stats = SubResource("Resource_lso6e")
+_stats = SubResource("Resource_uy65s")
 _targetLocation = Vector2(0, 32)
-_targetScenes = [SubResource("Resource_uy65s")]
-_senderScene = SubResource("Resource_it4f8")
+_targetScenes = [SubResource("Resource_it4f8")]
+_senderScene = SubResource("Resource_1bgk0")
 
 [node name="ProjectileInvalidSender" parent="." unique_id=499623327 node_paths=PackedStringArray("_target") instance=ExtResource("5_w8jki")]
 position = Vector2(200, 32)
-_stats = SubResource("Resource_1bgk0")
+_stats = SubResource("Resource_pfqdf")
 _targetLocation = Vector2(0, 32)
 _target = NodePath("../Enemy")
-_targetScenes = [SubResource("Resource_pfqdf")]
-_senderScene = SubResource("Resource_bkpqm")
+_targetScenes = [SubResource("Resource_bkpqm")]
+_senderScene = SubResource("Resource_ithlx")
 
 [node name="ProjectileNone" parent="." unique_id=1304734510 instance=ExtResource("5_w8jki")]
 position = Vector2(250, 32)
-_stats = SubResource("Resource_ithlx")
+_stats = SubResource("Resource_ue72g")
 _targetLocation = Vector2(0, 32)
-_senderScene = SubResource("Resource_ue72g")
+_senderScene = SubResource("Resource_pr8k4")
 
 [node name="ProjectileKiller" parent="." unique_id=708984260 node_paths=PackedStringArray("_target") instance=ExtResource("5_w8jki")]
 position = Vector2(300, 32)
-_stats = SubResource("Resource_pr8k4")
+_stats = SubResource("Resource_1ife7")
 _targetLocation = Vector2(0, 32)
 _target = NodePath("../Enemy")
-_senderScene = SubResource("Resource_1ife7")
+_senderScene = SubResource("Resource_k8th1")

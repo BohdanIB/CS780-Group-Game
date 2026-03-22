@@ -15,7 +15,7 @@ public partial class Turret : GenericStructure
 	[ExportGroup("Exported Components")]
 	[Export] private DetectorComponent _detectorComponent;
 	[Export] private DetectableComponent _detectableComponent;
-	[Export] private SpawnerComponent _projectileSpawnerComponent;
+	// [Export] private SpawnerComponent _projectileSpawnerComponent;
 
 	[ExportGroup("Exported Child Nodes")]
 	[Export] private Timer _shotCooldownTimer;
@@ -185,7 +185,7 @@ public partial class Turret : GenericStructure
 	}
 	protected void UpdateDetectorRadius(float newRadius)
 	{
-		_detectorComponent.ModifyDetectorRadius(newRadius);
+		// _detectorComponent.ModifyDetectorRadius(newRadius);
 	}
 	protected void UpdateDetectableRadius(float newRadius)
 	{
