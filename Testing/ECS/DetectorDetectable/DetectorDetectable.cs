@@ -3,6 +3,8 @@ using static CS780GroupProject.Scripts.Utils.NodeComponentChecking;
 using Godot;
 using System;
 using System.Diagnostics;
+using GdUnit4;
+using static GdUnit4.Assertions;
 
 /// <summary>
 /// Testing:
