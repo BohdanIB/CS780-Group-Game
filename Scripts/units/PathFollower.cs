@@ -17,8 +17,8 @@ public partial class PathFollower : Area2D
 		_movementSpeed = movementSpeed;
 	}
 
-    public override void _PhysicsProcess(double delta)
-    {
+	public override void _PhysicsProcess(double delta)
+	{
 		if (_path == null) return;
 		if (Position.DistanceTo(_path[_currentPathIndex]) < DISTANCE_THRESHOLD)
 		{

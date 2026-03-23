@@ -81,7 +81,7 @@ text = "0"
 
 [node name="SideMenuContainer" type="PanelContainer" parent="." unique_id=1423852120]
 custom_minimum_size = Vector2(250, 0)
-anchors_preset = -1
+anchors_preset = 11
 anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -98,18 +98,17 @@ size_flags_vertical = 4
 [node name="HBoxContainer" type="HBoxContainer" parent="SideMenuContainer/VBoxContainer" unique_id=180445247]
 layout_mode = 2
 
-[node name="Button" type="Button" parent="SideMenuContainer/VBoxContainer/HBoxContainer" unique_id=1127094194]
+[node name="BladeTurret" type="Button" parent="SideMenuContainer/VBoxContainer/HBoxContainer" unique_id=1127094194]
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxTexture_rxsu6")
-text = "Turret 1
+text = "Blade Turret
 "
 
-[node name="Button3" type="Button" parent="SideMenuContainer/VBoxContainer/HBoxContainer" unique_id=613986699]
+[node name="BallistaTurret" type="Button" parent="SideMenuContainer/VBoxContainer/HBoxContainer" unique_id=613986699]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_styles/normal = SubResource("StyleBoxTexture_y8vuf")
-text = "Turret 3
-"
+text = "Ballista Turret"
 
 [node name="Button4" type="Button" parent="SideMenuContainer/VBoxContainer/HBoxContainer" unique_id=978132700]
 layout_mode = 2
