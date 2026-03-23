@@ -36,11 +36,15 @@ public partial class SceneFilePathRes : Resource
 
 	public static bool EntitySharesScenePath(Node entity, SceneFilePathRes[] scenes)
 	{
-		foreach (var scene in scenes)
+		if (IsInstanceValid(entity))
 		{
-			if (RidToUid(entity.SceneFilePath) == scene.ScenePath)
+			foreach (var scene in scenes)
 			{
-				return true;
+				// if (RidToUid(entity.SceneFilePath) == scene.ScenePath)
+				if (entity.SceneFilePath == scene.ScenePath) // todo: This condition is sketchy
+				{
+					return true;
+				}
 			}
 		}
 		return false;

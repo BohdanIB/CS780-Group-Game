@@ -12,7 +12,13 @@ public partial class DetectableComponent : Area2D
 	[ExportGroup("Exported Child Nodes")]
 	[Export] private CollisionShape2D _detectableCollisionShape2D;
 
-	public void Initialize(SceneFilePathRes[] allowedToDetectScenes = null)
+	public void Initialize(float detectableRadius, SceneFilePathRes[] allowedDetectors = null)
+	{
+		ModifyDetectableRadius(detectableRadius);
+		Initialize(allowedDetectors);
+	}
+
+	public void Initialize(SceneFilePathRes[] allowedDetectors = null)
 	{
 		if (GetParent() is var parent && IsInstanceValid(parent))
 		{
@@ -23,9 +29,9 @@ public partial class DetectableComponent : Area2D
 			_entityScene = new SceneFilePathRes(this);
 		}
 
-		if (allowedToDetectScenes != null)
+		if (allowedDetectors != null)
 		{
-			_detectorScenes = allowedToDetectScenes;
+			_detectorScenes = allowedDetectors;
 		}
 		if (_detectorScenes.Length <= 0)
 		{
@@ -60,8 +66,12 @@ public partial class DetectableComponent : Area2D
 	{
 		((CircleShape2D)_detectableCollisionShape2D.Shape).Radius = newRadius;
 	}
+	public float GetDetectableRadius()
+	{
+		return ((CircleShape2D)_detectableCollisionShape2D.Shape).Radius;
+	}
 
-	private bool CanBeDetectedBy(SceneFilePathRes scene)
+	public bool CanBeDetectedBy(SceneFilePathRes scene)
 	{
 		return SceneFilePathRes.SceneSharesScenePath(scene, _detectorScenes);
 	}

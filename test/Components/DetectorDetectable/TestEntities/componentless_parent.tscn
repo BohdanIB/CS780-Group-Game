@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://eatgqtc4aebg"]
+
+[ext_resource type="Script" uid="uid://c6jtdcnxg4o3t" path="res://test/Components/DetectorDetectable/TestEntities/ComponentlessParent.cs" id="1_np7gs"]
+
+[node name="ComponentlessParent" type="Node2D" unique_id=122936744]
+script = ExtResource("1_np7gs")

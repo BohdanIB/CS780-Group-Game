@@ -13,6 +13,12 @@ public partial class DetectorComponent : Area2D
 	[ExportGroup("Exported Child Nodes")]
 	[Export] private CollisionShape2D _detectorCollisionShape2D;
 
+	public void Initialize(float detectorRadius, SceneFilePathRes[] allowedToDetectScenes = null)
+	{
+		ModifyDetectorRadius(detectorRadius);
+		Initialize(allowedToDetectScenes);
+	}
+
 	public void Initialize(SceneFilePathRes[] detectableScenes = null)
 	{
 		if (GetParent() is var parent && IsInstanceValid(parent))
@@ -53,8 +59,11 @@ public partial class DetectorComponent : Area2D
 				// {
 				// 	GD.Print($"DetectorComponent for {this.Owner.Name} made contact with {area.Name}. Emitting OnEnterDetector signal.");
 				// }
-				detectable.Detect(this, _entityScene);
-				EmitSignal(SignalName.OnEnterDetector, area);
+				if (IsValidDetection(detectable) && detectable.CanBeDetectedBy(_entityScene))
+				{
+					detectable.Detect(this, _entityScene);
+					EmitSignal(SignalName.OnEnterDetector, area);
+				}
 			}
 		};
 		AreaExited += (area) =>
@@ -69,8 +78,11 @@ public partial class DetectorComponent : Area2D
 				// {
 				// 	GD.Print($"DetectorComponent for {Owner.Name} lost detection of {area.Name}. Emitting OnExitDetector signal.");
 				// }
-				detectable.UnDetect(this, _entityScene);
-				EmitSignal(SignalName.OnExitDetector, area);
+				if (IsValidDetection(detectable) && detectable.CanBeDetectedBy(_entityScene))
+				{
+					detectable.UnDetect(this, _entityScene);
+					EmitSignal(SignalName.OnExitDetector, area);
+				}
 			}
 		};
 	}
@@ -80,19 +92,20 @@ public partial class DetectorComponent : Area2D
 	{
 		((CircleShape2D)_detectorCollisionShape2D.Shape).Radius = newRadius;
 	}
-
-	private DetectableComponent IsValidDetection(Area2D area)
+	public float GetDetectorRadius()
 	{
-		if (area is DetectableComponent detectable) // Todo: Unfortunate coupling, but can't wizard up a better way without getting godot layers or groups involved.
+		return ((CircleShape2D)_detectorCollisionShape2D.Shape).Radius;
+	}
+
+	private bool IsValidDetection(Area2D area)
+	{
+		if (area is DetectableComponent detectable)
 		{
 			// GD.Print("AREA IS DETECTABLE COMPONENT.");
 			// Check if the owner scene for area is detectable by this component.
-			if (SceneFilePathRes.EntitySharesScenePath(detectable.Owner, _detectableScenes))
-			{
-				return detectable;
-			}
+			return SceneFilePathRes.EntitySharesScenePath(detectable.GetParent(), _detectableScenes);
 		}
-		return null;
+		return false;
 	}
 
 

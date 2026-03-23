@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="CS780 Group Project"
-run/main_scene="uid://b020svwod52yf"
+run/main_scene="uid://dutuf0wm0qrtc"
 config/features=PackedStringArray("4.6", "C#", "Mobile")
 config/icon="res://icon.svg"
 
@@ -32,6 +32,10 @@ folder_colors={
 "res://Scripts/": "purple",
 "res://Testing/": "pink"
 }
+
+[gdunit4]
+
+settings/common/update_notification_enabled=false
 
 [input]
 

@@ -1,0 +1,36 @@
+[gd_scene format=3 uid="uid://dutuf0wm0qrtc"]
+
+[ext_resource type="PackedScene" uid="uid://fhs48h31du53" path="res://test/Components/DetectorDetectable/TestEntities/detector_parent.tscn" id="1_0j0og"]
+[ext_resource type="Script" uid="uid://c8jrsk43rjm0d" path="res://test/Components/DetectorDetectable/DetectorDetectableTestScene.cs" id="1_vmki4"]
+[ext_resource type="PackedScene" uid="uid://c43d2uh68714x" path="res://Scenes/Components/detector_component.tscn" id="2_vmki4"]
+[ext_resource type="PackedScene" uid="uid://dyspdllvkvq4q" path="res://test/Components/DetectorDetectable/TestEntities/detectable_parent.tscn" id="3_mtplb"]
+[ext_resource type="PackedScene" uid="uid://cbnk8jcd7c4v3" path="res://Scenes/Components/detectable_component.tscn" id="4_t1vkk"]
+[ext_resource type="PackedScene" uid="uid://eatgqtc4aebg" path="res://test/Components/DetectorDetectable/TestEntities/componentless_parent.tscn" id="6_mtplb"]
+[ext_resource type="PackedScene" uid="uid://cow07ru80n8oo" path="res://test/Components/DetectorDetectable/TestEntities/detector_detectable_parent.tscn" id="7_t1vkk"]
+
+[node name="DetectorDetectableTestScene" type="Node2D" unique_id=1170001035 node_paths=PackedStringArray("DetectorParent", "DetectableParent", "ComponentlessParent", "DetectorDetectableParent")]
+script = ExtResource("1_vmki4")
+DetectorParent = NodePath("DetectorParent")
+DetectableParent = NodePath("DetectableParent")
+ComponentlessParent = NodePath("ComponentlessParent")
+DetectorDetectableParent = NodePath("DetectorDetectableParent")
+
+[node name="DetectorParent" parent="." unique_id=1381552562 node_paths=PackedStringArray("Detector") instance=ExtResource("1_0j0og")]
+Detector = NodePath("DetectorComponent")
+
+[node name="DetectorComponent" parent="DetectorParent" unique_id=1835049866 instance=ExtResource("2_vmki4")]
+
+[node name="DetectableParent" parent="." unique_id=909177676 node_paths=PackedStringArray("Detectable") instance=ExtResource("3_mtplb")]
+Detectable = NodePath("DetectableComponent")
+
+[node name="DetectableComponent" parent="DetectableParent" unique_id=1572175138 instance=ExtResource("4_t1vkk")]
+
+[node name="ComponentlessParent" parent="." unique_id=122936744 instance=ExtResource("6_mtplb")]
+
+[node name="DetectorDetectableParent" parent="." unique_id=293818771 node_paths=PackedStringArray("Detector", "Detectable") instance=ExtResource("7_t1vkk")]
+Detector = NodePath("DetectorComponent")
+Detectable = NodePath("DetectableComponent")
+
+[node name="DetectorComponent" parent="DetectorDetectableParent" unique_id=2017303189 instance=ExtResource("2_vmki4")]
+
+[node name="DetectableComponent" parent="DetectorDetectableParent" unique_id=319384486 instance=ExtResource("4_t1vkk")]
