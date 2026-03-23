@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://00yung6dorfb"]
+
+[ext_resource type="Script" path="res://test/Components/HitHurt/TestEntities/HitParent.cs" id="1_7sfhs"]
+
+[node name="HitParent" type="Node2D" unique_id=780875915]
+script = ExtResource("1_7sfhs")
