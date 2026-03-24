@@ -27,7 +27,7 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="Projectile" type="Node2D" unique_id=1257787249 node_paths=PackedStringArray("_hitComponent")]
+[node name="Projectile" type="Node2D" unique_id=1257787249 node_paths=PackedStringArray("_hitComponent") groups=["projectile"]]
 script = ExtResource("1_yr2qt")
 _hitComponent = NodePath("HitComponent")
 

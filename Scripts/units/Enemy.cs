@@ -49,7 +49,7 @@ public partial class Enemy: PathFollower
 		};
 		_hurtComponent.OnHurt += (area, damage) => { _healthComponent.ApplyDamage(damage); }; 
 
-		_detectableComponent.OnDetected += (area) => {
+		_detectableComponent.OnDetected += (detector) => {
 			// if (area.GetOwnerOrNull<Node>() is var owner && owner != null)
 			// {
 			// 	GD.Print($"Enemy '{Name}' detected by '{owner.Name}'.");
@@ -59,7 +59,7 @@ public partial class Enemy: PathFollower
 			// 	GD.Print($"Enemy '{Name}' detected by '{area.Name}'.");
 			// }
 		};
-		_detectableComponent.OnUnDetected += (area) => {
+		_detectableComponent.OnLostDetection += (detector) => {
 			// if (area.GetOwnerOrNull<Node>() is var owner && owner != null)
 			// {
 			// 	GD.Print($"Enemy '{Name}' UNdetected by '{owner.Name}'.");

@@ -1,9 +1,9 @@
 [gd_scene format=3 uid="uid://bskv6rusyqggc"]
 
-[ext_resource type="Script" uid="uid://eekqpng6vmct" path="res://Testing/ECS/EnemyHit.cs" id="1_w8jki"]
+[ext_resource type="Script" uid="uid://eekqpng6vmct" path="res://test/Components/EnemyHit.cs" id="1_w8jki"]
 [ext_resource type="PackedScene" uid="uid://cvx7nxyaghhrx" path="res://Scenes/enemy.tscn" id="2_eyd4g"]
 [ext_resource type="Script" uid="uid://c35fcs4mhqjbm" path="res://Resources/Unit/EnemyStats.cs" id="3_eyd4g"]
-[ext_resource type="Script" uid="uid://dj1ghvji6ekg5" path="res://Resources/SceneFilePathRes.cs" id="5_eyd4g"]
+[ext_resource type="Script" uid="uid://dj1ghvji6ekg5" path="res://Resources/legacy/SceneFilePathRes.cs" id="5_eyd4g"]
 [ext_resource type="PackedScene" uid="uid://b1picus170nmk" path="res://Scenes/projectile.tscn" id="5_w8jki"]
 [ext_resource type="Script" uid="uid://db7kn4h7v1jqa" path="res://Resources/Turret/ProjectileStats.cs" id="6_eyd4g"]
 
@@ -13,78 +13,78 @@ _hitboxRadius = 10.0
 _health = 50.0
 metadata/_custom_type_script = "uid://c35fcs4mhqjbm"
 
-[sub_resource type="Resource" id="Resource_eyd4g"]
+[sub_resource type="Resource" id="Resource_3fm0l"]
 resource_local_to_scene = true
 script = ExtResource("6_eyd4g")
 _speed = 40.0
 _damage = 5.0
 metadata/_custom_type_script = "uid://db7kn4h7v1jqa"
 
-[sub_resource type="Resource" id="Resource_lso6e"]
+[sub_resource type="Resource" id="Resource_2g6h4"]
 resource_local_to_scene = true
 script = ExtResource("5_eyd4g")
 ScenePath = "uid://b2w8csm5vypb0"
 metadata/_custom_type_script = "uid://dj1ghvji6ekg5"
 
-[sub_resource type="Resource" id="Resource_uy65s"]
+[sub_resource type="Resource" id="Resource_lsxdi"]
 resource_local_to_scene = true
 script = ExtResource("6_eyd4g")
 _speed = 40.0
 _damage = 5.0
 metadata/_custom_type_script = "uid://db7kn4h7v1jqa"
 
-[sub_resource type="Resource" id="Resource_it4f8"]
+[sub_resource type="Resource" id="Resource_ym8d0"]
 resource_local_to_scene = true
 script = ExtResource("5_eyd4g")
 ScenePath = "uid://cvx7nxyaghhrx"
 metadata/_custom_type_script = "uid://dj1ghvji6ekg5"
 
-[sub_resource type="Resource" id="Resource_1bgk0"]
+[sub_resource type="Resource" id="Resource_ibwq4"]
 resource_local_to_scene = true
 script = ExtResource("5_eyd4g")
 ScenePath = "uid://b2w8csm5vypb0"
 metadata/_custom_type_script = "uid://dj1ghvji6ekg5"
 
-[sub_resource type="Resource" id="Resource_pfqdf"]
+[sub_resource type="Resource" id="Resource_atxgy"]
 resource_local_to_scene = true
 script = ExtResource("6_eyd4g")
 _speed = 40.0
 _damage = 5.0
 metadata/_custom_type_script = "uid://db7kn4h7v1jqa"
 
-[sub_resource type="Resource" id="Resource_bkpqm"]
+[sub_resource type="Resource" id="Resource_r7pui"]
 resource_local_to_scene = true
 script = ExtResource("5_eyd4g")
 ScenePath = "uid://cvx7nxyaghhrx"
 metadata/_custom_type_script = "uid://dj1ghvji6ekg5"
 
-[sub_resource type="Resource" id="Resource_ithlx"]
+[sub_resource type="Resource" id="Resource_jxq1d"]
 resource_local_to_scene = true
 script = ExtResource("5_eyd4g")
 ScenePath = "uid://cvx7nxyaghhrx"
 metadata/_custom_type_script = "uid://dj1ghvji6ekg5"
 
-[sub_resource type="Resource" id="Resource_ue72g"]
+[sub_resource type="Resource" id="Resource_8v1v3"]
 resource_local_to_scene = true
 script = ExtResource("6_eyd4g")
 _speed = 40.0
 _damage = 5.0
 metadata/_custom_type_script = "uid://db7kn4h7v1jqa"
 
-[sub_resource type="Resource" id="Resource_pr8k4"]
+[sub_resource type="Resource" id="Resource_cajpj"]
 resource_local_to_scene = true
 script = ExtResource("5_eyd4g")
 ScenePath = "uid://b2w8csm5vypb0"
 metadata/_custom_type_script = "uid://dj1ghvji6ekg5"
 
-[sub_resource type="Resource" id="Resource_1ife7"]
+[sub_resource type="Resource" id="Resource_xp7rv"]
 resource_local_to_scene = true
 script = ExtResource("6_eyd4g")
 _speed = 40.0
 _damage = 400.0
 metadata/_custom_type_script = "uid://db7kn4h7v1jqa"
 
-[sub_resource type="Resource" id="Resource_k8th1"]
+[sub_resource type="Resource" id="Resource_288ap"]
 resource_local_to_scene = true
 script = ExtResource("5_eyd4g")
 ScenePath = "uid://b2w8csm5vypb0"
@@ -105,34 +105,34 @@ _stats = SubResource("Resource_5ohfq")
 
 [node name="ProjectileTargeted" parent="." unique_id=1257787249 node_paths=PackedStringArray("_target") instance=ExtResource("5_w8jki")]
 position = Vector2(100, 32)
-_stats = SubResource("Resource_eyd4g")
+_stats = SubResource("Resource_3fm0l")
 _target = NodePath("../Enemy")
-_senderScene = SubResource("Resource_lso6e")
+_senderScene = SubResource("Resource_2g6h4")
 
 [node name="ProjectileTargetScenes" parent="." unique_id=1724838360 instance=ExtResource("5_w8jki")]
 position = Vector2(150, 32)
-_stats = SubResource("Resource_uy65s")
+_stats = SubResource("Resource_lsxdi")
 _targetLocation = Vector2(0, 32)
-_targetScenes = [SubResource("Resource_it4f8")]
-_senderScene = SubResource("Resource_1bgk0")
+_targetScenes = [SubResource("Resource_ym8d0")]
+_senderScene = SubResource("Resource_ibwq4")
 
 [node name="ProjectileInvalidSender" parent="." unique_id=499623327 node_paths=PackedStringArray("_target") instance=ExtResource("5_w8jki")]
 position = Vector2(200, 32)
-_stats = SubResource("Resource_pfqdf")
+_stats = SubResource("Resource_atxgy")
 _targetLocation = Vector2(0, 32)
 _target = NodePath("../Enemy")
-_targetScenes = [SubResource("Resource_bkpqm")]
-_senderScene = SubResource("Resource_ithlx")
+_targetScenes = [SubResource("Resource_r7pui")]
+_senderScene = SubResource("Resource_jxq1d")
 
 [node name="ProjectileNone" parent="." unique_id=1304734510 instance=ExtResource("5_w8jki")]
 position = Vector2(250, 32)
-_stats = SubResource("Resource_ue72g")
+_stats = SubResource("Resource_8v1v3")
 _targetLocation = Vector2(0, 32)
-_senderScene = SubResource("Resource_pr8k4")
+_senderScene = SubResource("Resource_cajpj")
 
 [node name="ProjectileKiller" parent="." unique_id=708984260 node_paths=PackedStringArray("_target") instance=ExtResource("5_w8jki")]
 position = Vector2(300, 32)
-_stats = SubResource("Resource_1ife7")
+_stats = SubResource("Resource_xp7rv")
 _targetLocation = Vector2(0, 32)
 _target = NodePath("../Enemy")
-_senderScene = SubResource("Resource_k8th1")
+_senderScene = SubResource("Resource_288ap")

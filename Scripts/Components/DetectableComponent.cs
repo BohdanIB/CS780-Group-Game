@@ -1,64 +1,71 @@
 
+using CS780GroupProject.Scripts.Utils;
 using Godot;
 
 public partial class DetectableComponent : Area2D
 {
-	[Signal] public delegate void OnDetectedEventHandler(Area2D DetectorArea);
-	[Signal] public delegate void OnUnDetectedEventHandler(Area2D DetectorArea);
+	[Signal] public delegate void OnDetectedEventHandler(DetectorComponent Detector);
+	[Signal] public delegate void OnLostDetectionEventHandler(DetectorComponent Detector);
 
-	private SceneFilePathRes _entityScene; // Scene being detected.
-	[Export] private SceneFilePathRes[] _detectorScenes = []; // Valid scenes for this component to be detected by.
+	[ExportGroup("Group Types")]
+	[Export] private Groups.GroupTypes _thisEntityTypes;
+	[Export] private Groups.GroupTypes _validDetectorTypes;
 
 	[ExportGroup("Exported Child Nodes")]
 	[Export] private CollisionShape2D _detectableCollisionShape2D;
 
-	public void Initialize(float detectableRadius, SceneFilePathRes[] allowedDetectors = null)
+	public void Initialize(float detectableRadius, Groups.GroupTypes entityTypes = Groups.GroupTypes.None, Groups.GroupTypes validDetectorTypes = Groups.GroupTypes.None)
 	{
 		ModifyDetectableRadius(detectableRadius);
-		Initialize(allowedDetectors);
+		Initialize(entityTypes, validDetectorTypes);
 	}
 
-	public void Initialize(SceneFilePathRes[] allowedDetectors = null)
+	public void Initialize(Groups.GroupTypes entityTypes = Groups.GroupTypes.None, Groups.GroupTypes validDetectorTypes = Groups.GroupTypes.None)
 	{
-		if (GetParent() is var parent && IsInstanceValid(parent))
-		{
-			_entityScene = new SceneFilePathRes(parent);
-		}
-		else
-		{
-			_entityScene = new SceneFilePathRes(this);
-		}
-
-		if (allowedDetectors != null)
-		{
-			_detectorScenes = allowedDetectors;
-		}
-		if (_detectorScenes.Length <= 0)
-		{
-			GD.Print($"WARNING - DetectableComponent for {Owner.Name}: No detectable scenes assigned!");
-		}
+		_thisEntityTypes = entityTypes;
+		_validDetectorTypes = validDetectorTypes;
 	}
 
-	/// <summary>
-	/// DetectorComponents can detect detectable components.
-	/// </summary>
-	/// <param name="detectorOwner"></param>
-	public void Detect(Area2D detector, SceneFilePathRes detectorScene)
+	public override void _Ready()
 	{
-		if (CanBeDetectedBy(detectorScene))
+		AreaEntered += (area) =>
 		{
-			GD.Print($"DetectableComponent for {Owner} was detected by {detector.Owner.Name}. Emitting OnDetected signal.");
-			EmitSignal(SignalName.OnDetected, detector);
-		}
+			if (area is DetectorComponent detector && detector != null)
+			{
+				if (SpottedBy(detector))
+				{
+					EmitSignal(SignalName.OnDetected, detector);
+				}
+			}
+		};
+		AreaExited += (area) =>
+		{
+			if (area is DetectorComponent detector && detector != null)
+			{
+				if (ConcealedFrom(detector))
+				{
+					EmitSignal(SignalName.OnLostDetection, detector);
+				}
+			}
+		};
 	}
 
-	public void UnDetect(Area2D detector, SceneFilePathRes detectorScene)
+	private bool SpottedBy(DetectorComponent detector)
 	{
-		if (CanBeDetectedBy(detectorScene))
-		{
-			GD.Print($"DetectableComponent for {Owner} lost the detection of {detector.Owner.Name}. Emitting OnUnDetected signal.");
-			EmitSignal(SignalName.OnUnDetected, detector);
-		}
+		return CanBeDetectedBy(detector) && detector.CanDetect(this);
+	}
+	private bool ConcealedFrom(DetectorComponent detector)
+	{
+		return CanBeDetectedBy(detector) && detector.CanDetect(this);
+	}
+
+	public bool CanBeDetectedBy(DetectorComponent detector)
+	{
+		return CanBeDetectedBy(detector.GetEntityTypes());
+	}
+	private bool CanBeDetectedBy(Groups.GroupTypes detectorGroupTypes)
+	{
+		return (detectorGroupTypes & _validDetectorTypes) != Groups.GroupTypes.None;
 	}
 
 	// Todo: Handle shapes other than circles in future?
@@ -66,24 +73,17 @@ public partial class DetectableComponent : Area2D
 	{
 		((CircleShape2D)_detectableCollisionShape2D.Shape).Radius = newRadius;
 	}
+
 	public float GetDetectableRadius()
 	{
 		return ((CircleShape2D)_detectableCollisionShape2D.Shape).Radius;
 	}
-
-	public bool CanBeDetectedBy(SceneFilePathRes scene)
+    public Groups.GroupTypes GetEntityTypes()
 	{
-		return SceneFilePathRes.SceneSharesScenePath(scene, _detectorScenes);
+		return _thisEntityTypes;
 	}
-
-
-
-	public SceneFilePathRes GetEntityScene()
+	public Groups.GroupTypes GetValidDetectorTypes()
 	{
-		return _entityScene;
-	}
-	public SceneFilePathRes[] GetDetectorScenes()
-	{
-		return _detectorScenes;
+		return _validDetectorTypes;
 	}
 }

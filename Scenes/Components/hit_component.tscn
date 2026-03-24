@@ -6,6 +6,8 @@
 resource_local_to_scene = true
 
 [node name="HitComponent" type="Area2D" unique_id=610990885 node_paths=PackedStringArray("_hitCollisionShape2D")]
+collision_layer = 32
+collision_mask = 64
 script = ExtResource("1_fiq8u")
 _hitCollisionShape2D = NodePath("HitCollisionShape2D")
 

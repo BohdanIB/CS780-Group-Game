@@ -1,90 +1,71 @@
 
-using static CS780GroupProject.Scripts.Utils.NodeComponentChecking;
 using Godot;
+using CS780GroupProject.Scripts.Utils;
 
 public partial class DetectorComponent : Area2D
 {
-	[Signal] public delegate void OnEnterDetectorEventHandler(Area2D DetectedArea);
-	[Signal] public delegate void OnExitDetectorEventHandler(Area2D DetectedArea);
+	[Signal] public delegate void OnEnterDetectorEventHandler(DetectableComponent Detectable);
+	[Signal] public delegate void OnExitDetectorEventHandler(DetectableComponent Detectable);
 
-	private SceneFilePathRes _entityScene; // Scene which is doing the detecting
-	[Export] private SceneFilePathRes[] _detectableScenes = [];
+	[ExportGroup("Group Types")]
+	[Export] private Groups.GroupTypes _thisEntityTypes;
+	[Export] private Groups.GroupTypes _validDetectableTypes;
 
 	[ExportGroup("Exported Child Nodes")]
 	[Export] private CollisionShape2D _detectorCollisionShape2D;
 
-	public void Initialize(float detectorRadius, SceneFilePathRes[] allowedToDetectScenes = null)
+	public void Initialize(float detectorRadius, Groups.GroupTypes entityTypes = Groups.GroupTypes.None, Groups.GroupTypes validDetectableScenes = Groups.GroupTypes.None)
 	{
 		ModifyDetectorRadius(detectorRadius);
-		Initialize(allowedToDetectScenes);
+		Initialize(entityTypes, validDetectableScenes);
 	}
 
-	public void Initialize(SceneFilePathRes[] detectableScenes = null)
+	public void Initialize(Groups.GroupTypes entityTypes = Groups.GroupTypes.None, Groups.GroupTypes validDetectableScenes = Groups.GroupTypes.None)
 	{
-		if (GetParent() is var parent && IsInstanceValid(parent))
-		{
-			_entityScene = new SceneFilePathRes(parent);
-		}
-		else
-		{
-			_entityScene = new SceneFilePathRes(this);
-		}
-		
-		if (detectableScenes != null)
-		{
-			_detectableScenes = detectableScenes;
-		}
-		if (_detectableScenes.Length <= 0)
-		{
-			GD.Print($"WARNING - DetectorComponent for {Owner.Name}: No detectable scenes assigned!");
-		}
+		_thisEntityTypes = entityTypes;
+		_validDetectableTypes = validDetectableScenes;
 	}
 
 	public override void _Ready()
 	{
 		AreaEntered += (area) =>
 		{
-			// Todo: Should be a better way of excluding related nodes?
-			if (area.GetParent() == this.GetParent())
+			if (area is DetectableComponent detectable && detectable != null)
 			{
-				return;
-			}
-			if (GetComponentOrNull<DetectableComponent>(area) is var detectable && IsInstanceValid(detectable))
-			{
-				// if (area.GetOwnerOrNull<Node>() is var owner && owner != null)
-				// {
-				// 	GD.Print($"DetectorComponent for {this.Owner.Name} made contact with {owner.Name}. Emitting OnEnterDetector signal.");
-				// }
-				// else
-				// {
-				// 	GD.Print($"DetectorComponent for {this.Owner.Name} made contact with {area.Name}. Emitting OnEnterDetector signal.");
-				// }
-				if (IsValidDetection(detectable) && detectable.CanBeDetectedBy(_entityScene))
+				if (Detected(detectable))
 				{
-					detectable.Detect(this, _entityScene);
 					EmitSignal(SignalName.OnEnterDetector, area);
 				}
 			}
 		};
 		AreaExited += (area) =>
 		{
-			if (GetComponentOrNull<DetectableComponent>(area) is var detectable && IsInstanceValid(detectable))
+			if (area is DetectableComponent detectable && detectable != null)
 			{
-				// if (area.GetOwnerOrNull<Node>() is var owner && owner != null)
-				// {
-				// 	GD.Print($"DetectorComponent for {this.Owner.Name} lost detection of {area.Owner.Name}. Emitting OnExitDetector signal.");
-				// }
-				// else
-				// {
-				// 	GD.Print($"DetectorComponent for {Owner.Name} lost detection of {area.Name}. Emitting OnExitDetector signal.");
-				// }
-				if (IsValidDetection(detectable) && detectable.CanBeDetectedBy(_entityScene))
+				if (LostDetectionOf(detectable))
 				{
-					detectable.UnDetect(this, _entityScene);
-					EmitSignal(SignalName.OnExitDetector, area);
+					EmitSignal(SignalName.OnExitDetector, detectable);
 				}
 			}
 		};
+	}
+
+	private bool Detected(DetectableComponent detectable)
+	{
+		return this.CanDetect(detectable) && detectable.CanBeDetectedBy(this);
+	}
+	private bool LostDetectionOf(DetectableComponent detectable)
+	{
+		return this.CanDetect(detectable) && detectable.CanBeDetectedBy(this);
+	}
+
+	public bool CanDetect(DetectableComponent detectable)
+	{
+		return CanDetect(detectable.GetEntityTypes());
+	}
+	private bool CanDetect(Groups.GroupTypes detectableGroupTypes)
+	{
+		return (detectableGroupTypes & _validDetectableTypes) != Groups.GroupTypes.None;
 	}
 
 	// Todo: Handle shapes other than circles in future?
@@ -92,30 +73,17 @@ public partial class DetectorComponent : Area2D
 	{
 		((CircleShape2D)_detectorCollisionShape2D.Shape).Radius = newRadius;
 	}
+
 	public float GetDetectorRadius()
 	{
 		return ((CircleShape2D)_detectorCollisionShape2D.Shape).Radius;
 	}
-
-	private bool IsValidDetection(Area2D area)
+	public Groups.GroupTypes GetEntityTypes()
 	{
-		if (area is DetectableComponent detectable)
-		{
-			// GD.Print("AREA IS DETECTABLE COMPONENT.");
-			// Check if the owner scene for area is detectable by this component.
-			return SceneFilePathRes.EntitySharesScenePath(detectable.GetParent(), _detectableScenes);
-		}
-		return false;
+		return _thisEntityTypes;
 	}
-
-
-
-	public SceneFilePathRes GetEntityScene()
+	public Groups.GroupTypes GetValidDetectableTypes()
 	{
-		return _entityScene;
-	}
-	public SceneFilePathRes[] GetDetectableScenes()
-	{
-		return _detectableScenes;
+		return _validDetectableTypes;
 	}
 }

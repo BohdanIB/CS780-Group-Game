@@ -26,7 +26,7 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="Friendly" unique_id=382514737 instance=ExtResource("1_jgycc")]
+[node name="Friendly" unique_id=382514737 groups=["friendly"] instance=ExtResource("1_jgycc")]
 script = ExtResource("2_50fos")
 
 [node name="AnimatedSprite2D" parent="." index="0" unique_id=1606845345]

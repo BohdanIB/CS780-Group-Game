@@ -6,6 +6,8 @@
 resource_local_to_scene = true
 
 [node name="DetectableComponent" type="Area2D" unique_id=1835049866 node_paths=PackedStringArray("_detectableCollisionShape2D")]
+collision_layer = 16
+collision_mask = 8
 script = ExtResource("1_ktbvm")
 _detectableCollisionShape2D = NodePath("DetectableCollisionShape2D")
 

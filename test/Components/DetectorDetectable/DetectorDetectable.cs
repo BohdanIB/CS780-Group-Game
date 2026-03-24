@@ -1,4 +1,5 @@
 
+using CS780GroupProject.Scripts.Utils;
 using GdUnit4;
 using GdUnit4.Asserts;
 using static GdUnit4.Assertions;
@@ -59,31 +60,18 @@ namespace TestNS
 		public void DetectorInitialization()
 		{
 			var detector = _detectorParent.Detector;
-			detector.Initialize(new SceneFilePathRes[]{AutoFree(new SceneFilePathRes(_detectableParent))});
-			// Check entity parent scene for component
-			var currentScene = _detectorParent.Detector.GetEntityScene().ScenePath;
-			var expectedScene = AutoFree(new SceneFilePathRes(_detectorParent)).ScenePath;
-			AssertThat(currentScene).IsEqual(expectedScene);
-			// Check detectable scenes
-			var detectableScenes = detector.GetDetectableScenes();
-			var expectedScenes = new SceneFilePathRes[] { AutoFree(new SceneFilePathRes(_detectableParent)) };
-			AssertThat(detectableScenes)
-				.IsNotNull()
-				.IsEqual(expectedScenes);
+			detector.Initialize(Groups.GroupTypes.Turret, Groups.GroupTypes.Enemy);
+			// Check for proper initialization
+			AssertThat(detector.GetEntityTypes()).IsEqual(Groups.GroupTypes.Turret);
+			AssertThat(detector.GetValidDetectableTypes()).IsEqual(Groups.GroupTypes.Enemy);
 
 			// Second Initialization
-			detector.Initialize(935, new SceneFilePathRes[]{ AutoFree(new SceneFilePathRes(_componentlessParent)) });
-			// Check entity parent scene for component
-			currentScene = _detectorParent.Detector.GetEntityScene().ScenePath;
-			expectedScene = AutoFree(new SceneFilePathRes(_detectorParent)).ScenePath;
-			AssertThat(currentScene).IsEqual(expectedScene);
-			// check radius
-			AssertThat(detector.GetDetectorRadius()).IsEqual(935);
-			// check detectable scenes
-			expectedScenes = new SceneFilePathRes[] { AutoFree(new SceneFilePathRes(_componentlessParent)) };
-			AssertThat(detector.GetDetectableScenes())
-				.IsNotNull()
-				.IsEqual(expectedScenes);
+			const float TEST_RADIUS = 935;
+			detector.Initialize(TEST_RADIUS, Groups.GroupTypes.Projectile, Groups.GroupTypes.Structure);
+			// Check for proper initialization
+			AssertThat(detector.GetEntityTypes()).IsEqual(Groups.GroupTypes.Projectile);
+			AssertThat(detector.GetDetectorRadius()).IsEqual(TEST_RADIUS);
+			AssertThat(detector.GetValidDetectableTypes()).IsEqual(Groups.GroupTypes.Structure);
 		}
 
 		[TestCase]
@@ -91,32 +79,18 @@ namespace TestNS
 		public void DetectableInitialization()
 		{
 			var detectable = _detectableParent.Detectable;
-			detectable.Initialize(new SceneFilePathRes[]{ AutoFree(new SceneFilePathRes(_detectorParent)) });
-
-			// Check entity parent scene for component
-			var currentScene = detectable.GetEntityScene().ScenePath;
-			var expectedScene = AutoFree(new SceneFilePathRes(_detectableParent)).ScenePath;
-			AssertThat(currentScene).IsEqual(expectedScene);
-
-			// Check detector scenes
-			var detectorScenes = detectable.GetDetectorScenes();
-			var expectedScenes = new SceneFilePathRes[] { AutoFree(new SceneFilePathRes(_detectorParent)) };
-			AssertThat(detectorScenes)
-				.IsNotNull()
-				.IsEqual(expectedScenes);
+			detectable.Initialize(Groups.GroupTypes.Turret, Groups.GroupTypes.Enemy);
+			// Check for proper initialization
+			AssertThat(detectable.GetEntityTypes()).IsEqual(Groups.GroupTypes.Turret);
+			AssertThat(detectable.GetValidDetectorTypes()).IsEqual(Groups.GroupTypes.Enemy);
 
 			// Second Initialization
-			detectable.Initialize(935, new SceneFilePathRes[]{ AutoFree(new SceneFilePathRes(_componentlessParent)) });
-			// Check entity parent scene for component
-			currentScene = detectable.GetEntityScene().ScenePath;
-			expectedScene = AutoFree(new SceneFilePathRes(_detectableParent)).ScenePath;
-			AssertThat(currentScene).IsEqual(expectedScene);
-			AssertThat(detectable.GetDetectableRadius()).IsEqual(935);
-			// check detector scenes
-			expectedScenes = new SceneFilePathRes[] { AutoFree(new SceneFilePathRes(_componentlessParent)) };
-			AssertThat(detectable.GetDetectorScenes())
-				.IsNotNull()
-				.IsEqual(expectedScenes);
+			const float TEST_RADIUS = 935;
+			detectable.Initialize(TEST_RADIUS, Groups.GroupTypes.Projectile, Groups.GroupTypes.Structure);
+			// Check for proper initialization
+			AssertThat(detectable.GetEntityTypes()).IsEqual(Groups.GroupTypes.Projectile);
+			AssertThat(detectable.GetDetectableRadius()).IsEqual(TEST_RADIUS);
+			AssertThat(detectable.GetValidDetectorTypes()).IsEqual(Groups.GroupTypes.Structure);
 		}
 
 		[TestCase]
@@ -127,14 +101,12 @@ namespace TestNS
 			_detectableParent.GlobalPosition = new(100,0);
 			var detector = _detectorParent.Detector;
 			var detectable = _detectableParent.Detectable;
-			detector.ModifyDetectorRadius(10);
-			detectable.ModifyDetectableRadius(10);
 
 			var detectorMonitor = AssertSignal(detector).StartMonitoring();
 			var detectableMonitor = AssertSignal(detectable).StartMonitoring();
 
-			detector.Initialize(new SceneFilePathRes[]{ AutoFree(new SceneFilePathRes(_detectableParent)) });
-			detectable.Initialize(new SceneFilePathRes[]{ AutoFree(new SceneFilePathRes(_detectorParent)) });
+			detector.Initialize(10, Groups.GroupTypes.Turret, Groups.GroupTypes.Enemy);
+			detectable.Initialize(10, Groups.GroupTypes.Enemy, Groups.GroupTypes.Turret);
 
 			await detectorMonitor.IsNotEmitted(DetectorComponent.SignalName.OnEnterDetector).WithTimeout(50);
 			await detectableMonitor.IsNotEmitted(DetectableComponent.SignalName.OnDetected).WithTimeout(50);
@@ -147,7 +119,7 @@ namespace TestNS
 			// Move them out of range of each other
 			_detectorParent.GlobalPosition = new(50,0);
 			await detectorMonitor.IsEmitted(DetectorComponent.SignalName.OnExitDetector, detectable).WithTimeout(100);
-			await detectableMonitor.IsEmitted(DetectableComponent.SignalName.OnUnDetected, detector).WithTimeout(100);
+			await detectableMonitor.IsEmitted(DetectableComponent.SignalName.OnLostDetection, detector).WithTimeout(100);
 		}
 
 		[TestCase]
@@ -158,14 +130,12 @@ namespace TestNS
 			_detectableParent.GlobalPosition = new(100,0);
 			var detector = _detectorParent.Detector;
 			var detectable = _detectableParent.Detectable;
-			detector.ModifyDetectorRadius(10);
-			detectable.ModifyDetectableRadius(10);
 
 			var detectorMonitor = AssertSignal(detector).StartMonitoring();
 			var detectableMonitor = AssertSignal(detectable).StartMonitoring();
 
-			detector.Initialize(new SceneFilePathRes[]{ AutoFree(new SceneFilePathRes(_componentlessParent)) });
-			detectable.Initialize(new SceneFilePathRes[]{ AutoFree(new SceneFilePathRes(_componentlessParent)) });
+			detector.Initialize(10, Groups.GroupTypes.Turret, Groups.GroupTypes.Enemy);
+			detectable.Initialize(10, Groups.GroupTypes.Turret, Groups.GroupTypes.Enemy);
 
 			await detectorMonitor.IsNotEmitted(DetectorComponent.SignalName.OnEnterDetector).WithTimeout(50);
 			await detectableMonitor.IsNotEmitted(DetectableComponent.SignalName.OnDetected).WithTimeout(50);
@@ -178,7 +148,7 @@ namespace TestNS
 			// Move them out of range of each other
 			_detectorParent.GlobalPosition = new(50,0);
 			await detectorMonitor.IsNotEmitted(DetectorComponent.SignalName.OnExitDetector, detectable).WithTimeout(100);
-			await detectableMonitor.IsNotEmitted(DetectableComponent.SignalName.OnUnDetected, detector).WithTimeout(100);
+			await detectableMonitor.IsNotEmitted(DetectableComponent.SignalName.OnLostDetection, detector).WithTimeout(100);
 		}
 
 		[TestCase]
@@ -189,14 +159,12 @@ namespace TestNS
 			_detectableParent.GlobalPosition = new(100,0);
 			var detector = _detectorParent.Detector;
 			var detectable = _detectableParent.Detectable;
-			detector.ModifyDetectorRadius(10);
-			detectable.ModifyDetectableRadius(10);
 
 			var detectorMonitor = AssertSignal(detector).StartMonitoring();
 			var detectableMonitor = AssertSignal(detectable).StartMonitoring();
 
-			detector.Initialize(new SceneFilePathRes[]{ AutoFree(new SceneFilePathRes(_detectableParent)) }); // looking for DetectableParents
-			detectable.Initialize(new SceneFilePathRes[]{ AutoFree(new SceneFilePathRes(_componentlessParent)) }); // detectable by ComponentlessParents
+			detector.Initialize(10, Groups.GroupTypes.Projectile, Groups.GroupTypes.Enemy); // looking for Enemies
+			detectable.Initialize(10, Groups.GroupTypes.Enemy, Groups.GroupTypes.Friendly); // detectable by Friendlies specifically
 
 			await detectorMonitor.IsNotEmitted(DetectorComponent.SignalName.OnEnterDetector).WithTimeout(50);
 			await detectableMonitor.IsNotEmitted(DetectableComponent.SignalName.OnDetected).WithTimeout(50);
@@ -209,31 +177,7 @@ namespace TestNS
 			// Move them out of range of each other
 			_detectorParent.GlobalPosition = new(50,0);
 			await detectorMonitor.IsNotEmitted(DetectorComponent.SignalName.OnExitDetector, detectable).WithTimeout(100);
-			await detectableMonitor.IsNotEmitted(DetectableComponent.SignalName.OnUnDetected, detector).WithTimeout(100);
-		}
-
-		[TestCase]
-		[RequireGodotRuntime]
-		public async Task ValidDetectorNoDetectable()
-		{
-			_detectorParent.GlobalPosition   = new(50,0);
-			_componentlessParent.GlobalPosition = new(100,0);
-			var detector = _detectorParent.Detector;
-			detector.ModifyDetectorRadius(10);
-
-			var detectorMonitor = AssertSignal(detector).StartMonitoring();
-
-			detector.Initialize(new SceneFilePathRes[]{ AutoFree(new SceneFilePathRes(_componentlessParent)) }); // looking for ComponentlessParents
-
-			await detectorMonitor.IsNotEmitted(DetectorComponent.SignalName.OnEnterDetector).WithTimeout(50);
-
-			// Move them in range of each other
-			_detectorParent.GlobalPosition = new(95,0);
-			await detectorMonitor.IsNotEmitted(DetectorComponent.SignalName.OnEnterDetector, _componentlessParent).WithTimeout(100);
-
-			// Move them out of range of each other
-			_detectorParent.GlobalPosition = new(50,0);
-			await detectorMonitor.IsNotEmitted(DetectorComponent.SignalName.OnExitDetector, _componentlessParent).WithTimeout(100);
+			await detectableMonitor.IsNotEmitted(DetectableComponent.SignalName.OnLostDetection, detector).WithTimeout(100);
 		}
 
 		[TestCase]
@@ -244,14 +188,12 @@ namespace TestNS
 			_detectableParent.GlobalPosition = new(100,0);
 			var detector = _detectorParent.Detector;
 			var detectable = _detectableParent.Detectable;
-			detector.ModifyDetectorRadius(10);
-			detectable.ModifyDetectableRadius(10);
 
 			var detectorMonitor = AssertSignal(detector).StartMonitoring();
 			var detectableMonitor = AssertSignal(detectable).StartMonitoring();
 
-			detector.Initialize(new SceneFilePathRes[]{ AutoFree(new SceneFilePathRes(_componentlessParent)) }); // looking for ComponentlessParents
-			detectable.Initialize(new SceneFilePathRes[]{ AutoFree(new SceneFilePathRes(_detectorParent)) }); // detectable by DetectorParents
+			detector.Initialize(10, Groups.GroupTypes.Turret, Groups.GroupTypes.None); // looking for Nothing
+			detectable.Initialize(10, Groups.GroupTypes.Enemy, Groups.GroupTypes.Turret); // detectable by Turrets
 
 			await detectorMonitor.IsNotEmitted(DetectorComponent.SignalName.OnEnterDetector).WithTimeout(50);
 			await detectableMonitor.IsNotEmitted(DetectableComponent.SignalName.OnDetected).WithTimeout(50);
@@ -264,31 +206,7 @@ namespace TestNS
 			// Move them out of range of each other
 			_detectorParent.GlobalPosition = new(50,0);
 			await detectorMonitor.IsNotEmitted(DetectorComponent.SignalName.OnExitDetector, detectable).WithTimeout(100);
-			await detectableMonitor.IsNotEmitted(DetectableComponent.SignalName.OnUnDetected, detector).WithTimeout(100);
-		}
-
-		[TestCase]
-		[RequireGodotRuntime]
-		public async Task NoDetectorValidDetectable()
-		{
-			_detectableParent.GlobalPosition   = new(50,0);
-			_componentlessParent.GlobalPosition = new(100,0);
-			var detectable = _detectableParent.Detectable;
-			detectable.ModifyDetectableRadius(10);
-
-			var detectableMonitor = AssertSignal(detectable).StartMonitoring();
-
-			detectable.Initialize(new SceneFilePathRes[]{ AutoFree(new SceneFilePathRes(_componentlessParent)) }); // detectable by ComponentlessParents
-
-			await detectableMonitor.IsNotEmitted(DetectableComponent.SignalName.OnDetected).WithTimeout(50);
-
-			// Move them in range of each other
-			_detectableParent.GlobalPosition = new(95,0);
-			await detectableMonitor.IsNotEmitted(DetectableComponent.SignalName.OnDetected, _componentlessParent).WithTimeout(100);
-
-			// Move them out of range of each other
-			_detectableParent.GlobalPosition = new(50,0);
-			await detectableMonitor.IsNotEmitted(DetectableComponent.SignalName.OnUnDetected, _componentlessParent).WithTimeout(100);
+			await detectableMonitor.IsNotEmitted(DetectableComponent.SignalName.OnLostDetection, detector).WithTimeout(100);
 		}
 
 		[TestCase]
@@ -302,21 +220,12 @@ namespace TestNS
 			var detectorMonitor = AssertSignal(detector).StartMonitoring();
 			var detectableMonitor = AssertSignal(detectable).StartMonitoring();
 
-			// Detecting and detectable by ComponentlessParents
-			detector.Initialize(10, new SceneFilePathRes[]{ AutoFree(new SceneFilePathRes(_componentlessParent)) });
-			detectable.Initialize(10, new SceneFilePathRes[]{ AutoFree(new SceneFilePathRes(_componentlessParent)) });
+			detector.Initialize(10, Groups.GroupTypes.Turret, Groups.GroupTypes.Enemy);
+			detectable.Initialize(10, Groups.GroupTypes.Turret, Groups.GroupTypes.Enemy | Groups.GroupTypes.Turret); // Can be detected by other turrets
 			await detectorMonitor.IsNotEmitted(DetectorComponent.SignalName.OnEnterDetector).WithTimeout(100);
 			await detectableMonitor.IsNotEmitted(DetectableComponent.SignalName.OnDetected).WithTimeout(100);
 			await detectorMonitor.IsNotEmitted(DetectorComponent.SignalName.OnExitDetector).WithTimeout(100);
-			await detectableMonitor.IsNotEmitted(DetectableComponent.SignalName.OnUnDetected).WithTimeout(100);
-
-			// Detecting and detectable by DetectorDetectableParents
-			detector.Initialize(10, new SceneFilePathRes[]{ AutoFree(new SceneFilePathRes(_detectorDetectableParent)) });
-			detectable.Initialize(10, new SceneFilePathRes[]{ AutoFree(new SceneFilePathRes(_detectorDetectableParent)) });
-			await detectorMonitor.IsNotEmitted(DetectorComponent.SignalName.OnEnterDetector).WithTimeout(100);
-			await detectableMonitor.IsNotEmitted(DetectableComponent.SignalName.OnDetected).WithTimeout(100);
-			await detectorMonitor.IsNotEmitted(DetectorComponent.SignalName.OnExitDetector).WithTimeout(100);
-			await detectableMonitor.IsNotEmitted(DetectableComponent.SignalName.OnUnDetected).WithTimeout(100);
+			await detectableMonitor.IsNotEmitted(DetectableComponent.SignalName.OnLostDetection).WithTimeout(100);
 		}
 
 		[TestCase]
@@ -334,9 +243,9 @@ namespace TestNS
 			var detectable1Monitor = AssertSignal(detectable1).StartMonitoring();
 			var detectable2Monitor = AssertSignal(detectable2).StartMonitoring();
 
-			detector.Initialize(10, new SceneFilePathRes[]{ AutoFree(new SceneFilePathRes(_detectableParent)), AutoFree(new SceneFilePathRes(_detectorDetectableParent)) });
-			detectable1.Initialize(10, new SceneFilePathRes[]{ AutoFree(new SceneFilePathRes(_detectorParent)) });
-			detectable2.Initialize(10, new SceneFilePathRes[]{ AutoFree(new SceneFilePathRes(_detectorParent)) });
+			detector.Initialize(10, Groups.GroupTypes.Turret, Groups.GroupTypes.Enemy | Groups.GroupTypes.Projectile);
+			detectable1.Initialize(10, Groups.GroupTypes.Enemy, Groups.GroupTypes.Turret);
+			detectable2.Initialize(10, Groups.GroupTypes.Projectile, Groups.GroupTypes.Turret);
 
 			await detectorMonitor.IsNotEmitted(DetectorComponent.SignalName.OnEnterDetector).WithTimeout(50);
 			await detectable1Monitor.IsNotEmitted(DetectableComponent.SignalName.OnDetected).WithTimeout(50);
@@ -354,8 +263,8 @@ namespace TestNS
 			_detectorParent.GlobalPosition = new(50,0);
 			await detectorMonitor.IsEmitted(DetectorComponent.SignalName.OnExitDetector, detectable1).WithTimeout(100);
 			await detectorMonitor.IsEmitted(DetectorComponent.SignalName.OnExitDetector, detectable2).WithTimeout(100);
-			await detectable1Monitor.IsEmitted(DetectableComponent.SignalName.OnUnDetected, detector).WithTimeout(100);
-			await detectable2Monitor.IsEmitted(DetectableComponent.SignalName.OnUnDetected, detector).WithTimeout(100);
+			await detectable1Monitor.IsEmitted(DetectableComponent.SignalName.OnLostDetection, detector).WithTimeout(100);
+			await detectable2Monitor.IsEmitted(DetectableComponent.SignalName.OnLostDetection, detector).WithTimeout(100);
 			// // detectorMonitor.IsCountEmitted(2, DetectorComponent.SignalName.OnExitDetector, detectable1, detectable2); // todo
 		}
 
@@ -374,9 +283,9 @@ namespace TestNS
 			var detector1Monitor = AssertSignal(detector1).StartMonitoring();
 			var detector2Monitor = AssertSignal(detector2).StartMonitoring();
 
-			detectable.Initialize(10, new SceneFilePathRes[]{ AutoFree(new SceneFilePathRes(_detectorParent)), AutoFree(new SceneFilePathRes(_detectorDetectableParent)) });
-			detector1.Initialize(10, new SceneFilePathRes[]{ AutoFree(new SceneFilePathRes(_detectableParent)) });
-			detector2.Initialize(10, new SceneFilePathRes[]{ AutoFree(new SceneFilePathRes(_detectableParent)) });
+			detectable.Initialize(10, Groups.GroupTypes.Turret, Groups.GroupTypes.Enemy | Groups.GroupTypes.Projectile);
+			detector1.Initialize(10, Groups.GroupTypes.Enemy, Groups.GroupTypes.Turret);
+			detector2.Initialize(10, Groups.GroupTypes.Projectile, Groups.GroupTypes.Turret);
 
 			await detectableMonitor.IsNotEmitted(DetectableComponent.SignalName.OnDetected).WithTimeout(50);
 			await detector1Monitor.IsNotEmitted(DetectorComponent.SignalName.OnEnterDetector).WithTimeout(50);
@@ -384,19 +293,20 @@ namespace TestNS
 
 			// Move them in range of each other
 			_detectableParent.GlobalPosition = new(95,0);
-			await detectableMonitor.IsEmitted(DetectableComponent.SignalName.OnDetected, detector1).WithTimeout(100);
-			await detectableMonitor.IsEmitted(DetectableComponent.SignalName.OnDetected, detector2).WithTimeout(100);
+			await detectableMonitor.IsEmitted(DetectableComponent.SignalName.OnDetected).WithTimeout(100);
+			await detectableMonitor.IsEmitted(DetectableComponent.SignalName.OnDetected).WithTimeout(100);
 			await detector1Monitor.IsEmitted(DetectorComponent.SignalName.OnEnterDetector, detectable).WithTimeout(100);
 			await detector2Monitor.IsEmitted(DetectorComponent.SignalName.OnEnterDetector, detectable).WithTimeout(100);
 			// detectableMonitor.IsCountEmitted(2, DetectableComponent.SignalName.OnDetected); // todo
 
 			// // Move them out of range of each other
 			_detectorParent.GlobalPosition = new(50,0);
-			await detectableMonitor.IsEmitted(DetectableComponent.SignalName.OnUnDetected, detector1).WithTimeout(100);
-			await detectableMonitor.IsEmitted(DetectableComponent.SignalName.OnUnDetected, detector2).WithTimeout(100);
+			await detectableMonitor.IsEmitted(DetectableComponent.SignalName.OnLostDetection, detector1).WithTimeout(100);
+			await detectableMonitor.IsEmitted(DetectableComponent.SignalName.OnLostDetection, detector2).WithTimeout(100);
 			await detector1Monitor.IsEmitted(DetectorComponent.SignalName.OnExitDetector, detectable).WithTimeout(100);
 			await detector2Monitor.IsEmitted(DetectorComponent.SignalName.OnExitDetector, detectable).WithTimeout(100);
 			// detectableMonitor.IsCountEmitted(2, DetectableComponent.SignalName.OnUnDetected); // todo
 		}
+
 	}
 }
