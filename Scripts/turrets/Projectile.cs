@@ -78,7 +78,7 @@ public partial class Projectile : Node2D
 	{
 		_stats = projectileStats;
 		_senderScene = senderScene;
-		_hitComponent.Initialize(_stats.Damage, _senderScene, _target, _targetScenes);
+		// _hitComponent.Initialize(_stats.Damage, _senderScene, _target, _targetScenes);
 		_wasInitialized = true;
 	}
 
@@ -104,11 +104,11 @@ public partial class Projectile : Node2D
 		_sprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D"); // Todo: Nix this for export (or component?)
 		_sprite.Frame = _stats.SpriteFrame;
 
-		_hitComponent.OnHit += (area, damage) =>
-		{
-			GD.Print($"PROJECTILE ONHIT: {area.Name} - Damage: {damage}");
-			ProjectileImpact();
-		};
+		// _hitComponent.OnHit += (area, damage) =>
+		// {
+		// 	GD.Print($"PROJECTILE ONHIT: {area.Name} - Damage: {damage}");
+		// 	ProjectileImpact();
+		// };
 	}
 
 	public override void _PhysicsProcess(double delta)

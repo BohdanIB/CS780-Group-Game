@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://ch00055ip72s0"]
 
 [ext_resource type="PackedScene" uid="uid://cvx7nxyaghhrx" path="res://Scenes/enemy.tscn" id="1_0cfo2"]
-[ext_resource type="Script" uid="uid://dpdoqjtnrwi8b" path="res://test/Components/EnemySight.cs" id="1_bsodh"]
+[ext_resource type="Script" uid="uid://dpdoqjtnrwi8b" path="res://Testing/Components/EnemySight.cs" id="1_bsodh"]
 [ext_resource type="Script" uid="uid://c35fcs4mhqjbm" path="res://Resources/Unit/EnemyStats.cs" id="3_wd7cv"]
 [ext_resource type="Script" uid="uid://bawwkshhg5psh" path="res://Resources/Turret/TurretStats.cs" id="4_0cfo2"]
 [ext_resource type="PackedScene" uid="uid://b2w8csm5vypb0" path="res://Scenes/turret.tscn" id="5_bsodh"]

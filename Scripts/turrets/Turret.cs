@@ -67,10 +67,10 @@ public partial class Turret : GenericStructure
 		// Todo: Primarily to support ghost mode turret in TurretPlacer. Probably better way of doing this.
 		if (_disabled) { return; }
 
-		_hurtComponent.OnHurt += (area, damage) =>
-		{
-			_healthComponent.ApplyDamage(damage);
-		};
+		// _hurtComponent.OnHurt += (area, damage) =>
+		// {
+		// 	_healthComponent.ApplyDamage(damage);
+		// };
 		_healthComponent.OnNoHealthLeft += () =>
 		{
 			GD.Print($"Turret {Name} died.");

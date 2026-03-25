@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bskv6rusyqggc"]
 
-[ext_resource type="Script" uid="uid://eekqpng6vmct" path="res://test/Components/EnemyHit.cs" id="1_w8jki"]
+[ext_resource type="Script" uid="uid://eekqpng6vmct" path="res://Testing/Components/EnemyHit.cs" id="1_w8jki"]
 [ext_resource type="PackedScene" uid="uid://cvx7nxyaghhrx" path="res://Scenes/enemy.tscn" id="2_eyd4g"]
 [ext_resource type="Script" uid="uid://c35fcs4mhqjbm" path="res://Resources/Unit/EnemyStats.cs" id="3_eyd4g"]
 [ext_resource type="Script" uid="uid://dj1ghvji6ekg5" path="res://Resources/legacy/SceneFilePathRes.cs" id="5_eyd4g"]

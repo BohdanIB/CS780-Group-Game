@@ -34,12 +34,13 @@ folder_colors={
 "res://Resources/": "blue",
 "res://Scenes/": "teal",
 "res://Scripts/": "purple",
-"res://test/": "pink"
+"res://Testing/": "pink"
 }
 
 [gdunit4]
 
 settings/common/update_notification_enabled=false
+settings/test/test_lookup_folder="Testing"
 
 [global_group]
 

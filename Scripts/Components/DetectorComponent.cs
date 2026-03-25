@@ -2,25 +2,28 @@
 using Godot;
 using CS780GroupProject.Scripts.Utils;
 
+/// <summary>
+/// DetectorComponent can detect DetectableComponents as long as the DetectorComponent contains 
+/// the Detectable's type, and the Detectable contains the Detector's type.
+/// </summary>
 public partial class DetectorComponent : Area2D
 {
 	[Signal] public delegate void OnEnterDetectorEventHandler(DetectableComponent Detectable);
 	[Signal] public delegate void OnExitDetectorEventHandler(DetectableComponent Detectable);
 
 	[ExportGroup("Group Types")]
-	[Export] private Groups.GroupTypes _thisEntityTypes;
-	[Export] private Groups.GroupTypes _validDetectableTypes;
+	[Export] private Groups.GroupTypes _thisEntityTypes, _validDetectableTypes;
 
 	[ExportGroup("Exported Child Nodes")]
 	[Export] private CollisionShape2D _detectorCollisionShape2D;
 
-	public void Initialize(float detectorRadius, Groups.GroupTypes entityTypes = Groups.GroupTypes.None, Groups.GroupTypes validDetectableScenes = Groups.GroupTypes.None)
+	public void Initialize(float detectorRadius, Groups.GroupTypes entityTypes, Groups.GroupTypes validDetectableScenes)
 	{
 		ModifyDetectorRadius(detectorRadius);
 		Initialize(entityTypes, validDetectableScenes);
 	}
 
-	public void Initialize(Groups.GroupTypes entityTypes = Groups.GroupTypes.None, Groups.GroupTypes validDetectableScenes = Groups.GroupTypes.None)
+	public void Initialize(Groups.GroupTypes entityTypes, Groups.GroupTypes validDetectableScenes)
 	{
 		_thisEntityTypes = entityTypes;
 		_validDetectableTypes = validDetectableScenes;
@@ -32,7 +35,7 @@ public partial class DetectorComponent : Area2D
 		{
 			if (area is DetectableComponent detectable && detectable != null)
 			{
-				if (Detected(detectable))
+				if (AbleToDetect(detectable))
 				{
 					EmitSignal(SignalName.OnEnterDetector, area);
 				}
@@ -42,7 +45,7 @@ public partial class DetectorComponent : Area2D
 		{
 			if (area is DetectableComponent detectable && detectable != null)
 			{
-				if (LostDetectionOf(detectable))
+				if (AbleToDetect(detectable))
 				{
 					EmitSignal(SignalName.OnExitDetector, detectable);
 				}
@@ -50,22 +53,18 @@ public partial class DetectorComponent : Area2D
 		};
 	}
 
-	private bool Detected(DetectableComponent detectable)
+	/// <summary>
+	/// Can this DetectorComponent detect a given DetectableComponent?
+	/// </summary>
+	/// <param name="detectable"></param>
+	/// <returns></returns>
+	private bool AbleToDetect(DetectableComponent detectable)
 	{
 		return this.CanDetect(detectable) && detectable.CanBeDetectedBy(this);
 	}
-	private bool LostDetectionOf(DetectableComponent detectable)
-	{
-		return this.CanDetect(detectable) && detectable.CanBeDetectedBy(this);
-	}
-
 	public bool CanDetect(DetectableComponent detectable)
 	{
-		return CanDetect(detectable.GetEntityTypes());
-	}
-	private bool CanDetect(Groups.GroupTypes detectableGroupTypes)
-	{
-		return (detectableGroupTypes & _validDetectableTypes) != Groups.GroupTypes.None;
+		return (detectable.GetEntityTypes() & _validDetectableTypes) != Groups.GroupTypes.None;
 	}
 
 	// Todo: Handle shapes other than circles in future?

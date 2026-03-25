@@ -2,25 +2,28 @@
 using CS780GroupProject.Scripts.Utils;
 using Godot;
 
+/// <summary>
+/// DetectableComponent can be detected by DetectorComponents as long as the DetectableComponent 
+/// contains the Detector's type, and the Detector contains the Detectable's type.
+/// </summary>
 public partial class DetectableComponent : Area2D
 {
 	[Signal] public delegate void OnDetectedEventHandler(DetectorComponent Detector);
 	[Signal] public delegate void OnLostDetectionEventHandler(DetectorComponent Detector);
 
 	[ExportGroup("Group Types")]
-	[Export] private Groups.GroupTypes _thisEntityTypes;
-	[Export] private Groups.GroupTypes _validDetectorTypes;
+	[Export] private Groups.GroupTypes _thisEntityTypes, _validDetectorTypes;
 
 	[ExportGroup("Exported Child Nodes")]
 	[Export] private CollisionShape2D _detectableCollisionShape2D;
 
-	public void Initialize(float detectableRadius, Groups.GroupTypes entityTypes = Groups.GroupTypes.None, Groups.GroupTypes validDetectorTypes = Groups.GroupTypes.None)
+	public void Initialize(float detectableRadius, Groups.GroupTypes entityTypes, Groups.GroupTypes validDetectorTypes)
 	{
 		ModifyDetectableRadius(detectableRadius);
 		Initialize(entityTypes, validDetectorTypes);
 	}
 
-	public void Initialize(Groups.GroupTypes entityTypes = Groups.GroupTypes.None, Groups.GroupTypes validDetectorTypes = Groups.GroupTypes.None)
+	public void Initialize(Groups.GroupTypes entityTypes, Groups.GroupTypes validDetectorTypes)
 	{
 		_thisEntityTypes = entityTypes;
 		_validDetectorTypes = validDetectorTypes;
@@ -32,7 +35,7 @@ public partial class DetectableComponent : Area2D
 		{
 			if (area is DetectorComponent detector && detector != null)
 			{
-				if (SpottedBy(detector))
+				if (DetectableBy(detector))
 				{
 					EmitSignal(SignalName.OnDetected, detector);
 				}
@@ -42,7 +45,7 @@ public partial class DetectableComponent : Area2D
 		{
 			if (area is DetectorComponent detector && detector != null)
 			{
-				if (ConcealedFrom(detector))
+				if (DetectableBy(detector))
 				{
 					EmitSignal(SignalName.OnLostDetection, detector);
 				}
@@ -50,22 +53,18 @@ public partial class DetectableComponent : Area2D
 		};
 	}
 
-	private bool SpottedBy(DetectorComponent detector)
+	/// <summary>
+	/// Can this DetectableComponent be detected by a given DetectorComponent?
+	/// </summary>
+	/// <param name="detector"></param>
+	/// <returns></returns>
+	private bool DetectableBy(DetectorComponent detector)
 	{
 		return CanBeDetectedBy(detector) && detector.CanDetect(this);
 	}
-	private bool ConcealedFrom(DetectorComponent detector)
-	{
-		return CanBeDetectedBy(detector) && detector.CanDetect(this);
-	}
-
 	public bool CanBeDetectedBy(DetectorComponent detector)
 	{
-		return CanBeDetectedBy(detector.GetEntityTypes());
-	}
-	private bool CanBeDetectedBy(Groups.GroupTypes detectorGroupTypes)
-	{
-		return (detectorGroupTypes & _validDetectorTypes) != Groups.GroupTypes.None;
+		return (detector.GetEntityTypes() & _validDetectorTypes) != Groups.GroupTypes.None;
 	}
 
 	// Todo: Handle shapes other than circles in future?

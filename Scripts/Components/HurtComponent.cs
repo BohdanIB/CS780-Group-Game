@@ -1,30 +1,72 @@
 
+using CS780GroupProject.Scripts.Utils;
 using Godot;
 
 /// <summary>
-/// The ability for parent entity to be hurt by other entities.
+/// TODO
 /// </summary>
 public partial class HurtComponent : Area2D
 {
-	[Signal] public delegate void OnHurtEventHandler(Area2D HitterArea, float Damage);
+	[Signal] public delegate void OnEnterHurtEventHandler(HitComponent Hit, float Damage);
+	[Signal] public delegate void OnExitHurtEventHandler(HitComponent Hit);
 
-	[Export] private SceneFilePathRes[] _allowedToHurtEntity = []; // todo?: Valid scenes for this component to be hurt by.
+	// Todo: Might be necessary to utilize second sender types instead of merging? Can't come up with the edgecase where this doesn't work atm
+	// [ExportGroup("___ Types")]
+	// [Export] private Groups.GroupTypes _receiverTypes;
+
+	[ExportGroup("Group Types")]
+	[Export] private Groups.GroupTypes _thisEntityTypes, _validHitterTypes;
 
 	[ExportGroup("Exported Child Nodes")]
 	[Export] private CollisionShape2D _hurtCollisionShape2D;
 
-	/// <summary>
-	/// HitComponents can deal damage to hurt components
-	/// </summary>
-	/// <param name="hitterOwner"></param>
-	/// <param name="damage"></param>
-	public void Hit(Area2D hitterArea, SceneFilePathRes senderScene, float damage)
+	public void Initialize(float hurtRadius, Groups.GroupTypes entityTypes, Groups.GroupTypes validHitterTypes)
 	{
-		if (CanBeHurtBy(senderScene))
+		ModifyHurtRadius(hurtRadius);
+		Initialize(entityTypes, validHitterTypes);
+	}
+	public void Initialize(Groups.GroupTypes entityTypes, Groups.GroupTypes validHitterTypes)
+	{
+		_thisEntityTypes = entityTypes;
+		_validHitterTypes = validHitterTypes;
+	}
+// TODO: The HurtComponent can be hurt by valid hitter types AND valid sender entities. Might not be what we want in future.
+	public override void _Ready()
+	{
+		AreaEntered += (area) =>
 		{
-			GD.Print($"HurtComponent was hit by {hitterArea.Owner.Name} and was dealt {damage} damage. Emitting OnHurt signal.");
-			EmitSignal(SignalName.OnHurt, hitterArea, damage);
-		}
+			if (area is HitComponent hit && hit != null)
+			{
+				if (Hurtable(hit))
+				{
+					EmitSignal(SignalName.OnEnterHurt, hit, hit.Damage);
+				}
+			}
+		};
+		AreaExited += (area) =>
+		{
+			if (area is HitComponent hit && hit != null)
+			{
+				if (Hurtable(hit))
+				{
+					EmitSignal(SignalName.OnExitHurt, hit);
+				}
+			}
+		};
+	}
+
+	/// <summary>
+	/// Can this HurtComponent be hit by a given HitComponent?
+	/// </summary>
+	/// <param name="hit"></param>
+	/// <returns></returns>
+	private bool Hurtable(HitComponent hit)
+	{
+		return this.CanBeHurtBy(hit) && hit.CanHit(this);
+	}
+	public bool CanBeHurtBy(HitComponent hit)
+	{
+		return (hit.GetEntityTypes() & _validHitterTypes) != Groups.GroupTypes.None;
 	}
 
 	// Todo: Handle shapes other than circles in future?
@@ -32,10 +74,12 @@ public partial class HurtComponent : Area2D
 	{
 		((CircleShape2D)_hurtCollisionShape2D.Shape).Radius = newRadius;
 	}
-
-	// TODO: Similar check to HitComponent potentially?
-	protected bool CanBeHurtBy(SceneFilePathRes scene)
+    public Groups.GroupTypes GetEntityTypes()
 	{
-		return SceneFilePathRes.SceneSharesScenePath(scene, _allowedToHurtEntity);
+		return _thisEntityTypes;
+	}
+	public Groups.GroupTypes GetValidHitterTypes()
+	{
+		return _validHitterTypes;
 	}
 }

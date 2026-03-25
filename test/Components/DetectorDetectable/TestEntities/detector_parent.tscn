@@ -1,6 +1,0 @@
-[gd_scene format=3 uid="uid://fhs48h31du53"]
-
-[ext_resource type="Script" uid="uid://de6vdk432sqv8" path="res://Testing/ECS/DetectorDetectable/TestEntities/DetectorParent.cs" id="1_xxv6t"]
-
-[node name="DetectorParent" type="Node2D" unique_id=1381552562]
-script = ExtResource("1_xxv6t")

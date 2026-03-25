@@ -1,63 +1,102 @@
 
-using static CS780GroupProject.Scripts.Utils.NodeComponentChecking;
+using CS780GroupProject.Scripts.Utils;
 using Godot;
 
+// TODO: CHECK IF HIT COMPONENT HITS BASED ON BOTH SENDER TYPE AND ENTITY TYPE!!!!!!
+
 /// <summary>
-/// The ability for parent entity to hit other entities.
-/// 
-/// TODO: This component is unfortuantely coupled with HurtComponent. Not sure about a good solution to this coupling.
+/// HitComponent can detect HurtComponents as long as the HitComponent contains the Hurtable's type, and 
+/// the Hurtable contains the Hitter's type.
+/// </br></br>
+/// HitComponent generally will want to make use of its sender's types to decide whether something can be hit or not, 
+/// as a HurtComponent will make decisions on whether it can be hit or not based on the type of the sender as opposed to 
+/// the type of the entity the HitComponent is attached to.
+/// </br>
+/// Eg. A HitComponent attached to a Projectile sent by a Turret hits an Enemy with a HurtComponent. The HurtComponent wants to check if it can be 
+/// hit by the Projectile object, but also wants to know if the original 'sender' entity (the Turret) is valid to be hit from also. An Enemy may want 
+/// to be hurtable by Projectile objects generically, but may not want to be hurtable by Enemies that use projectiles for example. Wheras a Tower 
+/// which sends a Projectile could be a valid combination of sender and hitter to satisfy the hurt component.
 /// </summary>
 public partial class HitComponent : Area2D
 {
-	[Signal] public delegate void OnHitEventHandler(Area2D HurtArea, float Damage);
+	[Signal] public delegate void OnEnterHitEventHandler(HurtComponent Hurt, float Damage);
+	[Signal] public delegate void OnExitHitEventHandler(HurtComponent Hurt);
 
 	[Export] private float _hitDamage = 1f;
-	[Export] private Node _target;
-	[Export] private SceneFilePathRes[] _hitableScenes = []; // Valid scenes for this component to be able to hit.
-	[Export] private SceneFilePathRes _senderScene;
+	[Export] private HurtComponent _target;
+
+	[ExportGroup("Sender Types")]
+	[Export] private Groups.GroupTypes _senderTypes;
+
+	[ExportGroup("Group Types")]
+	[Export] private Groups.GroupTypes _thisEntityTypes, _validHurtableTypes;
 
 	[ExportGroup("Exported Child Nodes")]
 	[Export] private CollisionShape2D _hitCollisionShape2D;
 
 	public float Damage { get => _hitDamage; }
 
+	
+	public void Initialize(float hitRadius, float damage, Groups.GroupTypes senderTypes, Groups.GroupTypes entityTypes, Groups.GroupTypes validHurtableTypes, HurtComponent target = null)
+	{
+		ModifyHitRadius(hitRadius);
+		Initialize(damage, senderTypes, entityTypes, validHurtableTypes, target);
+	}
 	/// <summary>
-	/// Damage and potential target for hit. If there is no specific target to hit, then a general set of hitable targets can be defined.
+	/// Damage and potential target for hit. If there is no specific target to hit, then the general set of hittable targets can be used to hit things.
 	/// </summary>
 	/// <param name="damage"></param>
-	/// <param name="validTargetGroups"></param>
+	/// <param name="senderTypes"></param>
+	/// <param name="validHurtableTypes"></param>
 	/// <param name="target"></param>
-	public void Initialize(float damage, SceneFilePathRes sender, Node target = null, SceneFilePathRes[] validTargetGroups = null)
+	public void Initialize(float damage, Groups.GroupTypes senderTypes, Groups.GroupTypes entityTypes, Groups.GroupTypes validHurtableTypes, HurtComponent target = null)
 	{
 		_hitDamage = damage;
-		_senderScene = sender;
+		_senderTypes = senderTypes;
+		_thisEntityTypes = entityTypes;
+		_validHurtableTypes = validHurtableTypes;
 		_target = target;
-		if (validTargetGroups != null)
-		{
-			_hitableScenes = validTargetGroups;
-		}
-		if (_target == null && _hitableScenes.Length <= 0)
-		{
-			GD.Print($"WARNING - HitComponent for {Owner.Name}: No target or hitable scenes assigned!");
-		}
 	}
 
 	public override void _Ready()
 	{
 		AreaEntered += (area) =>
 		{
-			// Todo: Should be a better way of excluding related nodes?
-			if (area.GetParent() == this.GetParent())
+			if (area is HurtComponent hurt && hurt != null)
 			{
-				return;
-			}
-			if (GetComponentOrNull<HurtComponent>(area) is var hurt && IsInstanceValid(hurt) && IsHitableHurtComponent(hurt))
-			{
-				GD.Print($"HitComponent made contact with {area.Name} and is attempting to deal {_hitDamage} damage. Emitting OnHit signal.");
-				hurt.Hit(this, _senderScene, _hitDamage);
-				EmitSignal(SignalName.OnHit, area, _hitDamage);
+				if (Hittable(hurt))
+				{
+					// GD.Print($"HitComponent made contact with {area.Name} and is attempting to deal {_hitDamage} damage. Emitting OnHit signal.");
+					EmitSignal(SignalName.OnEnterHit, hurt, _hitDamage);
+				}
 			}
 		};
+		AreaExited += (area) =>
+		{
+			if (area is HurtComponent hurt && hurt != null)
+			{
+				if (Hittable(hurt))
+				{
+					EmitSignal(SignalName.OnExitHit, hurt);
+				}
+			}
+		};
+	}
+
+	/// <summary>
+	/// Can this HitComponent hurt a given HurtComponent?
+	/// </summary>
+	/// <param name="hurt"></param>
+	/// <returns></returns>
+	private bool Hittable(HurtComponent hurt)
+	{
+		return this.CanHit(hurt) && hurt.CanBeHurtBy(this);
+	}
+	public bool CanHit(HurtComponent hurt)
+	{
+		var hurtTypes = hurt.GetEntityTypes();
+		return ((hurtTypes & _validHurtableTypes) != Groups.GroupTypes.None) && // Hurt component can be hit by hit component type
+		       ((hurtTypes & _senderTypes) != Groups.GroupTypes.None); // hurt component can be hit by sender of hit component
 	}
 
 	// Todo: Handle shapes other than circles in future?
@@ -65,22 +104,16 @@ public partial class HitComponent : Area2D
 	{
 		((CircleShape2D)_hitCollisionShape2D.Shape).Radius = newRadius;
 	}
-
-	public bool IsHitableHurtComponent(HurtComponent hurt)
+	public Groups.GroupTypes GetSenderTypes()
 	{
-		if (!IsInstanceValid(hurt)) { return false; }
-		var entity = hurt.Owner; // todo: Might break for some instantiations?
-		// Going for specific target
-		if (IsInstanceValid(_target) && _target == entity)
-		{
-			return true;
-		}
-		// Check if the owner scene for area is hitable by this component generically.
-		else if (SceneFilePathRes.EntitySharesScenePath(entity, _hitableScenes))
-		{
-			return true;
-		}
-		return false;
+		return _senderTypes;
 	}
-
+	public Groups.GroupTypes GetEntityTypes()
+	{
+		return _thisEntityTypes;
+	}
+	public Groups.GroupTypes GetValidHurtableTypes()
+	{
+		return _validHurtableTypes;
+	}
 }

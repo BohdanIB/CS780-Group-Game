@@ -47,7 +47,7 @@ public partial class Enemy: PathFollower
 			GD.Print($"Enemy {Name} died.");
 			QueueFree();
 		};
-		_hurtComponent.OnHurt += (area, damage) => { _healthComponent.ApplyDamage(damage); }; 
+		// _hurtComponent.OnHurt += (area, damage) => { _healthComponent.ApplyDamage(damage); }; 
 
 		_detectableComponent.OnDetected += (detector) => {
 			// if (area.GetOwnerOrNull<Node>() is var owner && owner != null)

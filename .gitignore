@@ -21,8 +21,8 @@ mono_crash.*.json
 .vscode
 # *.csproj
 *.sln
-# Testing
+
+# gdUnit4 Testing Stuff
 addons/
-TestResults/
 gdunit4_testadapter_v5/
 reports/

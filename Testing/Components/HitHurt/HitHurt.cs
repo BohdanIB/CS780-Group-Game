@@ -57,7 +57,7 @@ namespace TestNS
 			var hit = _hitParent.Hit;
 
 			// First initialization
-			hit.Initialize(935, AutoFree(new SceneFilePathRes(_componentlessParent)));
+			// hit.Initialize(935, AutoFree(new SceneFilePathRes(_componentlessParent)));
 
 
 
