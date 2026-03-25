@@ -103,17 +103,17 @@ public partial class PathFollower : Node2D
 	// }
 
 
-	protected void UpdateHitboxRadius(float newRadius)
+	protected void SetHitboxRadius(float newRadius)
 	{
-		_hurtComponent.ModifyHurtRadius(newRadius);
+		_hurtComponent.SetRadius(newRadius);
 	}
-	protected void UpdateDetectorRadius(float newRadius)
+	protected void SetDetectorRadius(float newRadius)
 	{
-		_detectorComponent.ModifyDetectorRadius(newRadius);
+		_detectorComponent.SetRadius(newRadius);
 	}
-	protected void UpdateDetectableRadius(float newRadius)
+	protected void SetDetectableRadius(float newRadius)
 	{
-		_detectableComponent.ModifyDetectableRadius(newRadius);
+		_detectableComponent.SetRadius(newRadius);
 	}
 	// Todo
 	protected void UpdateHealth(float newHealth)

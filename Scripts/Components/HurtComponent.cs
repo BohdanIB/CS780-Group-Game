@@ -10,10 +10,6 @@ public partial class HurtComponent : Area2D
 	[Signal] public delegate void OnEnterHurtEventHandler(HitComponent Hit, float Damage);
 	[Signal] public delegate void OnExitHurtEventHandler(HitComponent Hit);
 
-	// Todo: Might be necessary to utilize second sender types instead of merging? Can't come up with the edgecase where this doesn't work atm
-	// [ExportGroup("___ Types")]
-	// [Export] private Groups.GroupTypes _receiverTypes;
-
 	[ExportGroup("Group Types")]
 	[Export] private Groups.GroupTypes _thisEntityTypes, _validHitterTypes;
 
@@ -22,7 +18,7 @@ public partial class HurtComponent : Area2D
 
 	public void Initialize(float hurtRadius, Groups.GroupTypes entityTypes, Groups.GroupTypes validHitterTypes)
 	{
-		ModifyHurtRadius(hurtRadius);
+		SetRadius(hurtRadius);
 		Initialize(entityTypes, validHitterTypes);
 	}
 	public void Initialize(Groups.GroupTypes entityTypes, Groups.GroupTypes validHitterTypes)
@@ -30,7 +26,7 @@ public partial class HurtComponent : Area2D
 		_thisEntityTypes = entityTypes;
 		_validHitterTypes = validHitterTypes;
 	}
-// TODO: The HurtComponent can be hurt by valid hitter types AND valid sender entities. Might not be what we want in future.
+
 	public override void _Ready()
 	{
 		AreaEntered += (area) =>
@@ -66,11 +62,16 @@ public partial class HurtComponent : Area2D
 	}
 	public bool CanBeHurtBy(HitComponent hit)
 	{
-		return (hit.GetEntityTypes() & _validHitterTypes) != Groups.GroupTypes.None;
+		// Todo: Might want to split hitter types and receiver types for hurt?
+		return ((hit.GetEntityTypes() & _validHitterTypes) != Groups.GroupTypes.None) && // hitter types are valid for hurt
+		       ((hit.GetSenderTypes() & _validHitterTypes) != Groups.GroupTypes.None); // hitter sender is valid for hurt
 	}
 
-	// Todo: Handle shapes other than circles in future?
-	public void ModifyHurtRadius(float newRadius)
+	public float GetRadius()
+	{
+		return ((CircleShape2D)_hurtCollisionShape2D.Shape).Radius;
+	}
+	public void SetRadius(float newRadius)
 	{
 		((CircleShape2D)_hurtCollisionShape2D.Shape).Radius = newRadius;
 	}

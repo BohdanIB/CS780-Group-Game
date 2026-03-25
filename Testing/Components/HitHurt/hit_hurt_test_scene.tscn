@@ -1,26 +1,14 @@
 [gd_scene format=3 uid="uid://b7mem5sukuawb"]
 
 [ext_resource type="Script" uid="uid://b6tk8mvlxpufn" path="res://Testing/Components/HitHurt/HitHurtTestScene.cs" id="1_qnn72"]
-[ext_resource type="PackedScene" uid="uid://00yung6dorfb" path="res://Testing/Components/HitHurt/TestEntities/hit_parent.tscn" id="2_c33eo"]
 [ext_resource type="PackedScene" uid="uid://7n3xh2bxsdyb" path="res://Scenes/Components/hit_component.tscn" id="3_i6x2a"]
-[ext_resource type="PackedScene" uid="uid://xsr1l5pqxghd" path="res://Testing/Components/HitHurt/TestEntities/hurt_parent.tscn" id="3_m47qp"]
 [ext_resource type="PackedScene" uid="uid://bu5bt5d2jv3iu" path="res://Scenes/Components/hurt_component.tscn" id="5_beuku"]
-[ext_resource type="PackedScene" uid="uid://eatgqtc4aebg" path="res://Testing/Components/componentless_parent.tscn" id="6_beuku"]
 
-[node name="HitHurtTestScene" type="Node2D" unique_id=1254857674 node_paths=PackedStringArray("HitParent", "HurtParent", "ComponentlessParent")]
+[node name="HitHurtTestScene" type="Node2D" unique_id=1254857674 node_paths=PackedStringArray("HitComponent", "HurtComponent")]
 script = ExtResource("1_qnn72")
-HitParent = NodePath("HitParent")
-HurtParent = NodePath("HurtParent")
-ComponentlessParent = NodePath("ComponentlessParent")
+HitComponent = NodePath("HitComponent")
+HurtComponent = NodePath("HurtComponent")
 
-[node name="HitParent" parent="." unique_id=780875915 node_paths=PackedStringArray("Hit") instance=ExtResource("2_c33eo")]
-Hit = NodePath("HitComponent")
+[node name="HitComponent" parent="." unique_id=610990885 instance=ExtResource("3_i6x2a")]
 
-[node name="HitComponent" parent="HitParent" unique_id=610990885 instance=ExtResource("3_i6x2a")]
-
-[node name="HurtParent" parent="." unique_id=1962318672 node_paths=PackedStringArray("Hurt") instance=ExtResource("3_m47qp")]
-Hurt = NodePath("HurtComponent")
-
-[node name="HurtComponent" parent="HurtParent" unique_id=495543674 instance=ExtResource("5_beuku")]
-
-[node name="ComponentlessParent" parent="." unique_id=122936744 instance=ExtResource("6_beuku")]
+[node name="HurtComponent" parent="." unique_id=495543674 instance=ExtResource("5_beuku")]

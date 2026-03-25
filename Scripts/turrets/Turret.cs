@@ -167,9 +167,9 @@ public partial class Turret : GenericStructure
 	}
 	public void UpdateStats()
 	{
-		UpdateHitboxRadius(_stats.HitboxRadius);
-		UpdateDetectorRadius(_stats.AggroRadius);
-		UpdateDetectableRadius(_stats.DetectableRadius);
+		SetHitboxRadius(_stats.HitboxRadius);
+		SetDetectorRadius(_stats.AggroRadius);
+		SetDetectableRadius(_stats.DetectableRadius);
 		UpdateTurretSprite();
 
 		// Todo: Add more updates
@@ -179,17 +179,17 @@ public partial class Turret : GenericStructure
 		// Redraw detector radius
 		QueueRedraw();
 	}
-	protected void UpdateHitboxRadius(float newRadius)
+	protected void SetHitboxRadius(float newRadius)
 	{
-		_hurtComponent.ModifyHurtRadius(newRadius);
+		_hurtComponent.SetRadius(newRadius);
 	}
-	protected void UpdateDetectorRadius(float newRadius)
+	protected void SetDetectorRadius(float newRadius)
 	{
-		// _detectorComponent.ModifyDetectorRadius(newRadius);
+		_detectorComponent.SetRadius(newRadius);
 	}
-	protected void UpdateDetectableRadius(float newRadius)
+	protected void SetDetectableRadius(float newRadius)
 	{
-		_detectableComponent.ModifyDetectableRadius(newRadius);
+		_detectableComponent.SetRadius(newRadius);
 	}
 	private void UpdateTurretSprite()
 	{

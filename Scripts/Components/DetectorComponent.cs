@@ -19,7 +19,7 @@ public partial class DetectorComponent : Area2D
 
 	public void Initialize(float detectorRadius, Groups.GroupTypes entityTypes, Groups.GroupTypes validDetectableScenes)
 	{
-		ModifyDetectorRadius(detectorRadius);
+		SetRadius(detectorRadius);
 		Initialize(entityTypes, validDetectableScenes);
 	}
 
@@ -67,15 +67,13 @@ public partial class DetectorComponent : Area2D
 		return (detectable.GetEntityTypes() & _validDetectableTypes) != Groups.GroupTypes.None;
 	}
 
-	// Todo: Handle shapes other than circles in future?
-	public void ModifyDetectorRadius(float newRadius)
-	{
-		((CircleShape2D)_detectorCollisionShape2D.Shape).Radius = newRadius;
-	}
-
-	public float GetDetectorRadius()
+	public float GetRadius()
 	{
 		return ((CircleShape2D)_detectorCollisionShape2D.Shape).Radius;
+	}
+	public void SetRadius(float newRadius)
+	{
+		((CircleShape2D)_detectorCollisionShape2D.Shape).Radius = newRadius;
 	}
 	public Groups.GroupTypes GetEntityTypes()
 	{

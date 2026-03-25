@@ -49,7 +49,7 @@ public partial class Enemy: PathFollower
 		};
 		// _hurtComponent.OnHurt += (area, damage) => { _healthComponent.ApplyDamage(damage); }; 
 
-		_detectableComponent.OnDetected += (detector) => {
+		_detectableComponent.OnEnterDetectable += (detector) => {
 			// if (area.GetOwnerOrNull<Node>() is var owner && owner != null)
 			// {
 			// 	GD.Print($"Enemy '{Name}' detected by '{owner.Name}'.");
@@ -59,7 +59,7 @@ public partial class Enemy: PathFollower
 			// 	GD.Print($"Enemy '{Name}' detected by '{area.Name}'.");
 			// }
 		};
-		_detectableComponent.OnLostDetection += (detector) => {
+		_detectableComponent.OnExitDetectable += (detector) => {
 			// if (area.GetOwnerOrNull<Node>() is var owner && owner != null)
 			// {
 			// 	GD.Print($"Enemy '{Name}' UNdetected by '{owner.Name}'.");
@@ -100,9 +100,9 @@ public partial class Enemy: PathFollower
 	}
 	public void UpdateStats()
 	{
-		UpdateHitboxRadius(_stats.HitboxRadius);
-		UpdateDetectorRadius(_stats.AggroRadius);
-		UpdateDetectableRadius(_stats.DetectableRadius);
+		SetHitboxRadius(_stats.HitboxRadius);
+		SetDetectorRadius(_stats.AggroRadius);
+		SetDetectableRadius(_stats.DetectableRadius);
 		UpdateProjectileStats(_stats.ProjectileStats);
 		UpdateSprite(); // todo: should be a component?
 

@@ -39,7 +39,7 @@ public partial class HitComponent : Area2D
 	
 	public void Initialize(float hitRadius, float damage, Groups.GroupTypes senderTypes, Groups.GroupTypes entityTypes, Groups.GroupTypes validHurtableTypes, HurtComponent target = null)
 	{
-		ModifyHitRadius(hitRadius);
+		SetRadius(hitRadius);
 		Initialize(damage, senderTypes, entityTypes, validHurtableTypes, target);
 	}
 	/// <summary>
@@ -84,7 +84,7 @@ public partial class HitComponent : Area2D
 	}
 
 	/// <summary>
-	/// Can this HitComponent hurt a given HurtComponent?
+	/// Can this HitComponent hurt a given HurtComponent? If HitComponent has a target, then HurtComponent must also be target.
 	/// </summary>
 	/// <param name="hurt"></param>
 	/// <returns></returns>
@@ -94,13 +94,16 @@ public partial class HitComponent : Area2D
 	}
 	public bool CanHit(HurtComponent hurt)
 	{
-		var hurtTypes = hurt.GetEntityTypes();
-		return ((hurtTypes & _validHurtableTypes) != Groups.GroupTypes.None) && // Hurt component can be hit by hit component type
-		       ((hurtTypes & _senderTypes) != Groups.GroupTypes.None); // hurt component can be hit by sender of hit component
+		return ((hurt.GetEntityTypes() & _validHurtableTypes) != Groups.GroupTypes.None) && // Hurt component can be hit by hit component type
+		       ((hurt.GetValidHitterTypes() & _senderTypes) != Groups.GroupTypes.None) && // Hurt component can be hit by sender of hit component
+		       (_target == null || _target == hurt); // Hurt component is target (if target is assigned)
 	}
 
-	// Todo: Handle shapes other than circles in future?
-	public void ModifyHitRadius(float newRadius)
+	public float GetRadius()
+	{
+		return ((CircleShape2D)_hitCollisionShape2D.Shape).Radius;
+	}
+	public void SetRadius(float newRadius)
 	{
 		((CircleShape2D)_hitCollisionShape2D.Shape).Radius = newRadius;
 	}
@@ -115,5 +118,9 @@ public partial class HitComponent : Area2D
 	public Groups.GroupTypes GetValidHurtableTypes()
 	{
 		return _validHurtableTypes;
+	}
+	public HurtComponent GetTarget()
+	{
+		return _target;
 	}
 }

@@ -8,8 +8,8 @@ using Godot;
 /// </summary>
 public partial class DetectableComponent : Area2D
 {
-	[Signal] public delegate void OnDetectedEventHandler(DetectorComponent Detector);
-	[Signal] public delegate void OnLostDetectionEventHandler(DetectorComponent Detector);
+	[Signal] public delegate void OnEnterDetectableEventHandler(DetectorComponent Detector);
+	[Signal] public delegate void OnExitDetectableEventHandler(DetectorComponent Detector);
 
 	[ExportGroup("Group Types")]
 	[Export] private Groups.GroupTypes _thisEntityTypes, _validDetectorTypes;
@@ -19,7 +19,7 @@ public partial class DetectableComponent : Area2D
 
 	public void Initialize(float detectableRadius, Groups.GroupTypes entityTypes, Groups.GroupTypes validDetectorTypes)
 	{
-		ModifyDetectableRadius(detectableRadius);
+		SetRadius(detectableRadius);
 		Initialize(entityTypes, validDetectorTypes);
 	}
 
@@ -37,7 +37,7 @@ public partial class DetectableComponent : Area2D
 			{
 				if (DetectableBy(detector))
 				{
-					EmitSignal(SignalName.OnDetected, detector);
+					EmitSignal(SignalName.OnEnterDetectable, detector);
 				}
 			}
 		};
@@ -47,7 +47,7 @@ public partial class DetectableComponent : Area2D
 			{
 				if (DetectableBy(detector))
 				{
-					EmitSignal(SignalName.OnLostDetection, detector);
+					EmitSignal(SignalName.OnExitDetectable, detector);
 				}
 			}
 		};
@@ -67,15 +67,13 @@ public partial class DetectableComponent : Area2D
 		return (detector.GetEntityTypes() & _validDetectorTypes) != Groups.GroupTypes.None;
 	}
 
-	// Todo: Handle shapes other than circles in future?
-	public void ModifyDetectableRadius(float newRadius)
-	{
-		((CircleShape2D)_detectableCollisionShape2D.Shape).Radius = newRadius;
-	}
-
-	public float GetDetectableRadius()
+	public float GetRadius()
 	{
 		return ((CircleShape2D)_detectableCollisionShape2D.Shape).Radius;
+	}
+	public void SetRadius(float newRadius)
+	{
+		((CircleShape2D)_detectableCollisionShape2D.Shape).Radius = newRadius;
 	}
     public Groups.GroupTypes GetEntityTypes()
 	{
