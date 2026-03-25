@@ -34,7 +34,7 @@ namespace TestNS
 		[RequireGodotRuntime]
 		public void SetupScene()
 		{
-			_runner = ISceneRunner.Load("res://test/Components/HitHurt/hit_hurt_test_scene.tscn", true);
+			_runner = ISceneRunner.Load("res://Testing/Components/HitHurt/hit_hurt_test_scene.tscn", true);
 			AssertThat(_runner).IsNotNull();
 			AssertThat(_runner.Scene()).IsNotNull().IsInstanceOf<HitHurtTestScene>();
 

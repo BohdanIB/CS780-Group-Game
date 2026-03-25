@@ -35,7 +35,7 @@ namespace TestNS
 		[RequireGodotRuntime]
 		public void SetupScene()
 		{
-			_runner = ISceneRunner.Load("res://test/Components/DetectorDetectable/detector_detectable_test_scene.tscn", true);
+			_runner = ISceneRunner.Load("res://Testing/Components/DetectorDetectable/detector_detectable_test_scene.tscn", true);
 			AssertThat(_runner).IsNotNull();
 			AssertThat(_runner.Scene()).IsNotNull().IsInstanceOf<DetectorDetectableTestScene>();
 

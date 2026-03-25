@@ -26,3 +26,4 @@ mono_crash.*.json
 addons/
 gdunit4_testadapter_v5/
 reports/
+Testing/TestResults/*
