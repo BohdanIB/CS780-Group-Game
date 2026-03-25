@@ -3,9 +3,6 @@ using System;
 
 public partial class HitHurtTestScene : Node2D
 {
-	// [Export] public HitParent HitParent;
-	// [Export] public HurtParent HurtParent;
-	// [Export] public ComponentlessParent ComponentlessParent;
-	[Export] public HitComponent HitComponent;
-	[Export] public HurtComponent HurtComponent;
+	[Export] public HitComponent HitComponent, HitComponent2;
+	[Export] public HurtComponent HurtComponent, HurtComponent2;
 }

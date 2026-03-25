@@ -357,7 +357,6 @@ namespace TestNS
 			var detectable = _detectableParent.Detectable;
 			var detector1 = _detectorParent.Detector;
 			var detector2 = _detectorDetectableParent.Detector;
-			_detectorDetectableParent.Detectable.QueueFree(); // todo debug
 
 			var signalCollector = AutoFree(new SignalCollector(detector1, detectable, detector2: detector2));
 			_scene.AddChild(signalCollector);
@@ -392,7 +391,7 @@ namespace TestNS
 
 			// Move them out of range of each other
 			_detectableParent.GlobalPosition = new(50,0);
-			await _runner.SimulateFrames(8);
+			await _runner.SimulateFrames(4);
 			AssertThat(signalCollector.DetectableExitList)
 				.HasSize(2)
 				.Contains(detector1, detector2);
