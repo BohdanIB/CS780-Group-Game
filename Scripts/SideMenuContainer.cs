@@ -5,6 +5,7 @@ public partial class SideMenuContainer : PanelContainer
 {
 	[Signal]
 	public delegate void TurretSelectedEventHandler(TurretStats.Category turretType);
+	
 
 	private bool _open = false;
 	private float _width = 250f;
@@ -12,10 +13,23 @@ public partial class SideMenuContainer : PanelContainer
 	public override void _Ready()
 	{
 		CallDeferred(nameof(SetHiddenState));
+		MouseFilter = Control.MouseFilterEnum.Pass;
+		GD.Print("SideMenuContainer READY fired");
+		GD.Print("Ballista path exists? " + (GetNodeOrNull<Button>("VBoxContainer/HBoxContainer/BallistaTurret") != null));
 
-		 
-			GetNode<Button>("BallistaTurret").Pressed += () => OnTurretButtonPressed(TurretStats.Category.Ballista);
-			GetNode<Button>("BladeTurret").Pressed += () => OnTurretButtonPressed(TurretStats.Category.Blade);
+
+		var ballista = GetNode<Button>("VBoxContainer/HBoxContainer/BallistaTurret");
+		GD.Print("Connected button path: " + ballista.GetPath());
+
+		
+
+		var blade = GetNode<Button>("VBoxContainer/HBoxContainer/BladeTurret");
+		blade.Pressed += () => GD.Print(">>> BLADE BUTTON CLICKED <<<");
+
+		ballista.Pressed += () => OnTurretButtonPressed(TurretStats.Category.Ballista);
+		blade.Pressed += () => OnTurretButtonPressed(TurretStats.Category.Blade);
+
+
 		
 	}
 
@@ -54,6 +68,14 @@ else
 
 	private void OnTurretButtonPressed(TurretStats.Category turretType)
 	{
+		GD.Print($"Button pressed, emitting TurretSelected: {turretType}");
 		EmitSignal(SignalName.TurretSelected, (int)turretType);
 	}
+
+	public override void _Process(double delta)
+	{
+		var hovered = GetViewport().GuiGetHoveredControl();
+		//GD.Print("Hovered control: " + (hovered != null ? hovered.Name : "null"));
+	}
+
 }

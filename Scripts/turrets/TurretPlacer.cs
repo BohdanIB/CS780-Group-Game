@@ -23,6 +23,8 @@ public partial class TurretPlacer : Node2D
 
 	public override void _Ready()
 	{
+		SetProcessInput(true);
+		SetProcessUnhandledInput(true);
 		_ghostTurret = GetNode<Turret>("GhostHoverTurret");
 		_ghostTurret.Initialize(_currentTurretType);
 		_ghostTurret.Visible = false;
@@ -122,10 +124,24 @@ public partial class TurretPlacer : Node2D
 
 	private void FollowMouse()
 	{
-		Vector2 mousePosition = GetViewport().GetMousePosition();
-		_currentOriginCoordinates = (Vector2I) (mousePosition / _grid.cellSize).Clamp(Vector2I.Zero, _grid.GetGridDimensions());
-		Position = (Vector2) _currentOriginCoordinates * _grid.cellSize;
-		// GD.Print($"Current origin position for mouse: {_currentOriginCoordinates}");
+		// Correct world-space mouse position
+		Vector2 worldMouse = GetViewport().GetCamera2D().GetGlobalMousePosition();
+
+		// Convert world → grid
+   		 _currentOriginCoordinates = (Vector2I)(worldMouse / _grid.cellSize)
+		.Clamp(Vector2I.Zero, _grid.GetGridDimensions());
+
+		// Move the ghost turret node to the snapped world position
+		Position = (Vector2)_currentOriginCoordinates * _grid.cellSize;
+		//GD.Print($"Mouse world: {worldMouse}, grid: {_currentOriginCoordinates}");
+
+	}
+
+	public void EnablePlacementMode(TurretStats.Category turretType)
+	{
+		_currentTurretType = turretType;
+		_turretPlacerEnabled = true;
+		GD.Print($"TurretPlacer enabled for {turretType}");
 	}
 
 }

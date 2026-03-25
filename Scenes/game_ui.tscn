@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://bxnekokl8stoa"]
 
+[ext_resource type="Script" uid="uid://leh7amw6quj0" path="res://Scripts/GameUi.cs" id="1_3t1kc"]
 [ext_resource type="Script" uid="uid://bsj066idkmqi8" path="res://Scripts/SideMenuContainer.cs" id="1_bw2rt"]
 [ext_resource type="Script" uid="uid://ckkvwrabsbiar" path="res://Scripts/ToggleMenuButton.cs" id="2_xjnnq"]
 [ext_resource type="Texture2D" uid="uid://xstgnisi5lhl" path="res://Assets/[1] Normal.png" id="3_3t1kc"]
@@ -18,10 +19,8 @@ texture = SubResource("CompressedTexture2D_gjn1n")
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_rxsu6"]
 texture = ExtResource("3_3t1kc")
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_y8vuf"]
-texture = ExtResource("3_3t1kc")
-
 [node name="GameUI" type="CanvasLayer" unique_id=556209750]
+script = ExtResource("1_3t1kc")
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=384932]
 
@@ -56,6 +55,7 @@ grow_horizontal = 2
 
 [node name="TextureRect" type="TextureRect" parent="UI/BaseHealth" unique_id=848130792]
 layout_mode = 2
+mouse_filter = 2
 texture = ExtResource("4_1t2s1")
 stretch_mode = 3
 
@@ -73,6 +73,7 @@ grow_horizontal = 0
 
 [node name="TextureRect" type="TextureRect" parent="UI/Coin Count" unique_id=985502370]
 layout_mode = 2
+mouse_filter = 2
 texture = ExtResource("5_3t1kc")
 
 [node name="Label" type="Label" parent="UI/Coin Count" unique_id=1692703589]
@@ -80,6 +81,7 @@ layout_mode = 2
 text = "0"
 
 [node name="SideMenuContainer" type="PanelContainer" parent="." unique_id=1423852120]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(250, 0)
 anchors_preset = 11
 anchor_left = 1.0
@@ -100,21 +102,13 @@ layout_mode = 2
 
 [node name="BladeTurret" type="Button" parent="SideMenuContainer/VBoxContainer/HBoxContainer" unique_id=1127094194]
 layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxTexture_rxsu6")
 text = "Blade Turret
 "
 
 [node name="BallistaTurret" type="Button" parent="SideMenuContainer/VBoxContainer/HBoxContainer" unique_id=613986699]
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_styles/normal = SubResource("StyleBoxTexture_y8vuf")
 text = "Ballista Turret"
-
-[node name="Button4" type="Button" parent="SideMenuContainer/VBoxContainer/HBoxContainer" unique_id=978132700]
-layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxTexture_rxsu6")
-text = "Turret 1
-"
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="SideMenuContainer/VBoxContainer" unique_id=1093850489]
 layout_mode = 2
@@ -143,6 +137,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
 [node name="CenterContainer" type="CenterContainer" parent="." unique_id=68244084]
 anchors_preset = 15
