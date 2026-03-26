@@ -88,9 +88,9 @@ public partial class Enemy: PathFollower
 		// FireAtValidTarget();
 	}
 
-	public void SetPath(Vector2[] path)
+	public void SetPath(List<Vector2> path)
 	{
-		_moverComponent.SetPath(path);
+		_moverComponent.SetMoverPath(path);
 	}
 
 	public void UpdateStats(EnemyStats newStats)

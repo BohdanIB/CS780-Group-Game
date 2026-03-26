@@ -1,7 +1,6 @@
 
 using CS780GroupProject.Scripts.Utils;
 using GdUnit4;
-using GdUnit4.Asserts;
 using static GdUnit4.Assertions;
 using System.Threading.Tasks;
 using Godot;
@@ -21,7 +20,7 @@ namespace TestNS
 	/// </list>
 	/// </summary>
 	[TestSuite]
-	public partial class HitHurt
+	public partial class HitHurtTestSuite
 	{
 		private partial class SignalCollector : Node
 		{

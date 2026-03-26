@@ -1,7 +1,6 @@
 
 using CS780GroupProject.Scripts.Utils;
 using GdUnit4;
-using GdUnit4.Asserts;
 using static GdUnit4.Assertions;
 using Godot;
 using System.Collections.Generic;
@@ -22,7 +21,7 @@ namespace TestNS
 	/// </list>
 	/// </summary>
 	[TestSuite]
-	public partial class DetectorDetectable
+	public partial class DetectorDetectableTestSuite
 	{
 		private partial class SignalCollector : Node
 		{

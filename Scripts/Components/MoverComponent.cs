@@ -1,29 +1,50 @@
 
+using System.Collections.Generic;
 using Godot;
 
 public partial class MoverComponent : Node2D
 {
 	private const int START_PATH_INDEX = 0;
 
-	// [Signal] public delegate void OnMoveEventHandler(); // todo
+	[Signal] public delegate void OnPathPointReachedEventHandler(); // todo
 	[Signal] public delegate void OnPathCompletedEventHandler(); // todo
+	// [Signal] public delegate void OnStopEventHandler(); // todo
 
 	[Export] public float Speed = 20f;
-	[Export] private Vector2[] _path;
+	// [Export] public Vector2[] _moverPath
+	// {
+	// 	get => _moverPath;
+	// 	set
+	// 	{
+	// 		_moverPath = value;
+	// 		_currentPathIndex = START_PATH_INDEX;
+	// 	}
+	// }
+	[Export] public Node2D ParentNode;
+	public bool CurrentlyMoving { get; private set; } = false;
+	private List<Vector2> _moverPath = new();
 	private int _currentPathIndex = START_PATH_INDEX;
-	private bool _isMoving = false;
+
+	public void Initialize(float speed, Node2D parent, bool start = false, List<Vector2> moverPath = null)
+	{
+		Speed = speed;
+		ParentNode = parent;
+		if (start) {Start();} else {Stop();}
+		SetMoverPath(moverPath);
+	}
 
 	public override void _Process(double delta)
 	{
-		if (_path == null) return;
-		if (Owner is Node2D entity)
+		if (_moverPath == null || !CurrentlyMoving) return;
+
+		if (IsInstanceValid(ParentNode))
 		{
-			var targetPosition = _path[_currentPathIndex];
-			var distanceToTarget = entity.Position.DistanceTo(targetPosition);
+			var targetPosition = _moverPath[_currentPathIndex];
+			var distanceToTarget = ParentNode.Position.DistanceTo(targetPosition);
 			var totalMovement = distanceToTarget*Speed*delta;
 			while (totalMovement >= distanceToTarget)
 			{
-				entity.Position = targetPosition;
+				ParentNode.Position = targetPosition;
 				_currentPathIndex++;
 				if (PathCompleted())
 				{
@@ -31,49 +52,37 @@ public partial class MoverComponent : Node2D
 					return;
 				}
 				totalMovement -= distanceToTarget;
-				targetPosition = _path[_currentPathIndex];
-				distanceToTarget = entity.Position.DistanceTo(targetPosition);
+				targetPosition = _moverPath[_currentPathIndex];
+				distanceToTarget = ParentNode.Position.DistanceTo(targetPosition);
 			}
-			entity.Position = entity.Position.MoveToward(targetPosition, (float)totalMovement);
+			ParentNode.Position = ParentNode.Position.MoveToward(targetPosition, (float)totalMovement);
 		}
 		else
 		{
-			GD.Print($"Warning - MoverComponent's owner '{Owner.Name}' is not a Node2D, and cannot be moved in 2D space...");
+			// GD.Print($"Warning - MoverComponent's owner '{_parent.Name}' is not a Node2D, and cannot be moved in 2D space...");
 		}
 	}
 
-	public void SetPath(Vector2[] newPath)
-	{
-		_path = newPath;
-		_currentPathIndex = START_PATH_INDEX;
-		_isMoving = false;
-	}
-	public void SetPathAndMove(Vector2[] newPath)
-	{
-		_path = newPath;
-		_currentPathIndex = START_PATH_INDEX;
-		_isMoving = (_path != null && _path.Length > 0);
-	}
 	public void Start()
 	{
-		_isMoving = true;
+		CurrentlyMoving = true;
 	}
 	public void Stop()
 	{
-		_isMoving = false;
+		CurrentlyMoving = false;
 	}
 
 	public float GetPathLengthFromCurrentPosition()
 	{
-		if (_path == null || _currentPathIndex >= _path.Length)
+		if (_moverPath == null || _currentPathIndex >= _moverPath.Count)
 		{
 			return 0.0f;
 		}
 
-		float distance = Position.DistanceTo(_path[_currentPathIndex]);
-		for (int i = _currentPathIndex+1; i < _path.Length; i++)
+		float distance = Position.DistanceTo(_moverPath[_currentPathIndex]);
+		for (int i = _currentPathIndex+1; i < _moverPath.Count; i++)
 		{
-			distance += _path[i-1].DistanceTo(_path[i]);
+			distance += _moverPath[i-1].DistanceTo(_moverPath[i]);
 		}
 		// GD.Print($"MoverComponent for {Owner.Name} path length from current position: {distance}");
 		return distance;
@@ -81,15 +90,23 @@ public partial class MoverComponent : Node2D
 
 	public bool PathCompleted()
 	{
-		if (_path == null) { return true; }
+		if (_moverPath == null) { return true; }
 
-		if (_currentPathIndex >= _path.Length)
+		if (_currentPathIndex >= _moverPath.Count)
 		{
-			_isMoving = false;
 			EmitSignal(SignalName.OnPathCompleted);
 			return true;
 		}
 		return false;
+	}
+
+	public List<Vector2> GetMoverPath()
+	{
+		return _moverPath;
+	}
+	public void SetMoverPath(List<Vector2> path)
+	{
+		_moverPath = path;
 	}
 
 }
