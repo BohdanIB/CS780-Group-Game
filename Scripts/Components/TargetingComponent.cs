@@ -7,23 +7,32 @@ using System.Collections.Generic;
 
 public partial class TargetingComponent : Node2D
 {
-	[Signal] public delegate void OnTargetSelectEventHandler(Area2D Target);
+	[Signal] public delegate void OnTargetSelectEventHandler(DetectableComponent Target);
 
-	[Export] public TargetingMode TargetingStyle { get; set; } = TargetingMode.Close;
+	[Export] public TargetingMode TargetingStyle = TargetingMode.Close;
 	[Export] private DetectorComponent _detector;
 
 	private Random _random = new(); // todo: Seed this?
-	private List<Area2D> _targets = [];
+	private List<DetectableComponent> _targets = [];
+
+	public void Initialize(float radius, Groups.GroupTypes entityTypes, Groups.GroupTypes validTargets)
+	{
+		_detector.Initialize(radius, entityTypes, validTargets);
+	}
+	public void Initialize(Groups.GroupTypes entityTypes, Groups.GroupTypes validTargets)
+	{
+		_detector.Initialize(entityTypes, validTargets);
+	}
 
 	public override void _Ready()
 	{
-		_detector.OnEnterDetector += (area) => 
+		_detector.OnEnterDetector += (detectable) => 
 		{
-			_targets.Add(area);
+			_targets.Add(detectable);
 		};
-		_detector.OnExitDetector += (area) => 
+		_detector.OnExitDetector += (detectable) => 
 		{
-			_targets.Remove(area);
+			_targets.Remove(detectable);
 		};
 	}
 
@@ -203,4 +212,18 @@ public partial class TargetingComponent : Node2D
 		}
 		return currTarget;
 	}
+
+	public void SetRadius(float newRadius)
+	{
+		_detector.SetRadius(newRadius);
+	}
+	/// <summary>
+	/// Used for testing to see what the current target list is for TargetingComponent
+	/// </summary>
+	/// <returns></returns>
+	public List<DetectableComponent> GetTargetList()
+	{
+		return _targets;
+	}
+
 }
