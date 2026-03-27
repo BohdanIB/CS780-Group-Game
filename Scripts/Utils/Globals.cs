@@ -18,7 +18,7 @@ namespace CS780GroupProject.Scripts.Utils
 
 	// }
 
-	public partial class Groups
+	public partial class Groups : Node
 	{
 		const string TURRET = "turret";
 		const string STRUCTURE = "structure";

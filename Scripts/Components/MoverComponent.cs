@@ -6,20 +6,10 @@ public partial class MoverComponent : Node2D
 {
 	private const int START_PATH_INDEX = 0;
 
-	[Signal] public delegate void OnPathPointReachedEventHandler(); // todo
+	// [Signal] public delegate void OnPathPointReachedEventHandler(); // todo
 	[Signal] public delegate void OnPathCompletedEventHandler(); // todo
-	// [Signal] public delegate void OnStopEventHandler(); // todo
 
 	[Export] public float Speed = 20f;
-	// [Export] public Vector2[] _moverPath
-	// {
-	// 	get => _moverPath;
-	// 	set
-	// 	{
-	// 		_moverPath = value;
-	// 		_currentPathIndex = START_PATH_INDEX;
-	// 	}
-	// }
 	[Export] public Node2D ParentNode;
 	public bool CurrentlyMoving { get; private set; } = false;
 	private List<Vector2> _moverPath = new();
@@ -35,32 +25,31 @@ public partial class MoverComponent : Node2D
 
 	public override void _Process(double delta)
 	{
-		if (_moverPath == null || !CurrentlyMoving) return;
+		if (PathCompleted() || !CurrentlyMoving) return;
 
-		if (IsInstanceValid(ParentNode))
+		if (!IsInstanceValid(ParentNode))
 		{
-			var targetPosition = _moverPath[_currentPathIndex];
-			var distanceToTarget = ParentNode.Position.DistanceTo(targetPosition);
-			var totalMovement = distanceToTarget*Speed*delta;
-			while (totalMovement >= distanceToTarget)
+			// Mover cannot move parent
+			return;
+		}
+
+		var targetPosition = _moverPath[_currentPathIndex];
+		var distanceToTarget = ParentNode.Position.DistanceTo(targetPosition);
+		var totalMovement = Speed*delta;
+		while (totalMovement >= distanceToTarget)
+		{
+			ParentNode.Position = targetPosition;
+			_currentPathIndex++;
+			if (PathCompleted())
 			{
-				ParentNode.Position = targetPosition;
-				_currentPathIndex++;
-				if (PathCompleted())
-				{
-					EmitSignal(SignalName.OnPathCompleted);
-					return;
-				}
-				totalMovement -= distanceToTarget;
-				targetPosition = _moverPath[_currentPathIndex];
-				distanceToTarget = ParentNode.Position.DistanceTo(targetPosition);
+				EmitSignal(SignalName.OnPathCompleted);
+				return;
 			}
-			ParentNode.Position = ParentNode.Position.MoveToward(targetPosition, (float)totalMovement);
+			totalMovement -= distanceToTarget;
+			targetPosition = _moverPath[_currentPathIndex];
+			distanceToTarget = ParentNode.Position.DistanceTo(targetPosition);
 		}
-		else
-		{
-			// GD.Print($"Warning - MoverComponent's owner '{_parent.Name}' is not a Node2D, and cannot be moved in 2D space...");
-		}
+		ParentNode.Position = ParentNode.Position.MoveToward(targetPosition, (float)totalMovement);
 	}
 
 	public void Start()
@@ -74,7 +63,7 @@ public partial class MoverComponent : Node2D
 
 	public float GetPathLengthFromCurrentPosition()
 	{
-		if (_moverPath == null || _currentPathIndex >= _moverPath.Count)
+		if (PathCompleted())
 		{
 			return 0.0f;
 		}
@@ -90,14 +79,7 @@ public partial class MoverComponent : Node2D
 
 	public bool PathCompleted()
 	{
-		if (_moverPath == null) { return true; }
-
-		if (_currentPathIndex >= _moverPath.Count)
-		{
-			EmitSignal(SignalName.OnPathCompleted);
-			return true;
-		}
-		return false;
+		return _moverPath == null || _currentPathIndex >= _moverPath.Count;
 	}
 
 	public List<Vector2> GetMoverPath()
@@ -107,6 +89,7 @@ public partial class MoverComponent : Node2D
 	public void SetMoverPath(List<Vector2> path)
 	{
 		_moverPath = path;
+		_currentPathIndex = START_PATH_INDEX;
 	}
 
 }

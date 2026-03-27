@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://dafmxabg0knl"]
+
+[ext_resource type="Script" uid="uid://byk7tptgh00f7" path="res://Testing/Components/Targeting/TargetingTestScene.cs" id="1_s4l4s"]
+[ext_resource type="PackedScene" uid="uid://cxvwrh12elf1m" path="res://Scenes/Components/targeting_component.tscn" id="2_0fpph"]
+[ext_resource type="PackedScene" uid="uid://c43d2uh68714x" path="res://Scenes/Components/detector_component.tscn" id="3_1fsin"]
+[ext_resource type="PackedScene" uid="uid://cbnk8jcd7c4v3" path="res://Scenes/Components/detectable_component.tscn" id="4_lxw62"]
+
+[node name="TargetingTestScene" type="Node2D" unique_id=845363670 node_paths=PackedStringArray("TargetingComponent", "DetectorComponent", "DetectableComponent")]
+script = ExtResource("1_s4l4s")
+TargetingComponent = NodePath("TargetingComponent")
+DetectorComponent = NodePath("DetectorComponent")
+DetectableComponent = NodePath("DetectableComponent")
+
+[node name="TargetingComponent" parent="." unique_id=564942499 node_paths=PackedStringArray("_detector") instance=ExtResource("2_0fpph")]
+_detector = NodePath("../DetectorComponent")
+
+[node name="DetectorComponent" parent="." unique_id=1835049866 instance=ExtResource("3_1fsin")]
+
+[node name="DetectableComponent" parent="." unique_id=1198299484 instance=ExtResource("4_lxw62")]
