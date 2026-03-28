@@ -10,8 +10,13 @@ public partial class TurretPlacer : Node2D
 	private TurretStats.Category _currentTurretType = TurretStats.Category.Ballista;
 	private Turret.TargetingMode _currentTurretTargetMode = Turret.TargetingMode.First;
 	private GenericGrid<GroundTile> _grid;
-	private Turret _ghostTurret;
 	private Vector2I _currentOriginCoordinates = new();
+
+	// Scene Children
+	[Export] private Turret _ghostTurret;
+
+	// Preloaded Scenes
+	[Export] private PackedScene _turretScene;
 
 	[Signal] 
 	public delegate void OnTurretPlacedEventHandler();
@@ -61,14 +66,14 @@ public partial class TurretPlacer : Node2D
 
 		GroundTile tile;
 
-		tile = GetTileIfPlacementValid();
+		tile = GetTileIfStructurePlacementValid();
 		if (_turretPlacerEnabled && tile != null)
 		{
 			// Turret Placement
 			if (Input.IsActionJustPressed("Left Click"))
 			{
 				GD.Print($"Placing turret of type {_currentTurretType}");
-				var turret = GD.Load<PackedScene>("res://Scenes/turret.tscn").Instantiate<Turret>();
+				var turret = _turretScene.Instantiate<Turret>();
 				tile.Turret = turret;
 				turret.Initialize(_currentTurretType, _currentTurretTargetMode);
 				turret.GlobalPosition = _grid.GetCentralGridCellPositionPixels(tile.position);
@@ -92,22 +97,20 @@ public partial class TurretPlacer : Node2D
 
 		// Toggle turret targeting priority mode
 		tile = GetTile();
-		if (Input.IsActionJustPressed("Right Click") && tile != null && tile.HasTurret())
+		if (Input.IsActionJustPressed("Right Click") && tile != null && tile.Turret != null)
 		{
-			var t = tile.Turret;
-			GD.Print($"Updating turret {t.Name} targeting mode to {_currentTurretTargetMode}");
-			t.UpdateTargetingMode(_currentTurretTargetMode);
+			var turret = tile.Turret;
+			GD.Print($"Updating turret {turret.Name} targeting mode to {_currentTurretTargetMode}");
+			turret.UpdateTargetingMode(_currentTurretTargetMode);
 		}
 	}
 
-	private GroundTile GetTileIfPlacementValid()
+	private GroundTile GetTileIfStructurePlacementValid()
 	{
-		// return (_grid.GetGridValueOrDefault(_currentOriginCoordinates.X, _currentOriginCoordinates.Y) is GroundTile tile && 
-		// 	tile != null && !tile.HasRoadConnection() && !tile.HasTurret()) ? tile : null;
 		if (_grid.GetGridValueOrDefault(_currentOriginCoordinates.X, _currentOriginCoordinates.Y) is GroundTile tile && 
-			tile != null && !tile.HasRoadConnection() && !tile.HasTurret())
+			tile != null && !tile.HasRoadConnection() && !tile.HasStructure())
 		{
-			// GD.Print($"Turret placement valid for tile: {tile}");
+			// GD.Print($"Structure placement valid for tile: {tile}");
 			return tile;
 		}
 		return null;

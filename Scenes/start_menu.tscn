@@ -71,3 +71,77 @@ layout_mode = 2
 size_flags_horizontal = 4
 text = "Quit"
 script = ExtResource("3_m6uer")
+
+[gd_scene format=3 uid="uid://buls5l8vjfac6"]
+
+[ext_resource type="Script" path="res://Scripts/StartMenu.cs" id="1_jgtwh"]
+[ext_resource type="Texture2D" path="res://Assets/Sprites/Mariano Taccola De Ingensis combat d.jpg" id="1_juhg0"]
+[ext_resource type="Script" path="res://Scripts/AnimatedButton.cs" id="3_m6uer"]
+
+[node name="StartMenu" type="Control" unique_id=1969216613]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_jgtwh")
+
+[node name="FadeRect" type="ColorRect" parent="." unique_id=187715413]
+z_index = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.015686275, 0.015686275, 0.015686275, 1)
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=392345762]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_juhg0")
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=189376558]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer" unique_id=2040920360]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CenterContainer/VBoxContainer" unique_id=1500827070]
+layout_mode = 2
+theme_override_font_sizes/font_size = 64
+text = "Siege Automota
+"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PlayButton" type="Button" parent="CenterContainer/VBoxContainer" unique_id=762623586]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/icon_max_width = 400
+text = "Play"
+script = ExtResource("3_m6uer")
+
+[node name="OptionsButton" type="Button" parent="CenterContainer/VBoxContainer" unique_id=1348529675]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+text = "Options"
+script = ExtResource("3_m6uer")
+
+[node name="QuitButton" type="Button" parent="CenterContainer/VBoxContainer" unique_id=367813299]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Quit"
+script = ExtResource("3_m6uer")
