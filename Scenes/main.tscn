@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://caafjqfx010mq" path="res://Scenes/turret_placer.tscn" id="5_kry3j"]
 [ext_resource type="PackedScene" uid="uid://bxnekokl8stoa" path="res://Scenes/game_ui.tscn" id="6_21xkr"]
 [ext_resource type="Texture2D" uid="uid://djpqivk2pwl35" path="res://Assets/Sprites/temp_projectiles.png" id="6_ynf5e"]
+[ext_resource type="Script" uid="uid://dp5rjda24qxii" path="res://Scripts/EnemySpawner.cs" id="9_ynf5e"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_hptm8"]
 resource_local_to_scene = true
@@ -36,7 +37,7 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="PackedScene" id="PackedScene_6iyac"]
+[sub_resource type="PackedScene" id="PackedScene_hptm8"]
 resource_local_to_scene = true
 _bundled = {
 "conn_count": 0,
@@ -60,7 +61,7 @@ script = ExtResource("1_jjgbg")
 [node name="TileShapePlacer" parent="." unique_id=1636893986 instance=ExtResource("3_jjvhh")]
 
 [node name="PathFollower" parent="." unique_id=142391362 instance=ExtResource("4_jjvhh")]
-_projectileScene = SubResource("PackedScene_6iyac")
+_projectileScene = SubResource("PackedScene_hptm8")
 
 [node name="TurretPlacer" parent="." unique_id=1881251108 instance=ExtResource("5_kry3j")]
 
@@ -69,3 +70,6 @@ _projectileScene = SubResource("PackedScene_6iyac")
 [node name="Camera2D" type="Camera2D" parent="." unique_id=607524974]
 position = Vector2(662, 549)
 zoom = Vector2(2.5, 2.5)
+
+[node name="EnemySpawner" type="Node" parent="." unique_id=1904352068]
+script = ExtResource("9_ynf5e")
