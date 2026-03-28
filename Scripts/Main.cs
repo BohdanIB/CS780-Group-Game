@@ -25,6 +25,8 @@ public partial class Main : Node2D
 		float zoomX = 1920f / mapWidth;
 		float zoomY = 1080f / mapHeight;
 		float zoom = Mathf.Min(zoomX, zoomY);
+		GD.Print($"zoomX: {zoomX}, zoomY: {zoomY}");
+		//float zoom = 3.20f;
 
 		var center = gr.Position + new Vector2(mapWidth / 2f, mapHeight / 2f);
 
