@@ -12,18 +12,18 @@ public partial class MoverComponent : Node2D
 	[Export] public float Speed = 20f;
 	[Export] public Node2D ParentNode;
 	public bool CurrentlyMoving { get; private set; } = false;
-	private List<Vector2> _moverPath = new();
+	private Vector2[] _moverPath = [];
 	private int _currentPathIndex = START_PATH_INDEX;
 
-	public void Initialize(float speed, Node2D parent, bool start = false, List<Vector2> moverPath = null)
+	public void Initialize(float speed, Node2D parent, bool start = false, Vector2[] moverPath = null)
 	{
 		Speed = speed;
 		ParentNode = parent;
 		if (start) {Start();} else {Stop();}
-		SetMoverPath(moverPath);
+		if (moverPath != null) { SetMoverPath(moverPath); }
 	}
 
-	public override void _Process(double delta)
+	public override void _PhysicsProcess(double delta)
 	{
 		if (PathCompleted() || !CurrentlyMoving) return;
 
@@ -68,8 +68,8 @@ public partial class MoverComponent : Node2D
 			return 0.0f;
 		}
 
-		float distance = Position.DistanceTo(_moverPath[_currentPathIndex]);
-		for (int i = _currentPathIndex+1; i < _moverPath.Count; i++)
+		float distance = GlobalPosition.DistanceTo(_moverPath[_currentPathIndex]);
+		for (int i = _currentPathIndex+1; i < _moverPath.Length; i++)
 		{
 			distance += _moverPath[i-1].DistanceTo(_moverPath[i]);
 		}
@@ -79,14 +79,14 @@ public partial class MoverComponent : Node2D
 
 	public bool PathCompleted()
 	{
-		return _moverPath == null || _currentPathIndex >= _moverPath.Count;
+		return _moverPath == null || _currentPathIndex >= _moverPath.Length;
 	}
 
-	public List<Vector2> GetMoverPath()
+	public Vector2[] GetMoverPath()
 	{
 		return _moverPath;
 	}
-	public void SetMoverPath(List<Vector2> path)
+	public void SetMoverPath(Vector2[] path)
 	{
 		_moverPath = path;
 		_currentPathIndex = START_PATH_INDEX;

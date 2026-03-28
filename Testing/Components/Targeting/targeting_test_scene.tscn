@@ -4,16 +4,49 @@
 [ext_resource type="PackedScene" uid="uid://cxvwrh12elf1m" path="res://Scenes/Components/targeting_component.tscn" id="2_0fpph"]
 [ext_resource type="PackedScene" uid="uid://c43d2uh68714x" path="res://Scenes/Components/detector_component.tscn" id="3_1fsin"]
 [ext_resource type="PackedScene" uid="uid://cbnk8jcd7c4v3" path="res://Scenes/Components/detectable_component.tscn" id="4_lxw62"]
+[ext_resource type="PackedScene" uid="uid://e5vy6kbwqw12" path="res://Scenes/Components/health_component.tscn" id="6_cxlhv"]
+[ext_resource type="PackedScene" uid="uid://bm24bo2kifop0" path="res://Scenes/Components/mover_component.tscn" id="6_regxo"]
 
-[node name="TargetingTestScene" type="Node2D" unique_id=845363670 node_paths=PackedStringArray("TargetingComponent", "DetectorComponent", "DetectableComponent")]
+[node name="TargetingTestScene" type="Node2D" unique_id=845363670 node_paths=PackedStringArray("TargetingNode", "Target1", "Target2", "Target3")]
 script = ExtResource("1_s4l4s")
-TargetingComponent = NodePath("TargetingComponent")
-DetectorComponent = NodePath("DetectorComponent")
-DetectableComponent = NodePath("DetectableComponent")
+TargetingNode = NodePath("TargetingNode")
+Target1 = NodePath("Target1")
+Target2 = NodePath("Target2")
+Target3 = NodePath("Target3")
 
-[node name="TargetingComponent" parent="." unique_id=564942499 node_paths=PackedStringArray("_detector") instance=ExtResource("2_0fpph")]
+[node name="TargetingNode" type="Node2D" parent="." unique_id=195457512]
+
+[node name="TargetingComponent" parent="TargetingNode" unique_id=564942499 node_paths=PackedStringArray("_detector") instance=ExtResource("2_0fpph")]
 _detector = NodePath("../DetectorComponent")
 
-[node name="DetectorComponent" parent="." unique_id=1835049866 instance=ExtResource("3_1fsin")]
+[node name="DetectorComponent" parent="TargetingNode" unique_id=1835049866 instance=ExtResource("3_1fsin")]
 
-[node name="DetectableComponent" parent="." unique_id=1198299484 instance=ExtResource("4_lxw62")]
+[node name="Target1" type="Node2D" parent="." unique_id=2124941371]
+
+[node name="DetectableComponent" parent="Target1" unique_id=1985918561 instance=ExtResource("4_lxw62")]
+
+[node name="HealthComponent" parent="Target1" unique_id=1408774868 instance=ExtResource("6_cxlhv")]
+_startingHealth = 100.0
+
+[node name="MoverComponent" parent="Target1" unique_id=1975334598 node_paths=PackedStringArray("ParentNode") instance=ExtResource("6_regxo")]
+ParentNode = NodePath("..")
+
+[node name="Target2" type="Node2D" parent="." unique_id=1261177092]
+
+[node name="DetectableComponent" parent="Target2" unique_id=350858842 instance=ExtResource("4_lxw62")]
+
+[node name="HealthComponent" parent="Target2" unique_id=1360689334 instance=ExtResource("6_cxlhv")]
+_startingHealth = 100.0
+
+[node name="MoverComponent" parent="Target2" unique_id=1393165906 node_paths=PackedStringArray("ParentNode") instance=ExtResource("6_regxo")]
+ParentNode = NodePath("..")
+
+[node name="Target3" type="Node2D" parent="." unique_id=1684248173]
+
+[node name="DetectableComponent" parent="Target3" unique_id=130460200 instance=ExtResource("4_lxw62")]
+
+[node name="HealthComponent" parent="Target3" unique_id=1296305575 instance=ExtResource("6_cxlhv")]
+_startingHealth = 100.0
+
+[node name="MoverComponent" parent="Target3" unique_id=81253758 node_paths=PackedStringArray("ParentNode") instance=ExtResource("6_regxo")]
+ParentNode = NodePath("..")

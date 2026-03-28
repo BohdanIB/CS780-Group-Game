@@ -5,6 +5,7 @@ using static GdUnit4.Assertions;
 using System.Threading.Tasks;
 using Godot;
 using System.Collections.Generic;
+using System;
 
 namespace TestNS
 {
@@ -67,7 +68,9 @@ namespace TestNS
 			var speed = 935f;
 			mover.Initialize(speed, moverParent);
 			AssertThat(mover.Speed).IsEqual(speed);
-			AssertThat(mover.GetMoverPath()).IsNull();
+			AssertThat(mover.GetMoverPath())
+				.IsNotNull()
+				.IsEmpty();
 			AssertThat(mover.ParentNode).IsSame(moverParent);
 			AssertThat(mover.CurrentlyMoving).IsFalse();
 		}
@@ -82,7 +85,9 @@ namespace TestNS
 			var start = true;
 			mover.Initialize(speed, moverParent, start: start);
 			AssertThat(mover.Speed).IsEqual(speed);
-			AssertThat(mover.GetMoverPath()).IsNull();
+			AssertThat(mover.GetMoverPath())
+				.IsNotNull()
+				.IsEmpty();
 			AssertThat(mover.ParentNode).IsSame(moverParent);
 			AssertThat(mover.CurrentlyMoving).IsTrue();
 		}
@@ -94,7 +99,7 @@ namespace TestNS
 			var mover = _mover;
 			var moverParent = _moverObject;
 			var speed = 935f;
-			var moverPath = new List<Vector2>();
+			var moverPath = Array.Empty<Vector2>();
 			mover.Initialize(speed, moverParent, moverPath: moverPath);
 			AssertThat(mover.Speed).IsEqual(speed);
 			AssertThat(mover.GetMoverPath())
@@ -111,7 +116,7 @@ namespace TestNS
 			var moverParent = _moverObject;
 			var speed = 935f;
 			var start = true;
-			var moverPath = new List<Vector2>();
+			var moverPath = Array.Empty<Vector2>();
 			mover.Initialize(speed, moverParent, start: start, moverPath: moverPath);
 			AssertThat(mover.Speed).IsEqual(speed);
 			AssertThat(mover.GetMoverPath())
@@ -133,7 +138,7 @@ namespace TestNS
 			var speed = 50f;
 			var parent = moverParent;
 			var start = false;
-			var moverPath = new List<Vector2>(){new(50,0)};
+			var moverPath = new Vector2[] {new(50,0)};
 			mover.Initialize(speed, parent, start, moverPath);
 
 			// Shouldn't move
@@ -162,7 +167,7 @@ namespace TestNS
 			var speed = 50f;
 			var parent = moverParent;
 			var start = true;
-			var moverPath = new List<Vector2>(){new(50,0)};
+			var moverPath = new Vector2[]{new(50,0)};
 			mover.Initialize(speed, parent, start, moverPath);
 
 			// Should reach first path and fire off signal properly
@@ -171,7 +176,7 @@ namespace TestNS
 			AssertThat(signalCollector.OnPathCompletedCount).IsEqual(1);
 
 			// Set a track which it should reach various points of at specific times (moving 50 units per second)
-			moverPath = new List<Vector2>(){new(100,0), new(100, 50), new(100,100), new(50,100), new(0,100)};
+			moverPath = [new(100,0), new(100, 50), new(100,100), new(50,100), new(0,100)];
 			mover.SetMoverPath(moverPath);
 
 			await _runner.SimulateFrames(10, 100);
@@ -191,6 +196,8 @@ namespace TestNS
 			AssertThat(signalCollector.OnPathCompletedCount).IsEqual(2);
 		}
 			// var moverPath = new List<Vector2>(){new(10,0), new(20, 0), new(30,0), new(40,0), new(50,0)};
+
+		// TODO: Path length tests? Other function tests
 	}
 }
 

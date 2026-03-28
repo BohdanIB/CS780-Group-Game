@@ -66,6 +66,7 @@ public partial class TargetingComponent : Node2D
 	/// <returns></returns>
 	private Area2D RandomPick()
 	{
+		if (_targets.Count == 0) { return null; }
 		return _targets[_random.Next(_targets.Count)];
 	}
 	/// <summary>
@@ -74,6 +75,8 @@ public partial class TargetingComponent : Node2D
 	/// <returns></returns>
 	private Area2D FirstPick()
 	{
+		if (_targets.Count == 0) { return null; }
+
 		Area2D currTarget = null;
 		float currTargetPathLength = float.PositiveInfinity;
 		{ // Scope mover variable
@@ -105,6 +108,8 @@ public partial class TargetingComponent : Node2D
 	/// <returns></returns>
 	private Area2D LastPick()
 	{
+		if (_targets.Count == 0) { return null; }
+
 		Area2D currTarget = null;
 		float currTargetPathLength = 0.0f;
 		{ // Scope mover variable
@@ -136,12 +141,14 @@ public partial class TargetingComponent : Node2D
 	/// <returns></returns>
 	private Area2D ClosePick()
 	{
+		if (_targets.Count == 0) { return null; }
+
 		Area2D currTarget = _targets[0];
-		float currTargetDistanceFromPosition = Position.DistanceTo(currTarget.Position);
+		float currTargetDistanceFromPosition = GlobalPosition.DistanceTo(currTarget.GlobalPosition);
 		for (int i = 1; i < _targets.Count; i++)
 		{
 			var target = _targets[i];
-			float targetDistanceFromPosition = Position.DistanceTo(target.Position);
+			float targetDistanceFromPosition = GlobalPosition.DistanceTo(target.GlobalPosition);
 			if (targetDistanceFromPosition < currTargetDistanceFromPosition)
 			{
 				currTarget = target;
@@ -156,6 +163,8 @@ public partial class TargetingComponent : Node2D
 	/// <returns></returns>
 	private Area2D WeakPick()
 	{
+		if (_targets.Count == 0) { return null; }
+
 		Area2D currTarget = null;
 		float currTargetHealth = float.PositiveInfinity;
 		{ // Scope health variable
@@ -187,6 +196,8 @@ public partial class TargetingComponent : Node2D
 	/// <returns></returns>
 	private Area2D StrongPick()
 	{
+		if (_targets.Count == 0) { return null; }
+
 		Area2D currTarget = null;
 		float currTargetHealth = 0.0f;
 		{ // Scope health variable

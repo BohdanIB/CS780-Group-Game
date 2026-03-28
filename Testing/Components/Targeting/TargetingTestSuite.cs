@@ -1,5 +1,6 @@
 
 using CS780GroupProject.Scripts.Utils;
+using static CS780GroupProject.Scripts.Utils.NodeComponentChecking;
 using GdUnit4;
 using static GdUnit4.Assertions;
 using System.Threading.Tasks;
@@ -33,14 +34,23 @@ namespace TestNS
 			}
 		}
 
+		private static uint GENERIC_WAIT_FRAMES = 4;
+
 		private ISceneRunner _runner = null;
 
 		// Scene root
 		private TargetingTestScene _scene;
 		// Nodes
+		private Node2D 
+			_targetingNode,
+			_target1, _target2, _target3;
+		// Convenience references
 		private TargetingComponent _targeting;
-		private DetectorComponent _detector;
-		private DetectableComponent _detectable;
+		private DetectorComponent _targetingDetector;
+
+		private DetectableComponent _detectable1, _detectable2, _detectable3;
+		private HealthComponent _health1, _health2, _health3;
+		private MoverComponent _mover1, _mover2, _mover3;
 
 		[BeforeTest]
 		[RequireGodotRuntime]
@@ -51,13 +61,41 @@ namespace TestNS
 			AssertThat(_runner.Scene()).IsNotNull().IsInstanceOf<TargetingTestScene>();
 
 			_scene = _runner.Scene() as TargetingTestScene;
-			AssertThat(_scene.TargetingComponent).IsNotNull();
-			AssertThat(_scene.DetectorComponent).IsNotNull();
-			AssertThat(_scene.DetectableComponent).IsNotNull();
+			AssertThat(_scene.TargetingNode).IsNotNull();
+			AssertThat(_scene.Target1).IsNotNull();
+			AssertThat(_scene.Target2).IsNotNull();
+			AssertThat(_scene.Target3).IsNotNull();
 
-			_targeting = _scene.TargetingComponent;
-			_detector = _scene.DetectorComponent;
-			_detectable = _scene.DetectableComponent;
+			_targetingNode = _scene.TargetingNode;
+			_target1 = _scene.Target1;
+			_target2 = _scene.Target2;
+			_target3 = _scene.Target3;
+			
+			// Targeting Components
+			_targeting = GetComponentInChildrenOrNull<TargetingComponent>(_targetingNode); 
+			_targetingDetector = GetComponentInChildrenOrNull<DetectorComponent>(_targetingNode);
+			AssertThat(_targeting).IsNotNull();
+			AssertThat(_targetingDetector).IsNotNull();
+
+			// Target Components
+			_detectable1 = GetComponentInChildrenOrNull<DetectableComponent>(_target1);
+			_detectable2 = GetComponentInChildrenOrNull<DetectableComponent>(_target2);
+			_detectable3 = GetComponentInChildrenOrNull<DetectableComponent>(_target3);
+			_health1 = GetComponentInChildrenOrNull<HealthComponent>(_target1);
+			_health2 = GetComponentInChildrenOrNull<HealthComponent>(_target2);
+			_health3 = GetComponentInChildrenOrNull<HealthComponent>(_target3);
+			_mover1 = GetComponentInChildrenOrNull<MoverComponent>(_target1);
+			_mover2 = GetComponentInChildrenOrNull<MoverComponent>(_target2);
+			_mover3 = GetComponentInChildrenOrNull<MoverComponent>(_target3);
+			AssertThat(_detectable1).IsNotNull();
+			AssertThat(_detectable2).IsNotNull();
+			AssertThat(_detectable3).IsNotNull();
+			AssertThat(_health1).IsNotNull();
+			AssertThat(_health2).IsNotNull();
+			AssertThat(_health3).IsNotNull();
+			AssertThat(_mover1).IsNotNull();
+			AssertThat(_mover2).IsNotNull();
+			AssertThat(_mover3).IsNotNull();
 		}
 
 		[TestCase]
@@ -65,8 +103,8 @@ namespace TestNS
 		public async Task Targeting_Basic()
 		{
 			var targeting = _targeting;
-			var detector = _detector;
-			var detectable = _detectable;
+			var detector = _targetingDetector;
+			var detectable = _detectable1;
 
 			detector.GlobalPosition = new(50,0);
 			detectable.GlobalPosition = new(100,0);
@@ -87,13 +125,13 @@ namespace TestNS
 			detectable.Initialize(radius, detectableEntityTypes, detectableValidDetectableTypes);
 
 			// No targets spotted
-			await _runner.SimulateFrames(4);
+			await _runner.SimulateFrames(GENERIC_WAIT_FRAMES);
 			AssertThat(signalCollector.CurrentTarget).IsNull();
 			AssertThat(targeting.GetTargetList()).IsEmpty();
 
 			// Move towards targetable
 			detector.GlobalPosition = new(95,0);
-			await _runner.SimulateFrames(4);
+			await _runner.SimulateFrames(GENERIC_WAIT_FRAMES);
 			AssertThat(signalCollector.CurrentTarget)
 				.IsNotNull()
 				.IsEqual(detectable);
@@ -104,16 +142,110 @@ namespace TestNS
 
 			// Move away from target and see if targeting still happens
 			detector.GlobalPosition = new(50,0);
-			await _runner.SimulateFrames(4);
-			signalCollector.ClearCurrentTarget(); // Todo: might not work with signal buffering?
-			await _runner.SimulateFrames(4);
+			await _runner.SimulateFrames(GENERIC_WAIT_FRAMES);
+			signalCollector.ClearCurrentTarget(); // Todo: hard test condition here
+			await _runner.SimulateFrames(GENERIC_WAIT_FRAMES);
+			AssertThat(signalCollector.CurrentTarget).IsNull();
+			AssertThat(targeting.GetTargetList()).IsEmpty();
+		}
+
+		/// <summary>
+		/// Clo
+		/// </summary>
+		/// <returns></returns>
+		[TestCase]
+		[RequireGodotRuntime]
+		public async Task Targeting_Closest()
+		{
+			// T->  |T1|  |T2|  |T3|
+			const float INTER_TARGET_DISTANCE = 10;
+			Vector2 TARGETING_POSITION = new(100, 0);
+			Vector2 CLOSEST_POSITION   = TARGETING_POSITION + new Vector2(INTER_TARGET_DISTANCE, 0);
+			Vector2 MIDDLE_POSITION    = CLOSEST_POSITION + new Vector2(INTER_TARGET_DISTANCE, 0);
+			Vector2 FARTHEST_POSITION  = MIDDLE_POSITION + new Vector2(INTER_TARGET_DISTANCE, 0);
+
+			var targetingNode = _targetingNode;
+			var targeting = _targeting;
+			
+			var target1 = _target1;
+			var target2 = _target2;
+			var untargetable = _target3;
+
+			var detectable1 = _detectable1;
+			var detectable2 = _detectable2;
+			var undetectable = _detectable3;
+
+			targetingNode.GlobalPosition = -FARTHEST_POSITION; // Make sure we're not near the targets to start
+			target1.GlobalPosition = CLOSEST_POSITION;
+			target2.GlobalPosition = MIDDLE_POSITION;
+			untargetable.GlobalPosition = FARTHEST_POSITION;
+
+			SignalCollector signalCollector = AutoFree(new SignalCollector(targeting));
+
+			// Setup components
+			var range = FARTHEST_POSITION.X - CLOSEST_POSITION.X + (INTER_TARGET_DISTANCE*2);
+			var targetingTypes = Groups.GroupTypes.Structure | Groups.GroupTypes.Turret | Groups.GroupTypes.Friendly;
+			var targetingValidTargets = Groups.GroupTypes.Enemy;
+			targeting.Initialize(range, targetingTypes, targetingValidTargets);
+			targeting.TargetingStyle = TargetingMode.Close; // closest target
+
+			var targetTypes = Groups.GroupTypes.Enemy;
+			var targetValidTargetingEntitites = targetingTypes | Groups.GroupTypes.Projectile;
+			detectable1.Initialize(targetTypes, targetValidTargetingEntitites);
+			detectable2.Initialize(targetTypes, targetValidTargetingEntitites);
+			undetectable.Initialize(targetTypes, Groups.GroupTypes.None); // valid target, but undetectable
+
+			// Check that no signals or anything have fired off
+			await _runner.SimulateFrames(GENERIC_WAIT_FRAMES);
 			AssertThat(signalCollector.CurrentTarget).IsNull();
 			AssertThat(targeting.GetTargetList()).IsEmpty();
 
+			// Move targeting in range of targets, make sure proper target being targeted
+			targetingNode.GlobalPosition = TARGETING_POSITION;
+			await _runner.SimulateFrames(GENERIC_WAIT_FRAMES);
+			AssertThat(signalCollector.CurrentTarget)
+				.IsNotNull()
+				.IsEqual(detectable1);
+			AssertThat(targeting.GetTargetList())
+				.IsNotEmpty()
+				.Contains(detectable1, detectable2)
+				.NotContains(undetectable);
+
+			// shuffle target ordering and check targeting changes appropriately
+			target2.GlobalPosition = CLOSEST_POSITION;
+			untargetable.GlobalPosition = MIDDLE_POSITION;
+			target1.GlobalPosition = FARTHEST_POSITION;
+			await _runner.SimulateFrames(GENERIC_WAIT_FRAMES);
+			AssertThat(signalCollector.CurrentTarget)
+				.IsNotNull()
+				.IsEqual(detectable2);
+			AssertThat(targeting.GetTargetList())
+				.IsNotEmpty()
+				.Contains(detectable1, detectable2)
+				.NotContains(undetectable);
+
+			undetectable.GlobalPosition = CLOSEST_POSITION;
+			target1.GlobalPosition = MIDDLE_POSITION;
+			target2.GlobalPosition = FARTHEST_POSITION;
+			await _runner.SimulateFrames(GENERIC_WAIT_FRAMES);
+			AssertThat(signalCollector.CurrentTarget)
+				.IsNotNull()
+				.IsEqual(detectable1);
+			AssertThat(targeting.GetTargetList())
+				.IsNotEmpty()
+				.Contains(detectable1, detectable2)
+				.NotContains(undetectable);			
+
+			// All targets go out of range == no targets.
+			targetingNode.GlobalPosition = -FARTHEST_POSITION;
+			await _runner.SimulateFrames(GENERIC_WAIT_FRAMES);
+			signalCollector.ClearCurrentTarget(); // Todo: hard test condition here
+			await _runner.SimulateFrames(GENERIC_WAIT_FRAMES);
+			AssertThat(signalCollector.CurrentTarget).IsNull();
+			AssertThat(targeting.GetTargetList()).IsEmpty();
 
 		}
 
-		
 		/*
 		Todo: 
 		  - Targeting mode tests

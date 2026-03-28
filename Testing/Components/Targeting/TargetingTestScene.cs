@@ -1,10 +1,10 @@
+
 using Godot;
-using System;
 
 public partial class TargetingTestScene : Node2D
 {
-    [Export] public TargetingComponent TargetingComponent;
-    [Export] public DetectorComponent DetectorComponent;
-    // Target
-    [Export] public DetectableComponent DetectableComponent;
+	[Export] public Node2D
+		TargetingNode,             // What is being tested for targeting capabilities
+		Target1, Target2, Target3; // potential targets
+
 }
