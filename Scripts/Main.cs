@@ -17,13 +17,20 @@ public partial class Main : Node2D
 		GridRenderer gr = GetNode<GridRenderer>("GridRenderer");
 		gr.RenderGrid(grid);
 
-/*added this to make it sync with ui*/
-		var tileSize = gr.terrainMap.TileSet.TileSize;
-		var center = new Vector2(
-		21 * tileSize.X / 2f,
-		21 * tileSize.Y / 2f);
-		//end of stuff I added
-GetNode<Camera2D>("Camera2D").Position = center;
+		//camera stuff
+   		var tileSize = gr.terrainMap.TileSet.TileSize;
+		var mapWidth = grid.GetWidth() * tileSize.X;
+		var mapHeight = grid.GetHeight() * tileSize.Y;
+
+		float zoomX = 1920f / mapWidth;
+		float zoomY = 1080f / mapHeight;
+		float zoom = Mathf.Min(zoomX, zoomY);
+
+		var center = gr.Position + new Vector2(mapWidth / 2f, mapHeight / 2f);
+
+		Camera2D camera = GetNode<Camera2D>("Camera2D");
+		camera.Position = center;
+		camera.Zoom = new Vector2(zoom, zoom);
 
 		TurretPlacer turretPlacer = GetNode<TurretPlacer>("TurretPlacer");
 		turretPlacer.Initialize(grid);
