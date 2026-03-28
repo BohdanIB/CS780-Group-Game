@@ -15,15 +15,11 @@ public partial class SideMenuContainer : PanelContainer
 		CallDeferred(nameof(SetHiddenState));
 		MouseFilter = Control.MouseFilterEnum.Pass;
 		GD.Print("SideMenuContainer READY fired");
-		GD.Print("Ballista path exists? " + (GetNodeOrNull<Button>("VBoxContainer/HBoxContainer/BallistaTurret") != null));
+		GD.Print("Ballista path exists? " + (GetNodeOrNull<Button>("VBoxContainer/HBoxContainer/VBoxContainer/BallistaTurret") != null));
 
 
-		var ballista = GetNode<Button>("VBoxContainer/HBoxContainer/BallistaTurret");
-		GD.Print("Connected button path: " + ballista.GetPath());
-
-		
-
-		var blade = GetNode<Button>("VBoxContainer/HBoxContainer/BladeTurret");
+		var blade    = GetNode<Button>("VBoxContainer/HBoxContainer/VBoxContainer/BladeTurret");
+		var ballista = GetNode<Button>("VBoxContainer/HBoxContainer/VBoxContainer2/BallistaTurret");
 		blade.Pressed += () => GD.Print(">>> BLADE BUTTON CLICKED <<<");
 
 		ballista.Pressed += () => OnTurretButtonPressed(TurretStats.Category.Ballista);
