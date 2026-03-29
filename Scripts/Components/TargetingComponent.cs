@@ -81,7 +81,7 @@ public partial class TargetingComponent : Node2D
 		float currTargetPathLength = float.PositiveInfinity;
 		{ // Scope mover variable
 			var target = _targets[0];
-			if (GetComponentOrNull<MoverComponent>(target) is var mover)
+			if (GetComponentInSiblingsOrNull<MoverComponent>(target) is var mover && mover != null)
 			{
 				currTarget = target;
 				currTargetPathLength = mover.GetPathLengthFromCurrentPosition();
@@ -90,7 +90,7 @@ public partial class TargetingComponent : Node2D
 		for (int i = 1; i < _targets.Count; i++)
 		{
 			var target = _targets[i];
-			if (GetComponentOrNull<MoverComponent>(target) is var mover)
+			if (GetComponentInSiblingsOrNull<MoverComponent>(target) is var mover && mover != null)
 			{
 				float targetPathLength = mover.GetPathLengthFromCurrentPosition();
 				if (targetPathLength < currTargetPathLength)
@@ -114,7 +114,7 @@ public partial class TargetingComponent : Node2D
 		float currTargetPathLength = 0.0f;
 		{ // Scope mover variable
 			var target = _targets[0];
-			if (GetComponentOrNull<MoverComponent>(currTarget) is var mover)
+			if (GetComponentInSiblingsOrNull<MoverComponent>(target) is var mover && mover != null)
 			{
 				currTarget = target;
 				currTargetPathLength = mover.GetPathLengthFromCurrentPosition();
@@ -123,7 +123,7 @@ public partial class TargetingComponent : Node2D
 		for (int i = 1; i < _targets.Count; i++)
 		{
 			var target = _targets[i];
-			if (GetComponentOrNull<MoverComponent>(target) is var mover)
+			if (GetComponentInSiblingsOrNull<MoverComponent>(target) is var mover && mover != null)
 			{
 				float targetPathLength = mover.GetPathLengthFromCurrentPosition();
 				if (currTargetPathLength < targetPathLength)
@@ -169,7 +169,7 @@ public partial class TargetingComponent : Node2D
 		float currTargetHealth = float.PositiveInfinity;
 		{ // Scope health variable
 			var target = _targets[0];
-			if (GetComponentOrNull<HealthComponent>(currTarget) is var health)
+			if (GetComponentInSiblingsOrNull<HealthComponent>(target) is var health && health != null)
 			{
 				currTarget = target;
 				currTargetHealth = health.GetHealth();
@@ -178,7 +178,7 @@ public partial class TargetingComponent : Node2D
 		for (int i = 1; i < _targets.Count; i++)
 		{
 			var target = _targets[i];
-			if (GetComponentOrNull<HealthComponent>(target) is var health)
+			if (GetComponentInSiblingsOrNull<HealthComponent>(target) is var health && health != null)
 			{
 				float targetHealth = health.GetHealth();
 				if (targetHealth < currTargetHealth)
@@ -202,7 +202,7 @@ public partial class TargetingComponent : Node2D
 		float currTargetHealth = 0.0f;
 		{ // Scope health variable
 			var target = _targets[0];
-			if (GetComponentOrNull<HealthComponent>(currTarget) is var health)
+			if (GetComponentInSiblingsOrNull<HealthComponent>(target) is var health && health != null)
 			{
 				currTarget = target;
 				currTargetHealth = health.GetHealth();
@@ -211,7 +211,7 @@ public partial class TargetingComponent : Node2D
 		for (int i = 1; i < _targets.Count; i++)
 		{
 			var target = _targets[i];
-			if (GetComponentOrNull<HealthComponent>(target) is var health)
+			if (GetComponentInSiblingsOrNull<HealthComponent>(target) is var health && health != null)
 			{
 				float targetHealth = health.GetHealth();
 				if (currTargetHealth < targetHealth)
