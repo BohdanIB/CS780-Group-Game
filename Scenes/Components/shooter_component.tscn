@@ -2,5 +2,9 @@
 
 [ext_resource type="Script" uid="uid://b2m54rmgsisaw" path="res://Scripts/Components/ShooterComponent.cs" id="1_ihokv"]
 
-[node name="ShooterComponent" type="Node2D" unique_id=1054008556]
+[node name="ShooterComponent" type="Node2D" unique_id=1054008556 node_paths=PackedStringArray("_shotCooldown")]
 script = ExtResource("1_ihokv")
+_shotCooldown = NodePath("ShotTimer")
+
+[node name="ShotTimer" type="Timer" parent="." unique_id=1480616398]
+one_shot = true

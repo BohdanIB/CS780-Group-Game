@@ -17,16 +17,16 @@ public partial class DetectorComponent : Area2D
 	[ExportGroup("Exported Child Nodes")]
 	[Export] private CollisionShape2D _detectorCollisionShape2D;
 
-	public void Initialize(float detectorRadius, Groups.GroupTypes entityTypes, Groups.GroupTypes validDetectableScenes)
+	public void Initialize(float detectorRadius, Groups.GroupTypes entityTypes, Groups.GroupTypes validDetectableTypes)
 	{
 		SetRadius(detectorRadius);
-		Initialize(entityTypes, validDetectableScenes);
+		Initialize(entityTypes, validDetectableTypes);
 	}
 
-	public void Initialize(Groups.GroupTypes entityTypes, Groups.GroupTypes validDetectableScenes)
+	public void Initialize(Groups.GroupTypes entityTypes, Groups.GroupTypes validDetectableTypes)
 	{
 		_thisEntityTypes = entityTypes;
-		_validDetectableTypes = validDetectableScenes;
+		_validDetectableTypes = validDetectableTypes;
 	}
 
 	public override void _Ready()

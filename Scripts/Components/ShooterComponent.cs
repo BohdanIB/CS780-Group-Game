@@ -1,18 +1,34 @@
 
+using CS780GroupProject.Scripts.Utils;
 using Godot;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 public partial class ShooterComponent : Node2D
 {
-	[Signal] public delegate void OnShootEventHandler();
+	[Signal] public delegate void OnShootEventHandler(Node2D Target, Projectile Projectile);
 
+	[ExportGroup("Group Types")]
+	[Export] private Groups.GroupTypes _thisEntityTypes;
+
+	[ExportGroup("Exported Components")]
 	[Export] private SpawnerComponent _projectileSpawner;
 	[Export] private TargetingComponent _targeting;
 	[Export] private Timer _shotCooldown;
 
-	private SceneFilePathRes _sender;
+	// private Node2D _sender;
 	private ProjectileStats _projectileStats;
-	private float _shotsPerSecond = -1.0f;
+	private float 
+		_shotsPerSecond = -1, // How many shots are there per second? Human readability 
+		_shotTime = -1; // The actual cooldown time between shots
+
+	public void Initialize(float range, float fireRate, Groups.GroupTypes entityTypes, Groups.GroupTypes targetTypes, ProjectileStats stats)
+	{
+		SetFireRate(fireRate);
+		SetProjectileStats(stats);
+		_thisEntityTypes = entityTypes;
+		_targeting.Initialize(range, entityTypes, targetTypes);
+	}
 
 	public override void _Ready()
 	{
@@ -23,21 +39,17 @@ public partial class ShooterComponent : Node2D
 		_targeting.OnTargetSelect += (target) =>
 		{
 			if (!_shotCooldown.IsStopped()) { return; }
-			if (_sender == null && _projectileStats == null)
+			// if (_sender == null && _projectileStats == null)
+			if (_thisEntityTypes == Groups.GroupTypes.None || _projectileStats == null)
 			{
 				GD.Print($"WARNING - Target selected by ShooterComponent {this}, but shooter is not properly initialized.");
 				return;
 			}
-			_shotCooldown.Start(_shotsPerSecond);
-			// var projectile = _projectileScene.Instantiate<Projectile>();
-			// projectile.GlobalPosition = GlobalPosition;
-			// projectile.Initialize(currTargetEnemy, _stats.ProjectileStats);
-			// GetTree().GetRoot().AddChild(projectile);
+			_shotCooldown.Start(_shotTime);
 			var projectile = _projectileSpawner.Spawn() as Projectile;
-			projectile.Initialize(target, _projectileStats, _sender);
+			projectile.Initialize(target, _projectileStats, _thisEntityTypes);
 			GetTree().GetRoot().AddChild(projectile); // todo: Might not be right
-			EmitSignal(SignalName.OnShoot);
-
+			EmitSignal(SignalName.OnShoot, target, projectile);
 		};
 		// _projectileSpawner.OnSpawned += (node) =>
 		// {
@@ -52,25 +64,28 @@ public partial class ShooterComponent : Node2D
 		// };
 	}
 
-	public void Initialize(Node sender, ProjectileStats stats)
+    public Groups.GroupTypes GetEntityTypes()
 	{
-		SetSenderNode(sender);
-		SetProjectileStats(stats);
+		return _thisEntityTypes;
+	}
+	public float GetFireRate()
+	{
+		return _shotsPerSecond;
+	}
+	public ProjectileStats GetProjectileStats()
+	{
+		return _projectileStats;
 	}
 
-	private void SetSenderNode(Node sender)
-	{
-		_sender = new SceneFilePathRes(sender);
-	}
-
-	private void SetProjectileStats(ProjectileStats stats)
+	public void SetProjectileStats(ProjectileStats stats)
 	{
 		_projectileStats = stats;
 	}
 
 	public void SetFireRate(float shotsPerSecond)
 	{
-		_shotsPerSecond = 1f / shotsPerSecond;
+		_shotsPerSecond = shotsPerSecond;
+		_shotTime = 1 / shotsPerSecond;
 	}
 
 }

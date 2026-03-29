@@ -5,7 +5,7 @@ public partial class SpawnerComponent : Node2D
 {
 	[Signal] public delegate void OnSpawnedEventHandler(Node SpawnedNode);
 
-	[Export] private SceneFilePathRes _scenePath;
+	[Export(PropertyHint.File, "*.tscn")] private string _scenePath = null;
 
 	private PackedScene _scene;
 
@@ -16,7 +16,7 @@ public partial class SpawnerComponent : Node2D
 			GD.Print($"SpawnerComponent {this} not given scene path to load from...");
 			return;
 		}
-		_scene = ResourceLoader.Load<PackedScene>(SceneFilePathRes.UidToRid(_scenePath.ScenePath));
+		_scene = ResourceLoader.Load<PackedScene>(_scenePath);
 		if (_scene == null)
 		{
 			GD.Print($"SpawnerComponent {this} unable to load scene for spawning...");

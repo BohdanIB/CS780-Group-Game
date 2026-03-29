@@ -74,10 +74,10 @@ public partial class Enemy: PathFollower
 			// GD.Print($"Enemy '{Name}' completed their path.");
 		};
 
-		_shooterComponent.OnShoot += () =>
-		{
-			GD.Print($"Shooter for enemy '{Name}' shooting");
-		};
+		// _shooterComponent.OnShoot += () =>
+		// {
+		// 	GD.Print($"Shooter for enemy '{Name}' shooting");
+		// };
 
 	}
 
@@ -112,7 +112,7 @@ public partial class Enemy: PathFollower
 	}
 	protected void UpdateProjectileStats(ProjectileStats newStats)
 	{
-		_shooterComponent.Initialize(this, newStats);
+		_shooterComponent.SetProjectileStats(newStats);
 	}
 	private void UpdateSprite()
 	{

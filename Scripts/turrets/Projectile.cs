@@ -1,4 +1,5 @@
 
+using CS780GroupProject.Scripts.Utils;
 using static CS780GroupProject.Scripts.Utils.NodeComponentChecking;
 using Godot;
 
@@ -6,13 +7,14 @@ public partial class Projectile : Node2D
 {
 	public const float MIN_TARGET_DISTANCE = 0.01f;
 
-	[Signal] public delegate void OnProjectileImpactEventHandler(Vector2 Position, ProjectileStats Stats, SceneFilePathRes SenderScene); // todo: May need more dev; Explosive shots AOE?
+	[Signal] public delegate void OnProjectileImpactEventHandler(Vector2 Position, ProjectileStats Stats, Groups.GroupTypes SenderTypes); // todo: May need more dev; Explosive shots AOE?
 
-	[Export] private ProjectileStats _stats;
-	[Export] private Vector2 _targetLocation; // Either the target's last known position, or a position given at initialization.
-	[Export] private Node2D _target;
-	[Export] private SceneFilePathRes[] _targetScenes = []; // Valid scenes for this component to target.
-	[Export] private SceneFilePathRes _senderScene; // Scene which sent projectile (used for valid scene checks).
+	[Export] public ProjectileStats Stats;
+	[Export] public Vector2 TargetLocation; // Either the target's last known position, or a position given at initialization.
+	[Export] public Node2D Target;
+
+	[ExportGroup("Group Types")]
+	[Export] private Groups.GroupTypes _thisEntityTypes, _senderTypes;
 
 	[ExportGroup("Exported Components")]
 	[Export] private HitComponent _hitComponent;
@@ -20,25 +22,24 @@ public partial class Projectile : Node2D
 	private AnimatedSprite2D _sprite; // todo: export
 	private bool _wasInitialized = false;
 
-
 	/// <summary>
 	/// Initialize generic projectile to target specific position.
 	/// </summary>
 	/// <param name="targetPosition"></param>
 	/// <param name="category"></param>
-	public void Initialize(Vector2 targetPosition, ProjectileStats.Category category, SceneFilePathRes senderScene)
+	public void Initialize(Vector2 targetPosition, ProjectileStats.Category category, Groups.GroupTypes senderTypes)
 	{
-		Initialize(targetPosition, new ProjectileStats(category), senderScene);
+		Initialize(targetPosition, new ProjectileStats(category), senderTypes);
 	}
 	/// <summary>
 	/// Initialize projectile to target specific position with specific stats.
 	/// </summary>
 	/// <param name="targetPosition"></param>
 	/// <param name="projectileStats"></param>
-	public void Initialize(Vector2 targetPosition, ProjectileStats projectileStats, SceneFilePathRes senderScene)
+	public void Initialize(Vector2 targetPosition, ProjectileStats projectileStats, Groups.GroupTypes senderTypes)
 	{
-		_targetLocation = targetPosition;
-		Initialize(projectileStats, senderScene);
+		TargetLocation = targetPosition;
+		Initialize(projectileStats, senderTypes);
 	}
 
 	/// <summary>
@@ -46,26 +47,26 @@ public partial class Projectile : Node2D
 	/// </summary>
 	/// <param name="targetEntity"></param>
 	/// <param name="category"></param>
-	public void Initialize(Node2D targetEntity, ProjectileStats.Category category, SceneFilePathRes senderScene)
+	public void Initialize(Node2D targetNode, ProjectileStats.Category category, Groups.GroupTypes senderTypes)
 	{
-		Initialize(targetEntity, new ProjectileStats(category), senderScene);
+		Initialize(targetNode, new ProjectileStats(category), senderTypes);
 	}
 	/// <summary>
 	/// Initialize projectile to target specific entity with specific stats.
 	/// </summary>
 	/// <param name="targetEntity"></param>
 	/// <param name="projectileStats"></param>
-	public void Initialize(Node2D targetEntity, ProjectileStats projectileStats, SceneFilePathRes senderScene)
+	public void Initialize(Node2D targetNode, ProjectileStats projectileStats, Groups.GroupTypes senderTypes)
 	{
-		_target = targetEntity;
-		if (!IsInstanceValid(_target))
+		Target = targetNode;
+		if (!IsInstanceValid(Target))
 		{
 			GD.Print($"Projectile {Name} was initialized with target, but target no longer exists... Freeing projectile.");
 			QueueFree(); // todo: Might not be proper to queue a free before the _Ready call?
 			return;
 		}
-		_targetLocation = _target.GlobalPosition;
-		Initialize(projectileStats, senderScene);
+		TargetLocation = Target.GlobalPosition;
+		Initialize(projectileStats, senderTypes);
 	}
 
 	/// <summary>
@@ -74,13 +75,17 @@ public partial class Projectile : Node2D
 	/// Last layer of initilization for any type of initialization for projectile.
 	/// </summary>
 	/// <param name="projectileStats"></param>
-	private void Initialize(ProjectileStats projectileStats, SceneFilePathRes senderScene)
+	private void Initialize(ProjectileStats projectileStats, Groups.GroupTypes senderTypes)
 	{
-		_stats = projectileStats;
-		_senderScene = senderScene;
+		Stats = projectileStats;
+		_senderTypes = senderTypes;
+		_thisEntityTypes = _senderTypes | Groups.GroupTypes.Projectile;
+
 		// _hitComponent.Initialize(_stats.Damage, _senderScene, _target, _targetScenes);
 		_wasInitialized = true;
 	}
+
+	/*
 
 	public override void _Ready()
 	{
@@ -164,5 +169,7 @@ public partial class Projectile : Node2D
 		// GD.Print("Freeing Projectile.");
 		QueueFree(); // TODO: FREEING AND DISCONNECTION OF SIGNALS? https://docs.godotengine.org/en/stable/tutorials/scripting/c_sharp/c_sharp_signals.html
 	}
+
+	*/
 
 }

@@ -1,0 +1,61 @@
+[gd_scene format=3 uid="uid://8edn61d7oraq"]
+
+[ext_resource type="Script" uid="uid://bka5b7gp5j80o" path="res://Testing/Components/Shooter/ShooterTestScene.cs" id="1_0jvr5"]
+[ext_resource type="PackedScene" uid="uid://1xnv73ih3ekh" path="res://Scenes/Components/shooter_component.tscn" id="2_xhn81"]
+[ext_resource type="PackedScene" uid="uid://bxnd3hgmx5vi6" path="res://Scenes/Components/spawner_component.tscn" id="3_0pj6h"]
+[ext_resource type="PackedScene" uid="uid://cxvwrh12elf1m" path="res://Scenes/Components/targeting_component.tscn" id="4_roepo"]
+[ext_resource type="PackedScene" uid="uid://c43d2uh68714x" path="res://Scenes/Components/detector_component.tscn" id="5_0pj6h"]
+[ext_resource type="PackedScene" uid="uid://cbnk8jcd7c4v3" path="res://Scenes/Components/detectable_component.tscn" id="6_l1ofu"]
+[ext_resource type="PackedScene" uid="uid://e5vy6kbwqw12" path="res://Scenes/Components/health_component.tscn" id="7_swa2c"]
+[ext_resource type="PackedScene" uid="uid://bm24bo2kifop0" path="res://Scenes/Components/mover_component.tscn" id="8_dq11j"]
+
+[node name="ShooterTestScene" type="Node2D" unique_id=990212285 node_paths=PackedStringArray("ShooterNode", "Target1", "Target2", "Target3")]
+script = ExtResource("1_0jvr5")
+ShooterNode = NodePath("ShooterNode")
+Target1 = NodePath("Target1")
+Target2 = NodePath("Target2")
+Target3 = NodePath("Target3")
+
+[node name="ShooterNode" type="Node2D" parent="." unique_id=1363067810]
+
+[node name="ShooterComponent" parent="ShooterNode" unique_id=1054008556 node_paths=PackedStringArray("_projectileSpawner", "_targeting") instance=ExtResource("2_xhn81")]
+_projectileSpawner = NodePath("SpawnerComponent")
+_targeting = NodePath("TargetingComponent")
+
+[node name="SpawnerComponent" parent="ShooterNode/ShooterComponent" unique_id=391563213 instance=ExtResource("3_0pj6h")]
+_scenePath = "uid://b1picus170nmk"
+
+[node name="TargetingComponent" parent="ShooterNode/ShooterComponent" unique_id=564942499 node_paths=PackedStringArray("_detector") instance=ExtResource("4_roepo")]
+_detector = NodePath("DetectorComponent")
+
+[node name="DetectorComponent" parent="ShooterNode/ShooterComponent/TargetingComponent" unique_id=1835049866 instance=ExtResource("5_0pj6h")]
+
+[node name="Target1" type="Node2D" parent="." unique_id=1659694527]
+
+[node name="DetectableComponent" parent="Target1" unique_id=1075350594 instance=ExtResource("6_l1ofu")]
+
+[node name="HealthComponent" parent="Target1" unique_id=1408774868 instance=ExtResource("7_swa2c")]
+_startingHealth = 100.0
+
+[node name="MoverComponent" parent="Target1" unique_id=1975334598 node_paths=PackedStringArray("ParentNode") instance=ExtResource("8_dq11j")]
+ParentNode = NodePath("..")
+
+[node name="Target2" type="Node2D" parent="." unique_id=8271178]
+
+[node name="DetectableComponent" parent="Target2" unique_id=2142805973 instance=ExtResource("6_l1ofu")]
+
+[node name="HealthComponent" parent="Target2" unique_id=1471362154 instance=ExtResource("7_swa2c")]
+_startingHealth = 100.0
+
+[node name="MoverComponent" parent="Target2" unique_id=1769351619 node_paths=PackedStringArray("ParentNode") instance=ExtResource("8_dq11j")]
+ParentNode = NodePath("..")
+
+[node name="Target3" type="Node2D" parent="." unique_id=1186531138]
+
+[node name="DetectableComponent" parent="Target3" unique_id=1032894180 instance=ExtResource("6_l1ofu")]
+
+[node name="HealthComponent" parent="Target3" unique_id=197593711 instance=ExtResource("7_swa2c")]
+_startingHealth = 100.0
+
+[node name="MoverComponent" parent="Target3" unique_id=1421484638 node_paths=PackedStringArray("ParentNode") instance=ExtResource("8_dq11j")]
+ParentNode = NodePath("..")
