@@ -23,7 +23,7 @@ _projectileSpawner = NodePath("SpawnerComponent")
 _targeting = NodePath("TargetingComponent")
 
 [node name="SpawnerComponent" parent="ShooterNode/ShooterComponent" unique_id=391563213 instance=ExtResource("3_0pj6h")]
-_scenePath = "uid://b1picus170nmk"
+ScenePath = "uid://b1picus170nmk"
 
 [node name="TargetingComponent" parent="ShooterNode/ShooterComponent" unique_id=564942499 node_paths=PackedStringArray("_detector") instance=ExtResource("4_roepo")]
 _detector = NodePath("DetectorComponent")
