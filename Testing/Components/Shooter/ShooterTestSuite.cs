@@ -148,7 +148,7 @@ namespace TestNS
 
             var detector = _targetingDetector; // detector for shooter targeting is initialized properly
             AssertThat(detector.GetEntityTypes()).IsEqual(shooterTypes);
-            AssertThat(detector.GetValidDetectableTypes()).IsEqual(shooterTargetTypes);
+            AssertThat(detector.GetDetectableTypes()).IsEqual(shooterTargetTypes);
             AssertThat(detector.GetRadius()).IsEqual(range);
 		}
 

@@ -4,8 +4,10 @@
 [ext_resource type="PackedScene" uid="uid://27mmcge0cxrm" path="res://Scenes/generic_structure.tscn" id="1_hskch"]
 [ext_resource type="Texture2D" uid="uid://bl7a37uc0ye6u" path="res://Assets/Sprites/temp_turrets.png" id="2_hskch"]
 [ext_resource type="PackedScene" uid="uid://cbnk8jcd7c4v3" path="res://Scenes/Components/detectable_component.tscn" id="5_ku01o"]
+[ext_resource type="PackedScene" uid="uid://1xnv73ih3ekh" path="res://Scenes/Components/shooter_component.tscn" id="6_74mb1"]
 [ext_resource type="PackedScene" uid="uid://c43d2uh68714x" path="res://Scenes/Components/detector_component.tscn" id="6_628tr"]
-[ext_resource type="Script" uid="uid://dj1ghvji6ekg5" path="res://Resources/legacy/SceneFilePathRes.cs" id="6_ku01o"]
+[ext_resource type="PackedScene" uid="uid://cxvwrh12elf1m" path="res://Scenes/Components/targeting_component.tscn" id="7_hxjjt"]
+[ext_resource type="PackedScene" uid="uid://bxnd3hgmx5vi6" path="res://Scenes/Components/spawner_component.tscn" id="8_74mb1"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_6spbj"]
 atlas = ExtResource("2_hskch")
@@ -29,33 +31,26 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="Resource" id="Resource_ku01o"]
-resource_local_to_scene = true
-script = ExtResource("6_ku01o")
-ScenePath = "uid://cvx7nxyaghhrx"
-metadata/_custom_type_script = "uid://dj1ghvji6ekg5"
-
-[sub_resource type="Resource" id="Resource_628tr"]
-resource_local_to_scene = true
-script = ExtResource("6_ku01o")
-ScenePath = "uid://cvx7nxyaghhrx"
-metadata/_custom_type_script = "uid://dj1ghvji6ekg5"
-
-[node name="Turret" unique_id=440596787 node_paths=PackedStringArray("_detectorComponent", "_detectableComponent") groups=["structure", "turret"] instance=ExtResource("1_hskch")]
+[node name="Turret" unique_id=440596787 groups=["friendly", "turret"] instance=ExtResource("1_hskch")]
 script = ExtResource("1_fcprl")
+TargetingMode = 3
 _stats = null
-_targetingMode = 1
-_detectorComponent = NodePath("DetectorComponent")
-_detectableComponent = NodePath("DetectableComponent")
+_turretTypes = 11
 
 [node name="AnimatedSprite2D" parent="." index="0" unique_id=440445772]
 scale = Vector2(0.5, 0.5)
 sprite_frames = SubResource("SpriteFrames_6spbj")
 
-[node name="HurtComponent" parent="." index="2" unique_id=495543674]
-_allowedToHurtEntity = [SubResource("Resource_ku01o")]
-
 [node name="DetectorComponent" parent="." index="3" unique_id=1994671651 instance=ExtResource("6_628tr")]
-_detectableScenes = [SubResource("Resource_628tr")]
 
 [node name="DetectableComponent" parent="." index="4" unique_id=1835049866 instance=ExtResource("5_ku01o")]
+
+[node name="ShooterComponent" parent="." index="5" unique_id=1054008556 node_paths=PackedStringArray("_projectileSpawner", "_targeting") instance=ExtResource("6_74mb1")]
+_projectileSpawner = NodePath("ProjectileSpawnerComponent")
+_targeting = NodePath("TargetingComponent")
+
+[node name="TargetingComponent" parent="ShooterComponent" index="1" unique_id=564942499 node_paths=PackedStringArray("_detector") instance=ExtResource("7_hxjjt")]
+_detector = NodePath("../../DetectorComponent")
+
+[node name="ProjectileSpawnerComponent" parent="ShooterComponent" index="2" unique_id=391563213 instance=ExtResource("8_74mb1")]
+ScenePath = "uid://b1picus170nmk"

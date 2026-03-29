@@ -22,6 +22,28 @@ public partial class ShooterComponent : Node2D
 		_shotsPerSecond = -1, // How many shots are there per second? Human readability 
 		_shotTime = -1; // The actual cooldown time between shots
 
+	/// <summary>
+	/// Just initialize shooter component
+	/// </summary>
+	/// <param name="fireRate"></param>
+	/// <param name="entityTypes"></param>
+	/// <param name="stats"></param>
+	public void Initialize(float fireRate, Groups.GroupTypes entityTypes, ProjectileStats stats)
+	{
+		SetFireRate(fireRate);
+		SetProjectileStats(stats);
+		_thisEntityTypes = entityTypes;
+	}
+	/// <summary>
+	/// Initialize shooter and targeting component (which in-turn will initialize the detectable component associated with targeting component).
+	/// </br></br>
+	/// This is a convenience initialization for the shooter component pipeline
+	/// </summary>
+	/// <param name="range"></param>
+	/// <param name="fireRate"></param>
+	/// <param name="entityTypes"></param>
+	/// <param name="targetTypes"></param>
+	/// <param name="stats"></param>
 	public void Initialize(float range, float fireRate, Groups.GroupTypes entityTypes, Groups.GroupTypes targetTypes, ProjectileStats stats)
 	{
 		SetFireRate(fireRate);

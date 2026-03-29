@@ -122,7 +122,7 @@ namespace TestNS
 			detector.Initialize(Groups.GroupTypes.Turret, Groups.GroupTypes.Enemy);
 			// Check for proper initialization
 			AssertThat(detector.GetEntityTypes()).IsEqual(Groups.GroupTypes.Turret);
-			AssertThat(detector.GetValidDetectableTypes()).IsEqual(Groups.GroupTypes.Enemy);
+			AssertThat(detector.GetDetectableTypes()).IsEqual(Groups.GroupTypes.Enemy);
 
 			// Second Initialization
 			const float TEST_RADIUS = 935;
@@ -130,7 +130,7 @@ namespace TestNS
 			// Check for proper initialization
 			AssertThat(detector.GetEntityTypes()).IsEqual(Groups.GroupTypes.Projectile);
 			AssertThat(detector.GetRadius()).IsEqual(TEST_RADIUS);
-			AssertThat(detector.GetValidDetectableTypes()).IsEqual(Groups.GroupTypes.Structure);
+			AssertThat(detector.GetDetectableTypes()).IsEqual(Groups.GroupTypes.Structure);
 		}
 
 		[TestCase]

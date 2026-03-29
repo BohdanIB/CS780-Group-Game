@@ -118,7 +118,7 @@ namespace TestNS
 			targeting.Initialize(radius, targetComponentTypes, targetComponentValidTargets);
 			AssertThat(detector.GetRadius()).IsEqual(radius);
 			AssertThat(detector.GetEntityTypes()).IsEqual(targetComponentTypes);
-			AssertThat(detector.GetValidDetectableTypes()).IsEqual(targetComponentValidTargets);
+			AssertThat(detector.GetDetectableTypes()).IsEqual(targetComponentValidTargets);
 
 			var detectableEntityTypes = Groups.GroupTypes.Enemy;
 			var detectableValidDetectableTypes = Groups.GroupTypes.Structure | Groups.GroupTypes.Turret | Groups.GroupTypes.Projectile | Groups.GroupTypes.Friendly;

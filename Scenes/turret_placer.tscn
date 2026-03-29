@@ -6,14 +6,12 @@
 
 [node name="TurretPlacer" type="Node2D" unique_id=1881251108 node_paths=PackedStringArray("_ghostTurret")]
 script = ExtResource("1_00fsi")
-_ghostTurret = NodePath("GhostHoverTurret")
+_ghostTurret = NodePath("GhostTurret")
 _turretScene = ExtResource("3_ub6b8")
 
 [node name="GridRenderer" parent="." unique_id=76182152 instance=ExtResource("2_f3ru2")]
 
-[node name="GhostHoverTurret" parent="." unique_id=1985475119 instance=ExtResource("3_ub6b8")]
+[node name="GhostTurret" parent="." unique_id=1985475119 instance=ExtResource("3_ub6b8")]
 visible = false
 modulate = Color(1, 1, 1, 0.49019608)
-monitoring = false
-monitorable = false
-_projectileScene = null
+TurretTypes = 2

@@ -15,10 +15,21 @@ public partial class TargetingComponent : Node2D
 	private Random _random = new(); // todo: Seed this?
 	private List<DetectableComponent> _targets = [];
 
+	/// <summary>
+	/// Initialize associated detector with stats. Convenience function
+	/// </summary>
+	/// <param name="radius"></param>
+	/// <param name="entityTypes"></param>
+	/// <param name="validTargets"></param>
 	public void Initialize(float radius, Groups.GroupTypes entityTypes, Groups.GroupTypes validTargets)
 	{
 		_detector.Initialize(radius, entityTypes, validTargets);
 	}
+	/// <summary>
+	/// Initialize associated detector with stats. Convenience function
+	/// </summary>
+	/// <param name="entityTypes"></param>
+	/// <param name="validTargets"></param>
 	public void Initialize(Groups.GroupTypes entityTypes, Groups.GroupTypes validTargets)
 	{
 		_detector.Initialize(entityTypes, validTargets);

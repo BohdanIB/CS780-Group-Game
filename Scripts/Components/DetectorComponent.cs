@@ -79,8 +79,12 @@ public partial class DetectorComponent : Area2D
 	{
 		return _thisEntityTypes;
 	}
-	public Groups.GroupTypes GetValidDetectableTypes()
+	public Groups.GroupTypes GetDetectableTypes()
 	{
 		return _validDetectableTypes;
+	}
+	public void SetDetectableTypes(Groups.GroupTypes detectableTypes)
+	{
+		_validDetectableTypes = detectableTypes;
 	}
 }

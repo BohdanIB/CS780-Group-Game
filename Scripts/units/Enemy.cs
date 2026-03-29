@@ -37,6 +37,8 @@ public partial class Enemy: PathFollower
 
 	public override void _Ready()
 	{
+		base._Ready();
+
 		if (_stats != null)
 		{
 			Initialize(_stats);
