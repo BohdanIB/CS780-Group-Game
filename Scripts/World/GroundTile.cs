@@ -6,15 +6,18 @@ public class GroundTile
     public BiomeType terrain;
     public Vector2I position;
     public bool[] roadConnections = new bool[4]; // N,E,S,W
-    private Turret _turret = null;
-    public Turret Turret { get => _turret; set => _turret = value; }
+    private GenericStructure _structure;
+
+    // Getters + Setters
+    public GenericStructure Structure { get => _structure; set => _structure = value; }
+    public Turret Turret { get => _structure as Turret; set => _structure = value; }
 
     public GroundTile(BiomeType terrain, Vector2I position, bool[] roads = null, Turret turret = null)
     {
         this.terrain = terrain;
         this.position = position;
         roadConnections = roads ?? [false, false, false, false];
-        Turret = turret;
+        _structure = structure;
     }
 
     // public Vector2I GetGridPosition()
@@ -69,14 +72,14 @@ public class GroundTile
                (!roadConnections[0] && !roadConnections[1] && !roadConnections[2] && roadConnections[3]);
     }
 
-    public bool HasTurret()
+    public bool HasStructure()
     {
-        return _turret != null;
+        return _structure != null;
     }
 
     public override string ToString()
     {
-        return $"{terrain} {position} {roadConnections} {(HasTurret() ? Turret : "No Turret")}";
+        return $"{terrain} {position} {roadConnections} {(HasStructure() ? _structure : "No Structure")}";
     }
 
 }

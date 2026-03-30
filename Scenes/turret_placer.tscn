@@ -2,10 +2,12 @@
 
 [ext_resource type="Script" uid="uid://bwyae206qebn8" path="res://Scripts/turrets/TurretPlacer.cs" id="1_00fsi"]
 [ext_resource type="PackedScene" uid="uid://tw6j84txs1a1" path="res://Scenes/grid_renderer.tscn" id="2_f3ru2"]
-[ext_resource type="PackedScene" uid="uid://cktkmwqovsjyc" path="res://Scenes/turret.tscn" id="3_ub6b8"]
+[ext_resource type="PackedScene" uid="uid://b2w8csm5vypb0" path="res://Scenes/turret.tscn" id="3_ub6b8"]
 
-[node name="TurretPlacer" type="Node2D" unique_id=1881251108]
+[node name="TurretPlacer" type="Node2D" unique_id=1881251108 node_paths=PackedStringArray("_ghostTurret")]
 script = ExtResource("1_00fsi")
+_ghostTurret = NodePath("GhostHoverTurret")
+_turretScene = ExtResource("3_ub6b8")
 
 [node name="GridRenderer" parent="." unique_id=76182152 instance=ExtResource("2_f3ru2")]
 
@@ -14,4 +16,4 @@ visible = false
 modulate = Color(1, 1, 1, 0.49019608)
 monitoring = false
 monitorable = false
-_disabled = true
+_projectileScene = null
