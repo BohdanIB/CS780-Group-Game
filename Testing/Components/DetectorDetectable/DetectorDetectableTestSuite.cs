@@ -21,6 +21,7 @@ namespace TestNS
 	/// </list>
 	/// </summary>
 	[TestSuite]
+	[RequireGodotRuntime]
 	public partial class DetectorDetectableTestSuite
 	{
 		private partial class SignalCollector : Node

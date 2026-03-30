@@ -11,6 +11,7 @@ using System;
 namespace TestNS
 {
 	[TestSuite]
+    [RequireGodotRuntime]
     public partial class SpawnerTestSuite : Node
     {
         

@@ -9,6 +9,7 @@ using Godot;
 namespace TestNS
 {
 	[TestSuite]
+	[RequireGodotRuntime]
 	public partial class TargetingTestSuite
 	{
 		private partial class SignalCollector : Node

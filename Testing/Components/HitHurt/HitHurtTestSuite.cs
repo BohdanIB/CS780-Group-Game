@@ -20,6 +20,7 @@ namespace TestNS
 	/// </list>
 	/// </summary>
 	[TestSuite]
+	[RequireGodotRuntime]
 	public partial class HitHurtTestSuite
 	{
 		private partial class SignalCollector : Node

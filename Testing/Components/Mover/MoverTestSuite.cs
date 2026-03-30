@@ -10,6 +10,7 @@ using System;
 namespace TestNS
 {
 	[TestSuite]
+	[RequireGodotRuntime]
 	public partial class MoverTestSuite
 	{
 		private partial class SignalCollector : Node

@@ -17,6 +17,7 @@ namespace TestNS
     /// check targeting test suite
     /// </summary>
 	[TestSuite]
+    [RequireGodotRuntime]
     public partial class ShooterTestSuite : Node
     {
 		private partial class SignalCollector : Node
