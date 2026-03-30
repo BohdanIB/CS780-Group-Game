@@ -27,7 +27,6 @@ public partial class TurretPlacer : Node2D
 
 	public override void _Ready()
 	{
-
 		_ghostTurret.DisableTurret();
 		_ghostTurret.Visible = false;
 	}

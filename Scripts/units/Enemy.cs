@@ -7,7 +7,7 @@ using Godot;
 public partial class Enemy: PathFollower
 {
 	[Export] private TargetingMode _targetingMode = TargetingMode.Weak;
-	[Export] private EnemyStats _stats;
+	[Export] private EnemyStats _stats = new(EnemyStats.Category.Regular);
 
 	[ExportGroup("Types")]
 	[Export] public Groups.GroupTypes _enemyTypes = PathFollower.TYPES | Groups.GroupTypes.Enemy;
@@ -27,16 +27,18 @@ public partial class Enemy: PathFollower
 	/// <param name="type"></param>
 	public void Initialize(EnemyStats.Category type, Vector2[] path = null)
 	{
-		SetPath(path);
-		Initialize(new EnemyStats(type));
+		Initialize(new EnemyStats(type), path);
 	}
 	/// <summary>
 	/// Initializes enemy with custom stats.
 	/// </summary>
 	/// <param name="stats"></param>
-	public void Initialize(EnemyStats stats)
+	public void Initialize(EnemyStats stats, Vector2[] path = null)
 	{
-		UpdateStats(stats);
+		SetPath(path);
+		_stats = stats;
+		InitializeComponents();
+		UpdateStats();
 	}
 
 	public override void _Ready()
@@ -46,11 +48,6 @@ public partial class Enemy: PathFollower
 		if (_shooter == null || _targeting == null || _projectileSpawner == null)
 		{
 			GD.Print($"WARNING - Enemy {this} was unable to find one of its components on _Ready()");
-		}
-
-		if (_stats != null)
-		{
-			Initialize(_stats);
 		}
 
 		// Component callbacks //
@@ -65,46 +62,7 @@ public partial class Enemy: PathFollower
 			_health.ApplyDamage(damage); 
 		}; 
 
-		// _detectable.OnEnterDetectable += (detector) => {
-		// 	// if (area.GetOwnerOrNull<Node>() is var owner && owner != null)
-		// 	// {
-		// 	// 	GD.Print($"Enemy '{Name}' detected by '{owner.Name}'.");
-		// 	// }
-		// 	// else
-		// 	// {
-		// 	// 	GD.Print($"Enemy '{Name}' detected by '{area.Name}'.");
-		// 	// }
-		// };
-		// _detectable.OnExitDetectable += (detector) => {
-		// 	// if (area.GetOwnerOrNull<Node>() is var owner && owner != null)
-		// 	// {
-		// 	// 	GD.Print($"Enemy '{Name}' UNdetected by '{owner.Name}'.");
-		// 	// }
-		// 	// else
-		// 	// {
-		// 	// 	GD.Print($"Enemy '{Name}' UNdetected by '{area.Name}'.");
-		// 	// }
-		// };
-
-		// _mover.OnPathCompleted += () => {
-		// 	// GD.Print($"Enemy '{Name}' completed their path.");
-		// };
-
-		// _shooterComponent.OnShoot += () =>
-		// {
-		// 	GD.Print($"Shooter for enemy '{Name}' shooting");
-		// };
-
-		CallDeferred(MethodName.InitializeComponents);
-
 	}
-
-	// public override void _PhysicsProcess(double delta)
-	// {
-	// 	base._PhysicsProcess(delta);
-	// 	// Todo: Shoot at friendlies in range. Components?
-	// 	// FireAtValidTarget();
-	// }
 
 	public void SetPath(Vector2[] path)
 	{
@@ -119,14 +77,17 @@ public partial class Enemy: PathFollower
 		_mover.Stop();
 	}
 
-	public void UpdateStats(EnemyStats newStats)
+	public void UpdateStats(EnemyStats newStats = null)
 	{
-		_stats = newStats;
+		if (newStats != null)
+		{
+			_stats = newStats;
+		}
 		UpdateComponents();
 	}
 	public void UpdateComponents()
 	{
-		if (this.IsNodeReady())
+		if (this.IsNodeReady() && _stats != null)
 		{
 			_health.SetHealth(_stats.Health); // todo: this might not want to update everytime components are updated.
 			_hurt.SetRadius(_stats.HitboxRadius);
@@ -136,13 +97,13 @@ public partial class Enemy: PathFollower
 			_shooter.SetProjectileStats(_stats.ProjectileStats);
 			
 			// Todo: Add more updates
+			UpdateSprite(); // todo: should be a component?
 		}
-		UpdateSprite(); // todo: should be a component?
 	}
 
 	private void InitializeComponents()
 	{
-		if (this.IsNodeReady())
+		if (this.IsNodeReady() && _stats != null)
 		{
 			_health.SetHealth(_stats.Health); // todo: this might not want to update everytime components are updated.
 			_hurt.Initialize(_enemyTypes, _targetTypes);
@@ -150,6 +111,8 @@ public partial class Enemy: PathFollower
 			_detectable.Initialize(_enemyTypes, _targetTypes);
 			_mover.Initialize(_stats.MovementSpeed, this, start: true);
 			_shooter.Initialize(_stats.FireRate, _enemyTypes, _stats.ProjectileStats);
+
+			UpdateSprite(); // todo: should be a component?
 		}
 	}
 	// protected void UpdateProjectileStats(ProjectileStats newStats)

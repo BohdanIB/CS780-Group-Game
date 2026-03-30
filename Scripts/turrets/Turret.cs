@@ -9,7 +9,7 @@ using Godot;
 public partial class Turret : GenericStructure
 {
 	[Export] private TargetingMode _targetingMode = TargetingMode.Close;
-	[Export] private TurretStats _stats;
+	[Export] private TurretStats _stats = new(TurretStats.Category.Ballista);
 
 	[ExportGroup("Types")]
 	[Export] public Groups.GroupTypes _turretTypes = GenericStructure.TYPES | Groups.GroupTypes.Turret;
@@ -33,27 +33,21 @@ public partial class Turret : GenericStructure
 	/// </summary>
 	/// <param name="turretType"></param>
 	/// <param name="targetingMode"></param>
-	public void Initialize(TurretStats.Category turretType, TargetingMode targetingMode)
+	public void Initialize(TurretStats.Category turretType, TargetingMode targetingMode = TargetingMode.Close)
 	{
-		_targetingMode = targetingMode;
-		Initialize(turretType);
-	}
-	/// <summary>
-	/// Initializes generic turret.
-	/// </summary>
-	/// <param name="turretType"></param>
-	public void Initialize(TurretStats.Category turretType)
-	{
-		Initialize(new TurretStats(turretType));
+		Initialize(new TurretStats(turretType), targetingMode);
 	}
 	/// <summary>
 	/// Initialize turret with specific stats
 	/// </summary>
 	/// <param name="stats"></param>
-	public void Initialize(TurretStats stats)
+	/// <param name="targetingMode"></param>
+	public void Initialize(TurretStats stats, TargetingMode targetingMode = TargetingMode.Close)
 	{
+		_targetingMode = targetingMode;
+		_stats = stats;
 		InitializeComponents();
-		UpdateStats(stats);
+		UpdateStats();
 	}
 
 	public override void _Ready()
@@ -63,11 +57,6 @@ public partial class Turret : GenericStructure
 		if (_detector == null || _detectable == null || _shooter == null || _targeting == null || _projectileSpawner == null)
 		{
 			GD.Print($"WARNING - Turret {this} was unable to find one of its components on _Ready()");
-		}
-
-		if (_stats != null)
-		{
-			Initialize(_stats);
 		}
 
 		// Component callbacks //
@@ -119,36 +108,32 @@ public partial class Turret : GenericStructure
 		_detector.SetDetectableTypes(Groups.GroupTypes.None);
 		_detectable.SetDetectorTypes(Groups.GroupTypes.None);
 	}
-	// public void UpdateDetectableEntities(Groups.GroupTypes detectableTypes)
-	// {
-	// 	_detector.SetDetectableTypes(detectableTypes);
-	// }
-	// public void UpdateAbleToDetectEntities(Groups.GroupTypes detectableTypes)
-	// {
-	// 	_detectable.SetDetectorTypes(detectableTypes);
-	// }
 
 	/// <summary>
 	/// Replace current stats with newStats, then update all necessary components which react to stat changes.
 	/// </summary>
 	/// <param name="newStats"></param>
-	public void UpdateStats(TurretStats newStats)
+	public void UpdateStats(TurretStats newStats = null)
 	{
-		_stats = newStats;
+		if (newStats != null)
+		{
+			_stats = newStats;
+		}
 		UpdateComponents();
-		QueueRedraw(); // Draw aggro radius
 	}
 
 	public void UpdateComponents()
 	{
 		if (this.IsNodeReady() && _stats != null)
 		{
-			// _health.SetHealth(_stats.Health); // todo: this might not want to update everytime components are updated.
-			// _hurt.SetRadius(_stats.HitboxRadius);
-			// _detector.SetRadius(_stats.AggroRadius);
-			// _detectable.SetRadius(_stats.DetectableRadius);
-			// _shooter.SetProjectileStats(_stats.ProjectileStats);
-			InitializeComponents(); // TODO
+			_health.SetHealth(_stats.Health); // todo: this might not want to update everytime components are updated.
+			_hurt.SetRadius(_stats.HitboxRadius);
+			_detector.SetRadius(_stats.AggroRadius);
+			_detectable.SetRadius(_stats.DetectableRadius);
+			_shooter.SetProjectileStats(_stats.ProjectileStats);
+			_targeting.TargetingStyle = _targetingMode;
+			UpdateTurretSprite();
+			QueueRedraw(); // Draw aggro radius
 		}
 	}
 
@@ -167,33 +152,13 @@ public partial class Turret : GenericStructure
 			_targeting.TargetingStyle = _targetingMode;
 
 			UpdateTurretSprite();
+			QueueRedraw(); // Draw aggro radius
 		}
 	}
-	// protected void UpdateHitboxRadius(float newRadius)
-	// {
-	// 	_hurt.SetRadius(newRadius);
-	// }
-	// protected void UpdateDetectorRadius(float newRadius)
-	// {
-	// 	_detector.SetRadius(newRadius);
-	// }
-	// protected void UpdateDetectableRadius(float newRadius)
-	// {
-	// 	_detectable.SetRadius(newRadius);
-	// }
 	protected void UpdateTurretSprite()
 	{
 		_animatedSprite2D.Frame = _stats.SpriteFrame; // todo
 	}
-	// protected void UpdateTurretHealth(float newHealth)
-	// {
-	// 	_health.SetHealth(newHealth);
-	// }
-	// protected void UpdateProjectileStats(ProjectileStats newStats)
-	// {
-	// 	_shooter.SetProjectileStats(newStats);
-	// }
-
 	public override string ToString()
 	{
 		return $"{Name}: {_stats}";

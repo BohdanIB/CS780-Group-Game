@@ -3,11 +3,27 @@
 [ext_resource type="Script" uid="uid://bk3drg0y2r1ku" path="res://Scripts/turrets/Turret.cs" id="1_fcprl"]
 [ext_resource type="PackedScene" uid="uid://27mmcge0cxrm" path="res://Scenes/generic_structure.tscn" id="1_hskch"]
 [ext_resource type="Texture2D" uid="uid://bl7a37uc0ye6u" path="res://Assets/Sprites/temp_turrets.png" id="2_hskch"]
+[ext_resource type="Script" uid="uid://db7kn4h7v1jqa" path="res://Resources/Turret/ProjectileStats.cs" id="3_hpwha"]
+[ext_resource type="Script" uid="uid://bawwkshhg5psh" path="res://Resources/Turret/TurretStats.cs" id="4_bfgsf"]
 [ext_resource type="PackedScene" uid="uid://cbnk8jcd7c4v3" path="res://Scenes/Components/detectable_component.tscn" id="5_ku01o"]
 [ext_resource type="PackedScene" uid="uid://1xnv73ih3ekh" path="res://Scenes/Components/shooter_component.tscn" id="6_74mb1"]
 [ext_resource type="PackedScene" uid="uid://c43d2uh68714x" path="res://Scenes/Components/detector_component.tscn" id="6_628tr"]
 [ext_resource type="PackedScene" uid="uid://cxvwrh12elf1m" path="res://Scenes/Components/targeting_component.tscn" id="7_hxjjt"]
 [ext_resource type="PackedScene" uid="uid://bxnd3hgmx5vi6" path="res://Scenes/Components/spawner_component.tscn" id="8_74mb1"]
+
+[sub_resource type="Resource" id="Resource_hpwha"]
+script = ExtResource("3_hpwha")
+_speed = 100.0
+_damage = 10.0
+
+[sub_resource type="Resource" id="Resource_bfgsf"]
+script = ExtResource("4_bfgsf")
+_hitboxRadius = 16.0
+_aggroRadius = 100.0
+_detectableRadius = 16.0
+_health = 100.0
+_fireRate = 2.0
+_projectileStats = SubResource("Resource_hpwha")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_6spbj"]
 atlas = ExtResource("2_hskch")
@@ -34,7 +50,7 @@ animations = [{
 [node name="Turret" unique_id=440596787 node_paths=PackedStringArray("_detector", "_detectable", "_shooter", "_targeting", "_projectileSpawner") groups=["friendly", "turret"] instance=ExtResource("1_hskch")]
 script = ExtResource("1_fcprl")
 _targetingMode = 3
-_stats = null
+_stats = SubResource("Resource_bfgsf")
 _turretTypes = 3
 _targetTypes = 16
 _detector = NodePath("DetectorComponent")

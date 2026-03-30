@@ -31,11 +31,10 @@ public partial class Main : Node2D
 		{
 			enemyDemo = false;
 			var enemies = EnemyDemo();
-			foreach (var e in enemies)
-			{
-				e.StartMoving();
-			}
-			
+			// foreach (var e in enemies)
+			// {
+			// 	e.StartMoving();
+			// }
 		}
 	}
 
@@ -82,13 +81,13 @@ public partial class Main : Node2D
 		{
 			var enemy = GD.Load<PackedScene>("res://Scenes/enemy.tscn").Instantiate<Enemy>();
 			testEnemies.Add(enemy);
+			GetTree().GetRoot().AddChild(enemy);
 
 			// Set enemy paths
 			var spawnPoint = potentialEnemySpawnPoints[_random.Next(potentialEnemySpawnPoints.Count)].position;
 			var path = pathfinder.GetPathInPositions(spawnPoint, _hubLocation, _grid.cellSize);
 			enemy.GlobalPosition = _grid.GetCentralGridCellPositionPixels(spawnPoint);
 			enemy.Initialize(i == 0 ? EnemyStats.Category.Strong : EnemyStats.Category.Regular, path: path.ToArray()); // Make one 'strong' enemy for testing
-			GetTree().GetRoot().AddChild(enemy);
 			enemy.StartMoving();
 
 			// GD.Print($"{enemy}");
