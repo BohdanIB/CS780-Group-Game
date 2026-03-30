@@ -17,7 +17,7 @@ public class GroundTile
         this.terrain = terrain;
         this.position = position;
         roadConnections = roads ?? [false, false, false, false];
-        _structure = structure;
+        _structure = turret;
     }
 
     // public Vector2I GetGridPosition()

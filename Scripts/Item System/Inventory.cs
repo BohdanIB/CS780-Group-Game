@@ -5,7 +5,7 @@ using System.Linq;
 
 public class Inventory
 {
-    private Dictionary<MaterialType, int> materialCounts;
+    private Dictionary<MaterialType, int> materialCounts = [];
 
     public bool HasMaterial(MaterialType material)
     {
