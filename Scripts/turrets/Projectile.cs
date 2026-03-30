@@ -152,7 +152,7 @@ public partial class Projectile : Node2D
 	{
 		return _stats;
 	}
-	public Node2D GetTarget()
+	public HurtComponent GetTarget()
 	{
 		return _target;
 	}

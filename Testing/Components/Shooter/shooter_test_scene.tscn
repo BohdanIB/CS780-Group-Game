@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://cbnk8jcd7c4v3" path="res://Scenes/Components/detectable_component.tscn" id="6_l1ofu"]
 [ext_resource type="PackedScene" uid="uid://e5vy6kbwqw12" path="res://Scenes/Components/health_component.tscn" id="7_swa2c"]
 [ext_resource type="PackedScene" uid="uid://bm24bo2kifop0" path="res://Scenes/Components/mover_component.tscn" id="8_dq11j"]
+[ext_resource type="PackedScene" uid="uid://bu5bt5d2jv3iu" path="res://Scenes/Components/hurt_component.tscn" id="9_swa2c"]
 
 [node name="ShooterTestScene" type="Node2D" unique_id=990212285 node_paths=PackedStringArray("ShooterNode", "Target1", "Target2", "Target3")]
 script = ExtResource("1_0jvr5")
@@ -40,6 +41,8 @@ _startingHealth = 100.0
 [node name="MoverComponent" parent="Target1" unique_id=1975334598 node_paths=PackedStringArray("ParentNode") instance=ExtResource("8_dq11j")]
 ParentNode = NodePath("..")
 
+[node name="HurtComponent" parent="Target1" unique_id=495543674 instance=ExtResource("9_swa2c")]
+
 [node name="Target2" type="Node2D" parent="." unique_id=8271178]
 
 [node name="DetectableComponent" parent="Target2" unique_id=2142805973 instance=ExtResource("6_l1ofu")]
@@ -50,6 +53,8 @@ _startingHealth = 100.0
 [node name="MoverComponent" parent="Target2" unique_id=1769351619 node_paths=PackedStringArray("ParentNode") instance=ExtResource("8_dq11j")]
 ParentNode = NodePath("..")
 
+[node name="HurtComponent" parent="Target2" unique_id=614336045 instance=ExtResource("9_swa2c")]
+
 [node name="Target3" type="Node2D" parent="." unique_id=1186531138]
 
 [node name="DetectableComponent" parent="Target3" unique_id=1032894180 instance=ExtResource("6_l1ofu")]
@@ -59,3 +64,5 @@ _startingHealth = 100.0
 
 [node name="MoverComponent" parent="Target3" unique_id=1421484638 node_paths=PackedStringArray("ParentNode") instance=ExtResource("8_dq11j")]
 ParentNode = NodePath("..")
+
+[node name="HurtComponent" parent="Target3" unique_id=1554330368 instance=ExtResource("9_swa2c")]

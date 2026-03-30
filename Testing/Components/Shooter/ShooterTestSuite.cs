@@ -22,8 +22,8 @@ namespace TestNS
     {
 		private partial class SignalCollector : Node
 		{
-            public List<(Node2D target, Projectile projectile)> ShotList {get; private set;} = new();
-			public (Node2D target, Projectile projectile) CurrentShot {get; private set;} = new(null, null);
+            public List<(HurtComponent target, Projectile projectile)> ShotList {get; private set;} = new();
+			public (HurtComponent target, Projectile projectile) CurrentShot {get; private set;} = new(null, null);
 			public SignalCollector(ShooterComponent shooter)
 			{
 				ConnectComponents(shooter);
@@ -67,6 +67,7 @@ namespace TestNS
         private DetectorComponent _targetingDetector;
 
         private DetectableComponent _detectable1, _detectable2, _detectable3;
+        private HurtComponent _hurt1, _hurt2, _hurt3;
         private HealthComponent _health1, _health2, _health3;
         private MoverComponent _mover1, _mover2, _mover3;
 
@@ -106,6 +107,9 @@ namespace TestNS
 			_detectable1 = GetComponentInChildrenOrNull<DetectableComponent>(_target1);
 			_detectable2 = GetComponentInChildrenOrNull<DetectableComponent>(_target2);
 			_detectable3 = GetComponentInChildrenOrNull<DetectableComponent>(_target3);
+			_hurt1 = GetComponentInChildrenOrNull<HurtComponent>(_target1);
+			_hurt2 = GetComponentInChildrenOrNull<HurtComponent>(_target2);
+			_hurt3 = GetComponentInChildrenOrNull<HurtComponent>(_target3);
 			_health1 = GetComponentInChildrenOrNull<HealthComponent>(_target1);
 			_health2 = GetComponentInChildrenOrNull<HealthComponent>(_target2);
 			_health3 = GetComponentInChildrenOrNull<HealthComponent>(_target3);
@@ -115,6 +119,9 @@ namespace TestNS
 			AssertThat(_detectable1).IsNotNull();
 			AssertThat(_detectable2).IsNotNull();
 			AssertThat(_detectable3).IsNotNull();
+			AssertThat(_hurt1).IsNotNull();
+			AssertThat(_hurt2).IsNotNull();
+			AssertThat(_hurt3).IsNotNull();
 			AssertThat(_health1).IsNotNull();
 			AssertThat(_health2).IsNotNull();
 			AssertThat(_health3).IsNotNull();
@@ -187,7 +194,12 @@ namespace TestNS
 			var targetTypes = Groups.GroupTypes.Enemy;
 			var targetValidTargetingEntitites = shooterTypes | Groups.GroupTypes.Projectile;
 			targetDetectable.Initialize(targetTypes, targetValidTargetingEntitites);
-			untargetableDetectable.Initialize(targetTypes, Groups.GroupTypes.None); // valid but undetectable
+			untargetableDetectable.Initialize(targetTypes, Groups.GroupTypes.None); // valid but undetectable  
+            
+            var targetHurt = _hurt1;
+            var untargetableHurt = _hurt2;
+            targetHurt.Initialize(targetTypes, targetValidTargetingEntitites);
+            untargetableHurt.Initialize(targetTypes, Groups.GroupTypes.None);
 
             SignalCollector signalCollector = AutoFree(new SignalCollector(shooter));
 			
@@ -200,25 +212,25 @@ namespace TestNS
 			shooterNode.GlobalPosition = TARGETING_POSITION;
 			await _runner.SimulateFrames(5, 50); // wait 0.25 seconds
 			AssertThat(signalCollector.ShotList).HasSize(1); // Proper firerate 
-            AssertThat(signalCollector.CurrentShot.target).IsEqual(targetDetectable);
+            AssertThat(signalCollector.CurrentShot.target).IsEqual(targetHurt);
             AssertThat(signalCollector.CurrentShot.projectile.GetStats()).IsEqual(projectileStats);
-            AssertThat(signalCollector.CurrentShot.projectile.GetTarget()).IsEqual(targetDetectable);
+            AssertThat(signalCollector.CurrentShot.projectile.GetTarget()).IsEqual(targetHurt);
 
             // Wait for another shot (expecting a second shot after 0.5 seconds of initial spotting)
 			await _runner.SimulateFrames(5, 52);
 			AssertThat(signalCollector.ShotList).HasSize(2); // Proper firerate 
-            AssertThat(signalCollector.CurrentShot.target).IsEqual(targetDetectable);
+            AssertThat(signalCollector.CurrentShot.target).IsEqual(targetHurt);
             AssertThat(signalCollector.CurrentShot.projectile.GetStats()).IsEqual(projectileStats);
-            AssertThat(signalCollector.CurrentShot.projectile.GetTarget()).IsEqual(targetDetectable);
+            AssertThat(signalCollector.CurrentShot.projectile.GetTarget()).IsEqual(targetHurt);
 			
 			// shuffle target ordering and check shooting target does not change
 			target.GlobalPosition = CLOSEST_POSITION;
 			untargetable.GlobalPosition = MIDDLE_POSITION;
 			await _runner.SimulateFrames(5, 105);
 			AssertThat(signalCollector.ShotList).HasSize(3); // Proper firerate 
-            AssertThat(signalCollector.CurrentShot.target).IsEqual(targetDetectable);
+            AssertThat(signalCollector.CurrentShot.target).IsEqual(targetHurt);
             AssertThat(signalCollector.CurrentShot.projectile.GetStats()).IsEqual(projectileStats);
-            AssertThat(signalCollector.CurrentShot.projectile.GetTarget()).IsEqual(targetDetectable);
+            AssertThat(signalCollector.CurrentShot.projectile.GetTarget()).IsEqual(targetHurt);
 
 			// All targets go out of range == no targets.
 			shooterNode.GlobalPosition = -FARTHEST_POSITION;

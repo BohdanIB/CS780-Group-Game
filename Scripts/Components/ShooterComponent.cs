@@ -6,7 +6,7 @@ using System.Diagnostics;
 
 public partial class ShooterComponent : Node2D
 {
-	[Signal] public delegate void OnShootEventHandler(Node2D Target, Projectile Projectile);
+	[Signal] public delegate void OnShootEventHandler(HurtComponent Target, Projectile Projectile);
 
 	[ExportGroup("Group Types")]
 	[Export] private Groups.GroupTypes _thisEntityTypes, _targetTypes;
@@ -74,7 +74,7 @@ public partial class ShooterComponent : Node2D
 			if (GetComponentInSiblingsOrNull<HurtComponent>(target) is var hurt)
 			{
 				projectile.Initialize(hurt, _projectileStats, _thisEntityTypes, _targetTypes);
-				EmitSignal(SignalName.OnShoot, target, projectile);
+				EmitSignal(SignalName.OnShoot, hurt, projectile);
 			}
 			else
 			{
