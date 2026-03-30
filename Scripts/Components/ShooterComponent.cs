@@ -2,7 +2,6 @@
 using CS780GroupProject.Scripts.Utils;
 using Godot;
 using System.Diagnostics;
-using System.Text.RegularExpressions;
 
 public partial class ShooterComponent : Node2D
 {

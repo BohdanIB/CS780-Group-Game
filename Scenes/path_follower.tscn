@@ -7,13 +7,13 @@
 [ext_resource type="PackedScene" uid="uid://bm24bo2kifop0" path="res://Scenes/Components/mover_component.tscn" id="6_c3bam"]
 [ext_resource type="PackedScene" uid="uid://c43d2uh68714x" path="res://Scenes/Components/detector_component.tscn" id="6_rbq3h"]
 
-[node name="PathFollower" type="Node2D" unique_id=1740221814 node_paths=PackedStringArray("_healthComponent", "_hurtComponent", "_detectorComponent", "_detectableComponent", "_moverComponent", "_animatedSprite2D")]
+[node name="PathFollower" type="Node2D" unique_id=1740221814 node_paths=PackedStringArray("_health", "_hurt", "_detector", "_detectable", "_mover", "_animatedSprite2D")]
 script = ExtResource("1_atuyi")
-_healthComponent = NodePath("HealthComponent")
-_hurtComponent = NodePath("HurtComponent")
-_detectorComponent = NodePath("DetectorComponent")
-_detectableComponent = NodePath("DetectableComponent")
-_moverComponent = NodePath("MoverComponent")
+_health = NodePath("HealthComponent")
+_hurt = NodePath("HurtComponent")
+_detector = NodePath("DetectorComponent")
+_detectable = NodePath("DetectableComponent")
+_mover = NodePath("MoverComponent")
 _animatedSprite2D = NodePath("AnimatedSprite2D")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1606845345]
@@ -26,4 +26,5 @@ _animatedSprite2D = NodePath("AnimatedSprite2D")
 
 [node name="DetectableComponent" parent="." unique_id=734681606 instance=ExtResource("5_43wju")]
 
-[node name="MoverComponent" parent="." unique_id=1975334598 instance=ExtResource("6_c3bam")]
+[node name="MoverComponent" parent="." unique_id=1975334598 node_paths=PackedStringArray("ParentNode") instance=ExtResource("6_c3bam")]
+ParentNode = NodePath("..")

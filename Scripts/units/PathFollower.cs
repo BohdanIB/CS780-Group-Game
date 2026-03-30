@@ -1,47 +1,36 @@
 
+using CS780GroupProject.Scripts.Utils;
 using Godot;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 
 public partial class PathFollower : Node2D
 {
-	// protected const float DISTANCE_THRESHOLD = 0.01f;
+	public const Groups.GroupTypes TYPES = Groups.GroupTypes.None; // todo
 
 	// Components //
-	[ExportGroup("Exported Components")]
-	[Export] protected HealthComponent _healthComponent;
-	[Export] protected HurtComponent _hurtComponent;
-	[Export] protected DetectorComponent _detectorComponent;
-	[Export] protected DetectableComponent _detectableComponent;
-	[Export] protected MoverComponent _moverComponent;
+	[ExportGroup("Components")]
+	[Export] protected HealthComponent _health;
+	[Export] protected HurtComponent _hurt;
+	[Export] protected DetectorComponent _detector;
+	[Export] protected DetectableComponent _detectable;
+	[Export] protected MoverComponent _mover;
 
 	// Scene Children //
 	[ExportGroup("Exported Child Nodes")]
 	[Export] protected AnimatedSprite2D _animatedSprite2D;
 
-	// Preloaded Scenes //
-	// [Export] protected PackedScene _projectileScene;
-
-	// protected float _health = 100.0f;
-	// protected float _movementSpeed = 50.0f;
-
-	protected Random _random = new();
-	// protected List<Area2D> _detectedEntities = new();
-
 	public override void _Ready()
 	{
-		Debug.Assert(IsInstanceValid(_healthComponent));
-		Debug.Assert(IsInstanceValid(_hurtComponent));
-		Debug.Assert(IsInstanceValid(_detectorComponent));
-		Debug.Assert(IsInstanceValid(_detectableComponent));
-		Debug.Assert(IsInstanceValid(_moverComponent));
+		if (_health == null || _hurt == null || _detector == null || _detectable == null || _mover == null)
+		{
+			GD.Print($"WARNING - PathFollower {this} was unable to find components on _Ready()");
+		}
 	}
 
-	public override void _PhysicsProcess(double delta)
-	{
-		// FollowCurrentPath(delta);
-	}
+	// public override void _PhysicsProcess(double delta)
+	// {
+	// 	// FollowCurrentPath(delta);
+	// }
 
 	// Todo
 	// protected void FollowCurrentPath(float movementSpeed, double delta)
@@ -101,23 +90,4 @@ public partial class PathFollower : Node2D
 	// 	// GD.Print($"Follower {Name} distance to goal: {distance}");
 	// 	return distance;
 	// }
-
-
-	protected void SetHitboxRadius(float newRadius)
-	{
-		_hurtComponent.SetRadius(newRadius);
-	}
-	protected void SetDetectorRadius(float newRadius)
-	{
-		_detectorComponent.SetRadius(newRadius);
-	}
-	protected void SetDetectableRadius(float newRadius)
-	{
-		_detectableComponent.SetRadius(newRadius);
-	}
-	// Todo
-	protected void UpdateHealth(float newHealth)
-	{
-		_healthComponent.SetHealth(newHealth);
-	}
 }

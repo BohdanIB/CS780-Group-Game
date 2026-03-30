@@ -27,9 +27,7 @@ public partial class TurretPlacer : Node2D
 
 	public override void _Ready()
 	{
-		_ghostTurret.Initialize(_currentTurretType);
-		// _ghostTurret.UpdateDetectableEntities(Groups.GroupTypes.None);
-		// _ghostTurret.UpdateAbleToDetectEntities(Groups.GroupTypes.None);
+
 		_ghostTurret.DisableTurret();
 		_ghostTurret.Visible = false;
 	}
@@ -117,9 +115,9 @@ public partial class TurretPlacer : Node2D
 				GD.Print($"Placing turret of type {_currentTurretType}");
 				var turret = _turretScene.Instantiate<Turret>();
 				tile.Turret = turret;
+				GetTree().GetRoot().AddChild(turret);
 				turret.Initialize(_currentTurretType, _currentTurretTargetMode);
 				turret.GlobalPosition = _grid.GetCentralGridCellPositionPixels(tile.position);
-				GetTree().GetRoot().AddChild(turret);
 			}
 			// Display "ghost" turret to show where it's going to go and radius
 			// Ghost turret hover

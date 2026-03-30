@@ -12,33 +12,22 @@ public partial class Turret : GenericStructure
 	[Export] private TurretStats _stats;
 
 	[ExportGroup("Types")]
-	// [Export] public Groups.GroupTypes TurretTypes = Groups.GroupTypes.Friendly | Groups.GroupTypes.Structure | Groups.GroupTypes.Turret;
-	[Export] public Groups.GroupTypes TurretTypes
-	{
-		get => _types;
-		set
-		{
-			_types |= value;
-		}
-	}
+	[Export] public Groups.GroupTypes _turretTypes = GenericStructure.TYPES | Groups.GroupTypes.Turret;
+	[Export] public Groups.GroupTypes _targetTypes = Groups.GroupTypes.Enemy;
+	// [Export] public Groups.GroupTypes _hurtTypes = Groups.GroupTypes.Enemy;
+	// [Export] public Groups.GroupTypes _detectorTypes = Groups.GroupTypes.Enemy;
+	// [Export] public Groups.GroupTypes _detectableTypes = Groups.GroupTypes.Enemy;
+	
 
-	// Components
-	private DetectorComponent _detector;
-	private DetectableComponent _detectable;
-	private ShooterComponent _shooter;
-	private TargetingComponent _targeting;
-	private SpawnerComponent _projectileSpawner;
+	[ExportGroup("Components")]
+	[Export] protected DetectorComponent _detector;
+	[Export] protected DetectableComponent _detectable;
+	[Export] protected ShooterComponent _shooter;
+	[Export] protected TargetingComponent _targeting;
+	[Export] protected SpawnerComponent _projectileSpawner;
 
 	private bool _visibleTurretRadius = true; // todo
 
-	/// <summary>
-	/// Initializes generic turret.
-	/// </summary>
-	/// <param name="turretType"></param>
-	public void Initialize(TurretStats.Category turretType)
-	{
-		Initialize(new TurretStats(turretType));
-	}
 	/// <summary>
 	/// Initialize generic turret with specific targeting mode.
 	/// </summary>
@@ -50,28 +39,30 @@ public partial class Turret : GenericStructure
 		Initialize(turretType);
 	}
 	/// <summary>
+	/// Initializes generic turret.
+	/// </summary>
+	/// <param name="turretType"></param>
+	public void Initialize(TurretStats.Category turretType)
+	{
+		Initialize(new TurretStats(turretType));
+	}
+	/// <summary>
 	/// Initialize turret with specific stats
 	/// </summary>
-	/// <param name="turretStats"></param>
-	public void Initialize(TurretStats turretStats)
+	/// <param name="stats"></param>
+	public void Initialize(TurretStats stats)
 	{
-		UpdateStats(turretStats);
+		InitializeComponents();
+		UpdateStats(stats);
 	}
 
 	public override void _Ready()
 	{
 		base._Ready();
 
-		_detector = GetComponentInChildrenOrNull<DetectorComponent>(this);
-		_detectable = GetComponentInChildrenOrNull<DetectableComponent>(this);
-		_shooter = GetComponentInChildrenOrNull<ShooterComponent>(this);
-		_targeting = GetComponentInChildrenOrNull<TargetingComponent>(this);
-		_projectileSpawner = GetComponentInChildrenOrNull<SpawnerComponent>(this);
-	
 		if (_detector == null || _detectable == null || _shooter == null || _targeting == null || _projectileSpawner == null)
 		{
 			GD.Print($"WARNING - Turret {this} was unable to find one of its components on _Ready()");
-			return;
 		}
 
 		if (_stats != null)
@@ -81,26 +72,27 @@ public partial class Turret : GenericStructure
 
 		// Component callbacks //
 
-		_healthComponent.OnNoHealthLeft += () =>
+		_health.OnNoHealthLeft += () =>
 		{
 			GD.Print($"Turret {Name} died.");
 			QueueFree();
 		};
 
-		_hurtComponent.OnEnterHurt += (area, damage) =>
+		_hurt.OnEnterHurt += (area, damage) =>
 		{
-			_healthComponent.ApplyDamage(damage);
+			_health.ApplyDamage(damage);
 		};
 		// _hurtComponent.OnExitHurt += (area) => {};
-
 		// _shooter.OnShoot += (target, projectile) => {};
+
+		// CallDeferred(MethodName.InitializeComponents); // todo: run update components after _Ready() to ensure components are ready?
 
 		// GD.Print($"Turret Stats: {_stats}");
 	}
 
 	public override void _Draw()
 	{
-		if (_visibleTurretRadius)
+		if (_visibleTurretRadius && _stats != null)
 		{
 			DrawCircle(Vector2.Zero, _stats.AggroRadius, new Color(0xff000020), filled: true);
 		}
@@ -122,6 +114,8 @@ public partial class Turret : GenericStructure
 	/// </summary>
 	public void DisableTurret()
 	{
+		_turretTypes = Groups.GroupTypes.None;
+		_targetTypes = Groups.GroupTypes.None;
 		_detector.SetDetectableTypes(Groups.GroupTypes.None);
 		_detectable.SetDetectorTypes(Groups.GroupTypes.None);
 	}
@@ -141,54 +135,64 @@ public partial class Turret : GenericStructure
 	public void UpdateStats(TurretStats newStats)
 	{
 		_stats = newStats;
-		UpdateStats();
+		UpdateComponents();
+		QueueRedraw(); // Draw aggro radius
 	}
-	public void UpdateStats()
+
+	public void UpdateComponents()
+	{
+		if (this.IsNodeReady() && _stats != null)
+		{
+			// _health.SetHealth(_stats.Health); // todo: this might not want to update everytime components are updated.
+			// _hurt.SetRadius(_stats.HitboxRadius);
+			// _detector.SetRadius(_stats.AggroRadius);
+			// _detectable.SetRadius(_stats.DetectableRadius);
+			// _shooter.SetProjectileStats(_stats.ProjectileStats);
+			InitializeComponents(); // TODO
+		}
+	}
+
+	public void InitializeComponents()
 	{
 		// These rely on components which need to be in the scene tree before they can be modified.
-		if (this.IsNodeReady()) {
-			UpdateHitboxRadius(_stats.HitboxRadius);
-			UpdateDetectorRadius(_stats.AggroRadius);
-			UpdateDetectableRadius(_stats.DetectableRadius);
-			UpdateTargetingMode(_targetingMode);
-
+		if (this.IsNodeReady() && _stats != null) {
 			// Todo: Add more updates
 
-			UpdateTurretHealth(_stats.Health);
+			// _health.Initialize();
+			_health.SetHealth(_stats.Health); // todo: this might not want to update everytime components are updated.
+			_hurt.Initialize(_stats.HitboxRadius, _turretTypes, _targetTypes);
+			_detector.Initialize(_stats.AggroRadius, _turretTypes, _targetTypes);
+			_detectable.Initialize(_turretTypes, _targetTypes); // todo: radius
+			_shooter.Initialize(_stats.FireRate, _turretTypes, _stats.ProjectileStats);
+			_targeting.TargetingStyle = _targetingMode;
 
-			UpdateProjectileStats(_stats.ProjectileStats);
+			UpdateTurretSprite();
 		}
-
-		UpdateTurretSprite();
-		// Redraw detector radius
-		QueueRedraw();
 	}
-	protected void UpdateHitboxRadius(float newRadius)
-	{
-		_hurtComponent.SetRadius(newRadius);
-	}
-	protected void UpdateDetectorRadius(float newRadius)
-	{
-		_detector.SetRadius(newRadius);
-	}
-	protected void UpdateDetectableRadius(float newRadius)
-	{
-		_detectable.SetRadius(newRadius);
-	}
+	// protected void UpdateHitboxRadius(float newRadius)
+	// {
+	// 	_hurt.SetRadius(newRadius);
+	// }
+	// protected void UpdateDetectorRadius(float newRadius)
+	// {
+	// 	_detector.SetRadius(newRadius);
+	// }
+	// protected void UpdateDetectableRadius(float newRadius)
+	// {
+	// 	_detectable.SetRadius(newRadius);
+	// }
 	protected void UpdateTurretSprite()
 	{
 		_animatedSprite2D.Frame = _stats.SpriteFrame; // todo
 	}
-	protected void UpdateTurretHealth(float newHealth)
-	{
-		_healthComponent.SetHealth(newHealth);
-	}
-	protected void UpdateProjectileStats(ProjectileStats newStats)
-	{
-		_shooter.SetProjectileStats(newStats);
-	}
-
-
+	// protected void UpdateTurretHealth(float newHealth)
+	// {
+	// 	_health.SetHealth(newHealth);
+	// }
+	// protected void UpdateProjectileStats(ProjectileStats newStats)
+	// {
+	// 	_shooter.SetProjectileStats(newStats);
+	// }
 
 	public override string ToString()
 	{

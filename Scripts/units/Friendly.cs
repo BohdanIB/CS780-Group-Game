@@ -42,14 +42,14 @@ public partial class Friendly : PathFollower
 	}
 	public void UpdateStats()
 	{
-		SetHitboxRadius(_stats.HitboxRadius);
-		SetDetectorRadius(_stats.AggroRadius);
-		SetDetectableRadius(1); // todo
+		_hurt.SetRadius(_stats.HitboxRadius);
+		_detector.SetRadius(_stats.AggroRadius);
+		// _detectable.SetRadius(1) // todo
 		UpdateSprite(); // todo
 
 		// Todo: Add more updates
 
-		UpdateHealth(_stats.Health);
+		_health.SetHealth(_stats.Health);
 	}
 	private void UpdateSprite()
 	{

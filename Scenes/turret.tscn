@@ -31,11 +31,17 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="Turret" unique_id=440596787 groups=["friendly", "turret"] instance=ExtResource("1_hskch")]
+[node name="Turret" unique_id=440596787 node_paths=PackedStringArray("_detector", "_detectable", "_shooter", "_targeting", "_projectileSpawner") groups=["friendly", "turret"] instance=ExtResource("1_hskch")]
 script = ExtResource("1_fcprl")
-TargetingMode = 3
+_targetingMode = 3
 _stats = null
-_turretTypes = 11
+_turretTypes = 3
+_targetTypes = 16
+_detector = NodePath("DetectorComponent")
+_detectable = NodePath("DetectableComponent")
+_shooter = NodePath("ShooterComponent")
+_targeting = NodePath("ShooterComponent/TargetingComponent")
+_projectileSpawner = NodePath("ShooterComponent/ProjectileSpawnerComponent")
 
 [node name="AnimatedSprite2D" parent="." index="0" unique_id=440445772]
 scale = Vector2(0.5, 0.5)

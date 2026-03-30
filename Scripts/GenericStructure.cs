@@ -10,11 +10,11 @@ using Godot;
 /// </summary>
 public partial class GenericStructure: Node2D
 {
-	// [Export] public Groups.GroupTypes StructureTypes = Groups.GroupTypes.Structure;
+	public const Groups.GroupTypes TYPES = Groups.GroupTypes.Structure;
 
-	protected HealthComponent _healthComponent;
-	protected HurtComponent _hurtComponent;
-	protected Groups.GroupTypes _types = Groups.GroupTypes.Structure;
+	[ExportGroup("Components")]
+	[Export] protected HealthComponent _health;
+	[Export] protected HurtComponent _hurt;
 
 	// Nodes
 	[ExportGroup("Exported Child Nodes")]
@@ -24,9 +24,9 @@ public partial class GenericStructure: Node2D
 
 	public override void _Ready()
 	{
-		_healthComponent = GetComponentInChildrenOrNull<HealthComponent>(this);
-		_hurtComponent = GetComponentInChildrenOrNull<HurtComponent>(this);
-		if (_healthComponent == null || _hurtComponent == null)
+		_health = GetComponentInChildrenOrNull<HealthComponent>(this);
+		_hurt = GetComponentInChildrenOrNull<HurtComponent>(this);
+		if (_health == null || _hurt == null)
 		{
 			GD.Print($"WARNING - GenericStructure {this} was unable to find health and/or hurt components on _Ready()");
 		}
