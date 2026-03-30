@@ -138,18 +138,17 @@ namespace TestNS
             var shooterTypes = Groups.GroupTypes.Friendly | Groups.GroupTypes.Structure | Groups.GroupTypes.Turret;
             var shooterTargetTypes = Groups.GroupTypes.Enemy;
             var projectileStats = AutoFree(new ProjectileStats(ProjectileStats.Category.Bolt));
-            shooter.Initialize(range, fireRate, shooterTypes, shooterTargetTypes, projectileStats);
+            shooter.Initialize(fireRate, shooterTypes, shooterTargetTypes, projectileStats);
+            var targeting = _targeting;
+            targeting.Initialize(TargetingMode.Close);
+            var detector = _targetingDetector;
+            detector.Initialize(range, shooterTypes, shooterTargetTypes);
 
             AssertThat(shooter.GetFireRate()).IsEqual(fireRate);
             AssertThat(shooter.GetEntityTypes()).IsEqual(shooterTypes);
             AssertThat(shooter.GetProjectileStats())
                 .IsNotNull()
                 .IsEqual(projectileStats);
-
-            var detector = _targetingDetector; // detector for shooter targeting is initialized properly
-            AssertThat(detector.GetEntityTypes()).IsEqual(shooterTypes);
-            AssertThat(detector.GetDetectableTypes()).IsEqual(shooterTargetTypes);
-            AssertThat(detector.GetRadius()).IsEqual(range);
 		}
 
 		[TestCase]
@@ -175,7 +174,11 @@ namespace TestNS
             var shooterTypes = Groups.GroupTypes.Structure | Groups.GroupTypes.Turret | Groups.GroupTypes.Friendly;
             var shooterTargetTypes = Groups.GroupTypes.Enemy;
             var projectileStats = AutoFree(new ProjectileStats(ProjectileStats.Category.Bolt));
-            shooter.Initialize(range, fireRate, shooterTypes, shooterTargetTypes, projectileStats);
+            shooter.Initialize(fireRate, shooterTypes, shooterTargetTypes, projectileStats);
+            var targeting = _targeting;
+            targeting.Initialize(TargetingMode.Close);
+            var detector = _targetingDetector;
+            detector.Initialize(range, shooterTypes, shooterTargetTypes);
 
             // Target initialization
             var targetDetectable = _detectable1;
@@ -197,15 +200,15 @@ namespace TestNS
 			await _runner.SimulateFrames(5, 50); // wait 0.25 seconds
 			AssertThat(signalCollector.ShotList).HasSize(1); // Proper firerate 
             AssertThat(signalCollector.CurrentShot.target).IsEqual(targetDetectable);
-            AssertThat(signalCollector.CurrentShot.projectile.Stats).IsEqual(projectileStats);
-            AssertThat(signalCollector.CurrentShot.projectile.Target).IsEqual(targetDetectable);
+            AssertThat(signalCollector.CurrentShot.projectile.GetStats()).IsEqual(projectileStats);
+            AssertThat(signalCollector.CurrentShot.projectile.GetTarget()).IsEqual(targetDetectable);
 
             // Wait for another shot (expecting a second shot after 0.5 seconds of initial spotting)
 			await _runner.SimulateFrames(5, 52);
 			AssertThat(signalCollector.ShotList).HasSize(2); // Proper firerate 
             AssertThat(signalCollector.CurrentShot.target).IsEqual(targetDetectable);
-            AssertThat(signalCollector.CurrentShot.projectile.Stats).IsEqual(projectileStats);
-            AssertThat(signalCollector.CurrentShot.projectile.Target).IsEqual(targetDetectable);
+            AssertThat(signalCollector.CurrentShot.projectile.GetStats()).IsEqual(projectileStats);
+            AssertThat(signalCollector.CurrentShot.projectile.GetTarget()).IsEqual(targetDetectable);
 			
 			// shuffle target ordering and check shooting target does not change
 			target.GlobalPosition = CLOSEST_POSITION;
@@ -213,8 +216,8 @@ namespace TestNS
 			await _runner.SimulateFrames(5, 105);
 			AssertThat(signalCollector.ShotList).HasSize(3); // Proper firerate 
             AssertThat(signalCollector.CurrentShot.target).IsEqual(targetDetectable);
-            AssertThat(signalCollector.CurrentShot.projectile.Stats).IsEqual(projectileStats);
-            AssertThat(signalCollector.CurrentShot.projectile.Target).IsEqual(targetDetectable);
+            AssertThat(signalCollector.CurrentShot.projectile.GetStats()).IsEqual(projectileStats);
+            AssertThat(signalCollector.CurrentShot.projectile.GetTarget()).IsEqual(targetDetectable);
 
 			// All targets go out of range == no targets.
 			shooterNode.GlobalPosition = -FARTHEST_POSITION;

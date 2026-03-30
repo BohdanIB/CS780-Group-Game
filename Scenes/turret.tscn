@@ -15,6 +15,7 @@
 script = ExtResource("3_hpwha")
 _speed = 100.0
 _damage = 10.0
+_hitbox = 16.0
 
 [sub_resource type="Resource" id="Resource_bfgsf"]
 script = ExtResource("4_bfgsf")

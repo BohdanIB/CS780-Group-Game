@@ -148,7 +148,7 @@ public partial class Turret : GenericStructure
 			_hurt.Initialize(_stats.HitboxRadius, _turretTypes, _targetTypes);
 			_detector.Initialize(_stats.AggroRadius, _turretTypes, _targetTypes);
 			_detectable.Initialize(_turretTypes, _targetTypes); // todo: radius
-			_shooter.Initialize(_stats.FireRate, _turretTypes, _stats.ProjectileStats);
+			_shooter.Initialize(_stats.FireRate, _turretTypes, _targetTypes, _stats.ProjectileStats);
 			_targeting.TargetingStyle = _targetingMode;
 
 			UpdateTurretSprite();

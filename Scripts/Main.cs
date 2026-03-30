@@ -77,7 +77,7 @@ public partial class Main : Node2D
 		}
 
 		List<Enemy> testEnemies = [];
-		for (int i = 0; i < 1; i++)
+		for (int i = 0; i < 6; i++)
 		{
 			var enemy = GD.Load<PackedScene>("res://Scenes/enemy.tscn").Instantiate<Enemy>();
 			testEnemies.Add(enemy);

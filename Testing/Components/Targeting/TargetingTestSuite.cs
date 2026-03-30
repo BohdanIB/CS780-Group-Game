@@ -5,7 +5,6 @@ using GdUnit4;
 using static GdUnit4.Assertions;
 using System.Threading.Tasks;
 using Godot;
-using System.Collections.Generic;
 
 namespace TestNS
 {
@@ -115,10 +114,8 @@ namespace TestNS
 			var radius = 10f;
 			var targetComponentTypes = Groups.GroupTypes.Structure | Groups.GroupTypes.Turret | Groups.GroupTypes.Friendly;
 			var targetComponentValidTargets = Groups.GroupTypes.Enemy;
-			targeting.Initialize(radius, targetComponentTypes, targetComponentValidTargets);
-			AssertThat(detector.GetRadius()).IsEqual(radius);
-			AssertThat(detector.GetEntityTypes()).IsEqual(targetComponentTypes);
-			AssertThat(detector.GetDetectableTypes()).IsEqual(targetComponentValidTargets);
+			targeting.Initialize(TargetingMode.Close);
+			detector.Initialize(radius, targetComponentTypes, targetComponentValidTargets);
 
 			var detectableEntityTypes = Groups.GroupTypes.Enemy;
 			var detectableValidDetectableTypes = Groups.GroupTypes.Structure | Groups.GroupTypes.Turret | Groups.GroupTypes.Projectile | Groups.GroupTypes.Friendly;
@@ -167,6 +164,7 @@ namespace TestNS
 
 			var targetingNode = _targetingNode;
 			var targeting = _targeting;
+			var detector = _targetingDetector;
 			
 			var target1 = _target1;
 			var target2 = _target2;
@@ -191,8 +189,8 @@ namespace TestNS
 			var range = FARTHEST_POSITION.X - CLOSEST_POSITION.X + (INTER_TARGET_DISTANCE*2);
 			var targetingTypes = Groups.GroupTypes.Structure | Groups.GroupTypes.Turret | Groups.GroupTypes.Friendly;
 			var targetingValidTargets = Groups.GroupTypes.Enemy;
-			targeting.Initialize(range, targetingTypes, targetingValidTargets);
-			targeting.TargetingStyle = TargetingMode.First; // target closest to finishing their path
+			targeting.Initialize(TargetingMode.First);
+			detector.Initialize(range, targetingTypes, targetingValidTargets);
 
 			var targetTypes = Groups.GroupTypes.Enemy;
 			var targetValidTargetingEntitites = targetingTypes | Groups.GroupTypes.Projectile;
@@ -319,6 +317,7 @@ namespace TestNS
 
 			var targetingNode = _targetingNode;
 			var targeting = _targeting;
+			var detector = _targetingDetector;
 			
 			var target1 = _target1;
 			var target2 = _target2;
@@ -343,8 +342,8 @@ namespace TestNS
 			var range = FARTHEST_POSITION.X - CLOSEST_POSITION.X + (INTER_TARGET_DISTANCE*2);
 			var targetingTypes = Groups.GroupTypes.Structure | Groups.GroupTypes.Turret | Groups.GroupTypes.Friendly;
 			var targetingValidTargets = Groups.GroupTypes.Enemy;
-			targeting.Initialize(range, targetingTypes, targetingValidTargets);
-			targeting.TargetingStyle = TargetingMode.Last; // target farthest away from finishing their path
+			targeting.Initialize(TargetingMode.Last);
+			detector.Initialize(range, targetingTypes, targetingValidTargets);
 
 			var targetTypes = Groups.GroupTypes.Enemy;
 			var targetValidTargetingEntitites = targetingTypes | Groups.GroupTypes.Projectile;
@@ -471,6 +470,7 @@ namespace TestNS
 
 			var targetingNode = _targetingNode;
 			var targeting = _targeting;
+			var detector = _targetingDetector;
 			
 			var target1 = _target1;
 			var target2 = _target2;
@@ -491,8 +491,8 @@ namespace TestNS
 			var range = FARTHEST_POSITION.X - CLOSEST_POSITION.X + (INTER_TARGET_DISTANCE*2);
 			var targetingTypes = Groups.GroupTypes.Structure | Groups.GroupTypes.Turret | Groups.GroupTypes.Friendly;
 			var targetingValidTargets = Groups.GroupTypes.Enemy;
-			targeting.Initialize(range, targetingTypes, targetingValidTargets);
-			targeting.TargetingStyle = TargetingMode.Close; // closest target
+			targeting.Initialize(TargetingMode.Close);
+			detector.Initialize(range, targetingTypes, targetingValidTargets);
 
 			var targetTypes = Groups.GroupTypes.Enemy;
 			var targetValidTargetingEntitites = targetingTypes | Groups.GroupTypes.Projectile;
@@ -568,6 +568,7 @@ namespace TestNS
 
 			var targetingNode = _targetingNode;
 			var targeting = _targeting;
+			var detector = _targetingDetector;
 			
 			var target1 = _target1;
 			var target2 = _target2;
@@ -592,8 +593,8 @@ namespace TestNS
 			var range = FARTHEST_POSITION.X - CLOSEST_POSITION.X + (INTER_TARGET_DISTANCE*2);
 			var targetingTypes = Groups.GroupTypes.Structure | Groups.GroupTypes.Turret | Groups.GroupTypes.Friendly;
 			var targetingValidTargets = Groups.GroupTypes.Enemy;
-			targeting.Initialize(range, targetingTypes, targetingValidTargets);
-			targeting.TargetingStyle = TargetingMode.Weak; // weakest target
+			targeting.Initialize(TargetingMode.Weak);
+			detector.Initialize(range, targetingTypes, targetingValidTargets);
 
 			var targetTypes = Groups.GroupTypes.Enemy;
 			var targetValidTargetingEntitites = targetingTypes | Groups.GroupTypes.Projectile;
@@ -676,6 +677,7 @@ namespace TestNS
 
 			var targetingNode = _targetingNode;
 			var targeting = _targeting;
+			var detector = _targetingDetector;
 			
 			var target1 = _target1;
 			var target2 = _target2;
@@ -700,8 +702,8 @@ namespace TestNS
 			var range = FARTHEST_POSITION.X - CLOSEST_POSITION.X + (INTER_TARGET_DISTANCE*2);
 			var targetingTypes = Groups.GroupTypes.Structure | Groups.GroupTypes.Turret | Groups.GroupTypes.Friendly;
 			var targetingValidTargets = Groups.GroupTypes.Enemy;
-			targeting.Initialize(range, targetingTypes, targetingValidTargets);
-			targeting.TargetingStyle = TargetingMode.Strong; // strongest target
+			targeting.Initialize(TargetingMode.Strong);
+			detector.Initialize(range, targetingTypes, targetingValidTargets);
 
 			var targetTypes = Groups.GroupTypes.Enemy;
 			var targetValidTargetingEntitites = targetingTypes | Groups.GroupTypes.Projectile;

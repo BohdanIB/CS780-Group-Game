@@ -110,7 +110,7 @@ public partial class Enemy: PathFollower
 			_detector.Initialize(_enemyTypes, _targetTypes);
 			_detectable.Initialize(_enemyTypes, _targetTypes);
 			_mover.Initialize(_stats.MovementSpeed, this, start: true);
-			_shooter.Initialize(_stats.FireRate, _enemyTypes, _stats.ProjectileStats);
+			// _shooter.Initialize(_stats.FireRate, _enemyTypes, _targetTypes, _stats.ProjectileStats);
 
 			UpdateSprite(); // todo: should be a component?
 		}

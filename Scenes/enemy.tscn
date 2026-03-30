@@ -9,12 +9,13 @@
 [ext_resource type="PackedScene" uid="uid://cxvwrh12elf1m" path="res://Scenes/Components/targeting_component.tscn" id="6_1dp5w"]
 [ext_resource type="PackedScene" uid="uid://bxnd3hgmx5vi6" path="res://Scenes/Components/spawner_component.tscn" id="7_auwsv"]
 
-[sub_resource type="Resource" id="Resource_po0sg"]
+[sub_resource type="Resource" id="Resource_auwsv"]
 script = ExtResource("3_auwsv")
 _speed = 100.0
 _damage = 10.0
+_hitbox = 16.0
 
-[sub_resource type="Resource" id="Resource_haro7"]
+[sub_resource type="Resource" id="Resource_8uf12"]
 script = ExtResource("4_8uf12")
 _hitboxRadius = 16.0
 _aggroRadius = 50.0
@@ -22,7 +23,7 @@ _detectableRadius = 16.0
 _health = 50.0
 _fireRate = 4.0
 _movementSpeed = 15.0
-_projectileStats = SubResource("Resource_po0sg")
+_projectileStats = SubResource("Resource_auwsv")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_0830c"]
 atlas = ExtResource("4_287tu")
@@ -49,7 +50,7 @@ animations = [{
 [node name="Enemy" unique_id=382514737 node_paths=PackedStringArray("_shooter", "_targeting", "_projectileSpawner") groups=["enemy"] instance=ExtResource("1_hghv2")]
 script = ExtResource("2_1f0kj")
 _targetingMode = 4
-_stats = SubResource("Resource_haro7")
+_stats = SubResource("Resource_8uf12")
 _enemyTypes = 16
 _targetTypes = 11
 _shooter = NodePath("ShooterComponent")

@@ -7,39 +7,38 @@ public partial class Projectile : Node2D
 {
 	public const float MIN_TARGET_DISTANCE = 0.01f;
 
-	[Signal] public delegate void OnProjectileImpactEventHandler(Vector2 Position, ProjectileStats Stats, Groups.GroupTypes SenderTypes); // todo: May need more dev; Explosive shots AOE?
+	[Signal] public delegate void OnProjectileImpactEventHandler(Vector2 Position, ProjectileStats Stats/*, Groups.GroupTypes SenderTypes*/); // todo: May need more dev; Explosive shots AOE?
 
-	[Export] public ProjectileStats Stats;
-	[Export] public Vector2 TargetLocation; // Either the target's last known position, or a position given at initialization.
-	[Export] public Node2D Target;
+	[Export] protected ProjectileStats _stats = new(ProjectileStats.Category.Bolt);
+	[Export] protected Vector2 _targetLocation; // Either the target's last known position, or a position given at initialization.
+	[Export] protected HurtComponent _target;
 
 	[ExportGroup("Group Types")]
 	[Export] private Groups.GroupTypes _thisEntityTypes, _senderTypes;
 
 	[ExportGroup("Exported Components")]
-	[Export] private HitComponent _hitComponent;
+	[Export] private HitComponent _hit;
 
 	private AnimatedSprite2D _sprite; // todo: export
-	private bool _wasInitialized = false;
 
 	/// <summary>
 	/// Initialize generic projectile to target specific position.
 	/// </summary>
 	/// <param name="targetPosition"></param>
 	/// <param name="category"></param>
-	public void Initialize(Vector2 targetPosition, ProjectileStats.Category category, Groups.GroupTypes senderTypes)
+	public void Initialize(Vector2 targetPosition, ProjectileStats.Category category, Groups.GroupTypes senderTypes, Groups.GroupTypes hurtableTypes)
 	{
-		Initialize(targetPosition, new ProjectileStats(category), senderTypes);
+		Initialize(targetPosition, new ProjectileStats(category), senderTypes, hurtableTypes);
 	}
 	/// <summary>
 	/// Initialize projectile to target specific position with specific stats.
 	/// </summary>
 	/// <param name="targetPosition"></param>
 	/// <param name="projectileStats"></param>
-	public void Initialize(Vector2 targetPosition, ProjectileStats projectileStats, Groups.GroupTypes senderTypes)
+	public void Initialize(Vector2 targetPosition, ProjectileStats projectileStats, Groups.GroupTypes senderTypes, Groups.GroupTypes hurtableTypes)
 	{
-		TargetLocation = targetPosition;
-		Initialize(projectileStats, senderTypes);
+		_targetLocation = targetPosition;
+		Initialize(projectileStats, senderTypes, hurtableTypes);
 	}
 
 	/// <summary>
@@ -47,26 +46,26 @@ public partial class Projectile : Node2D
 	/// </summary>
 	/// <param name="targetEntity"></param>
 	/// <param name="category"></param>
-	public void Initialize(Node2D targetNode, ProjectileStats.Category category, Groups.GroupTypes senderTypes)
+	public void Initialize(HurtComponent targetNode, ProjectileStats.Category category, Groups.GroupTypes senderTypes, Groups.GroupTypes hurtableTypes)
 	{
-		Initialize(targetNode, new ProjectileStats(category), senderTypes);
+		Initialize(targetNode, new ProjectileStats(category), senderTypes, hurtableTypes);
 	}
 	/// <summary>
 	/// Initialize projectile to target specific entity with specific stats.
 	/// </summary>
 	/// <param name="targetEntity"></param>
 	/// <param name="projectileStats"></param>
-	public void Initialize(Node2D targetNode, ProjectileStats projectileStats, Groups.GroupTypes senderTypes)
+	public void Initialize(HurtComponent targetNode, ProjectileStats projectileStats, Groups.GroupTypes senderTypes, Groups.GroupTypes hurtableTypes)
 	{
-		Target = targetNode;
-		if (!IsInstanceValid(Target))
+		_target = targetNode;
+		if (!IsInstanceValid(_target))
 		{
 			GD.Print($"Projectile {Name} was initialized with target, but target no longer exists... Freeing projectile.");
 			QueueFree(); // todo: Might not be proper to queue a free before the _Ready call?
 			return;
 		}
-		TargetLocation = Target.GlobalPosition;
-		Initialize(projectileStats, senderTypes);
+		_targetLocation = _target.GlobalPosition;
+		Initialize(projectileStats, senderTypes, hurtableTypes);
 	}
 
 	/// <summary>
@@ -75,45 +74,24 @@ public partial class Projectile : Node2D
 	/// Last layer of initilization for any type of initialization for projectile.
 	/// </summary>
 	/// <param name="projectileStats"></param>
-	private void Initialize(ProjectileStats projectileStats, Groups.GroupTypes senderTypes)
+	private void Initialize(ProjectileStats projectileStats, Groups.GroupTypes senderTypes, Groups.GroupTypes hurtableTypes)
 	{
-		Stats = projectileStats;
+		_stats = projectileStats;
 		_senderTypes = senderTypes;
 		_thisEntityTypes = _senderTypes | Groups.GroupTypes.Projectile;
-
-		// _hitComponent.Initialize(_stats.Damage, _senderScene, _target, _targetScenes);
-		_wasInitialized = true;
+		_hit.Initialize(_stats.Hitbox, _stats.Damage, _senderTypes, _thisEntityTypes, hurtableTypes, target: _target);
 	}
-
-	/*
 
 	public override void _Ready()
 	{
-		// Debug
-		if (_stats != null && !_wasInitialized)
-		{
-			if (_target != null && _senderScene != null)
-			{
-				Initialize(_target, _stats, _senderScene);
-			}
-			else if (_senderScene != null)
-			{
-				Initialize(_targetLocation, _stats, _senderScene);
-			}
-			else
-			{
-				GD.Print($"WARNING - Projectile {Name} could not initialized on _Ready with given values {{ Stats: {_stats}, Target: {_target}, SenderScene: {_senderScene}}}");
-			}
-		}
-
 		_sprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D"); // Todo: Nix this for export (or component?)
 		_sprite.Frame = _stats.SpriteFrame;
 
-		// _hitComponent.OnHit += (area, damage) =>
-		// {
-		// 	GD.Print($"PROJECTILE ONHIT: {area.Name} - Damage: {damage}");
-		// 	ProjectileImpact();
-		// };
+		_hit.OnEnterHit += (area, damage) =>
+		{
+			GD.Print($"PROJECTILE ONHIT: {area.Name} - Damage: {damage}");
+			ProjectileImpact();
+		};
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -158,7 +136,7 @@ public partial class Projectile : Node2D
 	private void ProjectileImpact()
 	{
 		// // Todo: WIP - Potentially add animation or some other effects to projectile on impact? May want to incorporate signal somehow.
-		EmitSignal(SignalName.OnProjectileImpact, Position, _stats, _senderScene);
+		EmitSignal(SignalName.OnProjectileImpact, Position, _stats/*, _senderTypes*/);
 		// if (IsInstanceValid(_target) && GetComponentOrNull<HurtComponent>(_target) is var hurt && IsInstanceValid(hurt))
 		// {
 		// 	// GD.Print($"Projectile hit target {_target.Name} for {_stats.Damage} damage");
@@ -170,6 +148,13 @@ public partial class Projectile : Node2D
 		QueueFree(); // TODO: FREEING AND DISCONNECTION OF SIGNALS? https://docs.godotengine.org/en/stable/tutorials/scripting/c_sharp/c_sharp_signals.html
 	}
 
-	*/
+	public ProjectileStats GetStats()
+	{
+		return _stats;
+	}
+	public Node2D GetTarget()
+	{
+		return _target;
+	}
 
 }

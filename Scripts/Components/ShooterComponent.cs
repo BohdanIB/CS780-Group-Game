@@ -1,4 +1,5 @@
 
+using static CS780GroupProject.Scripts.Utils.NodeComponentChecking;
 using CS780GroupProject.Scripts.Utils;
 using Godot;
 using System.Diagnostics;
@@ -8,7 +9,7 @@ public partial class ShooterComponent : Node2D
 	[Signal] public delegate void OnShootEventHandler(Node2D Target, Projectile Projectile);
 
 	[ExportGroup("Group Types")]
-	[Export] private Groups.GroupTypes _thisEntityTypes;
+	[Export] private Groups.GroupTypes _thisEntityTypes, _targetTypes;
 
 	[ExportGroup("Exported Components")]
 	[Export] private SpawnerComponent _projectileSpawner;
@@ -27,11 +28,12 @@ public partial class ShooterComponent : Node2D
 	/// <param name="fireRate"></param>
 	/// <param name="entityTypes"></param>
 	/// <param name="stats"></param>
-	public void Initialize(float fireRate, Groups.GroupTypes entityTypes, ProjectileStats stats)
+	public void Initialize(float fireRate, Groups.GroupTypes entityTypes, Groups.GroupTypes targetTypes, ProjectileStats stats)
 	{
 		SetFireRate(fireRate);
 		SetProjectileStats(stats);
 		_thisEntityTypes = entityTypes;
+		_targetTypes = targetTypes;
 	}
 	/// <summary>
 	/// Initialize shooter and targeting component (which in-turn will initialize the detectable component associated with targeting component).
@@ -43,13 +45,13 @@ public partial class ShooterComponent : Node2D
 	/// <param name="entityTypes"></param>
 	/// <param name="targetTypes"></param>
 	/// <param name="stats"></param>
-	public void Initialize(float range, float fireRate, Groups.GroupTypes entityTypes, Groups.GroupTypes targetTypes, ProjectileStats stats)
-	{
-		SetFireRate(fireRate);
-		SetProjectileStats(stats);
-		_thisEntityTypes = entityTypes;
-		_targeting.Initialize(range, entityTypes, targetTypes);
-	}
+	// public void Initialize(float range, float fireRate, Groups.GroupTypes entityTypes, Groups.GroupTypes targetTypes, ProjectileStats stats)
+	// {
+	// 	SetFireRate(fireRate);
+	// 	SetProjectileStats(stats);
+	// 	_thisEntityTypes = entityTypes;
+	// 	_targeting.Initialize(range, entityTypes, targetTypes);
+	// }
 
 	public override void _Ready()
 	{
@@ -68,9 +70,19 @@ public partial class ShooterComponent : Node2D
 			}
 			_shotCooldown.Start(_shotTime);
 			var projectile = _projectileSpawner.Spawn() as Projectile;
-			projectile.Initialize(target, _projectileStats, _thisEntityTypes);
 			GetTree().GetRoot().AddChild(projectile); // todo: Might not be right
-			EmitSignal(SignalName.OnShoot, target, projectile);
+			if (GetComponentInSiblingsOrNull<HurtComponent>(target) is var hurt)
+			{
+				projectile.Initialize(hurt, _projectileStats, _thisEntityTypes, _targetTypes);
+				EmitSignal(SignalName.OnShoot, target, projectile);
+			}
+			else
+			{
+				GD.Print($"WARNING - Target selected by ShooterComponent {this}, but target does not have a hurt component?");
+				projectile.QueueFree(); // todo
+				return;
+			}
+			
 		};
 		// _projectileSpawner.OnSpawned += (node) =>
 		// {

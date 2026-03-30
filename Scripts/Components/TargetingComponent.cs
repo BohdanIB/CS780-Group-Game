@@ -11,40 +11,48 @@ public partial class TargetingComponent : Node2D
 
 	[Export] public TargetingMode TargetingStyle = TargetingMode.Close;
 	[Export] private DetectorComponent _detector;
+	// [Export] private HitComponent _hit; // todo: To detect hurt components
 
 	private Random _random = new(); // todo: Seed this?
 	private List<DetectableComponent> _targets = [];
 
-	/// <summary>
-	/// Initialize associated detector with stats. Convenience function
-	/// </summary>
-	/// <param name="radius"></param>
-	/// <param name="entityTypes"></param>
-	/// <param name="validTargets"></param>
-	public void Initialize(float radius, Groups.GroupTypes entityTypes, Groups.GroupTypes validTargets)
+	// /// <summary>
+	// /// Initialize associated detector with stats. Convenience function
+	// /// </summary>
+	// /// <param name="radius"></param>
+	// /// <param name="entityTypes"></param>
+	// /// <param name="validTargets"></param>
+	// public void Initialize(float radius, Groups.GroupTypes entityTypes, Groups.GroupTypes validTargets)
+	// {
+	// 	_detector.Initialize(radius, entityTypes, validTargets);
+	// }
+	// /// <summary>
+	// /// Initialize associated detector with stats. Convenience function
+	// /// </summary>
+	// /// <param name="entityTypes"></param>
+	// /// <param name="validTargets"></param>
+	// public void Initialize(Groups.GroupTypes entityTypes, Groups.GroupTypes validTargets)
+	// {
+	// 	_detector.Initialize(entityTypes, validTargets);
+	// }
+	public void Initialize (TargetingMode targetingMode)
 	{
-		_detector.Initialize(radius, entityTypes, validTargets);
-	}
-	/// <summary>
-	/// Initialize associated detector with stats. Convenience function
-	/// </summary>
-	/// <param name="entityTypes"></param>
-	/// <param name="validTargets"></param>
-	public void Initialize(Groups.GroupTypes entityTypes, Groups.GroupTypes validTargets)
-	{
-		_detector.Initialize(entityTypes, validTargets);
+		TargetingStyle = targetingMode;
 	}
 
 	public override void _Ready()
 	{
-		_detector.OnEnterDetector += (detectable) => 
+		if (IsInstanceValid(_detector))
 		{
-			_targets.Add(detectable);
-		};
-		_detector.OnExitDetector += (detectable) => 
-		{
-			_targets.Remove(detectable);
-		};
+			_detector.OnEnterDetector += (detectable) => 
+			{
+				_targets.Add(detectable);
+			};
+			_detector.OnExitDetector += (detectable) => 
+			{
+				_targets.Remove(detectable);
+			};
+		}
 	}
 
 	public override void _PhysicsProcess(double delta)

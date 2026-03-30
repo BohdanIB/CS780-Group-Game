@@ -17,13 +17,13 @@ public partial class ProjectileStats : Resource
 		Bolt,
 		Blade,
 	};
-	private record ProjectileBaseStats(float Speed, float Damage, int SpriteFrame);
+	private record ProjectileBaseStats(float Speed, float Damage, float Hitbox, int SpriteFrame);
 	private static readonly Dictionary<Category, ProjectileBaseStats> PROJECTILE_BASE_STATS = new()
 	{
 		{Category.Bolt, 
-			new ProjectileBaseStats(Speed: 100f, Damage: 10f, SpriteFrame: 0)},
+			new ProjectileBaseStats(Speed: 100f, Damage: 10f, Hitbox: 16f, SpriteFrame: 0)},
 		{Category.Blade, 
-			new ProjectileBaseStats(Speed: 100f, Damage: 20f, SpriteFrame: 1)},
+			new ProjectileBaseStats(Speed: 100f, Damage: 20f, Hitbox: 10f, SpriteFrame: 1)},
 	};
 	// private record ProjectileBaseStats(float Speed, float Damage, int SpriteFrame, Func<Vector2, Vector2, float, (Vector2, float)> MovementHandler);
 	// private static readonly Dictionary<Category, ProjectileBaseStats> PROJECTILE_BASE_STATS = new()
@@ -36,13 +36,14 @@ public partial class ProjectileStats : Resource
 
 	// Projectile Stats
 	[Export] private Category _type;
-	[Export] private float _speed, _damage;
+	[Export] private float _speed, _damage, _hitbox;
 	[Export] private int _spriteFrame;
 
 	// Getters + Setters
 	public Category Type { get => _type; set => _type = value; }
 	public float Speed { get => _speed; set => _speed = value; }
 	public float Damage { get => _damage; set => _damage = value; }
+	public float Hitbox { get => _hitbox; set => _hitbox = value; }
 	public int SpriteFrame { get => _spriteFrame; set => _spriteFrame = value; }
 
 	public ProjectileStats(Category type)
@@ -51,6 +52,7 @@ public partial class ProjectileStats : Resource
 		Type = type;
 		Speed = baseStats.Speed;
 		Damage = baseStats.Damage;
+		Hitbox = baseStats.Hitbox;
 		SpriteFrame = baseStats.SpriteFrame;
 	}
 	public ProjectileStats()
@@ -58,6 +60,7 @@ public partial class ProjectileStats : Resource
 		ProjectileBaseStats baseStats = PROJECTILE_BASE_STATS[Type];
 		Speed = baseStats.Speed;
 		Damage = baseStats.Damage;
+		Hitbox = baseStats.Hitbox;
 		SpriteFrame = baseStats.SpriteFrame;
 	}
 
@@ -78,6 +81,6 @@ public partial class ProjectileStats : Resource
 
 	public override string ToString()
 	{
-		return $"{_type} - Speed: {Speed} - Damage: {Damage}";
+		return $"{_type} - Speed: {Speed} - Damage: {Damage} - Hitbox: {Hitbox}";
 	}
 }
