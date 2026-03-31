@@ -25,14 +25,17 @@ public partial class Enemy: PathFollower
 	/// Initializes enemy with "generic" base stats for given type.
 	/// </summary>
 	/// <param name="type"></param>
+	/// <param name="path"></param>
 	public void Initialize(EnemyStats.Category type, Vector2[] path = null)
 	{
 		Initialize(new EnemyStats(type), path);
 	}
+	
 	/// <summary>
 	/// Initializes enemy with custom stats.
 	/// </summary>
 	/// <param name="stats"></param>
+	/// <param name="path"></param>
 	public void Initialize(EnemyStats stats, Vector2[] path = null)
 	{
 		SetPath(path);
@@ -62,19 +65,6 @@ public partial class Enemy: PathFollower
 			_health.ApplyDamage(damage); 
 		}; 
 
-	}
-
-	public void SetPath(Vector2[] path)
-	{
-		_mover.SetMoverPath(path);
-	}
-	public void StartMoving()
-	{
-		_mover.Start();
-	}
-	public void StopMoving()
-	{
-		_mover.Stop();
 	}
 
 	public void UpdateStats(EnemyStats newStats = null)
@@ -110,19 +100,20 @@ public partial class Enemy: PathFollower
 			_detector.Initialize(_enemyTypes, _targetTypes);
 			_detectable.Initialize(_enemyTypes, _targetTypes);
 			_mover.Initialize(_stats.MovementSpeed, this, start: true);
-			// _shooter.Initialize(_stats.FireRate, _enemyTypes, _targetTypes, _stats.ProjectileStats);
+			_shooter.Initialize(_stats.FireRate, _enemyTypes, _targetTypes, _stats.ProjectileStats);
 
 			UpdateSprite(); // todo: should be a component?
 		}
+	}
+
+	private void UpdateSprite()
+	{
+		_animatedSprite2D.Frame = _stats.SpriteFrame;
 	}
 	// protected void UpdateProjectileStats(ProjectileStats newStats)
 	// {
 	// 	_shooterComponent.SetProjectileStats(newStats);
 	// }
-	private void UpdateSprite()
-	{
-		_animatedSprite2D.Frame = _stats.SpriteFrame;
-	}
 	public override string ToString()
 	{
 		return $"Enemy '{Name}': {_stats}";

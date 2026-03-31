@@ -27,9 +27,10 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="Projectile" type="Node2D" unique_id=1257787249 node_paths=PackedStringArray("_hit") groups=["projectile"]]
+[node name="Projectile" type="Node2D" unique_id=1257787249 node_paths=PackedStringArray("_hit", "_sprite") groups=["projectile"]]
 script = ExtResource("1_yr2qt")
 _hit = NodePath("HitComponent")
+_sprite = NodePath("AnimatedSprite2D")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=225913893]
 scale = Vector2(0.5, 0.5)

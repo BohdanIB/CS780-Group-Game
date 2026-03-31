@@ -15,11 +15,14 @@ public partial class Projectile : Node2D
 
 	[ExportGroup("Group Types")]
 	[Export] private Groups.GroupTypes _thisEntityTypes, _senderTypes;
+	private Groups.GroupTypes _validHitableTypes;
 
-	[ExportGroup("Exported Components")]
+	[ExportGroup("Components")]
 	[Export] private HitComponent _hit;
 
-	private AnimatedSprite2D _sprite; // todo: export
+
+	[ExportGroup("Child Nodes")]
+	[Export] private AnimatedSprite2D _sprite;
 
 	/// <summary>
 	/// Initialize generic projectile to target specific position.
@@ -79,14 +82,13 @@ public partial class Projectile : Node2D
 		_stats = projectileStats;
 		_senderTypes = senderTypes;
 		_thisEntityTypes = _senderTypes | Groups.GroupTypes.Projectile;
-		_hit.Initialize(_stats.Hitbox, _stats.Damage, _senderTypes, _thisEntityTypes, hurtableTypes, target: _target);
+		_validHitableTypes = hurtableTypes;
+		InitializeComponents();
+		UpdateStats();
 	}
 
 	public override void _Ready()
 	{
-		_sprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D"); // Todo: Nix this for export (or component?)
-		_sprite.Frame = _stats.SpriteFrame;
-
 		_hit.OnEnterHit += (area, damage) =>
 		{
 			GD.Print($"PROJECTILE ONHIT: {area.Name} - Damage: {damage}");
@@ -146,6 +148,37 @@ public partial class Projectile : Node2D
 		// }
 		// GD.Print("Freeing Projectile.");
 		QueueFree(); // TODO: FREEING AND DISCONNECTION OF SIGNALS? https://docs.godotengine.org/en/stable/tutorials/scripting/c_sharp/c_sharp_signals.html
+	}
+
+	public void UpdateStats(ProjectileStats newStats = null)
+	{
+		if (newStats != null)
+		{
+			_stats = newStats;
+		}
+		UpdateComponents();
+	}
+	public void UpdateComponents()
+	{
+		if (this.IsNodeReady() && _stats != null)
+		{
+			_hit.SetRadius(_stats.Hitbox);
+			// Todo: Add more updates
+			UpdateSprite(); // todo: should be a component?
+		}
+	}
+	private void InitializeComponents()
+	{
+		if (this.IsNodeReady() && _stats != null)
+		{
+			_hit.Initialize(_stats.Hitbox, _stats.Damage, _senderTypes, _thisEntityTypes, _validHitableTypes, target: _target);
+
+			UpdateSprite(); // todo: should be a component?
+		}
+	}
+	private void UpdateSprite()
+	{
+		_sprite.Frame = _stats.SpriteFrame;
 	}
 
 	public ProjectileStats GetStats()

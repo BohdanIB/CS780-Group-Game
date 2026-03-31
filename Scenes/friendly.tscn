@@ -2,7 +2,25 @@
 
 [ext_resource type="PackedScene" uid="uid://dtv7kt7wo8omt" path="res://Scenes/path_follower.tscn" id="1_jgycc"]
 [ext_resource type="Script" uid="uid://bs25gk004xjd8" path="res://Scripts/units/Friendly.cs" id="2_50fos"]
+[ext_resource type="Script" uid="uid://db7kn4h7v1jqa" path="res://Resources/Turret/ProjectileStats.cs" id="3_ljipm"]
 [ext_resource type="Texture2D" uid="uid://cn7d6ij73r2i" path="res://Assets/Sprites/temp_friendly.png" id="3_ub8j0"]
+[ext_resource type="Script" uid="uid://catyueyep0aer" path="res://Resources/Unit/FriendlyStats.cs" id="4_r41ou"]
+
+[sub_resource type="Resource" id="Resource_ljipm"]
+script = ExtResource("3_ljipm")
+_speed = 100.0
+_damage = 10.0
+_hitbox = 16.0
+
+[sub_resource type="Resource" id="Resource_r41ou"]
+script = ExtResource("4_r41ou")
+_hitboxRadius = 5.0
+_aggroRadius = 25.0
+_detectableRadius = 16.0
+_health = 50.0
+_fireRate = 2.0
+_movementSpeed = 10.0
+_projectileStats = SubResource("Resource_ljipm")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_5vdkv"]
 atlas = ExtResource("3_ub8j0")
@@ -28,6 +46,9 @@ animations = [{
 
 [node name="Friendly" unique_id=382514737 groups=["friendly"] instance=ExtResource("1_jgycc")]
 script = ExtResource("2_50fos")
+_stats = SubResource("Resource_r41ou")
+_friendlyTypes = 8
+_enemyTypes = 16
 
 [node name="AnimatedSprite2D" parent="." index="0" unique_id=1606845345]
 scale = Vector2(0.25, 0.25)
