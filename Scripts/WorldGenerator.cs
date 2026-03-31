@@ -9,7 +9,7 @@ public partial class WorldGenerator : Node
 
 	public static GenericGrid<GroundTile> GenerateWorldAStar(Vector2I dimensions, Vector2I hubLocation, int seed = 42)
 	{
-		Random randomizer = new(seed);
+		Random randomizer = new();
 
 		TerrainType defaultTerrain = new TerrainType()
 		{

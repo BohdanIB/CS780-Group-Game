@@ -37,7 +37,7 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="PackedScene" id="PackedScene_hptm8"]
+[sub_resource type="PackedScene" id="PackedScene_ynf5e"]
 resource_local_to_scene = true
 _bundled = {
 "conn_count": 0,
@@ -61,7 +61,7 @@ script = ExtResource("1_jjgbg")
 [node name="TileShapePlacer" parent="." unique_id=1636893986 instance=ExtResource("3_jjvhh")]
 
 [node name="PathFollower" parent="." unique_id=142391362 instance=ExtResource("4_jjvhh")]
-_projectileScene = SubResource("PackedScene_hptm8")
+_projectileScene = SubResource("PackedScene_ynf5e")
 
 [node name="TurretPlacer" parent="." unique_id=1881251108 instance=ExtResource("5_kry3j")]
 

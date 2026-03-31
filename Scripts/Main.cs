@@ -9,7 +9,7 @@ public partial class Main : Node2D
 
 	public override void _Ready()
 	{
-		Random randomizer = new(MAIN_SEED); // todo: might just want a global seeded randomizer singleton kicking around somewhere?
+		Random randomizer = new(); // todo: might just want a global seeded randomizer singleton kicking around somewhere?
 
 		var hubLocation = new Vector2I(20, 10);
 		GenericGrid<GroundTile> grid = WorldGenerator.GenerateWorldAStar(new Vector2I(41, 21), hubLocation, MAIN_SEED);
