@@ -12,12 +12,12 @@ public class GroundTile
     public GenericStructure Structure { get => _structure; set => _structure = value; }
     public Turret Turret { get => _structure as Turret; set => _structure = value; }
 
-    public GroundTile(BiomeType terrain, Vector2I position, bool[] roads = null, Turret turret = null)
+    public GroundTile(BiomeType terrain, Vector2I position, bool[] roads = null, GenericStructure structure = null)
     {
         this.terrain = terrain;
         this.position = position;
         roadConnections = roads ?? [false, false, false, false];
-        _structure = turret;
+        _structure = structure;
     }
 
     // public Vector2I GetGridPosition()
