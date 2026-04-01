@@ -89,7 +89,7 @@ public partial class Projectile : Node2D
 
 	public override void _Ready()
 	{
-		_hit.OnEnterHit += (area, damage) =>
+		_hit.OnHit += (area, damage) =>
 		{
 			GD.Print($"PROJECTILE ONHIT: {area.Name} - Damage: {damage}");
 			ProjectileImpact();

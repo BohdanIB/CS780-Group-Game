@@ -7,8 +7,8 @@ using Godot;
 /// </summary>
 public partial class HurtComponent : Area2D
 {
-	[Signal] public delegate void OnEnterHurtEventHandler(HitComponent Hit, float Damage);
-	[Signal] public delegate void OnExitHurtEventHandler(HitComponent Hit);
+	[Signal] public delegate void OnHurtEventHandler(HitComponent Hit, float Damage);
+	// [Signal] public delegate void OnExitHurtEventHandler(HitComponent Hit);
 
 	[ExportGroup("Group Types")]
 	[Export] private Groups.GroupTypes _thisEntityTypes, _validHitterTypes;
@@ -29,26 +29,34 @@ public partial class HurtComponent : Area2D
 
 	public override void _Ready()
 	{
-		AreaEntered += (area) =>
+		// AreaEntered += (area) =>
+		// {
+		// 	if (area is HitComponent hit && hit != null)
+		// 	{
+		// 		if (Hurtable(hit))
+		// 		{
+		// 			EmitSignal(SignalName.OnEnterHurt, hit, hit.Damage);
+		// 		}
+		// 	}
+		// };
+		// AreaExited += (area) =>
+		// {
+		// 	if (area is HitComponent hit && hit != null)
+		// 	{
+		// 		if (Hurtable(hit))
+		// 		{
+		// 			EmitSignal(SignalName.OnExitHurt, hit);
+		// 		}
+		// 	}
+		// };
+	}
+
+	public void Hurt(HitComponent hit, float damage)
+	{
+		if (this.Hurtable(hit))
 		{
-			if (area is HitComponent hit && hit != null)
-			{
-				if (Hurtable(hit))
-				{
-					EmitSignal(SignalName.OnEnterHurt, hit, hit.Damage);
-				}
-			}
-		};
-		AreaExited += (area) =>
-		{
-			if (area is HitComponent hit && hit != null)
-			{
-				if (Hurtable(hit))
-				{
-					EmitSignal(SignalName.OnExitHurt, hit);
-				}
-			}
-		};
+			EmitSignal(SignalName.OnHurt, hit, damage);
+		}
 	}
 
 	/// <summary>

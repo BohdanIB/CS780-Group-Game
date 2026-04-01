@@ -67,7 +67,7 @@ public partial class Turret : GenericStructure
 			QueueFree();
 		};
 
-		_hurt.OnEnterHurt += (area, damage) =>
+		_hurt.OnHurt += (area, damage) =>
 		{
 			_health.ApplyDamage(damage);
 		};

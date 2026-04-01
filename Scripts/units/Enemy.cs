@@ -60,7 +60,7 @@ public partial class Enemy: PathFollower
 			GD.Print($"Enemy {Name} died.");
 			QueueFree();
 		};
-		_hurt.OnEnterHurt += (area, damage) => 
+		_hurt.OnHurt += (area, damage) => 
 		{
 			_health.ApplyDamage(damage); 
 		}; 

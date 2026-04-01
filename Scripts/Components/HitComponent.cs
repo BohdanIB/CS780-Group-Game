@@ -19,8 +19,8 @@ using Godot;
 /// </summary>
 public partial class HitComponent : Area2D
 {
-	[Signal] public delegate void OnEnterHitEventHandler(HurtComponent Hurt, float Damage);
-	[Signal] public delegate void OnExitHitEventHandler(HurtComponent Hurt);
+	[Signal] public delegate void OnHitEventHandler(HurtComponent Hurt, float Damage);
+	// [Signal] public delegate void OnExitHitEventHandler(HurtComponent Hurt);
 
 	[Export] private float _hitDamage = 1f;
 	[Export] private HurtComponent _target;
@@ -67,20 +67,21 @@ public partial class HitComponent : Area2D
 				if (Hittable(hurt))
 				{
 					// GD.Print($"HitComponent made contact with {area.Name} and is attempting to deal {_hitDamage} damage. Emitting OnHit signal.");
-					EmitSignal(SignalName.OnEnterHit, hurt, _hitDamage);
+					hurt.Hurt(this, Damage);
+					EmitSignal(SignalName.OnHit, hurt, Damage);
 				}
 			}
 		};
-		AreaExited += (area) =>
-		{
-			if (area is HurtComponent hurt && hurt != null)
-			{
-				if (Hittable(hurt))
-				{
-					EmitSignal(SignalName.OnExitHit, hurt);
-				}
-			}
-		};
+		// AreaExited += (area) =>
+		// {
+		// 	if (area is HurtComponent hurt && hurt != null)
+		// 	{
+		// 		if (Hittable(hurt))
+		// 		{
+		// 			EmitSignal(SignalName.OnExitHit, hurt);
+		// 		}
+		// 	}
+		// };
 	}
 
 	/// <summary>

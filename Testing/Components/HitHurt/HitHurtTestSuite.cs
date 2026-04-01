@@ -25,14 +25,14 @@ namespace TestNS
 	{
 		private partial class SignalCollector : Node
 		{
-			public List<(Node sender, float damage)> HitEnterList { get; } = new();
-			public List<(Node sender, float damage)> Hit2EnterList { get; } = new();
-			public List<(Node sender, float damage)> HurtEnterList { get; } = new();
-			public List<(Node sender, float damage)> Hurt2EnterList { get; } = new();
-			public List<Node> HitExitList { get; } = new();
-			public List<Node> Hit2ExitList { get; } = new();
-			public List<Node> HurtExitList { get; } = new();
-			public List<Node> Hurt2ExitList { get; } = new();
+			public List<(Node sender, float damage)> HitList { get; } = new();
+			public List<(Node sender, float damage)> Hit2List { get; } = new();
+			public List<(Node sender, float damage)> HurtList { get; } = new();
+			public List<(Node sender, float damage)> Hurt2List { get; } = new();
+			// public List<Node> HitExitList { get; } = new();
+			// public List<Node> Hit2ExitList { get; } = new();
+			// public List<Node> HurtExitList { get; } = new();
+			// public List<Node> Hurt2ExitList { get; } = new();
 
 			public SignalCollector(HitComponent hit, HurtComponent hurt, HitComponent hit2 = null, HurtComponent hurt2 = null)
 			{
@@ -40,41 +40,41 @@ namespace TestNS
 			}
 			public void ConnectComponents(HitComponent hit, HurtComponent hurt, HitComponent hit2 = null, HurtComponent hurt2 = null)
 			{
-				hit.OnEnterHit += (hurt, damage) => {
-					HitEnterList.Add((hurt, damage));
+				hit.OnHit += (hurt, damage) => {
+					HitList.Add((hurt, damage));
 				};
-				hit.OnExitHit += (hurt) =>
-				{
-					HitExitList.Add(hurt);
-				};
+				// hit.OnExitHit += (hurt) =>
+				// {
+				// 	HitExitList.Add(hurt);
+				// };
 
-				hurt.OnEnterHurt += (hit, damage) => {
-					HurtEnterList.Add((hit, damage));
+				hurt.OnHurt += (hit, damage) => {
+					HurtList.Add((hit, damage));
 				};
-				hurt.OnExitHurt += (hit) =>
-				{
-					HurtExitList.Add(hit);
-				};
+				// hurt.OnExitHurt += (hit) =>
+				// {
+				// 	HurtExitList.Add(hit);
+				// };
 
 				if (hit2 != null)
 				{
-					hit2.OnEnterHit += (hurt, damage) => {
-						Hit2EnterList.Add((hurt, damage));
+					hit2.OnHit += (hurt, damage) => {
+						Hit2List.Add((hurt, damage));
 					};
-					hit2.OnExitHit += (hurt) =>
-					{
-						Hit2ExitList.Add(hurt);
-					};
+					// hit2.OnExitHit += (hurt) =>
+					// {
+					// 	Hit2ExitList.Add(hurt);
+					// };
 				}
 				if (hurt2 != null)
 				{
-					hurt2.OnEnterHurt += (hit, damage) => {
-						Hurt2EnterList.Add((hit, damage));
+					hurt2.OnHurt += (hit, damage) => {
+						Hurt2List.Add((hit, damage));
 					};
-					hurt2.OnExitHurt += (hit) =>
-					{
-						Hurt2ExitList.Add(hit);
-					};
+					// hurt2.OnExitHurt += (hit) =>
+					// {
+					// 	Hurt2ExitList.Add(hit);
+					// };
 				}
 			}
 		}
@@ -234,34 +234,24 @@ namespace TestNS
 			hurt.Initialize(radius, hurtEntityTypes, hurtValidHitTypes);
 
 			await _runner.SimulateFrames(4);
-			AssertThat(signalCollector.HitEnterList).IsEmpty();
-			AssertThat(signalCollector.HitExitList).IsEmpty();
-			AssertThat(signalCollector.HurtEnterList).IsEmpty();
-			AssertThat(signalCollector.HurtExitList).IsEmpty();
+			AssertThat(signalCollector.HitList).IsEmpty();
+			AssertThat(signalCollector.HurtList).IsEmpty();
 
 			// move components into range
 			hit.GlobalPosition = new(95, 0);
 			await _runner.SimulateFrames(4);
-			AssertThat(signalCollector.HitEnterList)
+			AssertThat(signalCollector.HitList)
 				.HasSize(1)
 				.Contains(new List<(Node, float)>(){(hurt, damage)});
-			AssertThat(signalCollector.HurtEnterList)
+			AssertThat(signalCollector.HurtList)
 				.HasSize(1)
 				.Contains(new List<(Node, float)>(){(hit, damage)});
-			AssertThat(signalCollector.HitExitList).IsEmpty();
-			AssertThat(signalCollector.HurtExitList).IsEmpty();
 
 			// move components out of range
 			hit.GlobalPosition = new(50, 0);
 			await _runner.SimulateFrames(4);
-			AssertThat(signalCollector.HitExitList)
-				.HasSize(1)
-				.Contains(hurt);
-			AssertThat(signalCollector.HurtExitList)
-				.HasSize(1)
-				.Contains(hit);
-			AssertThat(signalCollector.HurtEnterList).HasSize(1);
-			AssertThat(signalCollector.HitEnterList).HasSize(1);
+			AssertThat(signalCollector.HurtList).HasSize(1);
+			AssertThat(signalCollector.HitList).HasSize(1);
 		}
 		/// <summary>
 		/// Expecting same result as NoTarget case
@@ -292,34 +282,24 @@ namespace TestNS
 			hurt.Initialize(radius, hurtEntityTypes, hurtValidHitTypes);
 
 			await _runner.SimulateFrames(4);
-			AssertThat(signalCollector.HitEnterList).IsEmpty();
-			AssertThat(signalCollector.HitExitList).IsEmpty();
-			AssertThat(signalCollector.HurtEnterList).IsEmpty();
-			AssertThat(signalCollector.HurtExitList).IsEmpty();
+			AssertThat(signalCollector.HitList).IsEmpty();
+			AssertThat(signalCollector.HurtList).IsEmpty();
 
 			// move components into range
 			hit.GlobalPosition = new(95, 0);
 			await _runner.SimulateFrames(4);
-			AssertThat(signalCollector.HitEnterList)
+			AssertThat(signalCollector.HitList)
 				.HasSize(1)
 				.Contains(new List<(Node, float)>(){(hurt, damage)});
-			AssertThat(signalCollector.HurtEnterList)
+			AssertThat(signalCollector.HurtList)
 				.HasSize(1)
 				.Contains(new List<(Node, float)>(){(hit, damage)});
-			AssertThat(signalCollector.HitExitList).IsEmpty();
-			AssertThat(signalCollector.HurtExitList).IsEmpty();
 
 			// move components out of range
 			hit.GlobalPosition = new(50, 0);
 			await _runner.SimulateFrames(4);
-			AssertThat(signalCollector.HitExitList)
-				.HasSize(1)
-				.Contains(hurt);
-			AssertThat(signalCollector.HurtExitList)
-				.HasSize(1)
-				.Contains(hit);
-			AssertThat(signalCollector.HurtEnterList).HasSize(1);
-			AssertThat(signalCollector.HitEnterList).HasSize(1);
+			AssertThat(signalCollector.HurtList).HasSize(1);
+			AssertThat(signalCollector.HitList).HasSize(1);
 		}
 		/// <summary>
 		/// Only expecting hits for target even though both hurts are viable
@@ -353,40 +333,27 @@ namespace TestNS
 			hurt2.Initialize(radius, hurtEntityTypes, hurtValidHitTypes);
 
 			await _runner.SimulateFrames(4);
-			AssertThat(signalCollector.HitEnterList).IsEmpty();
-			AssertThat(signalCollector.HurtEnterList).IsEmpty();
-			AssertThat(signalCollector.Hurt2EnterList).IsEmpty();
-			AssertThat(signalCollector.HitExitList).IsEmpty();
-			AssertThat(signalCollector.HurtExitList).IsEmpty();
-			AssertThat(signalCollector.Hurt2ExitList).IsEmpty();
+			AssertThat(signalCollector.HitList).IsEmpty();
+			AssertThat(signalCollector.HurtList).IsEmpty();
+			AssertThat(signalCollector.Hurt2List).IsEmpty();
 
 			// hit into range of components (Should only hit target)
 			hit.GlobalPosition = new(95, 0);
 			await _runner.SimulateFrames(4);
-			AssertThat(signalCollector.HitEnterList)
+			AssertThat(signalCollector.HitList)
 				.HasSize(1)
 				.Contains(new List<(Node, float)>(){(hurt2, damage)});
-			AssertThat(signalCollector.HurtEnterList).IsEmpty();
-			AssertThat(signalCollector.Hurt2EnterList)
+			AssertThat(signalCollector.HurtList).IsEmpty();
+			AssertThat(signalCollector.Hurt2List)
 				.HasSize(1)
 				.Contains(new List<(Node, float)>(){(hit, damage)});
-			AssertThat(signalCollector.HitExitList).IsEmpty();
-			AssertThat(signalCollector.HurtExitList).IsEmpty();
-			AssertThat(signalCollector.Hurt2ExitList).IsEmpty();
 
 			// move hit out of range
 			hit.GlobalPosition = new(50, 0);
 			await _runner.SimulateFrames(4);
-			AssertThat(signalCollector.HitExitList)
-				.HasSize(1)
-				.Contains(hurt2);
-			AssertThat(signalCollector.HurtExitList).IsEmpty();
-			AssertThat(signalCollector.Hurt2ExitList)
-				.HasSize(1)
-				.Contains(hit);
-			AssertThat(signalCollector.HitEnterList).HasSize(1);
-			AssertThat(signalCollector.HurtEnterList).IsEmpty();
-			AssertThat(signalCollector.Hurt2EnterList).HasSize(1);
+			AssertThat(signalCollector.HitList).HasSize(1);
+			AssertThat(signalCollector.HurtList).IsEmpty();
+			AssertThat(signalCollector.Hurt2List).HasSize(1);
 		}
 
 		/// <summary>
@@ -421,44 +388,29 @@ namespace TestNS
 			hurt2.Initialize(radius, hurtEntityTypes, hurtValidHitTypes);
 
 			await _runner.SimulateFrames(4);
-			AssertThat(signalCollector.HitEnterList).IsEmpty();
-			AssertThat(signalCollector.HurtEnterList).IsEmpty();
-			AssertThat(signalCollector.Hurt2EnterList).IsEmpty();
-			AssertThat(signalCollector.HitExitList).IsEmpty();
-			AssertThat(signalCollector.HurtExitList).IsEmpty();
-			AssertThat(signalCollector.Hurt2ExitList).IsEmpty();
+			AssertThat(signalCollector.HitList).IsEmpty();
+			AssertThat(signalCollector.HurtList).IsEmpty();
+			AssertThat(signalCollector.Hurt2List).IsEmpty();
 
 			// hit into range of components (Should only hit target)
 			hit.GlobalPosition = new(95, 0);
 			await _runner.SimulateFrames(4);
-			AssertThat(signalCollector.HitEnterList)
+			AssertThat(signalCollector.HitList)
 				.HasSize(2)
 				.Contains(new List<(Node, float)>(){(hurt, damage), (hurt2, damage)});
-			AssertThat(signalCollector.HurtEnterList)
+			AssertThat(signalCollector.HurtList)
 				.HasSize(1)
 				.Contains(new List<(Node, float)>(){(hit, damage)});
-			AssertThat(signalCollector.Hurt2EnterList)
+			AssertThat(signalCollector.Hurt2List)
 				.HasSize(1)
 				.Contains(new List<(Node, float)>(){(hit, damage)});
-			AssertThat(signalCollector.HitExitList).IsEmpty();
-			AssertThat(signalCollector.HurtExitList).IsEmpty();
-			AssertThat(signalCollector.Hurt2ExitList).IsEmpty();
 
 			// move hit out of range
 			hit.GlobalPosition = new(50, 0);
 			await _runner.SimulateFrames(4);
-			AssertThat(signalCollector.HitExitList)
-				.HasSize(2)
-				.Contains(hurt, hurt2);
-			AssertThat(signalCollector.HurtExitList)
-				.HasSize(1)
-				.Contains(hit);
-			AssertThat(signalCollector.Hurt2ExitList)
-				.HasSize(1)
-				.ContainsSame(hit);
-			AssertThat(signalCollector.HitEnterList).HasSize(2);
-			AssertThat(signalCollector.HurtEnterList).HasSize(1);
-			AssertThat(signalCollector.Hurt2EnterList).HasSize(1);
+			AssertThat(signalCollector.HitList).HasSize(2);
+			AssertThat(signalCollector.HurtList).HasSize(1);
+			AssertThat(signalCollector.Hurt2List).HasSize(1);
 		}
 
 		/// <summary>
@@ -495,44 +447,29 @@ namespace TestNS
 			hit2.Initialize(radius, damage2, hitSenderTypes, hitEntityTypes, hitValidHurtTypes, target);
 
 			await _runner.SimulateFrames(4);
-			AssertThat(signalCollector.HurtEnterList).IsEmpty();
-			AssertThat(signalCollector.HitEnterList).IsEmpty();
-			AssertThat(signalCollector.Hit2EnterList).IsEmpty();
-			AssertThat(signalCollector.HurtExitList).IsEmpty();
-			AssertThat(signalCollector.HitExitList).IsEmpty();
-			AssertThat(signalCollector.Hit2ExitList).IsEmpty();
+			AssertThat(signalCollector.HurtList).IsEmpty();
+			AssertThat(signalCollector.HitList).IsEmpty();
+			AssertThat(signalCollector.Hit2List).IsEmpty();
 
 			// hurt into range of components
 			hurt.GlobalPosition = new(95, 0);
 			await _runner.SimulateFrames(4);
-			AssertThat(signalCollector.HurtEnterList)
+			AssertThat(signalCollector.HurtList)
 				.HasSize(2)
 				.Contains(new List<(Node, float)>(){(hit, damage), (hit2, damage2)});
-			AssertThat(signalCollector.HitEnterList)
+			AssertThat(signalCollector.HitList)
 				.HasSize(1)
 				.Contains(new List<(Node, float)>(){(hurt, damage)});
-			AssertThat(signalCollector.Hit2EnterList)
+			AssertThat(signalCollector.Hit2List)
 				.HasSize(1)
 				.Contains(new List<(Node, float)>(){(hurt, damage2)});
-			AssertThat(signalCollector.HurtExitList).IsEmpty();
-			AssertThat(signalCollector.HitExitList).IsEmpty();
-			AssertThat(signalCollector.Hit2ExitList).IsEmpty();
 
 			// move hit out of range
 			hurt.GlobalPosition = new(50, 0);
 			await _runner.SimulateFrames(4);
-			AssertThat(signalCollector.HurtExitList)
-				.HasSize(2)
-				.Contains(hit, hit2);
-			AssertThat(signalCollector.HitExitList)
-				.HasSize(1)
-				.Contains(hurt);
-			AssertThat(signalCollector.Hit2ExitList)
-				.HasSize(1)
-				.ContainsSame(hurt);
-			AssertThat(signalCollector.HurtEnterList).HasSize(2);
-			AssertThat(signalCollector.HitEnterList).HasSize(1);
-			AssertThat(signalCollector.Hit2EnterList).HasSize(1);
+			AssertThat(signalCollector.HurtList).HasSize(2);
+			AssertThat(signalCollector.HitList).HasSize(1);
+			AssertThat(signalCollector.Hit2List).HasSize(1);
 		}
 		[TestCase]
 		[RequireGodotRuntime]
@@ -563,44 +500,29 @@ namespace TestNS
 			hit2.Initialize(radius, damage2, hitSenderTypes, hitEntityTypes, hitValidHurtTypes);
 
 			await _runner.SimulateFrames(4);
-			AssertThat(signalCollector.HurtEnterList).IsEmpty();
-			AssertThat(signalCollector.HitEnterList).IsEmpty();
-			AssertThat(signalCollector.Hit2EnterList).IsEmpty();
-			AssertThat(signalCollector.HurtExitList).IsEmpty();
-			AssertThat(signalCollector.HitExitList).IsEmpty();
-			AssertThat(signalCollector.Hit2ExitList).IsEmpty();
+			AssertThat(signalCollector.HurtList).IsEmpty();
+			AssertThat(signalCollector.HitList).IsEmpty();
+			AssertThat(signalCollector.Hit2List).IsEmpty();
 
 			// hurt into range of components
 			hurt.GlobalPosition = new(95, 0);
 			await _runner.SimulateFrames(4);
-			AssertThat(signalCollector.HurtEnterList)
+			AssertThat(signalCollector.HurtList)
 				.HasSize(2)
 				.Contains(new List<(Node, float)>(){(hit, damage), (hit2, damage2)});
-			AssertThat(signalCollector.HitEnterList)
+			AssertThat(signalCollector.HitList)
 				.HasSize(1)
 				.Contains(new List<(Node, float)>(){(hurt, damage)});
-			AssertThat(signalCollector.Hit2EnterList)
+			AssertThat(signalCollector.Hit2List)
 				.HasSize(1)
 				.Contains(new List<(Node, float)>(){(hurt, damage2)});
-			AssertThat(signalCollector.HurtExitList).IsEmpty();
-			AssertThat(signalCollector.HitExitList).IsEmpty();
-			AssertThat(signalCollector.Hit2ExitList).IsEmpty();
 
 			// move hit out of range
 			hurt.GlobalPosition = new(50, 0);
 			await _runner.SimulateFrames(4);
-			AssertThat(signalCollector.HurtExitList)
-				.HasSize(2)
-				.Contains(hit, hit2);
-			AssertThat(signalCollector.HitExitList)
-				.HasSize(1)
-				.Contains(hurt);
-			AssertThat(signalCollector.Hit2ExitList)
-				.HasSize(1)
-				.ContainsSame(hurt);
-			AssertThat(signalCollector.HurtEnterList).HasSize(2);
-			AssertThat(signalCollector.HitEnterList).HasSize(1);
-			AssertThat(signalCollector.Hit2EnterList).HasSize(1);
+			AssertThat(signalCollector.HurtList).HasSize(2);
+			AssertThat(signalCollector.HitList).HasSize(1);
+			AssertThat(signalCollector.Hit2List).HasSize(1);
 		}
 	}
 }

@@ -47,7 +47,7 @@ public partial class Friendly : PathFollower
 			GD.Print($"Friendly {Name} died.");
 			QueueFree();
 		};
-		_hurt.OnEnterHurt += (area, damage) => 
+		_hurt.OnHurt += (area, damage) => 
 		{
 			_health.ApplyDamage(damage); 
 		}; 

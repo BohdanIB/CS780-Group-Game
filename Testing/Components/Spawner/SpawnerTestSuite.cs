@@ -93,7 +93,7 @@ namespace TestNS
 			AssertThat(signalCollector.SpawnedList).IsEmpty();
 
             // Spawn node
-            spawner.Spawn();
+            AutoFree(spawner.Spawn());
 			await _runner.SimulateFrames(GENERIC_WAIT_FRAMES);
 			AssertThat(signalCollector.SpawnedList).HasSize(1);
             var spawnedNode1 = signalCollector.SpawnedList[0] as Projectile;
@@ -105,7 +105,7 @@ namespace TestNS
             spawnerNode.GlobalPosition = spawnerPosition;
             scenePath = "res://Scenes/Components/detector_component.tscn";
             spawner.ScenePath = scenePath;
-            spawner.Spawn();
+            AutoFree(spawner.Spawn());
 			await _runner.SimulateFrames(GENERIC_WAIT_FRAMES);
 			AssertThat(signalCollector.SpawnedList).HasSize(2);
             var spawnedNode2 = signalCollector.SpawnedList[1] as DetectorComponent;
