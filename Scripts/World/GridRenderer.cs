@@ -2,14 +2,10 @@ using Godot;
 
 public partial class GridRenderer : Node2D
 {
-	[Export] public TileMapLayer terrainMap, roadMap;
-	[Export] public IsometricTerrainMap _terrainMap;
-	[Export] public IsometricTerrainMap _waterMap;
+	[Export] public IsometricTerrainMap _waterMap, _terrainMap;
 
 	public void RenderGrid(GenericGrid<GroundTile> grid)
 	{
-		terrainMap.Clear();
-		roadMap.Clear();
 		_terrainMap.Clear();
 		_waterMap.Clear();
 

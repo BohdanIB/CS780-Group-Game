@@ -1,65 +1,13 @@
 [gd_scene format=3 uid="uid://tw6j84txs1a1"]
 
 [ext_resource type="Script" uid="uid://b1gccadgt058e" path="res://Scripts/World/GridRenderer.cs" id="1_m4t5i"]
-[ext_resource type="Texture2D" uid="uid://dpc0ll6wg7f2v" path="res://Assets/Sprites/TerrainTiles.png" id="2_103ga"]
-[ext_resource type="Texture2D" uid="uid://dd8vdef5ep1ls" path="res://Assets/Sprites/RoadTiles.png" id="3_m4t5i"]
 [ext_resource type="TileSet" uid="uid://q0v2aa8x440" path="res://Resources/IsometricTilesets/new_tile_set.tres" id="4_103ga"]
 [ext_resource type="Script" uid="uid://bb03ubmk3np8y" path="res://Scenes/IsometricTerrainMap.cs" id="4_w2gk3"]
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_nhlwq"]
-texture = ExtResource("2_103ga")
-0:0/0 = 0
-1:0/0 = 0
-2:0/0 = 0
-0:1/0 = 0
-1:1/0 = 0
-2:1/0 = 0
-0:2/0 = 0
-1:2/0 = 0
-2:2/0 = 0
-
-[sub_resource type="TileSet" id="TileSet_bijo1"]
-tile_layout = 5
-tile_offset_axis = 1
-sources/0 = SubResource("TileSetAtlasSource_nhlwq")
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_103ga"]
-texture = ExtResource("3_m4t5i")
-0:0/0 = 0
-1:0/0 = 0
-2:0/0 = 0
-3:0/0 = 0
-4:0/0 = 0
-5:0/0 = 0
-6:0/0 = 0
-8:0/0 = 0
-7:0/0 = 0
-9:0/0 = 0
-11:0/0 = 0
-10:0/0 = 0
-12:0/0 = 0
-13:0/0 = 0
-14:0/0 = 0
-15:0/0 = 0
-
-[sub_resource type="TileSet" id="TileSet_x0gn4"]
-sources/0 = SubResource("TileSetAtlasSource_103ga")
-
-[node name="GridRenderer" type="Node2D" unique_id=76182152 node_paths=PackedStringArray("terrainMap", "roadMap", "_terrainMap", "_waterMap")]
+[node name="GridRenderer" type="Node2D" unique_id=76182152 node_paths=PackedStringArray("_waterMap", "_terrainMap")]
 script = ExtResource("1_m4t5i")
-terrainMap = NodePath("TerrainMap")
-roadMap = NodePath("RoadMap")
-_terrainMap = NodePath("IsometricTerrainMap")
 _waterMap = NodePath("IsometricWaterMap")
-
-[node name="TerrainMap" type="TileMapLayer" parent="." unique_id=1399087840]
-visible = false
-tile_set = SubResource("TileSet_bijo1")
-
-[node name="RoadMap" type="TileMapLayer" parent="." unique_id=348094572]
-visible = false
-tile_map_data = PackedByteArray(0, 0, 1, 0, 1, 0, 1, 0, 7, 0, 0, 0, 0, 0, 3, 0, 3, 0, 1, 0, 7, 0, 0, 0, 0, 0)
-tile_set = SubResource("TileSet_x0gn4")
+_terrainMap = NodePath("IsometricTerrainMap")
 
 [node name="IsometricWaterMap" type="Node2D" parent="." unique_id=1871212287 node_paths=PackedStringArray("_layers")]
 scale = Vector2(2, 2)

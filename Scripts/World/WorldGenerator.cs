@@ -9,13 +9,11 @@ public partial class WorldGenerator : Node
     private const string TERRAIN_DIRECTORY_PATH = "res://Resources/Terrain/";
 
 
-    public static GenericGrid<GroundTile> GenerateWorldAStar(Vector2I dimensions, Vector2I hubLocation, int seed = 42)
+    public static GenericGrid<GroundTile> GenerateWorldAStar(Vector2I dimensions, Vector2I hubLocation)
     {
-        Random randomizer = new(seed);
-
-        float[,] elevationNoise = GenerateNoiseMatrix(dimensions.X, dimensions.Y, seed: randomizer.Next());
-        float[,] humidityNoise = GenerateNoiseMatrix(dimensions.X, dimensions.Y, seed: randomizer.Next(), frequency:0.03f);
-        float[,] temperatureNoise = GenerateNoiseMatrix(dimensions.X, dimensions.Y, seed: randomizer.Next(), lucanarity:1);
+        float[,] elevationNoise = GenerateNoiseMatrix(dimensions.X, dimensions.Y, seed: (int)GD.Randi());
+        float[,] humidityNoise = GenerateNoiseMatrix(dimensions.X, dimensions.Y, seed: (int)GD.Randi(), frequency:0.03f);
+        float[,] temperatureNoise = GenerateNoiseMatrix(dimensions.X, dimensions.Y, seed: (int)GD.Randi(), lucanarity:1);
 
         BiomeType[] loadedTerrains = LoadTerrains();
 
@@ -66,7 +64,7 @@ public partial class WorldGenerator : Node
         // Draw initial paths
         for (int i = 0; i < 25; i++)
         {
-            Vector2I targetPoint = new Vector2I(randomizer.Next(dimensions.X), randomizer.Next(dimensions.Y));
+            Vector2I targetPoint = new Vector2I(GD.RandRange(0, dimensions.X-1), GD.RandRange(0, dimensions.Y-1));
             if (targetPoint.DistanceTo(hubLocation) < 6) continue;
             targetPoints.Add(targetPoint);
 
@@ -93,8 +91,8 @@ public partial class WorldGenerator : Node
 
         for (int i = 0; i < 8; i++)
         {
-            Vector2I initialPoint = targetPoints[randomizer.Next(targetPoints.Count)];
-            Vector2I finalPoint = targetPoints[randomizer.Next(targetPoints.Count)];
+            Vector2I initialPoint = targetPoints[GD.RandRange(0, targetPoints.Count-1)];
+            Vector2I finalPoint = targetPoints[GD.RandRange(0, targetPoints.Count-1)];
 
             if (initialPoint == finalPoint || initialPoint.DistanceTo(finalPoint) < 3) continue;
 

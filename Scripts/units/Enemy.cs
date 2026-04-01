@@ -115,8 +115,7 @@ public partial class Enemy: PathFollower
 	/// <param name="parent"></param>
 	/// <param name="grid"></param>
 	/// <param name="hub"></param>
-	/// <param name="randomizer"></param>
-	public static void TempEnemyDemo(Node parent, GenericGrid<GroundTile> grid, Vector2I hub, Random randomizer)
+	public static void TempEnemyDemo(Node parent, GenericGrid<GroundTile> grid, Vector2I hub)
 	{
 		GridAStarPathfinder<GroundTile> pathfinder = new GridAStarPathfinder<GroundTile>(grid, 
 			(x,y) => {
@@ -162,7 +161,7 @@ public partial class Enemy: PathFollower
 			parent.GetTree().GetRoot().CallDeferred("add_child", enemy); // Cannot add children in _Ready() calls
 
 			// Set enemy paths
-			var spawnPoint = potentialEnemySpawnPoints[randomizer.Next(potentialEnemySpawnPoints.Count)].position;
+			var spawnPoint = potentialEnemySpawnPoints[GD.RandRange(0, potentialEnemySpawnPoints.Count-1)].position;
 			var path = pathfinder.GetPathInPositions(spawnPoint, hub, grid.cellSize);
 			enemy.SetPath(path);
 			enemy.GlobalPosition = grid.GetCentralGridCellPositionPixels(spawnPoint);
@@ -181,7 +180,7 @@ public partial class Enemy: PathFollower
 			Friendly currTarget;
 			if (_targetingMode == TargetingMode.Random)
 			{
-				currTarget = _targetsInRange[_random.Next(_targetsInRange.Count)];
+				currTarget = _targetsInRange[GD.RandRange(0, _targetsInRange.Count-1)];
 			}
 			else
 			{

@@ -79,8 +79,7 @@ public partial class Friendly : PathFollower
 	/// <param name="parent"></param>
 	/// <param name="grid"></param>
 	/// <param name="hub"></param>
-	/// <param name="randomizer"></param>
-	public static void TempFriendlyDemo(Node parent, GenericGrid<GroundTile> grid, Vector2I hub, Random randomizer)
+	public static void TempFriendlyDemo(Node parent, GenericGrid<GroundTile> grid, Vector2I hub)
 	{
 		GridAStarPathfinder<GroundTile> pathfinder = new GridAStarPathfinder<GroundTile>(grid, 
 			(x,y) => {
@@ -127,7 +126,7 @@ public partial class Friendly : PathFollower
 			parent.GetTree().GetRoot().CallDeferred("add_child", friendly); // Cannot add children in _Ready()
 
 			// Set path
-			var endPoint = potentialFriendlyEndpoints[randomizer.Next(potentialFriendlyEndpoints.Count)].position;
+			var endPoint = potentialFriendlyEndpoints[GD.RandRange(0, potentialFriendlyEndpoints.Count-1)].position;
 			var path = pathfinder.GetPathInPositions(hub, endPoint, grid.cellSize);
 			friendly.SetPath(path);
 			friendly.GlobalPosition = grid.GetCentralGridCellPositionPixels(hub);

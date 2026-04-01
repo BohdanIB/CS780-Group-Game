@@ -31,7 +31,6 @@ public partial class Turret : GenericStructure
 	// Preloaded Scenes
 	[Export] private PackedScene _projectileScene;
 
-	private Random _random = new();
 	private List<Enemy> _enemiesInRange = new();
 
 	/// <summary>
@@ -98,7 +97,7 @@ public partial class Turret : GenericStructure
 			Enemy currTargetEnemy;
 			if (_targetingMode == TargetingMode.Random)
 			{
-				currTargetEnemy = _enemiesInRange[_random.Next(_enemiesInRange.Count)];
+				currTargetEnemy = _enemiesInRange[GD.RandRange(0, _enemiesInRange.Count-1)];
 			}
 			else
 			{

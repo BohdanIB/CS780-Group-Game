@@ -19,7 +19,6 @@ public partial class PathFollower : Area2D
 	protected float _health = 100.0f;
 	protected float _movementSpeed = 50.0f;
 
-	protected Random _random = new();
 	protected List<Vector2> _path;
 	protected int _currentPathIndex;
 
