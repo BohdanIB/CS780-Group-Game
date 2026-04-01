@@ -10,4 +10,3 @@ script = ExtResource("1_jjgbg")
 [node name="GridRenderer" parent="." unique_id=76182152 instance=ExtResource("2_bo1nx")]
 
 [node name="TurretPlacer" parent="." unique_id=1881251108 instance=ExtResource("5_kry3j")]
-_turretScene = null
