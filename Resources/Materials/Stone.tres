@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="MaterialType" format=3 uid="uid://dfk6ujpa1i1xn"]
+
+[ext_resource type="Script" uid="uid://cplgdv73pm7sk" path="res://Scripts/Item System/MaterialType.cs" id="1_akt1g"]
+
+[resource]
+script = ExtResource("1_akt1g")
+metadata/_custom_type_script = "uid://cplgdv73pm7sk"
