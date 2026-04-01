@@ -3,7 +3,7 @@ using Godot;
 public class GroundTile
 {
     // Tile features
-    public TerrainType terrain;
+    public BiomeType terrain;
     public Vector2I position;
     public bool[] roadConnections = new bool[4]; // N,E,S,W
     private GenericStructure _structure;
@@ -12,7 +12,7 @@ public class GroundTile
     public GenericStructure Structure { get => _structure; set => _structure = value; }
     public Turret Turret { get => _structure as Turret; set => _structure = value; }
 
-    public GroundTile(TerrainType terrain, Vector2I position, bool[] roads = null, GenericStructure structure = null)
+    public GroundTile(BiomeType terrain, Vector2I position, bool[] roads = null, GenericStructure structure = null)
     {
         this.terrain = terrain;
         this.position = position;

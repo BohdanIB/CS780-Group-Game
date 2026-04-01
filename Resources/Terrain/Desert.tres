@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="BiomeType" format=3 uid="uid://dxlyat08vvtbj"]
+
+[ext_resource type="Script" uid="uid://dff1fbgdyals4" path="res://Scripts/World/BiomeType.cs" id="1_653j2"]
+
+[resource]
+script = ExtResource("1_653j2")
+groundTileAtlasCoords = Vector2i(2, 1)
+humidityGenerationRange = Vector2(0, 0.5)
+temperatureGenerationRange = Vector2(0.5, 1)
+generationPriority = 0.1
+harvestableMaterials = Array[Object]([])
+metadata/_custom_type_script = "uid://dff1fbgdyals4"
