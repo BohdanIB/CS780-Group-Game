@@ -34,7 +34,7 @@ public partial class TurretPlacer : Node2D
 
 	public override void _Process(double delta)
 	{
-		FollowMouse();
+		// FollowMouse();
 
 		if (Input.IsActionJustPressed("ToggleTurretPlacementMode"))
 		{
