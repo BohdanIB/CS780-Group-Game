@@ -112,7 +112,8 @@ public partial class TurretPlacer : Node2D
 
 	private GroundTile GetTileIfStructurePlacementValid()
 	{
-		if (_grid.GetGridValueOrDefault((int)GlobalPosition.X, (int)GlobalPosition.Y) is GroundTile tile && 
+		var coord = IsometricTileMap.GlobalPositionToMapCoord(_currentTileMapLayer, GlobalPosition);
+		if (_grid.GetGridValueOrDefault(coord.X, coord.Y) is GroundTile tile && 
 			tile != null && !tile.HasRoadConnection() && !tile.HasStructure())
 		{
 			// GD.Print($"Structure placement valid for tile: {tile}");
@@ -127,14 +128,15 @@ public partial class TurretPlacer : Node2D
 	/// <returns></returns>
 	private GroundTile GetTile()
 	{
-		return _grid.GetGridValueOrDefault((int)GlobalPosition.X, (int)GlobalPosition.Y);
+		var coord = IsometricTileMap.GlobalPositionToMapCoord(_currentTileMapLayer, GlobalPosition);
+		return _grid.GetGridValueOrDefault(coord.X, coord.Y);
 	}
 
 	private void FollowMouse()
 	{
-		Vector2 mousePosition = GetViewport().GetMousePosition();
+		Vector2 mousePosition = GetGlobalMousePosition();
 		// _currentOriginCoordinates = (Vector2I) (mousePosition / _grid.cellSize).Clamp(Vector2I.Zero, _grid.GetGridDimensions());
-		Position = IsometricTileMap.CenterTilePosition(_currentTileMapLayer, mousePosition);
+		GlobalPosition = IsometricTileMap.CenterTilePosition(_currentTileMapLayer, mousePosition);
 		// GD.Print($"Current origin position for mouse: {_currentOriginCoordinates}");
 		// GD.Print($"Coordinate: {IsometricTileMap.GlobalPositionToMapCoord(_currentTileMapLayer, mousePosition)} - Global Position: {IsometricTileMap.CenterTilePosition(_currentTileMapLayer, mousePosition)}");
 	}

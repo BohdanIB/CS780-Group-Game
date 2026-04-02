@@ -2,6 +2,7 @@ using Godot;
 
 public partial class GridRenderer : Node2D
 {
+	// [Export] public TileMapLayer TopDownTerrainMap, TopDownRoadMap;
 	[Export] public IsometricTileMap WaterMap, TerrainMap;
 
 	public void RenderGrid(GenericGrid<GroundTile> grid)

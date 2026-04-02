@@ -14,7 +14,7 @@ script = ExtResource("4_w2gk3")
 _layers = [NodePath("Layer0")]
 
 [node name="Layer0" type="TileMapLayer" parent="IsometricWaterMap" unique_id=1441229112]
-z_index = 1
+z_index = -1
 tile_set = ExtResource("4_103ga")
 
 [node name="IsometricTerrainMap" type="Node2D" parent="." unique_id=335113738 node_paths=PackedStringArray("_layers")]
@@ -22,10 +22,13 @@ script = ExtResource("4_w2gk3")
 _layers = [NodePath("Layer0"), NodePath("Layer1"), NodePath("Layer2")]
 
 [node name="Layer0" type="TileMapLayer" parent="IsometricTerrainMap" unique_id=1146434624]
+z_index = -2
 tile_set = ExtResource("4_103ga")
 
 [node name="Layer1" type="TileMapLayer" parent="IsometricTerrainMap" unique_id=2120328094]
+z_index = -2
 tile_set = ExtResource("4_103ga")
 
 [node name="Layer2" type="TileMapLayer" parent="IsometricTerrainMap" unique_id=1659913011]
+z_index = -2
 tile_set = ExtResource("4_103ga")

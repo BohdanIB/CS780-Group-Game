@@ -173,10 +173,10 @@ public partial class Enemy: PathFollower
 			var path = new List<Vector2>();
 			foreach (var point in pathfinder.GetPath(spawnPoint, hub))
 			{
-				path.Add(IsometricTileMap.CenterTilePosition(layer, point));
+				path.Add(IsometricTileMap.MapCoordToGlobalPosition(layer, point));
 			}
 			enemy.SetPath(path);
-			enemy.GlobalPosition = IsometricTileMap.CenterTilePosition(layer, spawnPoint);
+			enemy.GlobalPosition = IsometricTileMap.MapCoordToGlobalPosition(layer, spawnPoint);
 
 			// GD.Print($"{enemy}");
 		}

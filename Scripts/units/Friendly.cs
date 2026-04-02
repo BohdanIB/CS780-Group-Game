@@ -137,10 +137,10 @@ public partial class Friendly : PathFollower
 			var path = new List<Vector2>();
 			foreach (var point in pathfinder.GetPath(hub, endPoint))
 			{
-				path.Add(IsometricTileMap.CenterTilePosition(layer, point));
+				path.Add(IsometricTileMap.MapCoordToGlobalPosition(layer, point));
 			}
 			friendly.SetPath(path);
-			friendly.GlobalPosition = IsometricTileMap.CenterTilePosition(layer, hub);
+			friendly.GlobalPosition = IsometricTileMap.MapCoordToGlobalPosition(layer, hub);
 
 			// GD.Print($"{friendly}");
 		}
