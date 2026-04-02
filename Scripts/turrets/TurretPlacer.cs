@@ -10,7 +10,9 @@ public partial class TurretPlacer : Node2D
 	private TurretStats.Category _currentTurretType = TurretStats.Category.Ballista;
 	private Turret.TargetingMode _currentTurretTargetMode = Turret.TargetingMode.First;
 	private GenericGrid<GroundTile> _grid;
-	private Vector2I _currentOriginCoordinates = new();
+	private IsometricTileMap _tileMap;
+	private TileMapLayer _currentTileMapLayer; // todo: Potentially expand to other layers depending on hover location?
+	// private Vector2I _currentOriginCoordinates = new();
 
 	// Scene Children
 	[Export] private Turret _ghostTurret;
@@ -21,9 +23,15 @@ public partial class TurretPlacer : Node2D
 	[Signal] 
 	public delegate void OnTurretPlacedEventHandler();
 
-	public void Initialize(GenericGrid<GroundTile> targetGrid)
+	public void Initialize(GenericGrid<GroundTile> grid, IsometricTileMap tileMap)
 	{
-		_grid = targetGrid;
+		_grid = grid;
+		_tileMap = tileMap;
+		var layer = tileMap.GetLayers()[0];
+		if (layer != null)
+		{
+			_currentTileMapLayer = layer;
+		}
 	}
 
 	public override void _Ready()
@@ -34,7 +42,7 @@ public partial class TurretPlacer : Node2D
 
 	public override void _Process(double delta)
 	{
-		// FollowMouse();
+		FollowMouse();
 
 		if (Input.IsActionJustPressed("ToggleTurretPlacementMode"))
 		{
@@ -73,7 +81,7 @@ public partial class TurretPlacer : Node2D
 				var turret = _turretScene.Instantiate<Turret>();
 				tile.Turret = turret;
 				turret.Initialize(_currentTurretType, _currentTurretTargetMode);
-				turret.GlobalPosition = _grid.GetCentralGridCellPositionPixels(tile.position);
+				turret.GlobalPosition = IsometricTileMap.MapCoordToGlobalPosition(_currentTileMapLayer, tile.position);
 				GetTree().GetRoot().AddChild(turret);
 			}
 			// Display "ghost" turret to show where it's going to go and radius
@@ -81,7 +89,7 @@ public partial class TurretPlacer : Node2D
 			else
 			{
 				_ghostTurret.Visible = true;
-				_ghostTurret.GlobalPosition = _grid.GetCentralGridCellPositionPixels(tile.position);
+				_ghostTurret.GlobalPosition = IsometricTileMap.MapCoordToGlobalPosition(_currentTileMapLayer, tile.position);
 				TurretStats baseStats = TurretStats.GetBaseTurretStats(_currentTurretType);
 				_ghostTurret.UpdateStats(baseStats);
 				// GD.Print($"Ghost Turret: {_ghostTurret}");
@@ -104,7 +112,7 @@ public partial class TurretPlacer : Node2D
 
 	private GroundTile GetTileIfStructurePlacementValid()
 	{
-		if (_grid.GetGridValueOrDefault(_currentOriginCoordinates.X, _currentOriginCoordinates.Y) is GroundTile tile && 
+		if (_grid.GetGridValueOrDefault((int)GlobalPosition.X, (int)GlobalPosition.Y) is GroundTile tile && 
 			tile != null && !tile.HasRoadConnection() && !tile.HasStructure())
 		{
 			// GD.Print($"Structure placement valid for tile: {tile}");
@@ -119,15 +127,16 @@ public partial class TurretPlacer : Node2D
 	/// <returns></returns>
 	private GroundTile GetTile()
 	{
-		return _grid.GetGridValueOrDefault(_currentOriginCoordinates.X, _currentOriginCoordinates.Y);
+		return _grid.GetGridValueOrDefault((int)GlobalPosition.X, (int)GlobalPosition.Y);
 	}
 
 	private void FollowMouse()
 	{
 		Vector2 mousePosition = GetViewport().GetMousePosition();
-		_currentOriginCoordinates = (Vector2I) (mousePosition / _grid.cellSize).Clamp(Vector2I.Zero, _grid.GetGridDimensions());
-		Position = (Vector2) _currentOriginCoordinates * _grid.cellSize;
+		// _currentOriginCoordinates = (Vector2I) (mousePosition / _grid.cellSize).Clamp(Vector2I.Zero, _grid.GetGridDimensions());
+		Position = IsometricTileMap.CenterTilePosition(_currentTileMapLayer, mousePosition);
 		// GD.Print($"Current origin position for mouse: {_currentOriginCoordinates}");
+		// GD.Print($"Coordinate: {IsometricTileMap.GlobalPositionToMapCoord(_currentTileMapLayer, mousePosition)} - Global Position: {IsometricTileMap.CenterTilePosition(_currentTileMapLayer, mousePosition)}");
 	}
 
 }

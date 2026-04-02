@@ -19,9 +19,9 @@ public partial class Main : Node2D
 
 		_gridRenderer.RenderGrid(grid);
 
-		_turretPlacer.Initialize(grid);
+		_turretPlacer.Initialize(grid, _gridRenderer.TerrainMap);
 
-		Enemy.TempEnemyDemo(this, grid, hubLocation);
-		Friendly.TempFriendlyDemo(this, grid, hubLocation);
+		Enemy.TempEnemyDemo(this, grid, _gridRenderer.TerrainMap, hubLocation);
+		Friendly.TempFriendlyDemo(this, grid, _gridRenderer.TerrainMap, hubLocation);
 	}
 }

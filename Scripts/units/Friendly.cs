@@ -79,7 +79,7 @@ public partial class Friendly : PathFollower
 	/// <param name="parent"></param>
 	/// <param name="grid"></param>
 	/// <param name="hub"></param>
-	public static void TempFriendlyDemo(Node parent, GenericGrid<GroundTile> grid, Vector2I hub)
+	public static void TempFriendlyDemo(Node parent, GenericGrid<GroundTile> grid, IsometricTileMap tileMap, Vector2I hub)
 	{
 		GridAStarPathfinder<GroundTile> pathfinder = new GridAStarPathfinder<GroundTile>(grid, 
 			(x,y) => {
@@ -117,6 +117,13 @@ public partial class Friendly : PathFollower
 			}
 		}
 
+		var layers = tileMap.GetLayers();
+		if (layers.Length <= 0)
+		{
+			GD.Print("WARNING: COULD NOT RUN FRIENDLY TEMP DEMO - NO LAYERS IN TILE MAP!");
+			return;
+		}
+		var layer = layers[0];
 		List<Friendly> testFriendlies = [];
 		for (int i = 0; i < 3; i++)
 		{
@@ -127,9 +134,13 @@ public partial class Friendly : PathFollower
 
 			// Set path
 			var endPoint = potentialFriendlyEndpoints[GD.RandRange(0, potentialFriendlyEndpoints.Count-1)].position;
-			var path = pathfinder.GetPathInPositions(hub, endPoint, grid.cellSize);
+			var path = new List<Vector2>();
+			foreach (var point in pathfinder.GetPath(hub, endPoint))
+			{
+				path.Add(IsometricTileMap.CenterTilePosition(layer, point));
+			}
 			friendly.SetPath(path);
-			friendly.GlobalPosition = grid.GetCentralGridCellPositionPixels(hub);
+			friendly.GlobalPosition = IsometricTileMap.CenterTilePosition(layer, hub);
 
 			// GD.Print($"{friendly}");
 		}

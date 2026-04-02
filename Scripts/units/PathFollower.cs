@@ -52,7 +52,7 @@ public partial class PathFollower : Area2D
 
 	public void ChangeHealth(float healthChangeValue)
 	{
-		GD.Print($"HealthChange for PathFollower {Name} - CurrentHealth {_health} -> NewHealth {_health - healthChangeValue}");
+		// GD.Print($"HealthChange for PathFollower {Name} - CurrentHealth {_health} -> NewHealth {_health - healthChangeValue}");
 		_health -= healthChangeValue;
 		if (_health <= 0.0f)
 		{

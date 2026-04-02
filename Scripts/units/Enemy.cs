@@ -115,7 +115,7 @@ public partial class Enemy: PathFollower
 	/// <param name="parent"></param>
 	/// <param name="grid"></param>
 	/// <param name="hub"></param>
-	public static void TempEnemyDemo(Node parent, GenericGrid<GroundTile> grid, Vector2I hub)
+	public static void TempEnemyDemo(Node parent, GenericGrid<GroundTile> grid, IsometricTileMap tileMap, Vector2I hub)
 	{
 		GridAStarPathfinder<GroundTile> pathfinder = new GridAStarPathfinder<GroundTile>(grid, 
 			(x,y) => {
@@ -152,6 +152,13 @@ public partial class Enemy: PathFollower
 			}
 		}
 
+		var layers = tileMap.GetLayers();
+		if (layers.Length <= 0)
+		{
+			GD.Print("WARNING: COULD NOT RUN ENEMY TEMP DEMO - NO LAYERS IN TILE MAP!");
+			return;
+		}
+		var layer = layers[0];
 		List<Enemy> testEnemies = [];
 		for (int i = 0; i < 6; i++)
 		{
@@ -162,9 +169,14 @@ public partial class Enemy: PathFollower
 
 			// Set enemy paths
 			var spawnPoint = potentialEnemySpawnPoints[GD.RandRange(0, potentialEnemySpawnPoints.Count-1)].position;
-			var path = pathfinder.GetPathInPositions(spawnPoint, hub, grid.cellSize);
+			// var path = pathfinder.GetPathInPositions(spawnPoint, hub, grid.cellSize);
+			var path = new List<Vector2>();
+			foreach (var point in pathfinder.GetPath(spawnPoint, hub))
+			{
+				path.Add(IsometricTileMap.CenterTilePosition(layer, point));
+			}
 			enemy.SetPath(path);
-			enemy.GlobalPosition = grid.GetCentralGridCellPositionPixels(spawnPoint);
+			enemy.GlobalPosition = IsometricTileMap.CenterTilePosition(layer, spawnPoint);
 
 			// GD.Print($"{enemy}");
 		}
@@ -210,7 +222,7 @@ public partial class Enemy: PathFollower
 			}
 
 			// Shoot at the target
-			GD.Print($"Enemy {Name} firing Projectile at target {currTarget} with stats: {_stats.ProjectileStats}");
+			// GD.Print($"Enemy {Name} firing Projectile at target {currTarget} with stats: {_stats.ProjectileStats}");
 			_shotCooldownTimer.Start(1 / _stats.FireRate);
 			var projectile = _projectileScene.Instantiate<Projectile>();
 			projectile.GlobalPosition = GlobalPosition;

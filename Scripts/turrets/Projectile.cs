@@ -88,12 +88,12 @@ public partial class Projectile : Area2D
 		{
 			if (!IsInstanceValid(_target))
 			{
-				GD.Print($"\tProjectile reached target's last known location without colliding with target.");
+				// GD.Print($"\tProjectile reached target's last known location without colliding with target.");
 				ProjectileImpact();
 			}
 			else
 			{
-				GD.Print($"\tProjectile reached target's last known location without colliding with target AND THE TARGET STILL EXISTS. Performing normal hit on target.");
+				// GD.Print($"\tProjectile reached target's last known location without colliding with target AND THE TARGET STILL EXISTS. Performing normal hit on target.");
 				ProjectileImpact();
 			}
 		}
@@ -105,10 +105,10 @@ public partial class Projectile : Area2D
 		EmitSignal(SignalName.OnProjectileImpact, Position, _stats);
 		if (IsInstanceValid(_target))
 		{
-			GD.Print($"Projectile hit target {_target.Name} for {_stats.Damage} damage");
+			// GD.Print($"Projectile hit target {_target.Name} for {_stats.Damage} damage");
 			_target.ChangeHealth(_stats.Damage);
 		}
-		QueueFree(); // TODO: FREEING AND DISCONNECTION OF SIGNALS? https://docs.godotengine.org/en/stable/tutorials/scripting/c_sharp/c_sharp_signals.html
+		QueueFree();
 	}
 
 }

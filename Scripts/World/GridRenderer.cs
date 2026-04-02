@@ -2,17 +2,17 @@ using Godot;
 
 public partial class GridRenderer : Node2D
 {
-	[Export] public IsometricTerrainMap _waterMap, _terrainMap;
+	[Export] public IsometricTileMap WaterMap, TerrainMap;
 
 	public void RenderGrid(GenericGrid<GroundTile> grid)
 	{
-		_terrainMap.Clear();
-		_waterMap.Clear();
+		TerrainMap.Clear();
+		WaterMap.Clear();
 
 		// Todo: Just working on 0th layer for now.
-		var terrainLayers = _terrainMap.GetLayers();
+		var terrainLayers = TerrainMap.GetLayers();
 		var terrainLayer0 = terrainLayers[0];
-		var waterLayers = _waterMap.GetLayers();
+		var waterLayers = WaterMap.GetLayers();
 		var waterLayer0 = waterLayers[0];
 		for (int x = 0; x < grid.GetWidth(); x++)
 		{

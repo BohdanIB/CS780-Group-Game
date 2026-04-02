@@ -12,3 +12,6 @@ _turretPlacer = NodePath("TurretPlacer")
 [node name="GridRenderer" parent="." unique_id=76182152 instance=ExtResource("2_bo1nx")]
 
 [node name="TurretPlacer" parent="." unique_id=1881251108 instance=ExtResource("5_kry3j")]
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1108634126]
+offset = Vector2(50, 200)

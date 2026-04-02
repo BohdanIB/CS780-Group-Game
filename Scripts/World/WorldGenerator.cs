@@ -18,7 +18,7 @@ public partial class WorldGenerator : Node
         BiomeType[] loadedTerrains = LoadTerrains();
 
 
-        GenericGrid<GroundTile> newWorld = new GenericGrid<GroundTile>(dimensions.X, dimensions.Y, (g, x, y) => new GroundTile(SelectTerrain(elevationNoise[x, y], humidityNoise[x, y], temperatureNoise[x, y], loadedTerrains), new Vector2I(x, y)), 16);
+        GenericGrid<GroundTile> newWorld = new GenericGrid<GroundTile>(dimensions.X, dimensions.Y, (g, x, y) => new GroundTile(SelectTerrain(elevationNoise[x, y], humidityNoise[x, y], temperatureNoise[x, y], loadedTerrains), new Vector2I(x, y)));
 
         GridAStarPathfinder<GroundTile> pathfinder = new GridAStarPathfinder<GroundTile>(newWorld, 
                 (x,y) => {
