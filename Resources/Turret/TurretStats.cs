@@ -1,5 +1,6 @@
 
 using Godot;
+using System;
 using System.Collections.Generic;
 
 /// <summary>
@@ -13,6 +14,42 @@ public partial class TurretStats : Resource
 		Ballista,
 		Blade,
 	};
+	public enum AnimatedSpriteFrameDirection
+	{
+		South, SouthWest, West, NorthWest, North, NorthEast, East, SouthEast,
+	}
+	public static int DirectionToFrameIndex(AnimatedSpriteFrameDirection dir) => dir switch
+	{
+		AnimatedSpriteFrameDirection.South     => 0,
+		AnimatedSpriteFrameDirection.SouthWest => 1,
+		AnimatedSpriteFrameDirection.West      => 2,
+		AnimatedSpriteFrameDirection.NorthWest => 3,
+		AnimatedSpriteFrameDirection.North     => 4,
+		AnimatedSpriteFrameDirection.NorthEast => 5,
+		AnimatedSpriteFrameDirection.East      => 6,
+		AnimatedSpriteFrameDirection.SouthEast => 7,
+		_ => throw new NotImplementedException()
+	};
+	
+	/// <summary>
+	/// Expecting rads from -PI to PI (where 0 corresponds to positive X, PI/2 corresponds to positive Y [WHICH IS DOWNWARD IN THE SCENE IN GODOT], etc.)
+	/// </summary>
+	/// <param name="rads"></param>
+	/// <returns></returns>
+	public static int RadsToFrameIndex(float rads) => Mathf.RadToDeg(rads) switch
+	{
+		< -157.5f => DirectionToFrameIndex(AnimatedSpriteFrameDirection.West),
+		< -112.5f => DirectionToFrameIndex(AnimatedSpriteFrameDirection.NorthWest),
+		< -67.5f  => DirectionToFrameIndex(AnimatedSpriteFrameDirection.North),
+		< -22.5f  => DirectionToFrameIndex(AnimatedSpriteFrameDirection.NorthEast),
+		< 22.5f   => DirectionToFrameIndex(AnimatedSpriteFrameDirection.East),
+		< 67.5f   => DirectionToFrameIndex(AnimatedSpriteFrameDirection.SouthEast),
+		< 112.5f  => DirectionToFrameIndex(AnimatedSpriteFrameDirection.South),
+		< 157.5f  => DirectionToFrameIndex(AnimatedSpriteFrameDirection.SouthWest),
+		<= 180f   => DirectionToFrameIndex(AnimatedSpriteFrameDirection.West),
+		_ => throw new NotImplementedException(),
+	};
+
 	private record TurretBaseStats(float AggroRadius, float Health, float FireRate, ProjectileStats ProjectileStats, int SpriteFrame);
 	private static readonly Dictionary<Category, TurretBaseStats> TURRET_BASE_STATS = new()
 	{

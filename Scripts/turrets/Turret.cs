@@ -132,6 +132,10 @@ public partial class Turret : GenericStructure
 			projectile.GlobalPosition = GlobalPosition;
 			projectile.Initialize(currTargetEnemy, _stats.ProjectileStats);
 			GetTree().GetRoot().AddChild(projectile);
+
+			// Change frame to match direction of target
+			var angle = GlobalPosition.AngleToPoint(currTargetEnemy.GlobalPosition);
+			_animatedSprite2D.Frame = TurretStats.RadsToFrameIndex(angle);
 		}
 	}
 
