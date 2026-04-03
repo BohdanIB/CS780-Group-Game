@@ -5,6 +5,7 @@
 [ext_resource type="Script" uid="uid://bca40tiktvab7" path="res://Scripts/turrets/Projectile.cs" id="3_0830c"]
 [ext_resource type="Texture2D" uid="uid://bdd0jbwygdyav" path="res://Assets/Sprites/temp_enemy.png" id="4_287tu"]
 [ext_resource type="Texture2D" uid="uid://djpqivk2pwl35" path="res://Assets/Sprites/temp_projectiles.png" id="4_ghaa6"]
+[ext_resource type="Texture2D" uid="uid://chnp20vxd80w3" path="res://Assets/Sprites/isometric_enemy_temp.png" id="6_ghaa6"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_0830c"]
 resource_local_to_scene = true
@@ -33,7 +34,7 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="PackedScene" id="PackedScene_0830c"]
+[sub_resource type="PackedScene" id="PackedScene_1dp5w"]
 resource_local_to_scene = true
 _bundled = {
 "conn_count": 0,
@@ -49,13 +50,13 @@ _bundled = {
 "version": 3
 }
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_ghaa6"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_auwsv"]
 resource_local_to_scene = true
-radius = 5.0
+radius = 20.0
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_1dp5w"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_8uf12"]
 resource_local_to_scene = true
-radius = 5.0
+radius = 40.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_0830c"]
 atlas = ExtResource("4_287tu")
@@ -64,6 +65,22 @@ region = Rect2(0, 0, 32, 32)
 [sub_resource type="AtlasTexture" id="AtlasTexture_ghaa6"]
 atlas = ExtResource("4_287tu")
 region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_po0sg"]
+atlas = ExtResource("6_ghaa6")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_haro7"]
+atlas = ExtResource("6_ghaa6")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_56vhr"]
+atlas = ExtResource("6_ghaa6")
+region = Rect2(128, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ta2yt"]
+atlas = ExtResource("6_ghaa6")
+region = Rect2(192, 0, 64, 64)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_1dp5w"]
 animations = [{
@@ -77,18 +94,36 @@ animations = [{
 "loop": true,
 "name": &"default",
 "speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_po0sg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_haro7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_56vhr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ta2yt")
+}],
+"loop": true,
+"name": &"new_animation",
+"speed": 5.0
 }]
 
 [node name="Enemy" unique_id=382514737 instance=ExtResource("1_hghv2")]
 script = ExtResource("2_1f0kj")
-_projectileScene = SubResource("PackedScene_0830c")
+_projectileScene = SubResource("PackedScene_1dp5w")
 
 [node name="HitboxCollisionShape2D" parent="." index="0" unique_id=1358123789]
-shape = SubResource("CircleShape2D_ghaa6")
+shape = SubResource("CircleShape2D_auwsv")
 
 [node name="AggroCollisionShape2D" parent="AggroArea2D" parent_id_path=PackedInt32Array(1396697523) index="0" unique_id=1901836338]
-shape = SubResource("CircleShape2D_1dp5w")
+shape = SubResource("CircleShape2D_8uf12")
 
 [node name="AnimatedSprite2D" parent="." index="2" unique_id=1606845345]
-scale = Vector2(0.25, 0.25)
+position = Vector2(0, -4)
 sprite_frames = SubResource("SpriteFrames_1dp5w")
+animation = &"new_animation"

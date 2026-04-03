@@ -1,5 +1,6 @@
 
 using Godot;
+using System;
 using System.Collections.Generic;
 
 /// <summary>
@@ -11,6 +12,31 @@ public partial class EnemyStats : Resource
 	{
 		Regular,
 		Strong, // Creative, I know. Truly my genius knows no bounds
+	};
+	public enum AnimatedSpriteFrameDirection
+	{
+		SouthWest, NorthWest, NorthEast, SouthEast,
+	}
+	private static int DirectionToFrameIndex(AnimatedSpriteFrameDirection dir) => dir switch
+	{
+		AnimatedSpriteFrameDirection.SouthEast => 0,
+		AnimatedSpriteFrameDirection.SouthWest => 1,
+		AnimatedSpriteFrameDirection.NorthWest => 2,
+		AnimatedSpriteFrameDirection.NorthEast => 3,
+		_ => throw new NotImplementedException()
+	};
+	/// <summary>
+	/// Expecting rads from -PI to PI (where 0 corresponds to positive X, PI/2 corresponds to positive Y [WHICH IS DOWNWARD IN THE SCENE IN GODOT], etc.)
+	/// </summary>
+	/// <param name="rads"></param>
+	/// <returns></returns>
+	public static int RadsToFrameIndex(float rads) => Mathf.RadToDeg(rads) switch
+	{
+		< -90f   => DirectionToFrameIndex(AnimatedSpriteFrameDirection.NorthWest),
+		< 0f     => DirectionToFrameIndex(AnimatedSpriteFrameDirection.NorthEast),
+		< 90f    => DirectionToFrameIndex(AnimatedSpriteFrameDirection.SouthEast),
+		< 180f  => DirectionToFrameIndex(AnimatedSpriteFrameDirection.SouthWest),
+		_ => throw new NotImplementedException(),
 	};
 
 	private record BaseStats(float HitboxRadius, float AggroRadius, float Health, float FireRate, float MovementSpeed, ProjectileStats ProjectileStats, int SpriteFrame);

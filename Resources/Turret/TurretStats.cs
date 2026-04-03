@@ -18,7 +18,7 @@ public partial class TurretStats : Resource
 	{
 		South, SouthWest, West, NorthWest, North, NorthEast, East, SouthEast,
 	}
-	public static int DirectionToFrameIndex(AnimatedSpriteFrameDirection dir) => dir switch
+	private static int DirectionToFrameIndex(AnimatedSpriteFrameDirection dir) => dir switch
 	{
 		AnimatedSpriteFrameDirection.South     => 0,
 		AnimatedSpriteFrameDirection.SouthWest => 1,

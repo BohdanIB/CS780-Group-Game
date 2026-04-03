@@ -41,7 +41,11 @@ public partial class PathFollower : Area2D
 			return;
 		}
 
-		Position = Position.MoveToward(_path[_currentPathIndex], (float) delta * _movementSpeed);
+		Position = Position.MoveToward(_path[_currentPathIndex], (float) delta * _movementSpeed); // This results in jittery movement overshoots path points, but this is fixed in ECS PR.
+
+		// Change frame to match movement direction
+		var angle = Position.AngleToPoint(_path[_currentPathIndex]);
+		_animatedSprite2D.Frame = EnemyStats.RadsToFrameIndex(angle); // TODO: THIS IS BAD, BUT THIS GETS REWORKED IN ECS PR ANYWAYS, more proof of concept
 	}
 
 	public void SetPath(List<Vector2> newPath)

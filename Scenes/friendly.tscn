@@ -5,6 +5,7 @@
 [ext_resource type="Script" uid="uid://bca40tiktvab7" path="res://Scripts/turrets/Projectile.cs" id="3_ljipm"]
 [ext_resource type="Texture2D" uid="uid://cn7d6ij73r2i" path="res://Assets/Sprites/temp_friendly.png" id="3_ub8j0"]
 [ext_resource type="Texture2D" uid="uid://djpqivk2pwl35" path="res://Assets/Sprites/temp_projectiles.png" id="4_r41ou"]
+[ext_resource type="Texture2D" uid="uid://xfvl32pe0ms4" path="res://Assets/Sprites/isometric_friendly_temp.png" id="6_r41ou"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_j3gts"]
 resource_local_to_scene = true
@@ -51,11 +52,11 @@ _bundled = {
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_r41ou"]
 resource_local_to_scene = true
-radius = 5.0
+radius = 20.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_f2s7q"]
 resource_local_to_scene = true
-radius = 5.0
+radius = 40.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_5vdkv"]
 atlas = ExtResource("3_ub8j0")
@@ -64,6 +65,22 @@ region = Rect2(0, 0, 32, 32)
 [sub_resource type="AtlasTexture" id="AtlasTexture_ljipm"]
 atlas = ExtResource("3_ub8j0")
 region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_j3gts"]
+atlas = ExtResource("6_r41ou")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f2s7q"]
+atlas = ExtResource("6_r41ou")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_r8675"]
+atlas = ExtResource("6_r41ou")
+region = Rect2(128, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bxj72"]
+atlas = ExtResource("6_r41ou")
+region = Rect2(192, 0, 64, 64)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_r41ou"]
 animations = [{
@@ -76,6 +93,23 @@ animations = [{
 }],
 "loop": true,
 "name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_j3gts")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f2s7q")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_r8675")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bxj72")
+}],
+"loop": true,
+"name": &"new_animation",
 "speed": 5.0
 }]
 
@@ -90,5 +124,6 @@ shape = SubResource("CircleShape2D_r41ou")
 shape = SubResource("CircleShape2D_f2s7q")
 
 [node name="AnimatedSprite2D" parent="." index="2" unique_id=1606845345]
-scale = Vector2(0.25, 0.25)
+position = Vector2(0, -4)
 sprite_frames = SubResource("SpriteFrames_r41ou")
+animation = &"new_animation"
