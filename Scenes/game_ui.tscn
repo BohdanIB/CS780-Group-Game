@@ -186,3 +186,10 @@ grow_vertical = 0
 text = "Menu
 "
 script = ExtResource("2_xjnnq")
+
+[node name="QuitConfirmDialog" type="ConfirmationDialog" parent="." unique_id=1699950496]
+title = "Quit Game?"
+dialog_text = "Are you sure you want to quit to the main menu?
+"
+
+[connection signal="confirmed" from="QuitConfirmDialog" to="SideMenuContainer/HBoxContainer/QuitButton" method="_on_quit_confirm_dialog_confirmed"]
