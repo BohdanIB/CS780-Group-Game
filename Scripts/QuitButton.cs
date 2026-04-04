@@ -16,6 +16,10 @@ public partial class QuitButton : Button
 
 	private void _on_QuitButton_pressed()
 	{
+		// Free all placed turrets
+		foreach (Node turret in GetTree().GetNodesInGroup("placed_turrets"))
+			turret.QueueFree();
+
 		GD.Print(GetPath()); 
 		GetTree().ChangeSceneToFile("res://Scenes/start_menu.tscn");
 	}

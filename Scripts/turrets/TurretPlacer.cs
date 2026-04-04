@@ -74,6 +74,7 @@ public partial class TurretPlacer : Node2D
 			{
 				GD.Print($"Placing turret of type {_currentTurretType}");
 				var turret = _turretScene.Instantiate<Turret>();
+				turret.AddToGroup("placed_turrets");
 				tile.Turret = turret;
 				turret.Initialize(_currentTurretType, _currentTurretTargetMode);
 				turret.GlobalPosition = _grid.GetCentralGridCellPositionPixels(tile.position);
