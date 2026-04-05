@@ -20,19 +20,11 @@ public partial class Enemy: PathFollower
 		Strong, // Strongest enemies
 	}
 
-	private EnemyStats _stats;
-	private TargetingMode _targetingMode = TargetingMode.Weak;
+	[Export] private EnemyStats _stats;
+	[Export] private TargetingMode _targetingMode = TargetingMode.Weak;
 
 	protected List<Friendly> _targetsInRange = new(); // todo
 
-	/// <summary>
-	/// Initializes enemy with "generic" base stats for given type.
-	/// </summary>
-	/// <param name="type"></param>
-	public void Initialize(EnemyStats.Category type)
-	{
-		Initialize(new EnemyStats(type));
-	}
 	/// <summary>
 	/// Initializes enemy with custom stats.
 	/// </summary>
@@ -96,7 +88,7 @@ public partial class Enemy: PathFollower
 	}
 	private void UpdateEnemySprite()
 	{
-		_animatedSprite2D.Frame = _stats.SpriteFrame;
+		_idleAnimations.Frames = _stats.Animations.Idle;
 	}
 	private void UpdateEnemyHealth()
 	{
@@ -160,10 +152,21 @@ public partial class Enemy: PathFollower
 		}
 		var layer = layers[0];
 		List<Enemy> testEnemies = [];
+		var allEnemyStats = EnemyStats.LoadAllStats();
 		for (int i = 0; i < 6; i++)
 		{
 			var enemy = GD.Load<PackedScene>("res://Scenes/enemy.tscn").Instantiate<Enemy>();
-			enemy.Initialize(i == 0 ? EnemyStats.Category.Strong : EnemyStats.Category.Regular); // Make one 'strong' enemy for testing
+			foreach(var stats in allEnemyStats)
+			{
+				if (stats.Type == EnemyStats.Category.Regular)
+				{
+					enemy.Initialize(stats);
+					break;
+				}
+			}
+			
+			// enemy.Initialize(i == 0 ? EnemyStats.Category.Strong : EnemyStats.Category.Regular); // Make one 'strong' enemy for testing
+			// TODO
 			testEnemies.Add(enemy);
 			parent.GetTree().GetRoot().CallDeferred("add_child", enemy); // Cannot add children in _Ready() calls
 

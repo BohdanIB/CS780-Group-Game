@@ -10,7 +10,7 @@ public partial class GenericStructure: Area2D
 {
 	// Nodes
 	[Export] protected CollisionShape2D _collisionShape2D;
-	[Export] protected AnimatedSprite2D _animatedSprite2D;
+	[Export] protected AnimationManager _idleAnimations;
 
 	protected float _health;
 

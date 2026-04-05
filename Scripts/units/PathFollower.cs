@@ -10,8 +10,8 @@ public partial class PathFollower : Area2D
 	// Scene Children
 	[Export] protected Area2D _aggroArea2D;
 	[Export] protected CollisionShape2D _aggroCollisionShape2D, _hitboxCollisionShape2D;
-	[Export] protected AnimatedSprite2D _animatedSprite2D;
 	[Export] protected Timer _shotCooldownTimer;
+	[Export] protected AnimationManager _idleAnimations;
 
 	// Preloaded Scenes
 	[Export] protected PackedScene _projectileScene;
@@ -43,9 +43,8 @@ public partial class PathFollower : Area2D
 
 		Position = Position.MoveToward(_path[_currentPathIndex], (float) delta * _movementSpeed); // This results in jittery movement overshoots path points, but this is fixed in ECS PR.
 
-		// Change frame to match movement direction
-		var angle = Position.AngleToPoint(_path[_currentPathIndex]);
-		_animatedSprite2D.Frame = EnemyStats.RadsToFrameIndex(angle); // TODO: THIS IS BAD, BUT THIS GETS REWORKED IN ECS PR ANYWAYS, more proof of concept
+		// Change sprite to turn towards next path point
+		_idleAnimations.SetDirection(Position, _path[_currentPathIndex]);
 	}
 
 	public void SetPath(List<Vector2> newPath)

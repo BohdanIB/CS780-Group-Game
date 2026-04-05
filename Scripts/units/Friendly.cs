@@ -5,16 +5,8 @@ using System.Collections.Generic;
 
 public partial class Friendly : PathFollower
 {
-	private FriendlyStats _stats;
+	[Export] private FriendlyStats _stats;
 
-	/// <summary>
-	/// Initializes friendly with "generic" base stats for given type.
-	/// </summary>
-	/// <param name="type"></param>
-	public void Initialize(FriendlyStats.Category type)
-	{
-		Initialize(new FriendlyStats(type));
-	}
 	/// <summary>
 	/// Initializes friendly with custom stats.
 	/// </summary>
@@ -60,7 +52,7 @@ public partial class Friendly : PathFollower
 	}
 	private void UpdateFriendlySprite()
 	{
-		_animatedSprite2D.Frame = _stats.SpriteFrame;
+		_idleAnimations.Frames = _stats.Animations.Idle;
 	}
 	private void UpdateFriendlyHealth()
 	{
@@ -125,10 +117,21 @@ public partial class Friendly : PathFollower
 		}
 		var layer = layers[0];
 		List<Friendly> testFriendlies = [];
+		var allFriendlyStats = FriendlyStats.LoadAllStats();
 		for (int i = 0; i < 3; i++)
 		{
 			var friendly = GD.Load<PackedScene>("res://Scenes/friendly.tscn").Instantiate<Friendly>();
-			friendly.Initialize(i == 0 ? FriendlyStats.Category.Loaded : FriendlyStats.Category.Regular); // Make one 'loaded' enemy for testing
+
+			foreach(var stats in allFriendlyStats)
+			{
+				if (stats.Type == FriendlyStats.Category.Regular)
+				{
+					friendly.Initialize(stats);
+					break;
+				}
+			}
+			// friendly.Initialize(i == 0 ? FriendlyStats.Category.Loaded : FriendlyStats.Category.Regular); // Make one 'loaded' enemy for testing
+			// TODO
 			testFriendlies.Add(friendly);
 			parent.GetTree().GetRoot().CallDeferred("add_child", friendly); // Cannot add children in _Ready()
 

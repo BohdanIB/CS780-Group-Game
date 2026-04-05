@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="AnimationPack" format=3 uid="uid://b13x6a2yv4e76"]
+
+[ext_resource type="SpriteFrames" uid="uid://canpa0od65bwj" path="res://Assets/Animations/blade_idle.tres" id="1_pabhc"]
+[ext_resource type="Script" uid="uid://b8k2bijsjc1da" path="res://Scripts/Animation/AnimationPack.cs" id="1_udbgn"]
+
+[resource]
+script = ExtResource("1_udbgn")
+Idle = ExtResource("1_pabhc")
+metadata/_custom_type_script = "uid://b8k2bijsjc1da"
