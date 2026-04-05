@@ -1,13 +1,14 @@
 [gd_scene format=3 uid="uid://dgjos5x50idft"]
 
 [ext_resource type="Script" uid="uid://cuir3nismmvnr" path="res://Scripts/Main.cs" id="1_jjgbg"]
-[ext_resource type="PackedScene" uid="uid://tw6j84txs1a1" path="res://Scenes/grid_renderer.tscn" id="2_bo1nx"]
-[ext_resource type="PackedScene" uid="uid://caafjqfx010mq" path="res://Scenes/turret_placer.tscn" id="5_kry3j"]
+[ext_resource type="Resource" uid="uid://nbjv8l8rk1xm" path="res://Resources/Turret/TurretConstructionInformation.tres" id="2_jjvhh"]
+[ext_resource type="PackedScene" uid="uid://defgp5uclysnk" path="res://Scenes/PlayArea.tscn" id="3_8gbba"]
+[ext_resource type="PackedScene" uid="uid://5e8ht0mldott" path="res://Scenes/structure_placer.tscn" id="4_jjvhh"]
 
 [node name="Main" type="Node2D" unique_id=1822167308]
 script = ExtResource("1_jjgbg")
+tempConstructionInfo = ExtResource("2_jjvhh")
 
-[node name="GridRenderer" parent="." unique_id=76182152 instance=ExtResource("2_bo1nx")]
+[node name="StructurePlacer" parent="." unique_id=1843712961 instance=ExtResource("4_jjvhh")]
 
-[node name="TurretPlacer" parent="." unique_id=1881251108 instance=ExtResource("5_kry3j")]
-_turretScene = null
+[node name="PlayArea" parent="." unique_id=1275724900 instance=ExtResource("3_8gbba")]

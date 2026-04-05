@@ -14,6 +14,4 @@ _turretScene = ExtResource("3_ub6b8")
 [node name="GhostHoverTurret" parent="." unique_id=1985475119 instance=ExtResource("3_ub6b8")]
 visible = false
 modulate = Color(1, 1, 1, 0.49019608)
-monitoring = false
-monitorable = false
 _projectileScene = null

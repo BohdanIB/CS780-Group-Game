@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://defgp5uclysnk"]
+
+[ext_resource type="Script" uid="uid://bf556eg71b3uj" path="res://Scripts/World/PlayArea.cs" id="1_1tmfe"]
+[ext_resource type="PackedScene" uid="uid://tw6j84txs1a1" path="res://Scenes/grid_renderer.tscn" id="2_f5pfs"]
+
+[node name="PlayArea" type="Node2D" unique_id=1275724900 node_paths=PackedStringArray("gridRenderer")]
+script = ExtResource("1_1tmfe")
+gridRenderer = NodePath("GridRenderer")
+
+[node name="GridRenderer" parent="." unique_id=76182152 instance=ExtResource("2_f5pfs")]
