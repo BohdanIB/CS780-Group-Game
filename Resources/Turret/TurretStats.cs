@@ -13,13 +13,13 @@ public partial class TurretStats : Resource
 		Ballista,
 		Blade,
 	};
-	private record TurretBaseStats(float AggroRadius, float Health, float FireRate, ProjectileStats ProjectileStats, int SpriteFrame);
+	private record TurretBaseStats(float AggroRadius, float Health, float FireRate, ProjectileStats ProjectileStats, int SpriteFrame, int cost);
 	private static readonly Dictionary<Category, TurretBaseStats> TURRET_BASE_STATS = new()
 	{
 		{Category.Ballista, 
-			new TurretBaseStats(AggroRadius: 100f, Health: 100f, FireRate: 2f, ProjectileStats: new ProjectileStats(ProjectileStats.Category.Bolt), SpriteFrame: 0)},
+			new TurretBaseStats(AggroRadius: 100f, Health: 100f, FireRate: 2f, ProjectileStats: new ProjectileStats(ProjectileStats.Category.Bolt), SpriteFrame: 0, cost: 100)},
 		{Category.Blade, 
-			new TurretBaseStats(AggroRadius: 50f, Health: 100f, FireRate: 5f, ProjectileStats: new ProjectileStats(ProjectileStats.Category.Blade), SpriteFrame: 1)},
+			new TurretBaseStats(AggroRadius: 50f, Health: 100f, FireRate: 5f, ProjectileStats: new ProjectileStats(ProjectileStats.Category.Blade), SpriteFrame: 1, cost: 150)},
 	};
 
 	// Turret Stats
@@ -36,6 +36,8 @@ public partial class TurretStats : Resource
 	public float FireRate { get => _fireRate; set => _fireRate = value; }
 	public ProjectileStats ProjectileStats { get => _projectileStats; set => _projectileStats = value; } 
 	public int SpriteFrame { get => _spriteFrame; set => _spriteFrame = value; }
+	private int _cost;
+	public int Cost { get => _cost; set => _cost = value; }
 
 	public TurretStats(Category type)
 	{
@@ -46,6 +48,7 @@ public partial class TurretStats : Resource
 		FireRate = baseStats.FireRate;
 		ProjectileStats = baseStats.ProjectileStats;
 		SpriteFrame = baseStats.SpriteFrame;
+		Cost = baseStats.cost;
 	}
 
 	public static TurretStats GetBaseTurretStats(Category type)

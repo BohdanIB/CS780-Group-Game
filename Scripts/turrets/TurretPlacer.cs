@@ -20,6 +20,7 @@ public partial class TurretPlacer : Node2D
 
 	[Signal] 
 	public delegate void OnTurretPlacedEventHandler();
+	private GameUi _gameUi;
 
 	public void Initialize(GenericGrid<GroundTile> targetGrid)
 	{
@@ -33,6 +34,7 @@ public partial class TurretPlacer : Node2D
 		_ghostTurret = GetNode<Turret>("GhostHoverTurret");
 		_ghostTurret.Initialize(_currentTurretType);
 		_ghostTurret.Visible = false;
+		_gameUi = GetTree().GetRoot().GetNode<GameUi>("Main/GameUI");
 	}
 
 	public override void _Process(double delta)
@@ -72,6 +74,15 @@ public partial class TurretPlacer : Node2D
 			// Turret Placement
 			if (Input.IsActionJustPressed("Left Click"))
 			{
+
+				int cost = TurretStats.GetBaseTurretStats(_currentTurretType).Cost;
+				 if (!_gameUi.TryToSpendCoins(cost))
+   				 {
+					//GD.Print("Not enough coins!");
+					_gameUi.ShowWarning("Not enough coins!");
+					return;
+				}
+
 				GD.Print($"Placing turret of type {_currentTurretType}");
 				var turret = _turretScene.Instantiate<Turret>();
 				turret.AddToGroup("placed_turrets");
@@ -79,6 +90,7 @@ public partial class TurretPlacer : Node2D
 				turret.Initialize(_currentTurretType, _currentTurretTargetMode);
 				turret.GlobalPosition = _grid.GetCentralGridCellPositionPixels(tile.position);
 				GetTree().GetRoot().AddChild(turret);
+				EmitSignal(SignalName.OnTurretPlaced);
 			}
 			// Display "ghost" turret to show where it's going to go and radius
 			// Ghost turret hover

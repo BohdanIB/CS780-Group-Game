@@ -15,6 +15,7 @@ public partial class PathFollower : Area2D
 
 	// Preloaded Scenes
 	[Export] protected PackedScene _projectileScene;
+	[Signal]public delegate void UnitDiedEventHandler(PathFollower unit);
 
 	protected float _health = 100.0f;
 	protected float _movementSpeed = 50.0f;
@@ -57,7 +58,8 @@ public partial class PathFollower : Area2D
 		_health -= healthChangeValue;
 		if (_health <= 0.0f)
 		{
-			GD.Print($"PathFollower {Name} died.");
+			//GD.Print($"PathFollower {Name} died.");
+			EmitSignal(SignalName.UnitDied, this);
 			QueueFree();
 		}
 	}

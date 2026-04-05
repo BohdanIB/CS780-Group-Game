@@ -18,6 +18,7 @@ public partial class EnemySpawner : Node
 	private List<GroundTile> _spawnPoints;
 	private GridAStarPathfinder<GroundTile> _pathfinder;
 	private Timer _waveTimer;
+	private GameUi _gameUi;
 
 	public void Initialize(GenericGrid<GroundTile> grid, Vector2I hub, Random randomizer)
 	{
@@ -34,6 +35,7 @@ public partial class EnemySpawner : Node
 		_waveTimer.Timeout += SpawnWave;
 		AddChild(_waveTimer);
 		_waveTimer.Start();
+		_gameUi = GetTree().GetRoot().GetNode<GameUi>("Main/GameUI");
 
 		GD.Print("EnemySpawner initialized. First wave in " + WaveIntervalSeconds + " seconds.");
 	}
@@ -120,5 +122,8 @@ public partial class EnemySpawner : Node
 		enemy.SetPath(path);
 
 		enemy.GlobalPosition = _grid.GetCentralGridCellPositionPixels(spawnPos);
+		enemy.UnitDied += (_) => {
+			_gameUi.IncrementKillCount();
+};
 	}
 }
