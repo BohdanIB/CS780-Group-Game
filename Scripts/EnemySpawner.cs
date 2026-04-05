@@ -5,8 +5,12 @@ using System.Collections.Generic;
 public partial class EnemySpawner : Node
 {
 	[Export] public float WaveIntervalSeconds = 30f;
-	[Export] public int EnemiesPerWave = 50;
+	[Export] public int EnemiesPerWave = 5;
+	[Export] public int Final_wave_number = 10;
 
+	[Export] public int Number_of_Enemies_added_per_wave = 5;
+
+	public int CurrentWave { get; private set; } = 0;
 
 	private GenericGrid<GroundTile> _grid;
 	private Vector2I _hub;
@@ -81,9 +85,19 @@ public partial class EnemySpawner : Node
 
 	private void SpawnWave()
 	{
+		if(CurrentWave >= Final_wave_number)
+		{
+			GD.Print("Final wave reached. No more enemies will spawn.");
+			GD.Print("Player survived " + CurrentWave + " waves!");
+			_waveTimer.Stop();
+			return;
+		}
+		EnemiesPerWave += Number_of_Enemies_added_per_wave;
 		GD.Print("Spawning enemy wave...");
 		for (int i = 0; i < EnemiesPerWave; i++)
 			SpawnSingleEnemy();
+
+		CurrentWave++;
 	}
 
 	private void SpawnSingleEnemy()
