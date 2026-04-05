@@ -123,7 +123,7 @@ public partial class EnemySpawner : Node
 
 		enemy.GlobalPosition = _grid.GetCentralGridCellPositionPixels(spawnPos);
 		enemy.UnitDied += (_) => {
-			_gameUi.IncrementKillCount();
-};
+			_gameUi.IncrementKillCount();};
+			enemy.UnitReachedGoal += () => _gameUi.TakeDamage(5);
 	}
 }

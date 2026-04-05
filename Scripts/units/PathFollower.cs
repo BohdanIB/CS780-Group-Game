@@ -16,6 +16,7 @@ public partial class PathFollower : Area2D
 	// Preloaded Scenes
 	[Export] protected PackedScene _projectileScene;
 	[Signal]public delegate void UnitDiedEventHandler(PathFollower unit);
+	[Signal] public delegate void UnitReachedGoalEventHandler();
 
 	protected float _health = 100.0f;
 	protected float _movementSpeed = 50.0f;
@@ -39,6 +40,8 @@ public partial class PathFollower : Area2D
 			{
 				_path = null;
 				GD.Print($"PathFollower {Name} reached end of path.");
+				EmitSignal(SignalName.UnitReachedGoal);
+				QueueFree();
 			}
 			return;
 		}

@@ -9,6 +9,10 @@ public partial class GameUi : CanvasLayer
 	private int coins = 1000;
 	private Label coinCountLabel;
 	private Label _warningLabel;	
+	private Label _BaseHPLabel;
+
+	public const int StartingBaseHP = 100;
+	private int currentBaseHP = StartingBaseHP;
 
 	public override void _Ready()
 	{
@@ -17,6 +21,9 @@ public partial class GameUi : CanvasLayer
 		
 		var turretPlacer = GetTree().GetRoot().GetNode<TurretPlacer>("Main/TurretPlacer");
 		coinCountLabel = GetNode<Label>("UI/HBoxContainer/CoinCount/CoinCountLabel");
+
+		_BaseHPLabel = GetNode<Label>("UI/HBoxContainer/BaseHealth/BaseHPLabel");
+		_BaseHPLabel.Text = $"{StartingBaseHP}";
 		
 		killCountLabel = GetNode<Label>("UI/HBoxContainer/KillCount/KillCountLabel");
 		coinCountLabel.Text = $"{coins}";
@@ -47,12 +54,14 @@ public partial class GameUi : CanvasLayer
 
 	}
 
-	public void ShowWarning(string message)
+	public void ShowWarning(string message , bool GameOver = false)
 	{
 		_warningLabel.Text = message;
 		_warningLabel.Visible = true;
-		 var timer = GetTree().CreateTimer(2.0f); // show for 2 seconds
-		timer.Timeout += () => _warningLabel.Visible = false;
+		if(!GameOver){
+			var timer = GetTree().CreateTimer(3.0f); // show for 3 seconds
+			timer.Timeout += () => _warningLabel.Visible = false;
+		}
 	}
 
 	public bool TryToSpendCoins(int amount)
@@ -63,6 +72,16 @@ public partial class GameUi : CanvasLayer
 		coinCountLabel.Text = $"{coins}";
 		return true;
 	}
+
+	public void TakeDamage(int amount)
+	{
+		currentBaseHP -= amount;
+		_BaseHPLabel.Text = $"{currentBaseHP}";
+	if (currentBaseHP <= 0)
+	{
+		ShowWarning("Base destroyed! Game Over!", GameOver: true);
+	}
+}
 
 	private void OnTimerTick()
 	{
