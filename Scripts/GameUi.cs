@@ -50,6 +50,8 @@ public partial class GameUi : CanvasLayer
 	public void IncrementKillCount()
 	{
 		enemyKillCount++;
+		coins += 25;
+		coinCountLabel.Text = $"{coins}";
 		killCountLabel.Text = $"Kills: {enemyKillCount}";
 
 	}
