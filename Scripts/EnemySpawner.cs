@@ -89,6 +89,7 @@ public partial class EnemySpawner : Node
 	{
 		if(CurrentWave >= Final_wave_number)
 		{
+			_gameUi.ShowWarning("Final wave reached! No more enemies will spawn!", GameOver: true);
 			GD.Print("Final wave reached. No more enemies will spawn.");
 			GD.Print("Player survived " + CurrentWave + " waves!");
 			_waveTimer.Stop();

@@ -90,5 +90,4 @@ shape = SubResource("CircleShape2D_ghaa6")
 shape = SubResource("CircleShape2D_1dp5w")
 
 [node name="AnimatedSprite2D" parent="." index="2" unique_id=1606845345]
-scale = Vector2(0.25, 0.25)
 sprite_frames = SubResource("SpriteFrames_1dp5w")

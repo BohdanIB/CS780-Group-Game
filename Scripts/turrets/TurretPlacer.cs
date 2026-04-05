@@ -80,6 +80,7 @@ public partial class TurretPlacer : Node2D
    				 {
 					//GD.Print("Not enough coins!");
 					_gameUi.ShowWarning("Not enough coins!");
+					_turretPlacerEnabled = false;
 					return;
 				}
 
@@ -91,6 +92,7 @@ public partial class TurretPlacer : Node2D
 				turret.GlobalPosition = _grid.GetCentralGridCellPositionPixels(tile.position);
 				GetTree().GetRoot().AddChild(turret);
 				EmitSignal(SignalName.OnTurretPlaced);
+				_turretPlacerEnabled = false;
 			}
 			// Display "ghost" turret to show where it's going to go and radius
 			// Ghost turret hover
