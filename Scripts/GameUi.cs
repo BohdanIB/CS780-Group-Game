@@ -38,6 +38,17 @@ public partial class GameUi : CanvasLayer
 			coinCountLabel.Text = $"{coins}";
 		};
 
+
+		_warningLabel.MouseFilter = Control.MouseFilterEnum.Ignore;
+		var styleBox = new StyleBoxFlat();
+		styleBox.BgColor = new Color(0, 0, 0, 0.7f);
+		styleBox.ContentMarginLeft = 10;
+		styleBox.ContentMarginRight = 10;
+		styleBox.ContentMarginTop = 5;
+		styleBox.ContentMarginBottom = 5;
+		_warningLabel.Visible = false;
+		_warningLabel.AddThemeStyleboxOverride("normal", styleBox);
+
 		// Timer setup
 		timerLabel = GetNode<Label>("UI/HBoxContainer/TimerLabel");
 		var timer = new Timer();

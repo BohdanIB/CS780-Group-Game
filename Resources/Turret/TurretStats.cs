@@ -17,9 +17,9 @@ public partial class TurretStats : Resource
 	private static readonly Dictionary<Category, TurretBaseStats> TURRET_BASE_STATS = new()
 	{
 		{Category.Ballista, 
-			new TurretBaseStats(AggroRadius: 100f, Health: 100f, FireRate: 2f, ProjectileStats: new ProjectileStats(ProjectileStats.Category.Bolt), SpriteFrame: 0, cost: 100)},
+			new TurretBaseStats(AggroRadius: 100f, Health: 100f, FireRate: 2f, ProjectileStats: new ProjectileStats(ProjectileStats.Category.Bolt), SpriteFrame: 0, cost: 75)},
 		{Category.Blade, 
-			new TurretBaseStats(AggroRadius: 50f, Health: 100f, FireRate: 5f, ProjectileStats: new ProjectileStats(ProjectileStats.Category.Blade), SpriteFrame: 1, cost: 150)},
+			new TurretBaseStats(AggroRadius: 50f, Health: 100f, FireRate: 5f, ProjectileStats: new ProjectileStats(ProjectileStats.Category.Blade), SpriteFrame: 1, cost: 100)},
 	};
 
 	// Turret Stats
