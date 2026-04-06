@@ -87,6 +87,12 @@ public partial class Turret : GenericStructure
 		// GD.Print($"Turret Stats: {_stats}");
 	}
 
+		public void HideRadius()
+	{
+		_visibleTurretRadius = false;
+		QueueRedraw();
+	}
+
 	public override void _PhysicsProcess(double delta)
 	{
 		// Todo: Primarily to support ghost mode turret in TurretPlacer.

@@ -33,10 +33,12 @@ public partial class GameUi : CanvasLayer
 			//GD.Print($"TurretSelected signal received: {turretType}");
 			turretPlacer.EnablePlacementMode(turretType);
 		};
+		/*
 		turretPlacer.OnTurretPlaced += () =>{
 			coins -= 100; 
 			coinCountLabel.Text = $"{coins}";
 		};
+		*/
 
 
 		_warningLabel.MouseFilter = Control.MouseFilterEnum.Ignore;

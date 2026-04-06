@@ -91,7 +91,9 @@ public partial class TurretPlacer : Node2D
 				turret.Initialize(_currentTurretType, _currentTurretTargetMode);
 				turret.GlobalPosition = _grid.GetCentralGridCellPositionPixels(tile.position);
 				GetTree().GetRoot().AddChild(turret);
+				turret.HideRadius();
 				EmitSignal(SignalName.OnTurretPlaced);
+				
 				_turretPlacerEnabled = false;
 			}
 			// Display "ghost" turret to show where it's going to go and radius
@@ -130,6 +132,8 @@ public partial class TurretPlacer : Node2D
 		}
 		return null;
 	}
+
+	
 
 	/// <summary>
 	/// Can return null
