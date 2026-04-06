@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="TerrainType" format=3 uid="uid://ofawk8jjvbja"]
+
+[ext_resource type="Script" uid="uid://dff1fbgdyals4" path="res://Scripts/World/BiomeType.cs" id="1_vi40i"]
+
+[resource]
+script = ExtResource("1_vi40i")
+groundTileAtlasCoords = Vector2i(2, 2)
+humidityGenerationRange = Vector2(0.6, 1)
+temperatureGenerationRange = Vector2(0.6, 1)
+generationPriority = 0.2
+metadata/_custom_type_script = "uid://dff1fbgdyals4"
