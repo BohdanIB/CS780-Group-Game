@@ -5,4 +5,7 @@
     <EnableDynamicLoading>true</EnableDynamicLoading>
     <RootNamespace>CS780GroupProject</RootNamespace>
   </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="gdunit4_testadapter_v5/**" />
+  </ItemGroup>
 </Project>
