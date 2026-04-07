@@ -55,6 +55,16 @@ public partial class Enemy: PathFollower
 			_health.ApplyDamage(damage); 
 		}; 
 
+		_mover.OnPathPointReached += (hasNextPoint, nextPoint) =>
+		{
+			if (hasNextPoint)
+			{
+				var directionRads = GlobalPosition.AngleToPoint(nextPoint);
+				// _animation.SetState(AnimationPackEntry.State.Idle, directionRads); // TODO: Update this with new animations
+				_animation.SetDirection(directionRads);
+			}
+		};
+
 	}
 
 	public void UpdateStats(EnemyStats newStats = null)
@@ -64,21 +74,6 @@ public partial class Enemy: PathFollower
 			_stats = newStats;
 		}
 		UpdateComponents();
-	}
-	public void UpdateComponents()
-	{
-		if (_stats != null)
-		{
-			_health.SetHealth(_stats.Health); // todo: this might not want to update everytime components are updated.
-			_hurt.SetRadius(_stats.HitboxRadius);
-			_detector.SetRadius(_stats.AggroRadius);
-			_detectable.SetRadius(_stats.DetectableRadius);
-			_mover.Speed = _stats.MovementSpeed;
-			_shooter.SetProjectileStats(_stats.ProjectileStats);
-			
-			// Todo: Add more updates
-			UpdateSprite(); // todo: should be a component?
-		}
 	}
 
 	private void InitializeComponents()
@@ -91,19 +86,23 @@ public partial class Enemy: PathFollower
 			_detectable.Initialize(_enemyTypes, _targetTypes);
 			_mover.Initialize(_stats.MovementSpeed, this, start: true);
 			_shooter.Initialize(_stats.FireRate, _enemyTypes, _targetTypes, _stats.ProjectileStats);
-
-			UpdateSprite(); // todo: should be a component?
+			_animation.Initialize(_stats.Animations);
+		}
+	}
+	private void UpdateComponents()
+	{
+		if (_stats != null)
+		{
+			_health.SetHealth(_stats.Health); // todo: this might not want to update everytime components are updated.
+			_hurt.SetRadius(_stats.HitboxRadius);
+			_detector.SetRadius(_stats.AggroRadius);
+			_detectable.SetRadius(_stats.DetectableRadius);
+			_mover.Speed = _stats.MovementSpeed;
+			_shooter.SetProjectileStats(_stats.ProjectileStats);
+			_animation.Animations = _stats.Animations;
 		}
 	}
 
-	private void UpdateSprite()
-	{
-		_idleAnimations.Frames = _stats.Animations.Idle;
-	}
-	// protected void UpdateProjectileStats(ProjectileStats newStats)
-	// {
-	// 	_shooterComponent.SetProjectileStats(newStats);
-	// }
 	public override string ToString()
 	{
 		return $"Enemy '{Name}': {_stats}";

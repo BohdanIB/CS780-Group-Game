@@ -1,19 +1,18 @@
 [gd_scene format=3 uid="uid://27mmcge0cxrm"]
 
 [ext_resource type="Script" uid="uid://bg3usi07e1a27" path="res://Scripts/GenericStructure.cs" id="1_4h5ic"]
-[ext_resource type="Script" uid="uid://2ug0etwgadcd" path="res://Scripts/Animation/AnimationManager.cs" id="2_abu07"]
 [ext_resource type="PackedScene" uid="uid://e5vy6kbwqw12" path="res://Scenes/Components/health_component.tscn" id="2_nkylo"]
 [ext_resource type="PackedScene" uid="uid://bu5bt5d2jv3iu" path="res://Scenes/Components/hurt_component.tscn" id="3_305qt"]
+[ext_resource type="PackedScene" uid="uid://c1wk4dy8g10qq" path="res://Scenes/Components/animation_component.tscn" id="4_abu07"]
 
-[node name="GenericStructure" type="Node2D" unique_id=1862632577 node_paths=PackedStringArray("_health", "_hurt", "_idleAnimations") groups=["structure"]]
+[node name="GenericStructure" type="Node2D" unique_id=1862632577 node_paths=PackedStringArray("_health", "_hurt", "_animation") groups=["structure"]]
 script = ExtResource("1_4h5ic")
 _health = NodePath("HealthComponent")
 _hurt = NodePath("HurtComponent")
-_idleAnimations = NodePath("IdleAnimations")
+_animation = NodePath("AnimationComponent")
 
 [node name="HealthComponent" parent="." unique_id=1408774868 instance=ExtResource("2_nkylo")]
 
 [node name="HurtComponent" parent="." unique_id=495543674 instance=ExtResource("3_305qt")]
 
-[node name="IdleAnimations" type="AnimatedSprite2D" parent="." unique_id=440445772]
-script = ExtResource("2_abu07")
+[node name="AnimationComponent" parent="." unique_id=1834183178 instance=ExtResource("4_abu07")]

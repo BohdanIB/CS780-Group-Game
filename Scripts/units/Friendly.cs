@@ -42,6 +42,15 @@ public partial class Friendly : PathFollower
 		{
 			_health.ApplyDamage(damage); 
 		}; 
+		_mover.OnPathPointReached += (hasNextPoint, nextPoint) =>
+		{
+			if (hasNextPoint)
+			{
+				var directionRads = GlobalPosition.AngleToPoint(nextPoint);
+				// _animation.SetState(AnimationPackEntry.State.Idle, directionRads); // TODO: Update this with new animations
+				_animation.SetDirection(directionRads);
+			}
+		};
 	}
 
 	public void UpdateStats(FriendlyStats newStats = null)
@@ -52,20 +61,6 @@ public partial class Friendly : PathFollower
 		}
 		UpdateComponents();
 	}
-	public void UpdateComponents()
-	{
-		if (_stats != null)
-		{
-			_health.SetHealth(_stats.Health); // todo: this might not want to update everytime components are updated.
-			_hurt.SetRadius(_stats.HitboxRadius);
-			_detector.SetRadius(_stats.AggroRadius);
-			_detectable.SetRadius(_stats.DetectableRadius);
-			_mover.Speed = _stats.MovementSpeed;
-			
-			// Todo: Add more updates
-			UpdateSprite(); // todo: should be a component?
-		}
-	}
 	private void InitializeComponents()
 	{
 		if (_stats != null)
@@ -75,13 +70,20 @@ public partial class Friendly : PathFollower
 			_detector.Initialize(_friendlyTypes, _enemyTypes);
 			_detectable.Initialize(_friendlyTypes, _enemyTypes);
 			_mover.Initialize(_stats.MovementSpeed, this, start: true);
-
-			UpdateSprite(); // todo: should be a component?
+			_animation.Initialize(_stats.Animations);
 		}
 	}
-	private void UpdateSprite()
+	public void UpdateComponents()
 	{
-		_idleAnimations.Frames = _stats.Animations.Idle;
+		if (_stats != null)
+		{
+			_health.SetHealth(_stats.Health); // todo: this might not want to update everytime components are updated.
+			_hurt.SetRadius(_stats.HitboxRadius);
+			_detector.SetRadius(_stats.AggroRadius);
+			_detectable.SetRadius(_stats.DetectableRadius);
+			_mover.Speed = _stats.MovementSpeed;
+			_animation.Animations = _stats.Animations;
+		}
 	}
 	public override string ToString()
 	{

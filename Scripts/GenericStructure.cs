@@ -15,17 +15,14 @@ public partial class GenericStructure: Node2D
 	[ExportGroup("Components")]
 	[Export] protected HealthComponent _health;
 	[Export] protected HurtComponent _hurt;
-
-	// Nodes
-	[Export] protected AnimationManager _idleAnimations;
-
-    // public virtual void Initialize() { }
+	[Export] protected AnimationComponent _animation;
 
 	public override void _Ready()
 	{
 		_health = GetComponentInChildrenOrNull<HealthComponent>(this);
 		_hurt = GetComponentInChildrenOrNull<HurtComponent>(this);
-		if (_health == null || _hurt == null)
+		_animation = GetComponentInChildrenOrNull<AnimationComponent>(this); // todo: Multiple types could cause issues here
+		if (_health == null || _hurt == null || _animation == null)
 		{
 			GD.Print($"WARNING - GenericStructure {this} was unable to find health and/or hurt components on _Ready()");
 		}

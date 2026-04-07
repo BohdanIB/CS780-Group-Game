@@ -14,14 +14,11 @@ public partial class PathFollower : Node2D
 	[Export] protected DetectorComponent _detector;
 	[Export] protected DetectableComponent _detectable;
 	[Export] protected MoverComponent _mover;
-
-	// Scene Children //
-	[ExportGroup("Exported Child Nodes")]
-	[Export] protected AnimationManager _idleAnimations;
+	[Export] protected AnimationComponent _animation;
 
 	public override void _Ready()
 	{
-		if (_health == null || _hurt == null || _detector == null || _detectable == null || _mover == null)
+		if (_health == null || _hurt == null || _detector == null || _detectable == null || _mover == null || _animation == null)
 		{
 			GD.Print($"WARNING - PathFollower {this} was unable to find components on _Ready()");
 		}

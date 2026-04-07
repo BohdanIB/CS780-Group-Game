@@ -1,9 +1,9 @@
 [gd_resource type="Resource" script_class="AnimationPack" format=3 uid="uid://bg25ie1ckk3e0"]
 
-[ext_resource type="SpriteFrames" uid="uid://bpbko2n2qgxyk" path="res://Assets/Animations/enemy_idle.tres" id="1_aqtmn"]
 [ext_resource type="Script" uid="uid://b8k2bijsjc1da" path="res://Scripts/Animation/AnimationPack.cs" id="1_axcja"]
+[ext_resource type="Resource" uid="uid://cr2tpe1tcy8n2" path="res://Resources/Animations/AnimationPackEntries/enemy_idle_animation_entry.tres" id="1_muh2a"]
 
 [resource]
 script = ExtResource("1_axcja")
-Idle = ExtResource("1_aqtmn")
+Animations = Array[Object]([ExtResource("1_muh2a")])
 metadata/_custom_type_script = "uid://b8k2bijsjc1da"

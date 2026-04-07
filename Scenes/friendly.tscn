@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://dtv7kt7wo8omt" path="res://Scenes/path_follower.tscn" id="1_jgycc"]
 [ext_resource type="Script" uid="uid://bs25gk004xjd8" path="res://Scripts/units/Friendly.cs" id="2_50fos"]
 [ext_resource type="Resource" uid="uid://bx02gj3gjk2w5" path="res://Resources/Unit/Friendly/RegularFriendlyStats.tres" id="3_5vdkv"]
-[ext_resource type="SpriteFrames" uid="uid://be25vodgonygm" path="res://Assets/Animations/friendly_idle.tres" id="4_5vdkv"]
+[ext_resource type="Resource" uid="uid://ks5bvpdhp2ev" path="res://Resources/Animations/AnimationPacks/FriendlyAnimations.tres" id="4_5vdkv"]
 
 [node name="Friendly" unique_id=382514737 groups=["friendly"] instance=ExtResource("1_jgycc")]
 script = ExtResource("2_50fos")
@@ -11,8 +11,5 @@ _stats = ExtResource("3_5vdkv")
 _friendlyTypes = 8
 _enemyTypes = 16
 
-[node name="IdleAnimations" parent="." index="5" unique_id=1606845345]
-position = Vector2(0, -4)
-sprite_frames = ExtResource("4_5vdkv")
-animation = &"north_east"
-Frames = ExtResource("4_5vdkv")
+[node name="AnimationComponent" parent="." index="5" unique_id=1805975540]
+Animations = ExtResource("4_5vdkv")

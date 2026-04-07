@@ -1,9 +1,9 @@
 [gd_resource type="Resource" script_class="AnimationPack" format=3 uid="uid://ks5bvpdhp2ev"]
 
+[ext_resource type="Resource" uid="uid://bc6kubxjpy144" path="res://Resources/Animations/AnimationPackEntries/friendly_idle_animation_entry.tres" id="1_0dfh4"]
 [ext_resource type="Script" uid="uid://b8k2bijsjc1da" path="res://Scripts/Animation/AnimationPack.cs" id="1_d84wc"]
-[ext_resource type="SpriteFrames" uid="uid://be25vodgonygm" path="res://Assets/Animations/friendly_idle.tres" id="1_lywmu"]
 
 [resource]
 script = ExtResource("1_d84wc")
-Idle = ExtResource("1_lywmu")
+Animations = Array[Object]([ExtResource("1_0dfh4")])
 metadata/_custom_type_script = "uid://b8k2bijsjc1da"

@@ -5,8 +5,8 @@ public partial class MoverComponent : Node2D
 {
 	private const int START_PATH_INDEX = 0;
 
-	[Signal] public delegate void OnPathPointReachedEventHandler(Vector2 ReachedPoint, Vector2 NextPoint); // todo
-	[Signal] public delegate void OnPathCompletedEventHandler(); // todo
+	[Signal] public delegate void OnPathPointReachedEventHandler(bool HasNextPoint, Vector2 NextPoint);
+	[Signal] public delegate void OnPathCompletedEventHandler();
 
 	[Export] public float Speed = 20f;
 	[Export] public Node2D ParentNode;
@@ -41,12 +41,14 @@ public partial class MoverComponent : Node2D
 			_currentPathIndex++;
 			if (PathCompleted())
 			{
+				EmitSignal(SignalName.OnPathPointReached, false, Vector2.Zero);
 				EmitSignal(SignalName.OnPathCompleted);
 				return;
 			}
 			totalMovement -= distanceToTarget;
 			targetPosition = _moverPath[_currentPathIndex];
 			distanceToTarget = ParentNode.Position.DistanceTo(targetPosition);
+			EmitSignal(SignalName.OnPathPointReached, true, targetPosition);
 		}
 		ParentNode.Position = ParentNode.Position.MoveToward(targetPosition, (float)totalMovement);
 	}

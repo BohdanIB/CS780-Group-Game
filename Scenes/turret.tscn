@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://bk3drg0y2r1ku" path="res://Scripts/turrets/Turret.cs" id="1_fcprl"]
 [ext_resource type="PackedScene" uid="uid://27mmcge0cxrm" path="res://Scenes/generic_structure.tscn" id="1_hskch"]
 [ext_resource type="Resource" uid="uid://b65p4eimakib4" path="res://Resources/Turret/BallistaTurretStats.tres" id="3_hxjjt"]
-[ext_resource type="SpriteFrames" uid="uid://divrawug5fwn" path="res://Assets/Animations/turret_idle.tres" id="4_hxjjt"]
+[ext_resource type="Resource" uid="uid://cop41bqffhdhj" path="res://Resources/Animations/AnimationPacks/TurretAnimations.tres" id="4_hxjjt"]
 [ext_resource type="PackedScene" uid="uid://cbnk8jcd7c4v3" path="res://Scenes/Components/detectable_component.tscn" id="5_ku01o"]
 [ext_resource type="PackedScene" uid="uid://1xnv73ih3ekh" path="res://Scenes/Components/shooter_component.tscn" id="6_74mb1"]
 [ext_resource type="PackedScene" uid="uid://c43d2uh68714x" path="res://Scenes/Components/detector_component.tscn" id="6_628tr"]
@@ -22,10 +22,8 @@ _shooter = NodePath("ShooterComponent")
 _targeting = NodePath("ShooterComponent/TargetingComponent")
 _projectileSpawner = NodePath("ShooterComponent/ProjectileSpawnerComponent")
 
-[node name="IdleAnimations" parent="." index="2" unique_id=440445772]
-sprite_frames = ExtResource("4_hxjjt")
-animation = &"east"
-Frames = ExtResource("4_hxjjt")
+[node name="AnimationComponent" parent="." index="2" unique_id=1834183178]
+Animations = ExtResource("4_hxjjt")
 
 [node name="DetectorComponent" parent="." index="3" unique_id=1994671651 instance=ExtResource("6_628tr")]
 

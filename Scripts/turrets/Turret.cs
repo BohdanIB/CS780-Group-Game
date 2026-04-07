@@ -62,10 +62,14 @@ public partial class Turret : GenericStructure
 		{
 			_health.ApplyDamage(damage);
 		};
-		// _hurtComponent.OnExitHurt += (area) => {};
-		// _shooter.OnShoot += (target, projectile) => {};
 
-		// CallDeferred(MethodName.InitializeComponents); // todo: run update components after _Ready() to ensure components are ready?
+		// Update sprite to aim at target's direction
+		_targeting.OnTargetSelect += (target) =>
+		{
+			var directionRads = GlobalPosition.AngleToPoint(target.GlobalPosition);
+			// _animation.SetState(AnimationPackEntry.State.Idle, directionRads); // TODO: Update when new animations roll out
+			_animation.SetDirection(directionRads);
+		};
 
 		// GD.Print($"Turret Stats: {_stats}");
 	}
@@ -116,22 +120,7 @@ public partial class Turret : GenericStructure
 		UpdateComponents();
 	}
 
-	public void UpdateComponents()
-	{
-		if (_stats != null)
-		{
-			_health.SetHealth(_stats.Health); // todo: this might not want to update everytime components are updated.
-			_hurt.SetRadius(_stats.HitboxRadius);
-			_detector.SetRadius(_stats.AggroRadius);
-			_detectable.SetRadius(_stats.DetectableRadius);
-			_shooter.SetProjectileStats(_stats.ProjectileStats);
-			_targeting.TargetingStyle = _targetingMode;
-			UpdateTurretSpriteFrames();
-			QueueRedraw(); // Draw aggro radius
-		}
-	}
-
-	public void InitializeComponents()
+	private void InitializeComponents()
 	{
 		// These rely on components which need to be in the scene tree before they can be modified.
 		if (_stats != null) {
@@ -144,15 +133,26 @@ public partial class Turret : GenericStructure
 			_detectable.Initialize(_turretTypes, _targetTypes); // todo: radius
 			_shooter.Initialize(_stats.FireRate, _turretTypes, _targetTypes, _stats.ProjectileStats);
 			_targeting.TargetingStyle = _targetingMode;
+			_animation.Initialize(_stats.Animations);
 
-			UpdateTurretSpriteFrames();
 			QueueRedraw(); // Draw aggro radius
 		}
 	}
-	protected void UpdateTurretSpriteFrames()
+	private void UpdateComponents()
 	{
-		_idleAnimations.Frames = _stats.Animations.Idle; // TODO: This needs to be expanded in future
+		if (_stats != null)
+		{
+			_health.SetHealth(_stats.Health); // todo: this might not want to update everytime components are updated.
+			_hurt.SetRadius(_stats.HitboxRadius);
+			_detector.SetRadius(_stats.AggroRadius);
+			_detectable.SetRadius(_stats.DetectableRadius);
+			_shooter.SetProjectileStats(_stats.ProjectileStats);
+			_targeting.TargetingStyle = _targetingMode;
+			_animation.Animations = _stats.Animations;
+			QueueRedraw(); // Draw aggro radius
+		}
 	}
+
 	public override string ToString()
 	{
 		return $"{Name}: {_stats}";

@@ -19,10 +19,7 @@ public partial class Projectile : Node2D
 
 	[ExportGroup("Components")]
 	[Export] private HitComponent _hit;
-
-
-	[ExportGroup("Child Nodes")]
-	[Export] private AnimationManager _idleAnimations;
+	[Export] private AnimationComponent _animation;
 
 	/// <summary>
 	/// Initialize projectile to target specific position with specific stats.
@@ -67,7 +64,6 @@ public partial class Projectile : Node2D
 		_validHitableTypes = hurtableTypes;
 		InitializeComponents();
 		UpdateStats();
-		// _idleAnimations.Frames = _stats.Animations.Idle;
 	}
 
 	public override void _Ready()
@@ -77,11 +73,12 @@ public partial class Projectile : Node2D
 			GD.Print($"PROJECTILE ONHIT: {area.Name} - Damage: {damage}");
 			ProjectileImpact();
 		};
+
+		// GD.Print($"Projectile stats: {_stats}");
 	}
 
 	public override void _PhysicsProcess(double delta)
 	{
-		// GD.Print($"Projectile stats: {_stats}");
 		if (IsInstanceValid(_target))
 		{
 			_targetLocation = _target.GlobalPosition;
@@ -133,29 +130,23 @@ public partial class Projectile : Node2D
 		}
 		UpdateComponents();
 	}
-	public void UpdateComponents()
-	{
-		if (_stats != null)
-		{
-			_hit.SetRadius(_stats.Hitbox);
-			// Todo: Add more updates
-			UpdateSpriteFrames(); // todo: should be a component?
-		}
-	}
 	private void InitializeComponents()
 	{
 		if (_stats != null)
 		{
 			_hit.Initialize(_stats.Hitbox, _stats.Damage, _senderTypes, _thisEntityTypes, _validHitableTypes, target: _target);
-
-			UpdateSpriteFrames(); // todo: should be a component?
+			_animation.Initialize(_stats.Animations);
 		}
 	}
-	private void UpdateSpriteFrames()
+	private void UpdateComponents()
 	{
-		_idleAnimations.Frames = _stats.Animations.Idle;
+		if (_stats != null)
+		{
+			_hit.SetRadius(_stats.Hitbox);
+			// Todo: Add more updates
+			_animation.Animations = _stats.Animations;
+		}
 	}
-
 	public ProjectileStats GetStats()
 	{
 		return _stats;
