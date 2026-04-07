@@ -15,8 +15,7 @@ public partial class FriendlyStats : Resource
 
 	// Friendly Stats
 	[Export] public Category Type;
-	[Export] public float HitboxRadius;
-	[Export] public float AggroRadius;
+	[Export] public float AggroRadius, DetectableRadius, HitboxRadius;
 	[Export] public float Health;
 	[Export] public float FireRate; // Shots per second, so (1/FireRate) will give you the time between shots.
 	[Export] public float MovementSpeed; // pixels per second
@@ -47,7 +46,7 @@ public partial class FriendlyStats : Resource
 	}
 	public override string ToString()
 	{
-		return $"{Type} - HitboxRadius: {HitboxRadius} - AggroRadius: {AggroRadius} - Health: {Health} - FireRate: {FireRate} - MovementSpeed: {MovementSpeed} - Projectile: [{ProjectileStats}] - Animations: [{Animations}]";
+		return $"{Type} - AggroRadius: {AggroRadius} - DetectableRadius: {DetectableRadius} - HitboxRadius: {HitboxRadius} - Health: {Health} - FireRate: {FireRate} - MovementSpeed: {MovementSpeed} - Projectile: [{ProjectileStats}] - Animations: [{Animations}]";
 	}
 
 }

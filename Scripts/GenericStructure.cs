@@ -17,7 +17,6 @@ public partial class GenericStructure: Node2D
 	[Export] protected HurtComponent _hurt;
 
 	// Nodes
-	[Export] protected CollisionShape2D _collisionShape2D;
 	[Export] protected AnimationManager _idleAnimations;
 
     // public virtual void Initialize() { }

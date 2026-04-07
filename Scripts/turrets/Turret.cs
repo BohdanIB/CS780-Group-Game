@@ -8,8 +8,8 @@ using Godot;
 /// </summary>
 public partial class Turret : GenericStructure
 {
+	[Export] private TurretStats _stats;
 	[Export] private TargetingMode _targetingMode = TargetingMode.Close;
-	[Export] private TurretStats _stats = new(TurretStats.Category.Ballista);
 
 	[ExportGroup("Types")]
 	[Export] public Groups.GroupTypes _turretTypes = GenericStructure.TYPES | Groups.GroupTypes.Turret;
@@ -118,7 +118,7 @@ public partial class Turret : GenericStructure
 
 	public void UpdateComponents()
 	{
-		if (this.IsNodeReady() && _stats != null)
+		if (_stats != null)
 		{
 			_health.SetHealth(_stats.Health); // todo: this might not want to update everytime components are updated.
 			_hurt.SetRadius(_stats.HitboxRadius);
@@ -126,7 +126,7 @@ public partial class Turret : GenericStructure
 			_detectable.SetRadius(_stats.DetectableRadius);
 			_shooter.SetProjectileStats(_stats.ProjectileStats);
 			_targeting.TargetingStyle = _targetingMode;
-			UpdateTurretSprite();
+			UpdateTurretSpriteFrames();
 			QueueRedraw(); // Draw aggro radius
 		}
 	}
@@ -134,7 +134,7 @@ public partial class Turret : GenericStructure
 	public void InitializeComponents()
 	{
 		// These rely on components which need to be in the scene tree before they can be modified.
-		if (this.IsNodeReady() && _stats != null) {
+		if (_stats != null) {
 			// Todo: Add more updates
 
 			// _health.Initialize();
@@ -145,13 +145,13 @@ public partial class Turret : GenericStructure
 			_shooter.Initialize(_stats.FireRate, _turretTypes, _targetTypes, _stats.ProjectileStats);
 			_targeting.TargetingStyle = _targetingMode;
 
-			UpdateTurretSprite();
+			UpdateTurretSpriteFrames();
 			QueueRedraw(); // Draw aggro radius
 		}
 	}
-	protected void UpdateTurretSprite()
+	protected void UpdateTurretSpriteFrames()
 	{
-		_animatedSprite2D.Frame = _stats.SpriteFrame; // todo
+		_idleAnimations.Frames = _stats.Animations.Idle; // TODO: This needs to be expanded in future
 	}
 	public override string ToString()
 	{

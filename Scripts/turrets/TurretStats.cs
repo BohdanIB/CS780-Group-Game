@@ -17,7 +17,7 @@ public partial class TurretStats : Resource
 
 	// Turret Stats
 	[Export] public Category Type;
-	[Export] public float AggroRadius;
+	[Export] public float AggroRadius, DetectableRadius, HitboxRadius;
 	[Export] public float Health;
 	[Export] public float FireRate; // shots per second, so (1/FireRate) will give you the time between shots for this turret.
 	[Export] public ProjectileStats ProjectileStats; 
@@ -47,7 +47,7 @@ public partial class TurretStats : Resource
 	}
 	public override string ToString()
 	{
-		return $"{Type} - AggroRadius: {AggroRadius} - Health: {Health} - FireRate: {FireRate} - Projectile: [{ProjectileStats}] - Animations: [{Animations}]";
+		return $"{Type} - AggroRadius: {AggroRadius} - DetectableRadius: {DetectableRadius} - HitboxRadius: {HitboxRadius} - Health: {Health} - FireRate: {FireRate} - Projectile: [{ProjectileStats}] - Animations: [{Animations}]";
 	}
 
 

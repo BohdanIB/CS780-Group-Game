@@ -6,17 +6,16 @@
 [ext_resource type="PackedScene" uid="uid://bu5bt5d2jv3iu" path="res://Scenes/Components/hurt_component.tscn" id="5_rbq3h"]
 [ext_resource type="PackedScene" uid="uid://bm24bo2kifop0" path="res://Scenes/Components/mover_component.tscn" id="6_c3bam"]
 [ext_resource type="PackedScene" uid="uid://c43d2uh68714x" path="res://Scenes/Components/detector_component.tscn" id="6_rbq3h"]
+[ext_resource type="Script" uid="uid://2ug0etwgadcd" path="res://Scripts/Animation/AnimationManager.cs" id="7_c3bam"]
 
-[node name="PathFollower" type="Node2D" unique_id=1740221814 node_paths=PackedStringArray("_health", "_hurt", "_detector", "_detectable", "_mover", "_animatedSprite2D")]
+[node name="PathFollower" type="Node2D" unique_id=1740221814 node_paths=PackedStringArray("_health", "_hurt", "_detector", "_detectable", "_mover", "_idleAnimations")]
 script = ExtResource("1_atuyi")
 _health = NodePath("HealthComponent")
 _hurt = NodePath("HurtComponent")
 _detector = NodePath("DetectorComponent")
 _detectable = NodePath("DetectableComponent")
 _mover = NodePath("MoverComponent")
-_animatedSprite2D = NodePath("AnimatedSprite2D")
-
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1606845345]
+_idleAnimations = NodePath("IdleAnimations")
 
 [node name="HealthComponent" parent="." unique_id=1408774868 instance=ExtResource("4_43wju")]
 
@@ -28,3 +27,6 @@ _animatedSprite2D = NodePath("AnimatedSprite2D")
 
 [node name="MoverComponent" parent="." unique_id=1975334598 node_paths=PackedStringArray("ParentNode") instance=ExtResource("6_c3bam")]
 ParentNode = NodePath("..")
+
+[node name="IdleAnimations" type="AnimatedSprite2D" parent="." unique_id=1606845345]
+script = ExtResource("7_c3bam")

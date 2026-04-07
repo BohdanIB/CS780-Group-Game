@@ -2,64 +2,27 @@
 
 [ext_resource type="PackedScene" uid="uid://dtv7kt7wo8omt" path="res://Scenes/path_follower.tscn" id="1_hghv2"]
 [ext_resource type="Script" uid="uid://c21fjsrl23hps" path="res://Scripts/units/Enemy.cs" id="2_1f0kj"]
-[ext_resource type="Script" uid="uid://db7kn4h7v1jqa" path="res://Resources/Turret/ProjectileStats.cs" id="3_auwsv"]
-[ext_resource type="Script" uid="uid://c35fcs4mhqjbm" path="res://Resources/Unit/EnemyStats.cs" id="4_8uf12"]
-[ext_resource type="Texture2D" uid="uid://bdd0jbwygdyav" path="res://Assets/Sprites/temp_enemy.png" id="4_287tu"]
+[ext_resource type="Resource" uid="uid://vu803a5ed7i0" path="res://Resources/Unit/Enemy/RegularEnemyStats.tres" id="3_1dp5w"]
+[ext_resource type="SpriteFrames" uid="uid://bpbko2n2qgxyk" path="res://Assets/Animations/enemy_idle.tres" id="4_1dp5w"]
 [ext_resource type="PackedScene" uid="uid://1xnv73ih3ekh" path="res://Scenes/Components/shooter_component.tscn" id="5_0830c"]
 [ext_resource type="PackedScene" uid="uid://cxvwrh12elf1m" path="res://Scenes/Components/targeting_component.tscn" id="6_1dp5w"]
 [ext_resource type="PackedScene" uid="uid://bxnd3hgmx5vi6" path="res://Scenes/Components/spawner_component.tscn" id="7_auwsv"]
 
-[sub_resource type="Resource" id="Resource_auwsv"]
-script = ExtResource("3_auwsv")
-_speed = 100.0
-_damage = 10.0
-_hitbox = 16.0
-
-[sub_resource type="Resource" id="Resource_8uf12"]
-script = ExtResource("4_8uf12")
-_hitboxRadius = 16.0
-_aggroRadius = 50.0
-_detectableRadius = 16.0
-_health = 50.0
-_fireRate = 4.0
-_movementSpeed = 15.0
-_projectileStats = SubResource("Resource_auwsv")
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_0830c"]
-atlas = ExtResource("4_287tu")
-region = Rect2(0, 0, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_ghaa6"]
-atlas = ExtResource("4_287tu")
-region = Rect2(32, 0, 32, 32)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_1dp5w"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_0830c")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_ghaa6")
-}],
-"loop": true,
-"name": &"default",
-"speed": 5.0
-}]
-
 [node name="Enemy" unique_id=382514737 node_paths=PackedStringArray("_shooter", "_targeting", "_projectileSpawner") groups=["enemy"] instance=ExtResource("1_hghv2")]
 script = ExtResource("2_1f0kj")
+_stats = ExtResource("3_1dp5w")
 _targetingMode = 4
-_stats = SubResource("Resource_8uf12")
 _enemyTypes = 16
 _targetTypes = 11
 _shooter = NodePath("ShooterComponent")
 _targeting = NodePath("ShooterComponent/TargetingComponent")
 _projectileSpawner = NodePath("ShooterComponent/ProjectileSpawnerComponent")
 
-[node name="AnimatedSprite2D" parent="." index="0" unique_id=1606845345]
-scale = Vector2(0.25, 0.25)
-sprite_frames = SubResource("SpriteFrames_1dp5w")
+[node name="IdleAnimations" parent="." index="5" unique_id=1606845345]
+position = Vector2(0, -4)
+sprite_frames = ExtResource("4_1dp5w")
+animation = &"north_east"
+Frames = ExtResource("4_1dp5w")
 
 [node name="ShooterComponent" parent="." index="6" unique_id=1054008556 node_paths=PackedStringArray("_projectileSpawner", "_targeting", "_shotCooldown") instance=ExtResource("5_0830c")]
 _projectileSpawner = NodePath("ProjectileSpawnerComponent")

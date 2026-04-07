@@ -13,7 +13,6 @@ public partial class TargetingComponent : Node2D
 	[Export] private DetectorComponent _detector;
 	// [Export] private HitComponent _hit; // todo: To detect hurt components
 
-	private Random _random = new(); // todo: Seed this?
 	private List<DetectableComponent> _targets = [];
 
 	// /// <summary>
@@ -86,7 +85,7 @@ public partial class TargetingComponent : Node2D
 	private Area2D RandomPick()
 	{
 		if (_targets.Count == 0) { return null; }
-		return _targets[_random.Next(_targets.Count)];
+		return _targets[GD.RandRange(0, _targets.Count)];
 	}
 	/// <summary>
 	/// Pick the valid target that is closest to finishing its path.

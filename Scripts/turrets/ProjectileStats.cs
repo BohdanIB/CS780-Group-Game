@@ -23,6 +23,7 @@ public partial class ProjectileStats : Resource
 	[Export] public Category Type;
 	[Export] public float Speed;
 	[Export] public float Damage;
+	[Export] public float Hitbox;
 	[Export] public AnimationPack Animations;
 
 	/// <summary>
@@ -50,6 +51,6 @@ public partial class ProjectileStats : Resource
 
 	public override string ToString()
 	{
-		return $"{Type} - Speed: {Speed} - Damage: {Damage} - Animations: [{Animations}]";
+		return $"{Type} - HitboxRadius: {Hitbox} - Speed: {Speed} - Damage: {Damage} - Animations: [{Animations}]";
 	}
 }

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 public partial class Friendly : PathFollower
 {
-	[Export] private FriendlyStats _stats = new(FriendlyStats.Category.Regular);
+	[Export] private FriendlyStats _stats;
 
 	[ExportGroup("Types")]
 	[Export] public Groups.GroupTypes _friendlyTypes = PathFollower.TYPES | Groups.GroupTypes.Friendly;
@@ -54,7 +54,7 @@ public partial class Friendly : PathFollower
 	}
 	public void UpdateComponents()
 	{
-		if (this.IsNodeReady() && _stats != null)
+		if (_stats != null)
 		{
 			_health.SetHealth(_stats.Health); // todo: this might not want to update everytime components are updated.
 			_hurt.SetRadius(_stats.HitboxRadius);
@@ -68,7 +68,7 @@ public partial class Friendly : PathFollower
 	}
 	private void InitializeComponents()
 	{
-		if (this.IsNodeReady() && _stats != null)
+		if (_stats != null)
 		{
 			_health.SetHealth(_stats.Health); // todo: this might not want to update everytime components are updated.
 			_hurt.Initialize(_friendlyTypes, _enemyTypes);
@@ -145,8 +145,12 @@ public partial class Friendly : PathFollower
 		var allFriendlyStats = FriendlyStats.LoadAllStats();
 		for (int i = 0; i < 3; i++)
 		{
+			// Set friendly as child of parent
 			var friendly = GD.Load<PackedScene>("res://Scenes/friendly.tscn").Instantiate<Friendly>();
+			parent.CallDeferred("add_child", friendly); // Cannot add children in _Ready()
 
+			// Initialize
+			testFriendlies.Add(friendly);
 			foreach(var stats in allFriendlyStats)
 			{
 				if (stats.Type == FriendlyStats.Category.Regular)
@@ -155,10 +159,6 @@ public partial class Friendly : PathFollower
 					break;
 				}
 			}
-			// friendly.Initialize(i == 0 ? FriendlyStats.Category.Loaded : FriendlyStats.Category.Regular); // Make one 'loaded' enemy for testing
-			// TODO
-			testFriendlies.Add(friendly);
-			parent.GetTree().GetRoot().CallDeferred("add_child", friendly); // Cannot add children in _Ready()
 
 			// Set path
 			var endPoint = potentialFriendlyEndpoints[GD.RandRange(0, potentialFriendlyEndpoints.Count-1)].position;
@@ -167,7 +167,7 @@ public partial class Friendly : PathFollower
 			{
 				path.Add(IsometricTileMap.MapCoordToGlobalPosition(layer, point));
 			}
-			friendly.SetPath(path);
+			friendly.SetPath(path.ToArray());
 			friendly.GlobalPosition = IsometricTileMap.MapCoordToGlobalPosition(layer, hub);
 
 			// GD.Print($"{friendly}");

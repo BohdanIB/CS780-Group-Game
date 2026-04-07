@@ -1,16 +1,17 @@
 [gd_resource type="Resource" script_class="FriendlyStats" format=3 uid="uid://bx02gj3gjk2w5"]
 
-[ext_resource type="Resource" uid="uid://ks5bvpdhp2ev" path="res://Resources/Animations/StandardFriendlyAnimations.tres" id="1_c3cnr"]
+[ext_resource type="Resource" uid="uid://ks5bvpdhp2ev" path="res://Resources/Animations/FriendlyAnimations.tres" id="1_c3cnr"]
 [ext_resource type="Resource" uid="uid://dbmns5gjywp51" path="res://Resources/Projectiles/BoltStats.tres" id="2_3xnli"]
 [ext_resource type="Script" uid="uid://catyueyep0aer" path="res://Scripts/units/FriendlyStats.cs" id="3_n1uiq"]
 
 [resource]
 script = ExtResource("3_n1uiq")
-HitboxRadius = 5.0
 AggroRadius = 25.0
+DetectableRadius = 16.0
+HitboxRadius = 5.0
 Health = 50.0
 FireRate = 2.0
-MovementSpeed = 10.0
+MovementSpeed = 20.0
 ProjectileStats = ExtResource("2_3xnli")
 Animations = ExtResource("1_c3cnr")
 metadata/_custom_type_script = "uid://catyueyep0aer"

@@ -1,39 +1,19 @@
 [gd_scene format=3 uid="uid://b1picus170nmk"]
 
 [ext_resource type="Script" uid="uid://bca40tiktvab7" path="res://Scripts/turrets/Projectile.cs" id="1_yr2qt"]
-[ext_resource type="Texture2D" uid="uid://djpqivk2pwl35" path="res://Assets/Sprites/temp_projectiles.png" id="2_yr2qt"]
+[ext_resource type="Script" uid="uid://2ug0etwgadcd" path="res://Scripts/Animation/AnimationManager.cs" id="3_d4467"]
+[ext_resource type="SpriteFrames" uid="uid://boaj8j2l6raiy" path="res://Assets/Animations/bolt_idle.tres" id="3_e1077"]
 [ext_resource type="PackedScene" uid="uid://7n3xh2bxsdyb" path="res://Scenes/Components/hit_component.tscn" id="3_tl4hk"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_tl4hk"]
-atlas = ExtResource("2_yr2qt")
-region = Rect2(0, 0, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_d4467"]
-atlas = ExtResource("2_yr2qt")
-region = Rect2(32, 0, 32, 32)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_f8cdk"]
-resource_local_to_scene = true
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_tl4hk")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_d4467")
-}],
-"loop": true,
-"name": &"default",
-"speed": 5.0
-}]
-
-[node name="Projectile" type="Node2D" unique_id=1257787249 node_paths=PackedStringArray("_hit", "_sprite") groups=["projectile"]]
+[node name="Projectile" type="Node2D" unique_id=1257787249 node_paths=PackedStringArray("_hit", "_idleAnimations") groups=["projectile"]]
 script = ExtResource("1_yr2qt")
 _hit = NodePath("HitComponent")
-_sprite = NodePath("AnimatedSprite2D")
-
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=225913893]
-scale = Vector2(0.5, 0.5)
-sprite_frames = SubResource("SpriteFrames_f8cdk")
+_idleAnimations = NodePath("IdleAnimations")
 
 [node name="HitComponent" parent="." unique_id=610990885 instance=ExtResource("3_tl4hk")]
+
+[node name="IdleAnimations" type="AnimatedSprite2D" parent="." unique_id=225913893]
+scale = Vector2(0.5, 0.5)
+sprite_frames = ExtResource("3_e1077")
+script = ExtResource("3_d4467")
+Frames = ExtResource("3_e1077")

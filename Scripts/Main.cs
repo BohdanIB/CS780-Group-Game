@@ -11,7 +11,7 @@ public partial class Main : Node2D
 	[Export] private TurretPlacer _turretPlacer;
 
 	private GenericGrid<GroundTile> _grid;
-	private Vector2I _hubLocation = new Vector2I(41, 21);
+	private Vector2I _hubLocation = new Vector2I(20, 10);
 	
 
 	public override void _Ready()
@@ -23,6 +23,9 @@ public partial class Main : Node2D
 		_gridRenderer.RenderGrid(_grid);
 
 		_turretPlacer.Initialize(_grid, _gridRenderer.TerrainMap);
+
+		Enemy.TempEnemyDemo(this, _grid, _gridRenderer.TerrainMap, _hubLocation);
+		Friendly.TempFriendlyDemo(this, _grid, _gridRenderer.TerrainMap, _hubLocation);
 	}
 
 }

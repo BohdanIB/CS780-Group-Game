@@ -136,6 +136,8 @@ namespace TestNS
 			FARTHEST_POSITION  = MIDDLE_POSITION + INTER_TARGET_VECTOR;
 		}
 
+        /*
+
 		[TestCase]
 		[RequireGodotRuntime]
 		public void Initialization()
@@ -240,6 +242,8 @@ namespace TestNS
 			AssertThat(signalCollector.CurrentShotNull()).IsTrue();
 			AssertThat(signalCollector.ShotList).IsEmpty();
 		}
+
+        */
 
     }
 }

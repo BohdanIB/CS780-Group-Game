@@ -9,7 +9,7 @@ public partial class Projectile : Node2D
 
 	[Signal] public delegate void OnProjectileImpactEventHandler(Vector2 Position, ProjectileStats Stats/*, Groups.GroupTypes SenderTypes*/); // todo: May need more dev; Explosive shots AOE?
 
-	[Export] protected ProjectileStats _stats = new(ProjectileStats.Category.Bolt);
+	[Export] protected ProjectileStats _stats;
 	[Export] protected Vector2 _targetLocation; // Either the target's last known position, or a position given at initialization.
 	[Export] protected HurtComponent _target;
 
@@ -122,11 +122,6 @@ public partial class Projectile : Node2D
 	{
 		// Todo: WIP - Potentially add animation or some other effects to projectile on impact? May want to incorporate signal somehow.
 		EmitSignal(SignalName.OnProjectileImpact, GlobalPosition, _stats);
-		if (IsInstanceValid(_target))
-		{
-			// GD.Print($"Projectile hit target {_target.Name} for {_stats.Damage} damage");
-			_target.ChangeHealth(_stats.Damage);
-		}
 		QueueFree();
 	}
 
@@ -140,7 +135,7 @@ public partial class Projectile : Node2D
 	}
 	public void UpdateComponents()
 	{
-		if (this.IsNodeReady() && _stats != null)
+		if (_stats != null)
 		{
 			_hit.SetRadius(_stats.Hitbox);
 			// Todo: Add more updates
@@ -149,7 +144,7 @@ public partial class Projectile : Node2D
 	}
 	private void InitializeComponents()
 	{
-		if (this.IsNodeReady() && _stats != null)
+		if (_stats != null)
 		{
 			_hit.Initialize(_stats.Hitbox, _stats.Damage, _senderTypes, _thisEntityTypes, _validHitableTypes, target: _target);
 

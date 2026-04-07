@@ -6,7 +6,7 @@ using Godot;
 
 public partial class Enemy: PathFollower
 {
-	[Export] private EnemyStats _stats = new(EnemyStats.Category.Regular);
+	[Export] private EnemyStats _stats;
 	[Export] private TargetingMode _targetingMode = TargetingMode.Weak;
 
 	[ExportGroup("Types")]
@@ -67,7 +67,7 @@ public partial class Enemy: PathFollower
 	}
 	public void UpdateComponents()
 	{
-		if (this.IsNodeReady() && _stats != null)
+		if (_stats != null)
 		{
 			_health.SetHealth(_stats.Health); // todo: this might not want to update everytime components are updated.
 			_hurt.SetRadius(_stats.HitboxRadius);
@@ -83,7 +83,7 @@ public partial class Enemy: PathFollower
 
 	private void InitializeComponents()
 	{
-		if (this.IsNodeReady() && _stats != null)
+		if (_stats != null)
 		{
 			_health.SetHealth(_stats.Health); // todo: this might not want to update everytime components are updated.
 			_hurt.Initialize(_enemyTypes, _targetTypes);
@@ -165,7 +165,12 @@ public partial class Enemy: PathFollower
 		var allEnemyStats = EnemyStats.LoadAllStats();
 		for (int i = 0; i < 6; i++)
 		{
+			// Set enemy as child of parent
 			var enemy = GD.Load<PackedScene>("res://Scenes/enemy.tscn").Instantiate<Enemy>();
+			parent.CallDeferred("add_child", enemy); // Cannot add children in _Ready() calls
+
+			// Initialize
+			testEnemies.Add(enemy);
 			foreach(var stats in allEnemyStats)
 			{
 				if (stats.Type == EnemyStats.Category.Regular)
@@ -174,11 +179,6 @@ public partial class Enemy: PathFollower
 					break;
 				}
 			}
-			
-			// enemy.Initialize(i == 0 ? EnemyStats.Category.Strong : EnemyStats.Category.Regular); // Make one 'strong' enemy for testing
-			// TODO
-			testEnemies.Add(enemy);
-			parent.GetTree().GetRoot().CallDeferred("add_child", enemy); // Cannot add children in _Ready() calls
 
 			// Set enemy paths
 			var spawnPoint = potentialEnemySpawnPoints[GD.RandRange(0, potentialEnemySpawnPoints.Count-1)].position;
@@ -188,61 +188,11 @@ public partial class Enemy: PathFollower
 			{
 				path.Add(IsometricTileMap.MapCoordToGlobalPosition(layer, point));
 			}
-			enemy.SetPath(path);
+			enemy.SetPath(path.ToArray());
 			enemy.GlobalPosition = IsometricTileMap.MapCoordToGlobalPosition(layer, spawnPoint);
 
 			// GD.Print($"{enemy}");
 		}
 	}
-
-	/// <summary>
-	/// If there is a valid target in range of current PathFollower, choose and fire at target given TargetingMode.
-	/// </summary>
-	private void FireAtValidTarget()
-	{
-		if (_targetsInRange.Count > 0 && _shotCooldownTimer.IsStopped())
-		{
-			Friendly currTarget;
-			if (_targetingMode == TargetingMode.Random)
-			{
-				currTarget = _targetsInRange[GD.RandRange(0, _targetsInRange.Count-1)];
-			}
-			else
-			{
-				// Look for an appropriate target to shoot at within PathFollower's radius given TargetingMode.
-				currTarget = _targetsInRange[0];
-				float currTargetDistanceFromSelf = Position.DistanceTo(currTarget.Position);
-				float currTargetDistanceFromGoal = currTarget.GetDistanceToGoalPixels();
-				float currTargetHealth = currTarget.GetCurrentHealth();
-				for (int i = 1; i < _targetsInRange.Count; i++)
-				{
-					var target = _targetsInRange[i];
-					float targetDistanceFromSelf = Position.DistanceTo(target.Position);
-					float targetDistanceFromGoal = target.GetDistanceToGoalPixels();
-					float targetHealth = target.GetCurrentHealth();
-					if ((_targetingMode == TargetingMode.First  && targetDistanceFromGoal < currTargetDistanceFromGoal) || 
-						(_targetingMode == TargetingMode.Last   && currTargetDistanceFromGoal < targetDistanceFromGoal) || 
-						(_targetingMode == TargetingMode.Close  && targetDistanceFromSelf < currTargetDistanceFromSelf) ||
-						(_targetingMode == TargetingMode.Weak   && targetHealth < currTargetHealth) ||
-						(_targetingMode == TargetingMode.Strong && currTargetHealth < targetHealth))
-					{
-						currTarget = target;
-						currTargetDistanceFromSelf = targetDistanceFromSelf;
-						currTargetDistanceFromGoal = targetDistanceFromGoal;
-						currTargetHealth = targetHealth;
-					}
-				}
-			}
-
-			// Shoot at the target
-			// GD.Print($"Enemy {Name} firing Projectile at target {currTarget} with stats: {_stats.ProjectileStats}");
-			_shotCooldownTimer.Start(1 / _stats.FireRate);
-			var projectile = _projectileScene.Instantiate<Projectile>();
-			projectile.GlobalPosition = GlobalPosition;
-			projectile.Initialize(currTarget, _stats.ProjectileStats);
-			GetTree().GetRoot().AddChild(projectile);
-		}
-	}
-
 
 }

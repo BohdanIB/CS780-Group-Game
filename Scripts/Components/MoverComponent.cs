@@ -1,24 +1,23 @@
 
-using System.Collections.Generic;
 using Godot;
 
 public partial class MoverComponent : Node2D
 {
 	private const int START_PATH_INDEX = 0;
 
-	// [Signal] public delegate void OnPathPointReachedEventHandler(); // todo
+	[Signal] public delegate void OnPathPointReachedEventHandler(Vector2 ReachedPoint, Vector2 NextPoint); // todo
 	[Signal] public delegate void OnPathCompletedEventHandler(); // todo
 
 	[Export] public float Speed = 20f;
 	[Export] public Node2D ParentNode;
-	public bool CurrentlyMoving { get; private set; } = false;
+	public bool CurrentlyMoving { get; private set; } = true;
 	private Vector2[] _moverPath = [];
 	private int _currentPathIndex = START_PATH_INDEX;
 
-	public void Initialize(float speed, Node2D parent, bool start = false, Vector2[] moverPath = null)
+	public void Initialize(float speed, Node2D parent = null, bool start = true, Vector2[] moverPath = null)
 	{
 		Speed = speed;
-		ParentNode = parent;
+		if (parent != null) { ParentNode = parent; }
 		if (start) {Start();} else {Stop();}
 		if (moverPath != null) { SetMoverPath(moverPath); }
 	}
@@ -86,6 +85,7 @@ public partial class MoverComponent : Node2D
 	{
 		return _moverPath;
 	}
+
 	public void SetMoverPath(Vector2[] path)
 	{
 		_moverPath = path;

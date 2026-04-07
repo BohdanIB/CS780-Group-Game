@@ -20,7 +20,7 @@ public partial class TurretPlacer : Node2D
 
 	private List<TurretStats> _allTurretStats;
 	private int _currentTurretIndex = 0;
-	private Turret.TargetingMode _currentTurretTargetMode = Turret.TargetingMode.First;
+	private TargetingMode _currentTurretTargetMode = TargetingMode.First;
 
 	private GenericGrid<GroundTile> _grid;
 	private IsometricTileMap _tileMap;
@@ -118,7 +118,7 @@ public partial class TurretPlacer : Node2D
 		if (Input.IsActionJustPressed("SwitchTurretTargetingMode"))
 		{
 			_currentTurretTargetMode++;
-			if (!Enum.IsDefined(typeof(Turret.TargetingMode), _currentTurretTargetMode))
+			if (!Enum.IsDefined(typeof(TargetingMode), _currentTurretTargetMode))
 			{
 				_currentTurretTargetMode = 0;
 			}
