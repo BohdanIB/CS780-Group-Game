@@ -1,41 +1,25 @@
 [gd_scene format=3 uid="uid://b1picus170nmk"]
 
 [ext_resource type="Script" uid="uid://bca40tiktvab7" path="res://Scripts/turrets/Projectile.cs" id="1_yr2qt"]
-[ext_resource type="Texture2D" uid="uid://djpqivk2pwl35" path="res://Assets/Sprites/temp_projectiles.png" id="2_yr2qt"]
+[ext_resource type="Resource" uid="uid://dbmns5gjywp51" path="res://Resources/Projectiles/BoltStats.tres" id="2_tl4hk"]
+[ext_resource type="SpriteFrames" uid="uid://boaj8j2l6raiy" path="res://Assets/Animations/bolt_idle.tres" id="3_tl4hk"]
+[ext_resource type="Script" uid="uid://2ug0etwgadcd" path="res://Scripts/Animation/AnimationManager.cs" id="4_d4467"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_xjght"]
 resource_local_to_scene = true
 radius = 5.0
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_tl4hk"]
-atlas = ExtResource("2_yr2qt")
-region = Rect2(0, 0, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_d4467"]
-atlas = ExtResource("2_yr2qt")
-region = Rect2(32, 0, 32, 32)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_f8cdk"]
-resource_local_to_scene = true
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_tl4hk")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_d4467")
-}],
-"loop": true,
-"name": &"default",
-"speed": 5.0
-}]
-
-[node name="Projectile" type="Area2D" unique_id=196749450]
+[node name="Projectile" type="Area2D" unique_id=196749450 node_paths=PackedStringArray("_idleAnimations")]
 script = ExtResource("1_yr2qt")
+_stats = ExtResource("2_tl4hk")
+_idleAnimations = NodePath("IdleAnimations")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1960296799]
 shape = SubResource("CircleShape2D_xjght")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=225913893]
+[node name="IdleAnimations" type="AnimatedSprite2D" parent="." unique_id=225913893]
 scale = Vector2(0.5, 0.5)
-sprite_frames = SubResource("SpriteFrames_f8cdk")
+sprite_frames = ExtResource("3_tl4hk")
+autoplay = "default"
+script = ExtResource("4_d4467")
+Frames = ExtResource("3_tl4hk")
