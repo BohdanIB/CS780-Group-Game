@@ -144,7 +144,6 @@ public partial class Friendly : PathFollower
 		}
 		var layer = layers[0];
 		List<Friendly> testFriendlies = [];
-		var allFriendlyStats = FriendlyStats.LoadAllStats();
 		for (int i = 0; i < 3; i++)
 		{
 			// Set friendly as child of parent
@@ -153,7 +152,7 @@ public partial class Friendly : PathFollower
 
 			// Initialize
 			testFriendlies.Add(friendly);
-			foreach(var stats in allFriendlyStats)
+			foreach(var stats in FriendlyStats.ALL_FRIENDLIES)
 			{
 				if (stats.Type == FriendlyStats.Category.Regular)
 				{

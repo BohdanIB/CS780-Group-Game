@@ -161,7 +161,6 @@ public partial class Enemy: PathFollower
 		}
 		var layer = layers[0];
 		List<Enemy> testEnemies = [];
-		var allEnemyStats = EnemyStats.LoadAllStats();
 		for (int i = 0; i < 6; i++)
 		{
 			// Set enemy as child of parent
@@ -170,7 +169,7 @@ public partial class Enemy: PathFollower
 
 			// Initialize
 			testEnemies.Add(enemy);
-			foreach(var stats in allEnemyStats)
+			foreach(var stats in EnemyStats.ALL_ENEMIES)
 			{
 				if (stats.Type == EnemyStats.Category.Regular)
 				{

@@ -15,10 +15,8 @@ namespace TestNS
 	{
 		private partial class SignalCollector : Node
 		{
-			// public List<int> OnPathPointReachedList { get; } = new();
-			// public List<int> OnPathCompletedList { get; } = new();
-			// public int OnPathPointReachedCount { get; private set; } = new();
-			public int OnPathCompletedCount { get; private set; } = new();
+			public List<(bool hasNextPoint, Vector2 nextPoint)> OnPathPointReachedList { get; private set; } = new();
+			public int OnPathCompletedCount { get; private set; } = 0;
 
 			public SignalCollector(MoverComponent mover)
 			{
@@ -26,14 +24,19 @@ namespace TestNS
 			}
 			public void ConnectComponents(MoverComponent mover)
 			{
-				// mover.OnPathPointReached += () =>
-				// {
-				// 	OnPathPointReachedCount += 1;
-				// };
+				mover.OnPathPointReached += (hasNextPoint, nextPoint) =>
+				{
+					OnPathPointReachedList.Add((hasNextPoint, nextPoint));
+				};
 				mover.OnPathCompleted += () =>
 				{
 					OnPathCompletedCount += 1;
 				};
+			}
+			public void ClearSignalCollector()
+			{
+				OnPathPointReachedList.Clear();
+				OnPathCompletedCount = 0;
 			}
 		}
 		private ISceneRunner _runner = null;
@@ -73,7 +76,7 @@ namespace TestNS
 				.IsNotNull()
 				.IsEmpty();
 			AssertThat(mover.ParentNode).IsSame(moverParent);
-			AssertThat(mover.CurrentlyMoving).IsFalse();
+			AssertThat(mover.CurrentlyMoving).IsTrue();
 		}
 
 		[TestCase]
@@ -107,7 +110,7 @@ namespace TestNS
 				.IsNotNull()
 				.IsSame(moverPath);
 			AssertThat(mover.ParentNode).IsSame(moverParent);
-			AssertThat(mover.CurrentlyMoving).IsFalse();
+			AssertThat(mover.CurrentlyMoving).IsTrue();
 		}
 		[TestCase]
 		[RequireGodotRuntime]
@@ -132,27 +135,33 @@ namespace TestNS
 		{
 			var mover = _mover;
 			var moverParent = _moverObject;
-			moverParent.GlobalPosition = new(0, 0);
+			
+			var START_POINT = new Vector2(0, 0);
+			var END_POINT   = new Vector2(50, 0);
+
+			moverParent.GlobalPosition = START_POINT;
 
 			var signalCollector = AutoFree(new SignalCollector(mover));
 
 			var speed = 50f;
 			var parent = moverParent;
 			var start = false;
-			var moverPath = new Vector2[] {new(50,0)};
+			var moverPath = new Vector2[] {END_POINT};
 			mover.Initialize(speed, parent, start, moverPath);
 
 			// Shouldn't move
 			await _runner.SimulateFrames(10, 150);
-			AssertThat(parent.GlobalPosition).IsEqual(new(0,0));
-			// AssertThat(signalCollector.OnPathPointReachedCount).IsZero();
+			AssertThat(parent.GlobalPosition).IsEqual(START_POINT);
+			AssertThat(signalCollector.OnPathPointReachedList).IsEmpty();
 			AssertThat(signalCollector.OnPathCompletedCount).IsZero();
 
 			// Should have enough time to move to end of path.
 			mover.Start();
 			await _runner.SimulateFrames(10, 150);
-			AssertThat(parent.GlobalPosition).IsEqualApprox(new(50,0), new(0.05f, 0.05f));
-			// AssertThat(signalCollector.OnPathPointReachedCount).IsEqual(1);
+			AssertThat(parent.GlobalPosition).IsEqualApprox(END_POINT, new(0.05f, 0.05f));
+			AssertThat(signalCollector.OnPathPointReachedList)
+				.HasSize(1)
+				.Contains((false, Vector2.Zero));
 			AssertThat(signalCollector.OnPathCompletedCount).IsEqual(1);
 		}
 		[TestCase]
@@ -174,27 +183,50 @@ namespace TestNS
 			// Should reach first path and fire off signal properly
 			await _runner.SimulateFrames(10, 150);
 			AssertThat(parent.GlobalPosition).IsEqualApprox(new(50,0), new(0.05f, 0.05f));
+			AssertThat(signalCollector.OnPathPointReachedList).HasSize(1);
 			AssertThat(signalCollector.OnPathCompletedCount).IsEqual(1);
+			signalCollector.ClearSignalCollector();
 
 			// Set a track which it should reach various points of at specific times (moving 50 units per second)
-			moverPath = [new(100,0), new(100, 50), new(100,100), new(50,100), new(0,100)];
+			Vector2 
+				POINT_1 = new(100,0),
+				POINT_2 = new(100, 50),
+				POINT_3 = new(100, 100),
+				POINT_4 = new(50, 100),
+				POINT_5 = new(0, 100);
+			moverPath = [POINT_1, POINT_2, POINT_3, POINT_4, POINT_5];
 			mover.SetMoverPath(moverPath);
 
-			await _runner.SimulateFrames(10, 100);
+			await _runner.SimulateFrames(10, 101);
 			AssertThat(mover.PathCompleted()).IsFalse();
-			AssertThat(signalCollector.OnPathCompletedCount).IsEqual(1);
-			await _runner.SimulateFrames(10, 100);
+			AssertThat(signalCollector.OnPathPointReachedList)
+				.HasSize(1)
+				.Contains((true, POINT_2));
+			AssertThat(signalCollector.OnPathCompletedCount).IsZero();
+			await _runner.SimulateFrames(10, 101);
 			AssertThat(mover.PathCompleted()).IsFalse();
-			AssertThat(signalCollector.OnPathCompletedCount).IsEqual(1);
-			await _runner.SimulateFrames(10, 100);
+			AssertThat(signalCollector.OnPathPointReachedList)
+				.HasSize(2)
+				.Contains((true, POINT_3));
+			AssertThat(signalCollector.OnPathCompletedCount).IsZero();
+			await _runner.SimulateFrames(10, 101);
 			AssertThat(mover.PathCompleted()).IsFalse();
-			AssertThat(signalCollector.OnPathCompletedCount).IsEqual(1);
-			await _runner.SimulateFrames(10, 100);
+			AssertThat(signalCollector.OnPathPointReachedList)
+				.HasSize(3)
+				.Contains((true, POINT_4));
+			AssertThat(signalCollector.OnPathCompletedCount).IsZero();
+			await _runner.SimulateFrames(10, 101);
 			AssertThat(mover.PathCompleted()).IsFalse();
-			AssertThat(signalCollector.OnPathCompletedCount).IsEqual(1);
+			AssertThat(signalCollector.OnPathPointReachedList)
+				.HasSize(4)
+				.Contains((true, POINT_5));
+			AssertThat(signalCollector.OnPathCompletedCount).IsZero();
 			await _runner.SimulateFrames(10, 150); // Wait some extra time to make sure it has a reasonable amount of time to complete path
 			AssertThat(mover.PathCompleted()).IsTrue();
-			AssertThat(signalCollector.OnPathCompletedCount).IsEqual(2);
+			AssertThat(signalCollector.OnPathPointReachedList)
+				.HasSize(5)
+				.Contains((false, Vector2.Zero));
+			AssertThat(signalCollector.OnPathCompletedCount).IsEqual(1);
 		}
 			// var moverPath = new List<Vector2>(){new(10,0), new(20, 0), new(30,0), new(40,0), new(50,0)};
 

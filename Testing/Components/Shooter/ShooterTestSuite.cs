@@ -136,8 +136,6 @@ namespace TestNS
 			FARTHEST_POSITION  = MIDDLE_POSITION + INTER_TARGET_VECTOR;
 		}
 
-        /*
-
 		[TestCase]
 		[RequireGodotRuntime]
 		public void Initialization()
@@ -147,7 +145,7 @@ namespace TestNS
             var fireRate = 10f;
             var shooterTypes = Groups.GroupTypes.Friendly | Groups.GroupTypes.Structure | Groups.GroupTypes.Turret;
             var shooterTargetTypes = Groups.GroupTypes.Enemy;
-            var projectileStats = AutoFree(new ProjectileStats(ProjectileStats.Category.Bolt));
+            ProjectileStats projectileStats = ProjectileStats.ALL_PROJECTILES[0];
             shooter.Initialize(fireRate, shooterTypes, shooterTargetTypes, projectileStats);
             var targeting = _targeting;
             targeting.Initialize(TargetingMode.Close);
@@ -183,7 +181,7 @@ namespace TestNS
             var fireRate = 2f; // 2 shots per second
             var shooterTypes = Groups.GroupTypes.Structure | Groups.GroupTypes.Turret | Groups.GroupTypes.Friendly;
             var shooterTargetTypes = Groups.GroupTypes.Enemy;
-            var projectileStats = AutoFree(new ProjectileStats(ProjectileStats.Category.Bolt));
+            ProjectileStats projectileStats = ProjectileStats.ALL_PROJECTILES[0];
             shooter.Initialize(fireRate, shooterTypes, shooterTargetTypes, projectileStats);
             var targeting = _targeting;
             targeting.Initialize(TargetingMode.Close);
@@ -242,8 +240,6 @@ namespace TestNS
 			AssertThat(signalCollector.CurrentShotNull()).IsTrue();
 			AssertThat(signalCollector.ShotList).IsEmpty();
 		}
-
-        */
 
     }
 }

@@ -12,7 +12,9 @@ using System.Collections.Generic;
 [GlobalClass]
 public partial class ProjectileStats : Resource
 {
+	public static readonly List<ProjectileStats> ALL_PROJECTILES = LoadAllStats();
 	private const string PROJECTILE_DIRECTORY_PATH = "res://Resources/Projectiles/";
+
 	public enum Category
 	{
 		Bolt,
@@ -30,7 +32,7 @@ public partial class ProjectileStats : Resource
 	/// Get list of all projectile stats.
 	/// </summary>
 	/// <returns></returns>
-	public static List<ProjectileStats> LoadAllStats()
+	private static List<ProjectileStats> LoadAllStats()
 	{
 		DirAccess directory = DirAccess.Open(PROJECTILE_DIRECTORY_PATH);
 		if (directory == null) return null;

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 [GlobalClass]
 public partial class FriendlyStats : Resource
 {
+	public static readonly List<FriendlyStats> ALL_FRIENDLIES = LoadAllStats();
 	private const string FRIENDLY_DIRECTORY_PATH = "res://Resources/Unit/Friendly/";
 	public enum Category
 	{
@@ -26,7 +27,7 @@ public partial class FriendlyStats : Resource
 	/// Get list of all friendly stats.
 	/// </summary>
 	/// <returns></returns>
-	public static List<FriendlyStats> LoadAllStats()
+	private static List<FriendlyStats> LoadAllStats()
 	{
 		DirAccess directory = DirAccess.Open(FRIENDLY_DIRECTORY_PATH);
 		if (directory == null) return null;

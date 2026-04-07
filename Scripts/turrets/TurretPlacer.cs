@@ -18,7 +18,6 @@ public partial class TurretPlacer : Node2D
 	// Preloaded Scenes
 	[Export] private PackedScene _turretScene;
 
-	private List<TurretStats> _allTurretStats;
 	private int _currentTurretIndex = 0;
 	private TargetingMode _currentTurretTargetMode = TargetingMode.First;
 
@@ -41,10 +40,9 @@ public partial class TurretPlacer : Node2D
 
 	public override void _Ready()
 	{
-		_allTurretStats = TurretStats.LoadAllStats();
-		if (_allTurretStats.Count > 0)
+		if (TurretStats.ALL_TURRETS.Count > 0)
 		{
-			_ghostTurret.Initialize(_allTurretStats[_currentTurretIndex], _currentTurretTargetMode);
+			_ghostTurret.Initialize(TurretStats.ALL_TURRETS[_currentTurretIndex], _currentTurretTargetMode);
 		}
 		
 		_ghostTurret.DisableTurret();
@@ -109,11 +107,11 @@ public partial class TurretPlacer : Node2D
 		if (Input.IsActionJustPressed("SwitchTurretType"))
 		{
 			_currentTurretIndex++;
-			if (_currentTurretIndex >= _allTurretStats.Count)
+			if (_currentTurretIndex >= TurretStats.ALL_TURRETS.Count)
 			{
 				_currentTurretIndex = 0;
 			}
-			GD.Print($"Current turret type for placement: {_allTurretStats[_currentTurretIndex].Type}");
+			GD.Print($"Current turret type for placement: {TurretStats.ALL_TURRETS[_currentTurretIndex].Type}");
 		}
 		if (Input.IsActionJustPressed("SwitchTurretTargetingMode"))
 		{
@@ -132,7 +130,7 @@ public partial class TurretPlacer : Node2D
 		GroundTile tile = GetTileIfStructurePlacementValid();
 		if (_turretPlacerEnabled && tile != null)
 		{
-			var turretStats = _allTurretStats[_currentTurretIndex];
+			var turretStats = TurretStats.ALL_TURRETS[_currentTurretIndex];
 			// Turret Placement
 			if (Input.IsActionJustPressed("Left Click"))
 			{

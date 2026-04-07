@@ -8,6 +8,7 @@ using System.Collections.Generic;
 [GlobalClass]
 public partial class TurretStats : Resource
 {
+	public static readonly List<TurretStats> ALL_TURRETS = LoadAllStats();
 	private const string TURRET_DIRECTORY_PATH = "res://Resources/Turret/";
 	public enum Category
 	{
@@ -27,7 +28,7 @@ public partial class TurretStats : Resource
 	/// Get list of all turret stats.
 	/// </summary>
 	/// <returns></returns>
-	public static List<TurretStats> LoadAllStats()
+	private static List<TurretStats> LoadAllStats()
 	{
 		DirAccess directory = DirAccess.Open(TURRET_DIRECTORY_PATH);
 		if (directory == null) return null;

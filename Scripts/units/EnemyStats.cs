@@ -9,6 +9,7 @@ using System.Collections.Generic;
 [GlobalClass]
 public partial class EnemyStats : Resource
 {
+	public static readonly List<EnemyStats> ALL_ENEMIES = LoadAllStats();
 	private const string ENEMY_DIRECTORY_PATH = "res://Resources/Unit/Enemy/";
 	public enum Category
 	{
@@ -30,7 +31,7 @@ public partial class EnemyStats : Resource
 	/// Get list of all enemy stats.
 	/// </summary>
 	/// <returns></returns>
-	public static List<EnemyStats> LoadAllStats()
+	private static List<EnemyStats> LoadAllStats()
 	{
 		DirAccess directory = DirAccess.Open(ENEMY_DIRECTORY_PATH);
 		if (directory == null) return null;
