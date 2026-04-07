@@ -17,7 +17,7 @@ public partial class PathFollower : Node2D
 
 	// Scene Children //
 	[ExportGroup("Exported Child Nodes")]
-	[Export] protected AnimatedSprite2D _animatedSprite2D;
+	[Export] protected AnimationManager _idleAnimations;
 
 	public override void _Ready()
 	{
@@ -26,6 +26,9 @@ public partial class PathFollower : Node2D
 			GD.Print($"WARNING - PathFollower {this} was unable to find components on _Ready()");
 		}
 	}
+
+		// // Change sprite to turn towards next path point
+		// _idleAnimations.SetDirection(Position, _path[_currentPathIndex]);
 
 	public void SetPath(Vector2[] path)
 	{

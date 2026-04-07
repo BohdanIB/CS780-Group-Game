@@ -29,15 +29,6 @@ public partial class Turret : GenericStructure
 	private bool _visibleTurretRadius = true; // todo
 
 	/// <summary>
-	/// Initialize generic turret with specific targeting mode.
-	/// </summary>
-	/// <param name="turretType"></param>
-	/// <param name="targetingMode"></param>
-	public void Initialize(TurretStats.Category turretType, TargetingMode targetingMode = TargetingMode.Close)
-	{
-		Initialize(new TurretStats(turretType), targetingMode);
-	}
-	/// <summary>
 	/// Initialize turret with specific stats
 	/// </summary>
 	/// <param name="stats"></param>
@@ -78,6 +69,9 @@ public partial class Turret : GenericStructure
 
 		// GD.Print($"Turret Stats: {_stats}");
 	}
+
+	// // Change sprite to turn towards target
+	// _idleAnimations.SetDirection(GlobalPosition, currTargetEnemy.GlobalPosition);
 
 	public override void _Draw()
 	{

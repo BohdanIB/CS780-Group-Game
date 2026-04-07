@@ -6,8 +6,8 @@ using Godot;
 
 public partial class Enemy: PathFollower
 {
-	[Export] private TargetingMode _targetingMode = TargetingMode.Weak;
 	[Export] private EnemyStats _stats = new(EnemyStats.Category.Regular);
+	[Export] private TargetingMode _targetingMode = TargetingMode.Weak;
 
 	[ExportGroup("Types")]
 	[Export] public Groups.GroupTypes _enemyTypes = PathFollower.TYPES | Groups.GroupTypes.Enemy;
@@ -21,16 +21,6 @@ public partial class Enemy: PathFollower
 	[Export] private TargetingComponent _targeting;
 	[Export] protected SpawnerComponent _projectileSpawner;
 
-	/// <summary>
-	/// Initializes enemy with "generic" base stats for given type.
-	/// </summary>
-	/// <param name="type"></param>
-	/// <param name="path"></param>
-	public void Initialize(EnemyStats.Category type, Vector2[] path = null)
-	{
-		Initialize(new EnemyStats(type), path);
-	}
-	
 	/// <summary>
 	/// Initializes enemy with custom stats.
 	/// </summary>
@@ -108,7 +98,7 @@ public partial class Enemy: PathFollower
 
 	private void UpdateSprite()
 	{
-		_animatedSprite2D.Frame = _stats.SpriteFrame;
+		_idleAnimations.Frames = _stats.Animations.Idle;
 	}
 	// protected void UpdateProjectileStats(ProjectileStats newStats)
 	// {
@@ -118,5 +108,141 @@ public partial class Enemy: PathFollower
 	{
 		return $"Enemy '{Name}': {_stats}";
 	}
+
+	/// <summary>
+	/// TODO - This is a temporary function for testing enemy functionality on the game. This should go away at some point.
+	/// 
+	/// Spawn enemies at random tiles with dead-end roads to head towards hub
+	/// </summary>
+	/// <param name="parent"></param>
+	/// <param name="grid"></param>
+	/// <param name="hub"></param>
+	public static void TempEnemyDemo(Node parent, GenericGrid<GroundTile> grid, IsometricTileMap tileMap, Vector2I hub)
+	{
+		GridAStarPathfinder<GroundTile> pathfinder = new GridAStarPathfinder<GroundTile>(grid, 
+			(x,y) => {
+				List<Vector2I> neighborPositions = [];
+				if (grid.IsOnGrid(x, y-1)) neighborPositions.Add(new Vector2I(x, y-1)); // UP
+				if (grid.IsOnGrid(x+1, y)) neighborPositions.Add(new Vector2I(x+1, y)); // RIGHT
+				if (grid.IsOnGrid(x, y+1)) neighborPositions.Add(new Vector2I(x, y+1)); // DOWN
+				if (grid.IsOnGrid(x-1, y)) neighborPositions.Add(new Vector2I(x-1, y)); // LEFT
+
+				const float ROAD_COST = 0f;
+				Dictionary<Vector2I, float> neighborCosts = [];
+
+				GroundTile currentTile = grid.GetGridValueOrDefault(x, y);
+				foreach (Vector2I coordinate in neighborPositions)
+				{
+					GroundTile nextTile = grid.GetGridValueOrDefault(coordinate.X, coordinate.Y);
+					neighborCosts.Add(coordinate, currentTile.HasRoadConnection(nextTile.position - currentTile.position) ? ROAD_COST : int.MaxValue);
+				}
+
+				return neighborCosts;
+			}
+		);
+
+		List<GroundTile> potentialEnemySpawnPoints = [];
+		for (int x = 0; x < grid.GetWidth(); x++)
+		{
+			for (int y = 0; y < grid.GetHeight(); y++)
+			{
+				GroundTile t = grid.GetGridValueOrDefault(x, y);
+				if (t.HasRoadDeadEnd())
+				{
+					potentialEnemySpawnPoints.Add(t);
+				}
+			}
+		}
+
+		var layers = tileMap.GetLayers();
+		if (layers.Length <= 0)
+		{
+			GD.Print("WARNING: COULD NOT RUN ENEMY TEMP DEMO - NO LAYERS IN TILE MAP!");
+			return;
+		}
+		var layer = layers[0];
+		List<Enemy> testEnemies = [];
+		var allEnemyStats = EnemyStats.LoadAllStats();
+		for (int i = 0; i < 6; i++)
+		{
+			var enemy = GD.Load<PackedScene>("res://Scenes/enemy.tscn").Instantiate<Enemy>();
+			foreach(var stats in allEnemyStats)
+			{
+				if (stats.Type == EnemyStats.Category.Regular)
+				{
+					enemy.Initialize(stats);
+					break;
+				}
+			}
+			
+			// enemy.Initialize(i == 0 ? EnemyStats.Category.Strong : EnemyStats.Category.Regular); // Make one 'strong' enemy for testing
+			// TODO
+			testEnemies.Add(enemy);
+			parent.GetTree().GetRoot().CallDeferred("add_child", enemy); // Cannot add children in _Ready() calls
+
+			// Set enemy paths
+			var spawnPoint = potentialEnemySpawnPoints[GD.RandRange(0, potentialEnemySpawnPoints.Count-1)].position;
+			// var path = pathfinder.GetPathInPositions(spawnPoint, hub, grid.cellSize);
+			var path = new List<Vector2>();
+			foreach (var point in pathfinder.GetPath(spawnPoint, hub))
+			{
+				path.Add(IsometricTileMap.MapCoordToGlobalPosition(layer, point));
+			}
+			enemy.SetPath(path);
+			enemy.GlobalPosition = IsometricTileMap.MapCoordToGlobalPosition(layer, spawnPoint);
+
+			// GD.Print($"{enemy}");
+		}
+	}
+
+	/// <summary>
+	/// If there is a valid target in range of current PathFollower, choose and fire at target given TargetingMode.
+	/// </summary>
+	private void FireAtValidTarget()
+	{
+		if (_targetsInRange.Count > 0 && _shotCooldownTimer.IsStopped())
+		{
+			Friendly currTarget;
+			if (_targetingMode == TargetingMode.Random)
+			{
+				currTarget = _targetsInRange[GD.RandRange(0, _targetsInRange.Count-1)];
+			}
+			else
+			{
+				// Look for an appropriate target to shoot at within PathFollower's radius given TargetingMode.
+				currTarget = _targetsInRange[0];
+				float currTargetDistanceFromSelf = Position.DistanceTo(currTarget.Position);
+				float currTargetDistanceFromGoal = currTarget.GetDistanceToGoalPixels();
+				float currTargetHealth = currTarget.GetCurrentHealth();
+				for (int i = 1; i < _targetsInRange.Count; i++)
+				{
+					var target = _targetsInRange[i];
+					float targetDistanceFromSelf = Position.DistanceTo(target.Position);
+					float targetDistanceFromGoal = target.GetDistanceToGoalPixels();
+					float targetHealth = target.GetCurrentHealth();
+					if ((_targetingMode == TargetingMode.First  && targetDistanceFromGoal < currTargetDistanceFromGoal) || 
+						(_targetingMode == TargetingMode.Last   && currTargetDistanceFromGoal < targetDistanceFromGoal) || 
+						(_targetingMode == TargetingMode.Close  && targetDistanceFromSelf < currTargetDistanceFromSelf) ||
+						(_targetingMode == TargetingMode.Weak   && targetHealth < currTargetHealth) ||
+						(_targetingMode == TargetingMode.Strong && currTargetHealth < targetHealth))
+					{
+						currTarget = target;
+						currTargetDistanceFromSelf = targetDistanceFromSelf;
+						currTargetDistanceFromGoal = targetDistanceFromGoal;
+						currTargetHealth = targetHealth;
+					}
+				}
+			}
+
+			// Shoot at the target
+			// GD.Print($"Enemy {Name} firing Projectile at target {currTarget} with stats: {_stats.ProjectileStats}");
+			_shotCooldownTimer.Start(1 / _stats.FireRate);
+			var projectile = _projectileScene.Instantiate<Projectile>();
+			projectile.GlobalPosition = GlobalPosition;
+			projectile.Initialize(currTarget, _stats.ProjectileStats);
+			GetTree().GetRoot().AddChild(projectile);
+		}
+	}
+
 
 }
