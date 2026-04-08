@@ -10,8 +10,8 @@ public partial class PathFollower : Area2D
 	// Scene Children
 	[Export] protected Area2D _aggroArea2D;
 	[Export] protected CollisionShape2D _aggroCollisionShape2D, _hitboxCollisionShape2D;
-	[Export] protected AnimatedSprite2D _animatedSprite2D;
 	[Export] protected Timer _shotCooldownTimer;
+	[Export] protected AnimationManager _idleAnimations;
 
 	// Preloaded Scenes
 	[Export] protected PackedScene _projectileScene;
@@ -19,7 +19,6 @@ public partial class PathFollower : Area2D
 	protected float _health = 100.0f;
 	protected float _movementSpeed = 50.0f;
 
-	protected Random _random = new();
 	protected List<Vector2> _path;
 	protected int _currentPathIndex;
 
@@ -42,7 +41,10 @@ public partial class PathFollower : Area2D
 			return;
 		}
 
-		Position = Position.MoveToward(_path[_currentPathIndex], (float) delta * _movementSpeed);
+		Position = Position.MoveToward(_path[_currentPathIndex], (float) delta * _movementSpeed); // This results in jittery movement overshoots path points, but this is fixed in ECS PR.
+
+		// Change sprite to turn towards next path point
+		_idleAnimations.SetDirection(Position, _path[_currentPathIndex]);
 	}
 
 	public void SetPath(List<Vector2> newPath)
@@ -53,7 +55,7 @@ public partial class PathFollower : Area2D
 
 	public void ChangeHealth(float healthChangeValue)
 	{
-		GD.Print($"HealthChange for PathFollower {Name} - CurrentHealth {_health} -> NewHealth {_health - healthChangeValue}");
+		// GD.Print($"HealthChange for PathFollower {Name} - CurrentHealth {_health} -> NewHealth {_health - healthChangeValue}");
 		_health -= healthChangeValue;
 		if (_health <= 0.0f)
 		{

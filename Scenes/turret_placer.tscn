@@ -15,3 +15,5 @@ _turretScene = ExtResource("3_ub6b8")
 visible = false
 modulate = Color(1, 1, 1, 0.49019608)
 _projectileScene = null
+monitoring = false
+monitorable = false

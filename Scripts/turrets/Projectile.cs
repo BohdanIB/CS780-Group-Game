@@ -12,7 +12,7 @@ public partial class Projectile : Area2D
 
 	[Export] private ProjectileStats _stats;
 
-	private AnimatedSprite2D _sprite;
+	[Export] private AnimationManager _idleAnimations;
 
 	private PathFollower _target;
 	private Vector2 _targetLastKnownLocation;
@@ -31,23 +31,13 @@ public partial class Projectile : Area2D
 			QueueFree(); // todo: Might not be proper to queue a free before the _Ready call?
 			return;
 		}
-		_targetLastKnownLocation = _target.Position;
+		_targetLastKnownLocation = _target.GlobalPosition;
 		_stats = projectileStats;
-	}
-	/// <summary>
-	/// Initializes projectile with "generic" base stats for given type.
-	/// </summary>
-	/// <param name="target"></param>
-	/// <param name="projectileType"></param>
-	public void Initialize(PathFollower target, ProjectileStats.Category projectileType)
-	{
-		Initialize(target, new ProjectileStats(projectileType));
 	}
 
 	public override void _Ready()
 	{
-		_sprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
-		_sprite.Frame = _stats.SpriteFrame;
+		_idleAnimations.Frames = _stats.Animations.Idle;
 
 		AreaEntered += (area) =>
 		{
@@ -59,41 +49,56 @@ public partial class Projectile : Area2D
 
 		// GD.Print($"Projectile ready with stats: {_stats}");
 	}
+	public void UpdateStats(ProjectileStats newStats = null)
+	{
+		if (newStats != null)
+		{
+			_stats = newStats;
+		}
+		UpdateSpriteFrames();
+
+		// Todo: Add more updates
+	}
+
+	private void UpdateSpriteFrames()
+	{
+		_idleAnimations.Frames = _stats.Animations.Idle;
+	}
 
 	public override void _PhysicsProcess(double delta)
 	{
 		// GD.Print($"Projectile stats: {_stats}");
 		if (IsInstanceValid(_target))
 		{
-			_targetLastKnownLocation = _target.Position;
+			_targetLastKnownLocation = _target.GlobalPosition;
 		}
 
 		// Todo: Make movement a little easier to expand
-		Position = Position.MoveToward(_targetLastKnownLocation, (float)delta * _stats.Speed);
+		GlobalPosition = GlobalPosition.MoveToward(_targetLastKnownLocation, (float)delta * _stats.Speed);
 		switch (_stats.Type) {
 			case ProjectileStats.Category.Bolt:
 				LookAt(_targetLastKnownLocation);
 				RotationDegrees += 90f; // Rotate 90 degrees to the right to look at -Y instead of +X
 				break;
-			case ProjectileStats.Category.Blade:
-				const float ROTATION_SPEED_DEGREES = 270f;
-				GlobalRotationDegrees += (float)delta * ROTATION_SPEED_DEGREES;
-				break;
+			// case ProjectileStats.Category.Blade:
+			// 	const float ROTATION_SPEED_DEGREES = 270f;
+			// 	GlobalRotationDegrees += (float)delta * ROTATION_SPEED_DEGREES;
+			// 	break;
 			default:
-				GD.Print($"WARNING: Projectile type {_stats.Type} special movement is UNDEFINED.");
+				// GD.Print($"WARNING: Projectile type {_stats.Type} special movement is UNDEFINED.");
 				break;
 		}
 
-		if (Position.DistanceTo(_targetLastKnownLocation) < MIN_TARGET_DISTANCE)
+		if (GlobalPosition.DistanceTo(_targetLastKnownLocation) < MIN_TARGET_DISTANCE)
 		{
 			if (!IsInstanceValid(_target))
 			{
-				GD.Print($"\tProjectile reached target's last known location without colliding with target.");
+				// GD.Print($"\tProjectile reached target's last known location without colliding with target.");
 				ProjectileImpact();
 			}
 			else
 			{
-				GD.Print($"\tProjectile reached target's last known location without colliding with target AND THE TARGET STILL EXISTS. Performing normal hit on target.");
+				// GD.Print($"\tProjectile reached target's last known location without colliding with target AND THE TARGET STILL EXISTS. Performing normal hit on target.");
 				ProjectileImpact();
 			}
 		}
@@ -102,13 +107,13 @@ public partial class Projectile : Area2D
 	private void ProjectileImpact()
 	{
 		// Todo: WIP - Potentially add animation or some other effects to projectile on impact? May want to incorporate signal somehow.
-		EmitSignal(SignalName.OnProjectileImpact, Position, _stats);
+		EmitSignal(SignalName.OnProjectileImpact, GlobalPosition, _stats);
 		if (IsInstanceValid(_target))
 		{
-			GD.Print($"Projectile hit target {_target.Name} for {_stats.Damage} damage");
+			// GD.Print($"Projectile hit target {_target.Name} for {_stats.Damage} damage");
 			_target.ChangeHealth(_stats.Damage);
 		}
-		QueueFree(); // TODO: FREEING AND DISCONNECTION OF SIGNALS? https://docs.godotengine.org/en/stable/tutorials/scripting/c_sharp/c_sharp_signals.html
+		QueueFree();
 	}
 
 }

@@ -1,16 +1,18 @@
 [gd_scene format=3 uid="uid://27mmcge0cxrm"]
 
-[ext_resource type="Script" uid="uid://bg3usi07e1a27" path="res://Scripts/Structures/GenericStructure.cs" id="1_4h5ic"]
+[ext_resource type="Script" uid="uid://bg3usi07e1a27" path="res://Scripts/GenericStructure.cs" id="1_4h5ic"]
+[ext_resource type="Script" uid="uid://2ug0etwgadcd" path="res://Scripts/Animation/AnimationManager.cs" id="2_nkylo"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_nkylo"]
 resource_local_to_scene = true
 
-[node name="GenericStructure" type="Area2D" unique_id=440596787 node_paths=PackedStringArray("_collisionShape2D", "_animatedSprite2D")]
+[node name="GenericStructure" type="Area2D" unique_id=440596787 node_paths=PackedStringArray("_collisionShape2D", "_idleAnimations")]
 script = ExtResource("1_4h5ic")
 _collisionShape2D = NodePath("CollisionShape2D")
-_animatedSprite2D = NodePath("AnimatedSprite2D")
+_idleAnimations = NodePath("IdleAnimations")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=650548273]
 shape = SubResource("CircleShape2D_nkylo")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=440445772]
+[node name="IdleAnimations" type="AnimatedSprite2D" parent="." unique_id=1943597911]
+script = ExtResource("2_nkylo")

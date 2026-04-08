@@ -4,10 +4,9 @@ using Godot;
 public class GenericGrid<TGridObject>
 {
 	private int width, height;
-	public float cellSize;
 	public TGridObject[,] gridArray {get; private set;} // TODO: remove getter
 
-	public GenericGrid(int width, int height, Func<GenericGrid<TGridObject>, int, int, TGridObject> createGridObject, float cellSize = 1) {
+	public GenericGrid(int width, int height, Func<GenericGrid<TGridObject>, int, int, TGridObject> createGridObject) {
 		this.width = width;
 		this.height = height;
 		gridArray = new TGridObject[width, height];
@@ -17,8 +16,6 @@ public class GenericGrid<TGridObject>
 				gridArray[x, y] = createGridObject(this, x, y);
 			}
 		} 
-
-		this.cellSize = cellSize;
 	}
 
 	/// <summary>
@@ -85,24 +82,20 @@ public class GenericGrid<TGridObject>
 		 }
 	}
 
-	public Vector2I GetGridCoords(Vector2 position) {
-		Vector2I coords = new((int) (position.X / cellSize), (int) (position.Y / cellSize));
-		return coords;
-	}
+	// public Vector2I GetGridCoords(Vector2 position) {
+	// 	Vector2I coords = new((int) (position.X / cellSize), (int) (position.Y / cellSize));
+	// 	return coords;
+	// }
 
-	public bool IsAreaOnGrid(Vector2I start, Vector2I end) {
-		if (!IsOnGrid(start.X, start.Y) || !IsOnGrid(end.X, end.Y)) return false;
+	// public bool IsAreaOnGrid(Vector2I start, Vector2I end) {
+	// 	if (!IsOnGrid(start.X, start.Y) || !IsOnGrid(end.X, end.Y)) return false;
 
-		return true;
-	}
+	// 	return true;
+	// }
 
 	public Vector2I GetGridDimensions()
 	{
 		return new Vector2I(width, height);
 	}
 	
-	public Vector2 GetCentralGridCellPositionPixels(Vector2I pos)
-	{
-		return new Vector2((pos.X * cellSize) + (cellSize / 2), (pos.Y * cellSize) + (cellSize / 2));
-	}
 }

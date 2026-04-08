@@ -5,10 +5,13 @@
 [ext_resource type="PackedScene" uid="uid://defgp5uclysnk" path="res://Scenes/PlayArea.tscn" id="3_8gbba"]
 [ext_resource type="PackedScene" uid="uid://5e8ht0mldott" path="res://Scenes/structure_placer.tscn" id="4_jjvhh"]
 
-[node name="Main" type="Node2D" unique_id=1822167308]
+[node name="Main" type="Node2D" unique_id=1822167308 node_paths=PackedStringArray("_gridRenderer", "_turretPlacer")]
 script = ExtResource("1_jjgbg")
 tempConstructionInfo = ExtResource("2_jjvhh")
 
 [node name="StructurePlacer" parent="." unique_id=1843712961 instance=ExtResource("4_jjvhh")]
 
-[node name="PlayArea" parent="." unique_id=1275724900 instance=ExtResource("3_8gbba")]
+[node name="TurretPlacer" parent="." unique_id=1881251108 instance=ExtResource("5_kry3j")]
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=341152257]
+position = Vector2(415, 532)
