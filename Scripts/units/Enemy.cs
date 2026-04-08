@@ -20,19 +20,11 @@ public partial class Enemy: PathFollower
 		Strong, // Strongest enemies
 	}
 
-	private EnemyStats _stats;
-	private TargetingMode _targetingMode = TargetingMode.Weak;
+	[Export] private EnemyStats _stats;
+	[Export] private TargetingMode _targetingMode = TargetingMode.Weak;
 
 	protected List<Friendly> _targetsInRange = new(); // todo
 
-	/// <summary>
-	/// Initializes enemy with "generic" base stats for given type.
-	/// </summary>
-	/// <param name="type"></param>
-	public void Initialize(EnemyStats.Category type)
-	{
-		Initialize(new EnemyStats(type));
-	}
 	/// <summary>
 	/// Initializes enemy with custom stats.
 	/// </summary>
@@ -96,7 +88,7 @@ public partial class Enemy: PathFollower
 	}
 	private void UpdateEnemySprite()
 	{
-		_animatedSprite2D.Frame = _stats.SpriteFrame;
+		_idleAnimations.Frames = _stats.Animations.Idle;
 	}
 	private void UpdateEnemyHealth()
 	{
@@ -115,8 +107,7 @@ public partial class Enemy: PathFollower
 	/// <param name="parent"></param>
 	/// <param name="grid"></param>
 	/// <param name="hub"></param>
-	/// <param name="randomizer"></param>
-	public static void TempEnemyDemo(Node parent, GenericGrid<GroundTile> grid, Vector2I hub, Random randomizer)
+	public static void TempEnemyDemo(Node parent, GenericGrid<GroundTile> grid, IsometricTileMap tileMap, Vector2I hub)
 	{
 		GridAStarPathfinder<GroundTile> pathfinder = new GridAStarPathfinder<GroundTile>(grid, 
 			(x,y) => {
@@ -153,19 +144,42 @@ public partial class Enemy: PathFollower
 			}
 		}
 
+		var layers = tileMap.GetLayers();
+		if (layers.Length <= 0)
+		{
+			GD.Print("WARNING: COULD NOT RUN ENEMY TEMP DEMO - NO LAYERS IN TILE MAP!");
+			return;
+		}
+		var layer = layers[0];
 		List<Enemy> testEnemies = [];
+		var allEnemyStats = EnemyStats.LoadAllStats();
 		for (int i = 0; i < 6; i++)
 		{
 			var enemy = GD.Load<PackedScene>("res://Scenes/enemy.tscn").Instantiate<Enemy>();
-			enemy.Initialize(i == 0 ? EnemyStats.Category.Strong : EnemyStats.Category.Regular); // Make one 'strong' enemy for testing
+			foreach(var stats in allEnemyStats)
+			{
+				if (stats.Type == EnemyStats.Category.Regular)
+				{
+					enemy.Initialize(stats);
+					break;
+				}
+			}
+			
+			// enemy.Initialize(i == 0 ? EnemyStats.Category.Strong : EnemyStats.Category.Regular); // Make one 'strong' enemy for testing
+			// TODO
 			testEnemies.Add(enemy);
 			parent.GetTree().GetRoot().CallDeferred("add_child", enemy); // Cannot add children in _Ready() calls
 
 			// Set enemy paths
-			var spawnPoint = potentialEnemySpawnPoints[randomizer.Next(potentialEnemySpawnPoints.Count)].position;
-			var path = pathfinder.GetPathInPositions(spawnPoint, hub, grid.cellSize);
+			var spawnPoint = potentialEnemySpawnPoints[GD.RandRange(0, potentialEnemySpawnPoints.Count-1)].position;
+			// var path = pathfinder.GetPathInPositions(spawnPoint, hub, grid.cellSize);
+			var path = new List<Vector2>();
+			foreach (var point in pathfinder.GetPath(spawnPoint, hub))
+			{
+				path.Add(IsometricTileMap.MapCoordToGlobalPosition(layer, point));
+			}
 			enemy.SetPath(path);
-			enemy.GlobalPosition = grid.GetCentralGridCellPositionPixels(spawnPoint);
+			enemy.GlobalPosition = IsometricTileMap.MapCoordToGlobalPosition(layer, spawnPoint);
 
 			// GD.Print($"{enemy}");
 		}
@@ -181,7 +195,7 @@ public partial class Enemy: PathFollower
 			Friendly currTarget;
 			if (_targetingMode == TargetingMode.Random)
 			{
-				currTarget = _targetsInRange[_random.Next(_targetsInRange.Count)];
+				currTarget = _targetsInRange[GD.RandRange(0, _targetsInRange.Count-1)];
 			}
 			else
 			{
@@ -211,7 +225,7 @@ public partial class Enemy: PathFollower
 			}
 
 			// Shoot at the target
-			GD.Print($"Enemy {Name} firing Projectile at target {currTarget} with stats: {_stats.ProjectileStats}");
+			// GD.Print($"Enemy {Name} firing Projectile at target {currTarget} with stats: {_stats.ProjectileStats}");
 			_shotCooldownTimer.Start(1 / _stats.FireRate);
 			var projectile = _projectileScene.Instantiate<Projectile>();
 			projectile.GlobalPosition = GlobalPosition;

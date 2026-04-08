@@ -3,6 +3,7 @@ using System;
 
 public class TileShape
 {
+	/*
 	public GenericGrid<GroundTile> grid;
 
 
@@ -71,4 +72,6 @@ public class TileShape
 			// } 
 		});
 	}
+
+	*/
 }

@@ -19,3 +19,12 @@ mono_crash.*.json
 
 # Custom ignores
 .vscode
+
+# *.csproj
+*.sln
+
+### gdUnit4 Testing Stuff ###
+addons/
+Testing/TestResults/*
+gdunit4_testadapter_v5/
+reports/

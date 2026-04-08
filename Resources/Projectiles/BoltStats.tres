@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ProjectileStats" format=3 uid="uid://dbmns5gjywp51"]
+
+[ext_resource type="Resource" uid="uid://dor2re0k01blp" path="res://Resources/Animations/BoltAnimations.tres" id="1_4pksn"]
+[ext_resource type="Script" uid="uid://db7kn4h7v1jqa" path="res://Scripts/turrets/ProjectileStats.cs" id="1_l3l46"]
+
+[resource]
+script = ExtResource("1_l3l46")
+Speed = 100.0
+Damage = 10.0
+Animations = ExtResource("1_4pksn")
+metadata/_custom_type_script = "uid://db7kn4h7v1jqa"
