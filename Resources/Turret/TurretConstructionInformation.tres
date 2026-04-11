@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="ConstructionInformation" format=3 uid="uid://nbjv8l8rk1xm"]
 
-[ext_resource type="Texture2D" uid="uid://bdd0jbwygdyav" path="res://Assets/Sprites/temp_enemy.png" id="1_3e3ec"]
+[ext_resource type="Texture2D" uid="uid://btcjokbaebndn" path="res://Assets/Sprites/RightArrow.png" id="1_3e3ec"]
 [ext_resource type="Script" uid="uid://c5a4sxpqqv1sn" path="res://Scripts/Structures/ConstructionInformation.cs" id="1_n2a30"]
 [ext_resource type="PackedScene" uid="uid://b2w8csm5vypb0" path="res://Scenes/turret.tscn" id="2_k3ma5"]
 

@@ -14,7 +14,7 @@ public partial class StructurePlacementRequirements : Resource
     public bool IsPlacementValid(GenericGrid<GroundTile> placementGrid, Vector2I placementCoordinates)
     {
         GroundTile placementTile = placementGrid.GetGridValueOrDefault(placementCoordinates.X, placementCoordinates.Y);
-        if (!IsBiomeValid(placementTile._biome)) return false;
+        if (!IsBiomeValid(placementTile.biome)) return false;
 
         return true;
     } 

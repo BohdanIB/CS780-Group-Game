@@ -12,47 +12,72 @@ public partial class StructurePlacer : Node2D
 
 	private ConstructionInformation _constructionInformation;
 	private Inventory _paymentInventory;
+	private TileMapLayer _placementTilemap;
 	private GenericGrid<GroundTile> _placementGrid;
 	private Vector2I _currentGridCoordinates;
-	private bool _isPlacementValid;
+	private bool _isEnabled;
+	private bool _isPlacementValid = false;
 
     public override void _Ready()
     {
 		List<OptionSelector> selectors = [];
         foreach (Node child in _selectorContainer.GetChildren())
 		{
-			GD.Print(child);
 			if (child is OptionSelector selector)
 			{
 				selectors.Add(selector);
 			}
 		}
 		_optionSelectors = [.. selectors];
+
+		SetStructure(null);
     }
 
 
-	public void Initialize(GenericGrid<GroundTile> targetGrid, ConstructionInformation constructionInformation, Inventory paymentInventory)
+	public void Initialize(PlayArea targetPlayArea, Inventory paymentInventory)
 	{
-		_placementGrid = targetGrid;
-		_constructionInformation = constructionInformation;
+		_placementTilemap = targetPlayArea.GridRenderer.TerrainMap.GetLayers()[0]; // This is not clean
+		_placementGrid = targetPlayArea.Grid;
 		_paymentInventory = paymentInventory;
-		_placementGhost.Texture = constructionInformation.DisplayImage;
+	}
 
-		for (int i = 0; i < _optionSelectors.Length; i++)
+	public void SetStructure(ConstructionInformation constructionInformation)
+	{
+		if (constructionInformation == null)
 		{
-			_optionSelectors[i].Visible = false;
-		}
-		int j = 0;
-		foreach (string key in constructionInformation.ConfigurationOptions.Keys)
+			// Disable, no structure to place\
+			_constructionInformation = null;
+			_placementGhost.Texture = null;
+			_isEnabled = false;
+			Visible = false;
+		} 
+		else
 		{
-			GD.Print($"Displaying Key: {key}  Selectors: {_optionSelectors.Length} j: {j}");
-			_optionSelectors[j].SetOptions(constructionInformation.ConfigurationOptions[key], key);
-			_optionSelectors[j].Visible = true;
-			j++;
+			_constructionInformation = constructionInformation;
+			_placementGhost.Texture = constructionInformation.DisplayImage;
+			
+
+			for (int i = 0; i < _optionSelectors.Length; i++)
+			{
+				_optionSelectors[i].Visible = false;
+			}
+			int j = 0;
+			foreach (string key in constructionInformation.ConfigurationOptions.Keys)
+			{
+				_optionSelectors[j].SetOptions(constructionInformation.ConfigurationOptions[key], key);
+				_optionSelectors[j].Visible = true;
+				j++;
+			}
+
+			_isEnabled = true;
+			Visible = true;
 		}
 	}
+
     public override void _Process(double delta)
     {
+		if (!_isEnabled) return;
+
         UpdatePosition();
 		UpdatePlacementValidity();
 
@@ -65,8 +90,8 @@ public partial class StructurePlacer : Node2D
 	private void UpdatePosition()
 	{
 		Vector2 mousePosition = GetViewport().GetMousePosition();
-		_currentGridCoordinates = (Vector2I) (mousePosition / _placementGrid.cellSize).Clamp(Vector2I.Zero, _placementGrid.GetGridDimensions());
-		_placementGhost.Position = (Vector2) _currentGridCoordinates * _placementGrid.cellSize;
+		_currentGridCoordinates = IsometricTileMap.GlobalPositionToMapCoord(_placementTilemap, mousePosition);;
+		_placementGhost.GlobalPosition = IsometricTileMap.MapCoordToGlobalPosition(_placementTilemap, _currentGridCoordinates);
 	}
 
 	private void UpdatePlacementValidity()
@@ -99,7 +124,7 @@ public partial class StructurePlacer : Node2D
 
 		
 		GenericStructure placedStructure = _constructionInformation.Structure.Instantiate<GenericStructure>();
-		placedStructure.GlobalPosition = _placementGrid.GetCentralGridCellPositionPixels(_currentGridCoordinates);
+		placedStructure.GlobalPosition = IsometricTileMap.MapCoordToGlobalPosition(_placementTilemap, _currentGridCoordinates);
 		_placementGrid.GetGridValueOrDefault(_currentGridCoordinates.X, _currentGridCoordinates.Y).Structure = placedStructure;
 
 		PlayArea.instance.AddChild(placedStructure);
