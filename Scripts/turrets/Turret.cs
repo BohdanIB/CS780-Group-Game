@@ -165,7 +165,11 @@ public partial class Turret : GenericStructure
 		((CircleShape2D)_collisionShape2D.Shape).Radius = _stats.AggroRadius; // TODO: Better way of doing this?
 	}
 	private void UpdateTurretSpriteFrames()
+	
 	{
+		if (_idleAnimations == null || _stats?.Animations?.Idle == null) return;
+   
+
 		_idleAnimations.Frames = _stats.Animations.Idle; // TODO: This needs to be expanded in future
 	}
 	private void UpdateTurretHealth()

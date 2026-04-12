@@ -4,54 +4,9 @@
 [ext_resource type="PackedScene" uid="uid://tw6j84txs1a1" path="res://Scenes/grid_renderer.tscn" id="2_bo1nx"]
 [ext_resource type="PackedScene" uid="uid://cundji84oafs3" path="res://Scenes/legacy/tile_shape_placer.tscn" id="3_jjvhh"]
 [ext_resource type="PackedScene" uid="uid://dtv7kt7wo8omt" path="res://Scenes/path_follower.tscn" id="4_jjvhh"]
-[ext_resource type="Script" uid="uid://bca40tiktvab7" path="res://Scripts/turrets/Projectile.cs" id="5_344ge"]
 [ext_resource type="PackedScene" uid="uid://caafjqfx010mq" path="res://Scenes/turret_placer.tscn" id="5_kry3j"]
 [ext_resource type="PackedScene" uid="uid://bxnekokl8stoa" path="res://Scenes/game_ui.tscn" id="6_21xkr"]
-[ext_resource type="Texture2D" uid="uid://djpqivk2pwl35" path="res://Assets/Sprites/temp_projectiles.png" id="6_ynf5e"]
 [ext_resource type="Script" uid="uid://dp5rjda24qxii" path="res://Scripts/EnemySpawner.cs" id="9_ynf5e"]
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_hptm8"]
-resource_local_to_scene = true
-radius = 5.0
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_tl4hk"]
-atlas = ExtResource("6_ynf5e")
-region = Rect2(0, 0, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_d4467"]
-atlas = ExtResource("6_ynf5e")
-region = Rect2(32, 0, 32, 32)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_d1ilt"]
-resource_local_to_scene = true
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_tl4hk")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_d4467")
-}],
-"loop": true,
-"name": &"default",
-"speed": 5.0
-}]
-
-[sub_resource type="PackedScene" id="PackedScene_ynf5e"]
-resource_local_to_scene = true
-_bundled = {
-"conn_count": 0,
-"conns": PackedInt32Array(),
-"editable_instances": [],
-"id_paths": [PackedInt32Array(), PackedInt32Array()],
-"names": PackedStringArray("Projectile", "Area2D", "script", "CollisionShape2D", "CollisionShape2D", "shape", "AnimatedSprite2D", "AnimatedSprite2D", "scale", "sprite_frames"),
-"node_count": 3,
-"node_ids": PackedInt32Array(196749450, 1960296799, 225913893),
-"node_paths": [NodePath("."), NodePath(".")],
-"nodes": PackedInt32Array(-1, -1, 1, 0, -1, 1, 2, 0, 0, 1073741824, 0, 4, 3, -1, 1, 5, 1, 0, 1073741825, 0, 7, 6, -1, 2, 8, 2, 9, 3, 0),
-"variants": [ExtResource("5_344ge"), SubResource("CircleShape2D_hptm8"), Vector2(0.5, 0.5), SubResource("SpriteFrames_d1ilt")],
-"version": 3
-}
 
 [node name="Main" type="Node2D" unique_id=1822167308 node_paths=PackedStringArray("_gridRenderer", "_turretPlacer")]
 script = ExtResource("1_jjgbg")
@@ -63,7 +18,7 @@ _turretPlacer = NodePath("TurretPlacer")
 [node name="TileShapePlacer" parent="." unique_id=1636893986 instance=ExtResource("3_jjvhh")]
 
 [node name="PathFollower" parent="." unique_id=142391362 instance=ExtResource("4_jjvhh")]
-_projectileScene = SubResource("PackedScene_ynf5e")
+_projectileScene = null
 
 [node name="TurretPlacer" parent="." unique_id=1881251108 instance=ExtResource("5_kry3j")]
 

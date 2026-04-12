@@ -60,10 +60,13 @@ public partial class TurretPlacer : Node2D
 		_ghostTurret.Visible = false;
 
 		_gameUi = GetTree().GetRoot().GetNode<GameUi>("Main/GameUI");
+		if (_gameUi == null) GD.PrintErr("GameUI not found!");
 	}
 
 	public override void _Process(double delta)
 	{
+		if (_currentTileMapLayer == null) return;
+
 		FollowMouse();
 
 		if (Input.IsActionJustPressed("ToggleTurretPlacementMode"))
@@ -99,7 +102,7 @@ public partial class TurretPlacer : Node2D
 			if (Input.IsActionJustPressed("Left Click"))
 			{
 				int cost = turretStats.Cost;
-				if (!_gameUi.TryToSpendCoins(cost))
+				if (_gameUi != null && !_gameUi.TryToSpendCoins(cost))
 				{
 					_gameUi.ShowWarning("Not enough coins!");
 					_turretPlacerEnabled = false;
