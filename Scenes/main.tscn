@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://dtv7kt7wo8omt" path="res://Scenes/path_follower.tscn" id="4_jjvhh"]
 [ext_resource type="PackedScene" uid="uid://caafjqfx010mq" path="res://Scenes/turret_placer.tscn" id="5_kry3j"]
 [ext_resource type="PackedScene" uid="uid://bxnekokl8stoa" path="res://Scenes/game_ui.tscn" id="6_21xkr"]
+[ext_resource type="Script" uid="uid://c7j48ea8ghddd" path="res://Scripts/CameraController.cs" id="7_344ge"]
 [ext_resource type="Script" uid="uid://dp5rjda24qxii" path="res://Scripts/EnemySpawner.cs" id="9_ynf5e"]
 
 [node name="Main" type="Node2D" unique_id=1822167308 node_paths=PackedStringArray("_gridRenderer", "_turretPlacer")]
@@ -26,6 +27,8 @@ _projectileScene = null
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=341152257]
 position = Vector2(415, 532)
+script = ExtResource("7_344ge")
+HubLocation = Vector2i(50, 50)
 
 [node name="EnemySpawner" type="Node" parent="." unique_id=1904352068]
 script = ExtResource("9_ynf5e")

@@ -7,7 +7,6 @@ public partial class EnemySpawner : Node
     [Export] public float WaveIntervalSeconds = 30f;
     [Export] public int EnemiesPerWave = 5;
     [Export] public int Final_wave_number = 10;
-
     [Export] public int Number_of_Enemies_added_per_wave = 5;
 
     public int CurrentWave { get; private set; } = 0;
@@ -19,19 +18,24 @@ public partial class EnemySpawner : Node
     private GridAStarPathfinder<GroundTile> _pathfinder;
     private Timer _waveTimer;
     private GameUi _gameUi;
+    private TileMapLayer _tileMapLayer;
 
     private List<EnemyStats> _enemyStats;
 
-    public void Initialize(GenericGrid<GroundTile> grid, Vector2I hub, Random randomizer)
+    public void Initialize(GenericGrid<GroundTile> grid, Vector2I hub, Random randomizer, TileMapLayer tileMapLayer)
     {
         _grid = grid;
         _hub = hub;
         _random = randomizer;
+        _tileMapLayer = tileMapLayer;
 
         _enemyStats = EnemyStats.LoadAllStats();
 
         BuildSpawnPointList();
         BuildPathfinder();
+
+        // NEW: Place the goal sprite at the hub
+        SpawnGoalSprite();
 
         _waveTimer = new Timer();
         _waveTimer.WaitTime = WaveIntervalSeconds;
@@ -90,6 +94,20 @@ public partial class EnemySpawner : Node
         );
     }
 
+
+    private void SpawnGoalSprite()
+    {
+        var goalScene = GD.Load<PackedScene>("res://Scenes/base_scene.tscn");
+        var goal = goalScene.Instantiate<Node2D>();
+
+        Vector2 worldPos = IsometricTileMap.MapCoordToGlobalPosition(_tileMapLayer, _hub);
+        goal.Position = worldPos;
+
+        GetTree().GetRoot().AddChild(goal);
+
+        GD.Print("Goal sprite placed at hub: " + _hub);
+    }
+
     private void SpawnWave()
     {
         if (CurrentWave >= Final_wave_number)
@@ -123,7 +141,6 @@ public partial class EnemySpawner : Node
         var enemyScene = GD.Load<PackedScene>("res://Scenes/enemy.tscn");
         var enemy = enemyScene.Instantiate<Enemy>();
 
-        // Pick Regular stats (same logic as TempEnemyDemo)
         var regularStats = _enemyStats.Find(s => s.Type == EnemyStats.Category.Regular);
         if (regularStats == null)
         {
@@ -135,7 +152,6 @@ public partial class EnemySpawner : Node
 
         GetTree().GetRoot().CallDeferred("add_child", enemy);
 
-        // Get grid path
         var pathGrid = _pathfinder.GetPath(spawnPos, _hub);
         if (pathGrid == null || pathGrid.Count == 0)
         {
@@ -143,10 +159,9 @@ public partial class EnemySpawner : Node
             return;
         }
 
-        // Convert grid coords → world coords (simple version)
         var pathWorld = new List<Vector2>();
         foreach (var p in pathGrid)
-            pathWorld.Add(new Vector2(p.X, p.Y));
+            pathWorld.Add(IsometricTileMap.MapCoordToGlobalPosition(_tileMapLayer, p));
 
         enemy.SetPath(pathWorld);
         enemy.GlobalPosition = pathWorld[0];

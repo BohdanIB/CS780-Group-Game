@@ -9,4 +9,5 @@ AggroRadius = 100.0
 Health = 100.0
 FireRate = 2.0
 ProjectileStats = ExtResource("2_vd56s")
+Cost = 75
 metadata/_custom_type_script = "uid://bawwkshhg5psh"

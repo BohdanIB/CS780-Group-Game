@@ -44,12 +44,14 @@ stretch_mode = 5
 
 [node name="KillCountLabel" type="Label" parent="UI/HBoxContainer/KillCount" unique_id=1643478985]
 layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "0"
 script = ExtResource("3_y8vuf")
 
 [node name="TimerLabel" type="Label" parent="UI/HBoxContainer" unique_id=986703465]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "0:00"
 script = ExtResource("3_rxsu6")
 
@@ -68,6 +70,7 @@ stretch_mode = 3
 
 [node name="BaseHPLabel" type="Label" parent="UI/HBoxContainer/BaseHealth" unique_id=1183692357]
 layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "100"
 
 [node name="CoinCount" type="HBoxContainer" parent="UI/HBoxContainer" unique_id=1027251394]
@@ -81,6 +84,7 @@ texture = ExtResource("5_3t1kc")
 
 [node name="CoinCountLabel" type="Label" parent="UI/HBoxContainer/CoinCount" unique_id=1692703589]
 layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "1000"
 
 [node name="WarningLabel" type="Label" parent="UI" unique_id=389522481]

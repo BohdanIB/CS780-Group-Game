@@ -13,17 +13,16 @@ public partial class Main : Node2D
 		Random randomizer = new Random((int)MAIN_SEED);
 		GD.Seed(MAIN_SEED);
 
-		var hubLocation = new Vector2I(20, 10);
+		var hubLocation = new Vector2I(50, 50);
 
 		GenericGrid<GroundTile> grid =
 			WorldGenerator.GenerateWorldAStar(
-				new Vector2I(41, 21),
+				new Vector2I(100, 100),
 				hubLocation
 			);
 
 		_gridRenderer.RenderGrid(grid);
 
-		// Fallback: treat each tile as size 1x1 in world units for zoom math
 		var tileSize = new Vector2I(1, 1);
 		var mapWidth = grid.GetWidth() * tileSize.X;
 		var mapHeight = grid.GetHeight() * tileSize.Y;
@@ -38,15 +37,12 @@ public partial class Main : Node2D
 					 new Vector2(mapWidth / 2f, mapHeight / 2f);
 
 		Camera2D camera = GetNode<Camera2D>("Camera2D");
-		//camera.Position = center;
-		//camera.Zoom = new Vector2(zoom, zoom);
 
 		_turretPlacer.Initialize(grid, _gridRenderer.TerrainMap);
 
 		EnemySpawner spawner = GetNode<EnemySpawner>("EnemySpawner");
-		spawner.Initialize(grid, hubLocation, randomizer);
+		spawner.Initialize(grid, hubLocation, randomizer, _gridRenderer.TerrainMap.GetLayers()[0]);
 
 		Friendly.TempFriendlyDemo(this, grid, _gridRenderer.TerrainMap, hubLocation);
-
 	}
 }
