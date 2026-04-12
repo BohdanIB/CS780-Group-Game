@@ -14,6 +14,5 @@ tempConstructionInformation = ExtResource("2_jjvhh")
 position = Vector2(573, 323)
 
 [node name="StructurePlacer" parent="." unique_id=1843712961 instance=ExtResource("4_jjvhh")]
-position = Vector2(-564, -305)
 
 [node name="PlayArea" parent="." unique_id=1275724900 instance=ExtResource("3_8gbba")]

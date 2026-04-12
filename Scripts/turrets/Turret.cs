@@ -172,4 +172,20 @@ public partial class Turret : GenericStructure
 		return $"{Name}: {_stats}";
 	}
 
+    public override void SetConfigurationOption(string configurationName, string configurationSelection)
+    {
+		
+        if (configurationName.Equals("Target"))
+		{
+			foreach (TargetingMode mode in Enum.GetValues(typeof(TargetingMode)))
+			{
+				if (mode.ToString().Equals(configurationSelection)) 
+				{
+					UpdateTargetingMode(mode);				
+				}
+			}
+		}
+    }
+
+
 }

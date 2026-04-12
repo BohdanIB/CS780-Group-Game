@@ -6,14 +6,14 @@
 
 [sub_resource type="LabelSettings" id="LabelSettings_i6hl4"]
 
-[node name="OptionSelector" type="Panel" unique_id=839933324 node_paths=PackedStringArray("leftButton", "rightButton", "selectionLabel", "nameLabel")]
+[node name="OptionSelector" type="Panel" unique_id=839933324 node_paths=PackedStringArray("_leftButton", "_rightButton", "_selectionLabel", "_nameLabel")]
 offset_right = 192.0
 offset_bottom = 32.0
 script = ExtResource("1_anqex")
-leftButton = NodePath("Left Button")
-rightButton = NodePath("Right Button")
-selectionLabel = NodePath("SelectionLabel")
-nameLabel = NodePath("Label")
+_leftButton = NodePath("Left Button")
+_rightButton = NodePath("Right Button")
+_selectionLabel = NodePath("SelectionLabel")
+_nameLabel = NodePath("Label")
 
 [node name="Left Button" type="TextureButton" parent="." unique_id=1391571810]
 layout_mode = 0

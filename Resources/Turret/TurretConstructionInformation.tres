@@ -8,7 +8,5 @@
 script = ExtResource("1_n2a30")
 DisplayImage = ExtResource("1_3e3ec")
 Structure = ExtResource("2_k3ma5")
-ConfigurationOptions = Dictionary[String, PackedStringArray]({
-"Target": PackedStringArray("Random", "First", "Last", "Close", "Weak", "Strong")
-})
+ConfigurationType = 1
 metadata/_custom_type_script = "uid://c5a4sxpqqv1sn"

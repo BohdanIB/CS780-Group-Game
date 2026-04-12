@@ -61,13 +61,21 @@ public partial class StructurePlacer : Node2D
 			{
 				_optionSelectors[i].Visible = false;
 			}
-			int j = 0;
-			foreach (string key in constructionInformation.ConfigurationOptions.Keys)
+
+			if (constructionInformation.ConfigurationType != GenericStructure.ConfigurationType.None)
 			{
-				_optionSelectors[j].SetOptions(constructionInformation.ConfigurationOptions[key], key);
-				_optionSelectors[j].Visible = true;
-				j++;
+				
+				int j = 0;
+				Dictionary<string, string[]> configDictionary = GenericStructure.GetConfigurationOptions(constructionInformation.ConfigurationType);
+				foreach (string key in configDictionary.Keys)
+				{
+					_optionSelectors[j].SetOptions(configDictionary[key], key);
+					_optionSelectors[j].Visible = true;
+					j++;
+				}
+
 			}
+
 
 			_isEnabled = true;
 			Visible = true;
@@ -126,6 +134,15 @@ public partial class StructurePlacer : Node2D
 		GenericStructure placedStructure = _constructionInformation.Structure.Instantiate<GenericStructure>();
 		placedStructure.GlobalPosition = IsometricTileMap.MapCoordToGlobalPosition(_placementTilemap, _currentGridCoordinates);
 		_placementGrid.GetGridValueOrDefault(_currentGridCoordinates.X, _currentGridCoordinates.Y).Structure = placedStructure;
+
+		foreach (OptionSelector selector in _optionSelectors)
+		{
+			if (selector.Visible)
+			{
+				placedStructure.SetConfigurationOption(selector.OptionsName, selector.GetOptionSelection());
+			}
+		}
+
 
 		PlayArea.instance.AddChild(placedStructure);
 	}

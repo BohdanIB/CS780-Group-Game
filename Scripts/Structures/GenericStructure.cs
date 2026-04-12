@@ -1,5 +1,6 @@
 
 using System;
+using System.Collections.Generic;
 using Godot;
 
 /// <summary>
@@ -9,7 +10,11 @@ using Godot;
 /// </summary>
 public partial class GenericStructure: Area2D
 {
-
+	public enum ConfigurationType
+	{
+		None,
+		TurretTargetting
+	}
 
 	// Nodes
 	[Export] protected CollisionShape2D _collisionShape2D;
@@ -19,4 +24,18 @@ public partial class GenericStructure: Area2D
 
 	// public virtual void Initialize() { }
 
+	public static Dictionary<string, string[]> GetConfigurationOptions(ConfigurationType configurationType)
+	{
+        return configurationType switch
+        {
+            ConfigurationType.None => null,
+            ConfigurationType.TurretTargetting => new()
+				{
+					["Target"] = Enum.GetNames(typeof(Turret.TargetingMode))
+				},
+            _ => null,
+        };
+    }
+
+	public virtual void SetConfigurationOption(string configurationName, string configurationSelection) { }
 }
