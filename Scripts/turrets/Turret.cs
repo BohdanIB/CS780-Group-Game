@@ -22,8 +22,8 @@ public partial class Turret : GenericStructure
 
 	private bool _disabled = false;
 	private bool _visibleTurretRadius = true;
-	private TargetingMode _targetingMode = TargetingMode.First;
-	private TurretStats _stats;
+	[Export] private TurretStats _stats;
+	[Export] private TargetingMode _targetingMode = TargetingMode.First;
 
 	// Scene Children
 	[Export] private Timer _shotCooldownTimer;
@@ -31,38 +31,20 @@ public partial class Turret : GenericStructure
 	// Preloaded Scenes
 	[Export] private PackedScene _projectileScene;
 
-	private Random _random = new();
 	private List<Enemy> _enemiesInRange = new();
 
 	/// <summary>
 	/// Initializes turret with given stats.
 	/// </summary>
 	/// <param name="turretStats"></param>
-	public void Initialize(TurretStats turretStats)
+	public void Initialize(TurretStats turretStats, TargetingMode targetingMode = TargetingMode.First)
 	{
-		UpdateStats(turretStats);
-	}
-	/// <summary>
-	/// Initializes turret with "generic" base stats for given type.
-	/// </summary>
-	/// <param name="turretType"></param>
-	public void Initialize(TurretStats.Category turretType)
-	{
-		Initialize(new TurretStats(turretType));
-	}
-	public void Initialize(TurretStats.Category turretType, TargetingMode targetingMode)
-	{
-		Initialize(turretType);
 		_targetingMode = targetingMode;
+		UpdateStats(turretStats);
 	}
 
 	public override void _Ready()
 	{
-		// Some cases where _Ready gets called before Initialize, just set to some value for now and it will get reinitialized later.
-		if (_stats == null)
-		{
-			Initialize(TurretStats.Category.Ballista);
-		}
 		UpdateStats(_stats);
 
 		// Todo: Primarily to support ghost mode turret in TurretPlacer. Probably better way of doing this.
@@ -104,7 +86,7 @@ public partial class Turret : GenericStructure
 			Enemy currTargetEnemy;
 			if (_targetingMode == TargetingMode.Random)
 			{
-				currTargetEnemy = _enemiesInRange[_random.Next(_enemiesInRange.Count)];
+				currTargetEnemy = _enemiesInRange[GD.RandRange(0, _enemiesInRange.Count-1)];
 			}
 			else
 			{
@@ -139,6 +121,9 @@ public partial class Turret : GenericStructure
 			projectile.GlobalPosition = GlobalPosition;
 			projectile.Initialize(currTargetEnemy, _stats.ProjectileStats);
 			GetTree().GetRoot().AddChild(projectile);
+
+			// Change sprite to turn towards target
+			_idleAnimations.SetDirection(GlobalPosition, currTargetEnemy.GlobalPosition);
 		}
 	}
 
@@ -159,15 +144,14 @@ public partial class Turret : GenericStructure
 	/// Replace current stats with newStats, then update all necessary components which react to stat changes.
 	/// </summary>
 	/// <param name="newStats"></param>
-	public void UpdateStats(TurretStats newStats)
+	public void UpdateStats(TurretStats newStats = null)
 	{
-		_stats = newStats;
-		UpdateStats();
-	}
-	public void UpdateStats()
-	{
+		if (newStats != null)
+		{
+			_stats = newStats;
+		}
 		UpdateTurretRadius();
-		UpdateTurretSprite();
+		UpdateTurretSpriteFrames();
 
 		// Todo: Add more updates
 
@@ -180,9 +164,9 @@ public partial class Turret : GenericStructure
 	{
 		((CircleShape2D)_collisionShape2D.Shape).Radius = _stats.AggroRadius; // TODO: Better way of doing this?
 	}
-	private void UpdateTurretSprite()
+	private void UpdateTurretSpriteFrames()
 	{
-		_animatedSprite2D.Frame = _stats.SpriteFrame;
+		_idleAnimations.Frames = _stats.Animations.Idle; // TODO: This needs to be expanded in future
 	}
 	private void UpdateTurretHealth()
 	{

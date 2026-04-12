@@ -53,8 +53,10 @@ _bundled = {
 "version": 3
 }
 
-[node name="Main" type="Node2D" unique_id=1822167308]
+[node name="Main" type="Node2D" unique_id=1822167308 node_paths=PackedStringArray("_gridRenderer", "_turretPlacer")]
 script = ExtResource("1_jjgbg")
+_gridRenderer = NodePath("GridRenderer")
+_turretPlacer = NodePath("TurretPlacer")
 
 [node name="GridRenderer" parent="." unique_id=76182152 instance=ExtResource("2_bo1nx")]
 
@@ -65,6 +67,7 @@ _projectileScene = SubResource("PackedScene_ynf5e")
 
 [node name="TurretPlacer" parent="." unique_id=1881251108 instance=ExtResource("5_kry3j")]
 
+<<<<<<< HEAD
 [node name="GameUI" parent="." unique_id=556209750 instance=ExtResource("6_21xkr")]
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=607524974]
@@ -73,3 +76,7 @@ zoom = Vector2(2.5, 2.5)
 
 [node name="EnemySpawner" type="Node" parent="." unique_id=1904352068]
 script = ExtResource("9_ynf5e")
+=======
+[node name="Camera2D" type="Camera2D" parent="." unique_id=341152257]
+position = Vector2(415, 532)
+>>>>>>> main

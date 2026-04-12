@@ -2,45 +2,30 @@
 
 [ext_resource type="Script" uid="uid://bk3drg0y2r1ku" path="res://Scripts/turrets/Turret.cs" id="1_fcprl"]
 [ext_resource type="PackedScene" uid="uid://27mmcge0cxrm" path="res://Scenes/generic_structure.tscn" id="1_hskch"]
-[ext_resource type="Texture2D" uid="uid://bl7a37uc0ye6u" path="res://Assets/Sprites/temp_turrets.png" id="2_hskch"]
+[ext_resource type="Resource" uid="uid://b65p4eimakib4" path="res://Resources/Turret/BallistaTurretStats.tres" id="3_ahfaj"]
 [ext_resource type="PackedScene" uid="uid://b1picus170nmk" path="res://Scenes/projectile.tscn" id="3_pulj5"]
+[ext_resource type="SpriteFrames" uid="uid://divrawug5fwn" path="res://Assets/Animations/turret_idle.tres" id="4_pulj5"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_pulj5"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_ahfaj"]
 resource_local_to_scene = true
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_6spbj"]
-atlas = ExtResource("2_hskch")
-region = Rect2(0, 0, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_pulj5"]
-atlas = ExtResource("2_hskch")
-region = Rect2(32, 0, 32, 32)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_6spbj"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_6spbj")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_pulj5")
-}],
-"loop": true,
-"name": &"default",
-"speed": 5.0
-}]
+radius = 16.0
 
 [node name="Turret" unique_id=440596787 node_paths=PackedStringArray("_shotCooldownTimer") instance=ExtResource("1_hskch")]
 script = ExtResource("1_fcprl")
+_stats = ExtResource("3_ahfaj")
+_targetingMode = 1
 _shotCooldownTimer = NodePath("ShotCooldownTimer")
 _projectileScene = ExtResource("3_pulj5")
 
 [node name="CollisionShape2D" parent="." index="0" unique_id=650548273]
-shape = SubResource("CircleShape2D_pulj5")
+shape = SubResource("CircleShape2D_ahfaj")
 
-[node name="AnimatedSprite2D" parent="." index="1" unique_id=440445772]
-sprite_frames = SubResource("SpriteFrames_6spbj")
-
-[node name="ShotCooldownTimer" type="Timer" parent="." index="2" unique_id=1922669520]
+[node name="ShotCooldownTimer" type="Timer" parent="." index="1" unique_id=1922669520]
 process_callback = 0
 one_shot = true
+
+[node name="IdleAnimations" parent="." index="2" unique_id=1943597911]
+sprite_frames = ExtResource("4_pulj5")
+animation = &"east"
+autoplay = "east"
+Frames = ExtResource("4_pulj5")

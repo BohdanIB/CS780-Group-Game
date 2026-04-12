@@ -4,6 +4,8 @@ using System;
 public partial class TileShapePlacer : Node2D
 {
 
+	/*
+
 	private TileShape currentShape;
 	private GenericGrid<GroundTile> targetGrid;
 	private Vector2I currentOriginCoordinates;
@@ -79,5 +81,7 @@ public partial class TileShapePlacer : Node2D
 		}
 		EmitSignal(nameof(OnShapePlaced));
 	}
+
+	*/
 
 }
