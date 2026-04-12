@@ -3,26 +3,27 @@
 [ext_resource type="PackedScene" uid="uid://dtv7kt7wo8omt" path="res://Scenes/path_follower.tscn" id="1_jgycc"]
 [ext_resource type="Script" uid="uid://bs25gk004xjd8" path="res://Scripts/units/Friendly.cs" id="2_50fos"]
 [ext_resource type="PackedScene" uid="uid://b1picus170nmk" path="res://Scenes/projectile.tscn" id="3_5vdkv"]
+[ext_resource type="Resource" uid="uid://bx02gj3gjk2w5" path="res://Resources/Unit/Friendly/RegularFriendlyStats.tres" id="3_ljipm"]
 [ext_resource type="SpriteFrames" uid="uid://be25vodgonygm" path="res://Assets/Animations/friendly_idle.tres" id="5_ljipm"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_r41ou"]
 resource_local_to_scene = true
 radius = 20.0
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_f2s7q"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_j3gts"]
 resource_local_to_scene = true
 radius = 40.0
 
 [node name="Friendly" unique_id=382514737 instance=ExtResource("1_jgycc")]
 script = ExtResource("2_50fos")
-_stats = null
+_stats = ExtResource("3_ljipm")
 _projectileScene = ExtResource("3_5vdkv")
 
 [node name="HitboxCollisionShape2D" parent="." index="0" unique_id=1358123789]
 shape = SubResource("CircleShape2D_r41ou")
 
 [node name="AggroCollisionShape2D" parent="AggroArea2D" parent_id_path=PackedInt32Array(1396697523) index="0" unique_id=1901836338]
-shape = SubResource("CircleShape2D_f2s7q")
+shape = SubResource("CircleShape2D_j3gts")
 
 [node name="IdleAnimations" parent="." index="2" unique_id=1606845345]
 position = Vector2(0, -4)

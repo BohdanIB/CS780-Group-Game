@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" uid="uid://bawwkshhg5psh" path="res://Scripts/turrets/TurretStats.cs" id="1_2ucxh"]
 [ext_resource type="Resource" uid="uid://hvld1egu65vi" path="res://Resources/Projectiles/BladeStats.tres" id="1_vj1tk"]
-[ext_resource type="Resource" uid="uid://cop41bqffhdhj" path="res://Resources/Animations/StandardTurretAnimations.tres" id="1_wk7r1"]
 
 [resource]
 script = ExtResource("1_2ucxh")
@@ -11,5 +10,5 @@ AggroRadius = 80.0
 Health = 100.0
 FireRate = 5.0
 ProjectileStats = ExtResource("1_vj1tk")
-Animations = ExtResource("1_wk7r1")
+Cost = 100
 metadata/_custom_type_script = "uid://bawwkshhg5psh"

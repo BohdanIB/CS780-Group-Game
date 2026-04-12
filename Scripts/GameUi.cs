@@ -30,9 +30,10 @@ public partial class GameUi : CanvasLayer
 		
 		
 		sideMenu.TurretSelected += (turretType) => {
-			//GD.Print($"TurretSelected signal received: {turretType}");
-			turretPlacer.EnablePlacementMode(turretType);
-		};
+    		turretPlacer.BeginPlacement((int)turretType);
+	};
+
+
 		/*
 		turretPlacer.OnTurretPlaced += () =>{
 			coins -= 100; 

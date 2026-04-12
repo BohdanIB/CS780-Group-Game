@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://c21fjsrl23hps" path="res://Scripts/units/Enemy.cs" id="2_1f0kj"]
 [ext_resource type="PackedScene" uid="uid://b1picus170nmk" path="res://Scenes/projectile.tscn" id="3_287tu"]
 [ext_resource type="SpriteFrames" uid="uid://bpbko2n2qgxyk" path="res://Assets/Animations/enemy_idle.tres" id="5_ghaa6"]
+[ext_resource type="Script" uid="uid://bawwkshhg5psh" path="res://Scripts/Animation/AnimationManager.cs" id="5_anim"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_0830c"]
 resource_local_to_scene = true
@@ -25,14 +26,10 @@ shape = SubResource("CircleShape2D_0830c")
 [node name="AggroCollisionShape2D" parent="AggroArea2D" parent_id_path=PackedInt32Array(1396697523) index="0" unique_id=1901836338]
 shape = SubResource("CircleShape2D_ghaa6")
 
-<<<<<<< HEAD
-[node name="AnimatedSprite2D" parent="." index="2" unique_id=1606845345]
-sprite_frames = SubResource("SpriteFrames_1dp5w")
-=======
 [node name="IdleAnimations" parent="." index="2" unique_id=1606845345]
+script = ExtResource("5_anim")
 position = Vector2(0, -4)
 sprite_frames = ExtResource("5_ghaa6")
 animation = &"north_east"
 autoplay = "north_east"
 Frames = ExtResource("5_ghaa6")
->>>>>>> main
