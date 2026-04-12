@@ -1,4 +1,5 @@
 
+using CS780GroupProject.Scripts.Utils;
 using Godot;
 using System;
 using System.Collections.Generic;
@@ -7,56 +8,82 @@ public partial class Friendly : PathFollower
 {
 	[Export] private FriendlyStats _stats;
 
+	[ExportGroup("Types")]
+	[Export] public Groups.GroupTypes _friendlyTypes = PathFollower.TYPES | Groups.GroupTypes.Friendly;
+	[Export] public Groups.GroupTypes _enemyTypes = Groups.GroupTypes.Enemy;
+	// [Export] public Groups.GroupTypes _hurtTypes = Groups.GroupTypes.Enemy;
+	// [Export] public Groups.GroupTypes _detectorTypes = Groups.GroupTypes.None;
+	// [Export] public Groups.GroupTypes _detectableTypes = Groups.GroupTypes.Enemy;
+
 	/// <summary>
 	/// Initializes friendly with custom stats.
 	/// </summary>
 	/// <param name="stats"></param>
-	public void Initialize(FriendlyStats stats)
+	public void Initialize(FriendlyStats stats, Vector2[] path = null)
 	{
-		UpdateStats(stats);
-	}
-
-	// public override void _Ready()
-	// {
-	// 	base._Ready();
-	// }
-
-	public override void _PhysicsProcess(double delta)
-	{
-		base._PhysicsProcess(delta);
-		// Todo
-	}
-
-	public void UpdateStats(FriendlyStats newStats)
-	{
-		_stats = newStats;
+		SetPath(path);
+		_stats = stats;
+		InitializeComponents();
 		UpdateStats();
 	}
-	public void UpdateStats()
-	{
-		UpdateFriendlyHitboxRadius();
-		UpdateFriendlyAggroRadius();
-		UpdateFriendlySprite();
 
-		// Todo: Add more updates
+	public override void _Ready()
+	{
+		base._Ready();
 
-		UpdateFriendlyHealth();
+		// Component callbacks //
+
+		_health.OnNoHealthLeft += () =>
+		{
+			GD.Print($"Friendly {Name} died.");
+			QueueFree();
+		};
+		_hurt.OnHurt += (area, damage) => 
+		{
+			_health.ApplyDamage(damage); 
+		}; 
+		_mover.OnPathPointReached += (hasNextPoint, nextPoint) =>
+		{
+			if (hasNextPoint)
+			{
+				var directionRads = GlobalPosition.AngleToPoint(nextPoint);
+				// _animation.SetState(AnimationPackEntry.State.Idle, directionRads); // TODO: Update this with new animations
+				_animation.SetDirection(directionRads);
+			}
+		};
 	}
-	private void UpdateFriendlyHitboxRadius()
+
+	public void UpdateStats(FriendlyStats newStats = null)
 	{
-		((CircleShape2D)_hitboxCollisionShape2D.Shape).Radius = _stats.HitboxRadius; // TODO: Better way of doing this?
+		if (newStats != null)
+		{
+			_stats = newStats;
+		}
+		UpdateComponents();
 	}
-	private void UpdateFriendlyAggroRadius()
+	private void InitializeComponents()
 	{
-		((CircleShape2D)_aggroCollisionShape2D.Shape).Radius = _stats.AggroRadius; // TODO: Better way of doing this?
+		if (_stats != null)
+		{
+			_health.SetHealth(_stats.Health); // todo: this might not want to update everytime components are updated.
+			_hurt.Initialize(_friendlyTypes, _enemyTypes);
+			_detector.Initialize(_friendlyTypes, _enemyTypes);
+			_detectable.Initialize(_friendlyTypes, _enemyTypes);
+			_mover.Initialize(_stats.MovementSpeed, this, start: true);
+			_animation.Initialize(_stats.Animations);
+		}
 	}
-	private void UpdateFriendlySprite()
+	public void UpdateComponents()
 	{
-		_idleAnimations.Frames = _stats.Animations.Idle;
-	}
-	private void UpdateFriendlyHealth()
-	{
-		_health = _stats.Health;
+		if (_stats != null)
+		{
+			_health.SetHealth(_stats.Health); // todo: this might not want to update everytime components are updated.
+			_hurt.SetRadius(_stats.HitboxRadius);
+			_detector.SetRadius(_stats.AggroRadius);
+			_detectable.SetRadius(_stats.DetectableRadius);
+			_mover.Speed = _stats.MovementSpeed;
+			_animation.Animations = _stats.Animations;
+		}
 	}
 	public override string ToString()
 	{
@@ -117,12 +144,15 @@ public partial class Friendly : PathFollower
 		}
 		var layer = layers[0];
 		List<Friendly> testFriendlies = [];
-		var allFriendlyStats = FriendlyStats.LoadAllStats();
 		for (int i = 0; i < 3; i++)
 		{
+			// Set friendly as child of parent
 			var friendly = GD.Load<PackedScene>("res://Scenes/friendly.tscn").Instantiate<Friendly>();
+			parent.CallDeferred("add_child", friendly); // Cannot add children in _Ready()
 
-			foreach(var stats in allFriendlyStats)
+			// Initialize
+			testFriendlies.Add(friendly);
+			foreach(var stats in FriendlyStats.ALL_FRIENDLIES)
 			{
 				if (stats.Type == FriendlyStats.Category.Regular)
 				{
@@ -130,10 +160,6 @@ public partial class Friendly : PathFollower
 					break;
 				}
 			}
-			// friendly.Initialize(i == 0 ? FriendlyStats.Category.Loaded : FriendlyStats.Category.Regular); // Make one 'loaded' enemy for testing
-			// TODO
-			testFriendlies.Add(friendly);
-			parent.GetTree().GetRoot().CallDeferred("add_child", friendly); // Cannot add children in _Ready()
 
 			// Set path
 			var endPoint = potentialFriendlyEndpoints[GD.RandRange(0, potentialFriendlyEndpoints.Count-1)].position;
@@ -142,7 +168,7 @@ public partial class Friendly : PathFollower
 			{
 				path.Add(IsometricTileMap.MapCoordToGlobalPosition(layer, point));
 			}
-			friendly.SetPath(path);
+			friendly.SetPath(path.ToArray());
 			friendly.GlobalPosition = IsometricTileMap.MapCoordToGlobalPosition(layer, hub);
 
 			// GD.Print($"{friendly}");

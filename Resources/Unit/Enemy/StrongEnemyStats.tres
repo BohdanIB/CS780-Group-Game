@@ -1,17 +1,18 @@
 [gd_resource type="Resource" script_class="EnemyStats" format=3 uid="uid://c7vjclsh0my6y"]
 
-[ext_resource type="Resource" uid="uid://bg25ie1ckk3e0" path="res://Resources/Animations/StandardEnemyAnimations.tres" id="1_euj1g"]
+[ext_resource type="Resource" uid="uid://bg25ie1ckk3e0" path="res://Resources/Animations/AnimationPacks/EnemyAnimations.tres" id="1_euj1g"]
 [ext_resource type="Resource" uid="uid://dbmns5gjywp51" path="res://Resources/Projectiles/BoltStats.tres" id="2_d3mm8"]
 [ext_resource type="Script" uid="uid://c35fcs4mhqjbm" path="res://Scripts/units/EnemyStats.cs" id="3_hsamk"]
 
 [resource]
 script = ExtResource("3_hsamk")
 Type = 1
-HitboxRadius = 5.0
 AggroRadius = 25.0
+DetectableRadius = 16.0
+HitboxRadius = 16.0
 Health = 100.0
 FireRate = 4.0
-MovementSpeed = 10.0
+MovementSpeed = 15.0
 ProjectileStats = ExtResource("2_d3mm8")
 Animations = ExtResource("1_euj1g")
 metadata/_custom_type_script = "uid://c35fcs4mhqjbm"

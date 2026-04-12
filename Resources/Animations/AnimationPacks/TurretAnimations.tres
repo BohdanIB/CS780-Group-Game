@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="AnimationPack" format=3 uid="uid://cop41bqffhdhj"]
+
+[ext_resource type="Resource" uid="uid://dqeaij2dseljx" path="res://Resources/Animations/AnimationPackEntries/turret_idle_animation_entry.tres" id="1_m4hxe"]
+[ext_resource type="Script" uid="uid://b8k2bijsjc1da" path="res://Scripts/Animation/AnimationPack.cs" id="2_usgxq"]
+
+[resource]
+script = ExtResource("2_usgxq")
+Animations = Array[Object]([ExtResource("1_m4hxe")])
+metadata/_custom_type_script = "uid://b8k2bijsjc1da"

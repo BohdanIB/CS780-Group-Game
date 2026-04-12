@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://c1wk4dy8g10qq"]
+
+[ext_resource type="Script" uid="uid://bnlldn87fqfks" path="res://Scripts/Components/AnimationComponent.cs" id="1_hg02v"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_anykh"]
+
+[node name="AnimationComponent" type="AnimatedSprite2D" unique_id=1805975540]
+sprite_frames = SubResource("SpriteFrames_anykh")
+script = ExtResource("1_hg02v")

@@ -10,18 +10,22 @@ public partial class Main : Node2D
 	[Export] private GridRenderer _gridRenderer;
 	[Export] private TurretPlacer _turretPlacer;
 
+	private GenericGrid<GroundTile> _grid;
+	private Vector2I _hubLocation = new Vector2I(20, 10);
+	
+
 	public override void _Ready()
 	{
 		GD.Seed(MAIN_SEED);
 
-		var hubLocation = new Vector2I(20, 10);
-		GenericGrid<GroundTile> grid = WorldGenerator.GenerateWorldAStar(new Vector2I(41, 21), hubLocation);
+		_grid = WorldGenerator.GenerateWorldAStar(new Vector2I(41, 21), _hubLocation);
 
-		_gridRenderer.RenderGrid(grid);
+		_gridRenderer.RenderGrid(_grid);
 
-		_turretPlacer.Initialize(grid, _gridRenderer.TerrainMap);
+		_turretPlacer.Initialize(_grid, _gridRenderer.TerrainMap);
 
-		Enemy.TempEnemyDemo(this, grid, _gridRenderer.TerrainMap, hubLocation);
-		Friendly.TempFriendlyDemo(this, grid, _gridRenderer.TerrainMap, hubLocation);
+		Enemy.TempEnemyDemo(this, _grid, _gridRenderer.TerrainMap, _hubLocation);
+		Friendly.TempFriendlyDemo(this, _grid, _gridRenderer.TerrainMap, _hubLocation);
 	}
+
 }
