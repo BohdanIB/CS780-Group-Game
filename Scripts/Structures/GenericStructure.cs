@@ -1,6 +1,8 @@
 
 using System;
 using System.Collections.Generic;
+using CS780GroupProject.Scripts.Utils;
+using static CS780GroupProject.Scripts.Utils.NodeComponentChecking;
 using Godot;
 
 /// <summary>
@@ -8,7 +10,7 @@ using Godot;
 /// 
 /// Should have a redefined Initialize and ToString whenever a new structure is contrived.
 /// </summary>
-public partial class GenericStructure: Area2D
+public partial class GenericStructure: Node2D
 {
 	public enum ConfigurationType
 	{
@@ -16,13 +18,25 @@ public partial class GenericStructure: Area2D
 		TurretTargetting
 	}
 
-	// Nodes
-	[Export] protected CollisionShape2D _collisionShape2D;
-	[Export] protected AnimationManager _idleAnimations;
+	public const Groups.GroupTypes TYPES = Groups.GroupTypes.Structure;
 
-	protected float _health;
+	[ExportGroup("Components")]
+	[Export] protected HealthComponent _health;
+	[Export] protected HurtComponent _hurt;
+	[Export] protected AnimationComponent _animation;
 
 	// public virtual void Initialize() { }
+
+	public override void _Ready()
+	{
+		_health = GetComponentInChildrenOrNull<HealthComponent>(this);
+		_hurt = GetComponentInChildrenOrNull<HurtComponent>(this);
+		_animation = GetComponentInChildrenOrNull<AnimationComponent>(this); // todo: Multiple types could cause issues here
+		if (_health == null || _hurt == null || _animation == null)
+		{
+			GD.Print($"WARNING - GenericStructure {this} was unable to find health and/or hurt components on _Ready()");
+		}
+	}
 
 	public static Dictionary<string, string[]> GetConfigurationOptions(ConfigurationType configurationType)
 	{
@@ -31,7 +45,7 @@ public partial class GenericStructure: Area2D
             ConfigurationType.None => null,
             ConfigurationType.TurretTargetting => new()
 				{
-					["Target"] = Enum.GetNames(typeof(Turret.TargetingMode))
+					["Target"] = Enum.GetNames(typeof(TargetingMode))
 				},
             _ => null,
         };
