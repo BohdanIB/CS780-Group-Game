@@ -12,7 +12,6 @@ public partial class Main : Node2D
 
 	[Export] public ConstructionInformation tempConstructionInformation;
 
-	private GenericGrid<GroundTile> _grid;
 	private Vector2I _hubLocation = new Vector2I(20, 10);
 	
 

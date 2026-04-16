@@ -143,6 +143,8 @@ public partial class StructurePlacer : Node2D
 			}
 		}
 
+		placedStructure.Initialize();
+
 
 		PlayArea.instance.AddChild(placedStructure);
 	}

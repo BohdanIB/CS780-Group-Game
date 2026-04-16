@@ -25,7 +25,7 @@ public partial class GenericStructure: Node2D
 	[Export] protected HurtComponent _hurt;
 	[Export] protected AnimationComponent _animation;
 
-	// public virtual void Initialize() { }
+	public virtual void Initialize() { }
 
 	public override void _Ready()
 	{
