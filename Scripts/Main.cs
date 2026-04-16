@@ -12,6 +12,10 @@ public partial class Main : Node2D
 
 	[Export] public ConstructionInformation tempConstructionInformation;
 
+	private GenericGrid<GroundTile> _grid;
+	private Vector2I _hubLocation = new Vector2I(20, 10);
+	
+
 	public override void _Ready()
 	{
 		GD.Seed(MAIN_SEED);
@@ -27,4 +31,5 @@ public partial class Main : Node2D
 		Enemy.TempEnemyDemo(this, grid, PlayArea.instance.GridRenderer.TerrainMap, hubLocation);
 		Friendly.TempFriendlyDemo(this, grid, PlayArea.instance.GridRenderer.TerrainMap, hubLocation);
 	}
+
 }

@@ -2,32 +2,35 @@
 
 [ext_resource type="PackedScene" uid="uid://dtv7kt7wo8omt" path="res://Scenes/path_follower.tscn" id="1_hghv2"]
 [ext_resource type="Script" uid="uid://c21fjsrl23hps" path="res://Scripts/units/Enemy.cs" id="2_1f0kj"]
-[ext_resource type="PackedScene" uid="uid://b1picus170nmk" path="res://Scenes/projectile.tscn" id="3_287tu"]
-[ext_resource type="SpriteFrames" uid="uid://bpbko2n2qgxyk" path="res://Assets/Animations/enemy_idle.tres" id="5_ghaa6"]
+[ext_resource type="Resource" uid="uid://vu803a5ed7i0" path="res://Resources/Unit/Enemy/RegularEnemyStats.tres" id="3_1dp5w"]
+[ext_resource type="Resource" uid="uid://bg25ie1ckk3e0" path="res://Resources/Animations/AnimationPacks/EnemyAnimations.tres" id="4_1dp5w"]
+[ext_resource type="PackedScene" uid="uid://1xnv73ih3ekh" path="res://Scenes/Components/shooter_component.tscn" id="5_0830c"]
+[ext_resource type="PackedScene" uid="uid://cxvwrh12elf1m" path="res://Scenes/Components/targeting_component.tscn" id="6_1dp5w"]
+[ext_resource type="PackedScene" uid="uid://bxnd3hgmx5vi6" path="res://Scenes/Components/spawner_component.tscn" id="7_auwsv"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_0830c"]
-resource_local_to_scene = true
-radius = 20.0
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_ghaa6"]
-resource_local_to_scene = true
-radius = 40.0
-
-[node name="Enemy" unique_id=382514737 instance=ExtResource("1_hghv2")]
+[node name="Enemy" unique_id=382514737 node_paths=PackedStringArray("_shooter", "_targeting", "_projectileSpawner") groups=["enemy"] instance=ExtResource("1_hghv2")]
 script = ExtResource("2_1f0kj")
-_stats = null
+_stats = ExtResource("3_1dp5w")
 _targetingMode = 4
-_projectileScene = ExtResource("3_287tu")
+_enemyTypes = 16
+_targetTypes = 11
+_shooter = NodePath("ShooterComponent")
+_targeting = NodePath("ShooterComponent/TargetingComponent")
+_projectileSpawner = NodePath("ShooterComponent/ProjectileSpawnerComponent")
 
-[node name="HitboxCollisionShape2D" parent="." index="0" unique_id=1358123789]
-shape = SubResource("CircleShape2D_0830c")
+[node name="AnimationComponent" parent="." index="5" unique_id=1805975540]
+Animations = ExtResource("4_1dp5w")
 
-[node name="AggroCollisionShape2D" parent="AggroArea2D" parent_id_path=PackedInt32Array(1396697523) index="0" unique_id=1901836338]
-shape = SubResource("CircleShape2D_ghaa6")
+[node name="ShooterComponent" parent="." index="6" unique_id=1054008556 node_paths=PackedStringArray("_projectileSpawner", "_targeting", "_shotCooldown") instance=ExtResource("5_0830c")]
+_projectileSpawner = NodePath("ProjectileSpawnerComponent")
+_targeting = NodePath("TargetingComponent")
+_shotCooldown = NodePath("ShotCooldown")
 
-[node name="IdleAnimations" parent="." index="2" unique_id=1606845345]
-position = Vector2(0, -4)
-sprite_frames = ExtResource("5_ghaa6")
-animation = &"north_east"
-autoplay = "north_east"
-Frames = ExtResource("5_ghaa6")
+[node name="TargetingComponent" parent="ShooterComponent" index="0" unique_id=564942499 node_paths=PackedStringArray("_detector") instance=ExtResource("6_1dp5w")]
+_detector = NodePath("../../DetectorComponent")
+
+[node name="ProjectileSpawnerComponent" parent="ShooterComponent" index="1" unique_id=391563213 instance=ExtResource("7_auwsv")]
+ScenePath = "uid://b1picus170nmk"
+
+[node name="ShotCooldown" type="Timer" parent="ShooterComponent" index="2" unique_id=1150597860]
+one_shot = true

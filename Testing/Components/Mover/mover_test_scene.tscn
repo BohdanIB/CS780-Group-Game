@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://cat0dh8qd25mc"]
+
+[ext_resource type="PackedScene" uid="uid://bm24bo2kifop0" path="res://Scenes/Components/mover_component.tscn" id="1_hllpu"]
+[ext_resource type="Script" uid="uid://c04h8k4qo7f6f" path="res://Testing/Components/Mover/MoverTestScene.cs" id="1_pl7v7"]
+
+[node name="MoverTestScene" type="Node2D" unique_id=1198838474 node_paths=PackedStringArray("MoverObject", "MoverComponent")]
+script = ExtResource("1_pl7v7")
+MoverObject = NodePath("Node2D")
+MoverComponent = NodePath("MoverComponent")
+
+[node name="Node2D" type="Node2D" parent="." unique_id=1829543316]
+
+[node name="MoverComponent" parent="." unique_id=1975334598 instance=ExtResource("1_hllpu")]

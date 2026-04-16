@@ -2,30 +2,44 @@
 
 [ext_resource type="Script" uid="uid://bk3drg0y2r1ku" path="res://Scripts/turrets/Turret.cs" id="1_fcprl"]
 [ext_resource type="PackedScene" uid="uid://27mmcge0cxrm" path="res://Scenes/generic_structure.tscn" id="1_hskch"]
-[ext_resource type="Resource" uid="uid://b65p4eimakib4" path="res://Resources/Turret/BallistaTurretStats.tres" id="3_ahfaj"]
-[ext_resource type="PackedScene" uid="uid://b1picus170nmk" path="res://Scenes/projectile.tscn" id="3_pulj5"]
-[ext_resource type="SpriteFrames" uid="uid://divrawug5fwn" path="res://Assets/Animations/turret_idle.tres" id="4_pulj5"]
+[ext_resource type="Resource" uid="uid://b65p4eimakib4" path="res://Resources/Turret/BallistaTurretStats.tres" id="3_hxjjt"]
+[ext_resource type="Resource" uid="uid://cop41bqffhdhj" path="res://Resources/Animations/AnimationPacks/TurretAnimations.tres" id="4_hxjjt"]
+[ext_resource type="PackedScene" uid="uid://cbnk8jcd7c4v3" path="res://Scenes/Components/detectable_component.tscn" id="5_ku01o"]
+[ext_resource type="PackedScene" uid="uid://1xnv73ih3ekh" path="res://Scenes/Components/shooter_component.tscn" id="6_74mb1"]
+[ext_resource type="PackedScene" uid="uid://c43d2uh68714x" path="res://Scenes/Components/detector_component.tscn" id="6_628tr"]
+[ext_resource type="PackedScene" uid="uid://cxvwrh12elf1m" path="res://Scenes/Components/targeting_component.tscn" id="7_hxjjt"]
+[ext_resource type="PackedScene" uid="uid://bxnd3hgmx5vi6" path="res://Scenes/Components/spawner_component.tscn" id="8_74mb1"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_ahfaj"]
-resource_local_to_scene = true
-radius = 16.0
-
-[node name="Turret" unique_id=440596787 node_paths=PackedStringArray("_shotCooldownTimer") instance=ExtResource("1_hskch")]
+[node name="Turret" unique_id=440596787 node_paths=PackedStringArray("_detector", "_detectable", "_shooter", "_targeting", "_projectileSpawner") groups=["friendly", "turret"] instance=ExtResource("1_hskch")]
 script = ExtResource("1_fcprl")
-_stats = ExtResource("3_ahfaj")
-_targetingMode = 1
-_shotCooldownTimer = NodePath("ShotCooldownTimer")
-_projectileScene = ExtResource("3_pulj5")
+_stats = ExtResource("3_hxjjt")
+_targetingMode = 3
+_turretTypes = 3
+_targetTypes = 16
+_detector = NodePath("DetectorComponent")
+_detectable = NodePath("DetectableComponent")
+_shooter = NodePath("ShooterComponent")
+_targeting = NodePath("ShooterComponent/TargetingComponent")
+_projectileSpawner = NodePath("ShooterComponent/ProjectileSpawnerComponent")
 
-[node name="CollisionShape2D" parent="." index="0" unique_id=650548273]
-shape = SubResource("CircleShape2D_ahfaj")
+[node name="AnimationComponent" parent="." index="2" unique_id=1834183178]
+Animations = ExtResource("4_hxjjt")
 
-[node name="ShotCooldownTimer" type="Timer" parent="." index="1" unique_id=1922669520]
-process_callback = 0
-one_shot = true
+[node name="DetectorComponent" parent="." index="3" unique_id=1994671651 instance=ExtResource("6_628tr")]
 
 [node name="IdleAnimations" parent="." index="2" unique_id=1943597911]
 sprite_frames = ExtResource("4_pulj5")
 animation = &"east"
 autoplay = "east"
 Frames = ExtResource("4_pulj5")
+[node name="DetectableComponent" parent="." index="4" unique_id=1835049866 instance=ExtResource("5_ku01o")]
+
+[node name="ShooterComponent" parent="." index="5" unique_id=1054008556 node_paths=PackedStringArray("_projectileSpawner", "_targeting") instance=ExtResource("6_74mb1")]
+_projectileSpawner = NodePath("ProjectileSpawnerComponent")
+_targeting = NodePath("TargetingComponent")
+
+[node name="TargetingComponent" parent="ShooterComponent" index="1" unique_id=564942499 node_paths=PackedStringArray("_detector") instance=ExtResource("7_hxjjt")]
+_detector = NodePath("../../DetectorComponent")
+
+[node name="ProjectileSpawnerComponent" parent="ShooterComponent" index="2" unique_id=391563213 instance=ExtResource("8_74mb1")]
+ScenePath = "uid://b1picus170nmk"
