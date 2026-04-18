@@ -32,7 +32,7 @@ public partial class GridRenderer : Node2D
 				
 				// roadMap.SetCell(new Vector2I(x, y), 0, new Vector2I(roadIndex, 0));
 
-				terrainLayer0.SetCell(new Vector2I(x, y), 1, tile.terrain.groundTileAtlasCoords);
+				terrainLayer0.SetCell(new Vector2I(x, y), 1, tile.biome.groundTileAtlasCoords);
 				if (tile.HasRoadConnection())
 				{
 					waterLayer0.SetCell(new Vector2I(x, y), 1, new Vector2I(0,0));
