@@ -16,6 +16,14 @@ public partial class StructurePlacementRequirements : Resource
         GroundTile placementTile = placementGrid.GetGridValueOrDefault(placementCoordinates.X, placementCoordinates.Y);
         if (!IsBiomeValid(placementTile.biome)) return false;
 
+        BiomeType[] adjacentBiomes = new BiomeType[4];
+        GroundTile[] adjacentTiles = placementGrid.GetNeighbors(placementCoordinates.X, placementCoordinates.Y, considerDiagonals: false);
+        for (int i = 0; i < 4; i++)
+        {
+            adjacentBiomes[i] = adjacentTiles[i].biome;
+        }
+        if (!AreAdjacentBiomesValid(adjacentBiomes)) return false;
+
         return true;
     } 
 

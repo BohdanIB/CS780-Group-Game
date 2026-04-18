@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://dgjos5x50idft"]
 
 [ext_resource type="Script" uid="uid://cuir3nismmvnr" path="res://Scripts/Main.cs" id="1_jjgbg"]
-[ext_resource type="Resource" uid="uid://nbjv8l8rk1xm" path="res://Resources/Turret/BallistaTurretConstructionInformation.tres" id="2_jjvhh"]
+[ext_resource type="Resource" uid="uid://x2da3uinl30n" path="res://Resources/ConstructionInformation/FarmConstructionInformation.tres" id="2_jjvhh"]
 [ext_resource type="PackedScene" uid="uid://defgp5uclysnk" path="res://Scenes/play_area.tscn" id="3_8gbba"]
 [ext_resource type="PackedScene" uid="uid://5e8ht0mldott" path="res://Scenes/structure_placer.tscn" id="4_jjvhh"]
 
