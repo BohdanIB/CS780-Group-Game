@@ -1,7 +1,6 @@
 [gd_resource type="Resource" script_class="BiomeType" format=3 uid="uid://dqiby32timn4k"]
 
 [ext_resource type="Script" uid="uid://dff1fbgdyals4" path="res://Scripts/World/BiomeType.cs" id="1_b37ja"]
-[ext_resource type="Resource" uid="uid://dfk6ujpa1i1xn" path="res://Resources/Materials/Stone.tres" id="1_h2sun"]
 
 [resource]
 script = ExtResource("1_b37ja")

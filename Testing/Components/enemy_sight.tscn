@@ -2,10 +2,10 @@
 
 [ext_resource type="PackedScene" uid="uid://cvx7nxyaghhrx" path="res://Scenes/enemy.tscn" id="1_0cfo2"]
 [ext_resource type="Script" uid="uid://dpdoqjtnrwi8b" path="res://Testing/Components/EnemySight.cs" id="1_bsodh"]
-[ext_resource type="Script" uid="uid://c35fcs4mhqjbm" path="res://Scripts/units/EnemyStats.cs" id="3_wd7cv"]
-[ext_resource type="Script" uid="uid://bawwkshhg5psh" path="res://Scripts/turrets/TurretStats.cs" id="4_0cfo2"]
-[ext_resource type="PackedScene" uid="uid://b2w8csm5vypb0" path="res://Scenes/Structures/turret.tscn" id="5_bsodh"]
-[ext_resource type="Script" uid="uid://db7kn4h7v1jqa" path="res://Scripts/turrets/ProjectileStats.cs" id="6_7u720"]
+[ext_resource type="Script" uid="uid://c35fcs4mhqjbm" path="res://Resources/Unit/EnemyStats.cs" id="3_wd7cv"]
+[ext_resource type="Script" uid="uid://bawwkshhg5psh" path="res://Resources/Turret/TurretStats.cs" id="4_0cfo2"]
+[ext_resource type="PackedScene" uid="uid://b2w8csm5vypb0" path="res://Scenes/turret.tscn" id="5_bsodh"]
+[ext_resource type="Script" uid="uid://db7kn4h7v1jqa" path="res://Resources/Turret/ProjectileStats.cs" id="6_7u720"]
 
 [sub_resource type="Resource" id="Resource_388wp"]
 resource_local_to_scene = true

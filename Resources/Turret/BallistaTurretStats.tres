@@ -13,4 +13,3 @@ Health = 100.0
 FireRate = 2.0
 ProjectileStats = ExtResource("1_ljd0c")
 Animations = ExtResource("1_v0m1v")
-metadata/_custom_type_script = "uid://bawwkshhg5psh"

@@ -1,21 +1,17 @@
 [gd_scene format=3 uid="uid://dgjos5x50idft"]
 
 [ext_resource type="Script" uid="uid://cuir3nismmvnr" path="res://Scripts/Main.cs" id="1_jjgbg"]
-[ext_resource type="Resource" uid="uid://x2da3uinl30n" path="res://Resources/ConstructionInformation/FarmConstructionInformation.tres" id="2_jjvhh"]
-[ext_resource type="PackedScene" uid="uid://defgp5uclysnk" path="res://Scenes/play_area.tscn" id="3_8gbba"]
-[ext_resource type="Resource" uid="uid://nbjv8l8rk1xm" path="res://Resources/ConstructionInformation/BallistaTurretConstructionInformation.tres" id="4_21xkr"]
-[ext_resource type="PackedScene" uid="uid://5e8ht0mldott" path="res://Scenes/structure_placer.tscn" id="4_jjvhh"]
-[ext_resource type="Resource" uid="uid://7o5m0v8ccfo2" path="res://Resources/ConstructionInformation/BladeTurretConstructionInformation.tres" id="5_6bp64"]
+[ext_resource type="PackedScene" uid="uid://tw6j84txs1a1" path="res://Scenes/grid_renderer.tscn" id="2_bo1nx"]
+[ext_resource type="PackedScene" uid="uid://caafjqfx010mq" path="res://Scenes/turret_placer.tscn" id="5_kry3j"]
 
-[node name="Main" type="Node2D" unique_id=1822167308 node_paths=PackedStringArray("_structurePlacer")]
+[node name="Main" type="Node2D" unique_id=1822167308 node_paths=PackedStringArray("_gridRenderer", "_turretPlacer")]
 script = ExtResource("1_jjgbg")
-_structurePlacer = NodePath("StructurePlacer")
-tempConstructionInformation = ExtResource("2_jjvhh")
+_gridRenderer = NodePath("GridRenderer")
+_turretPlacer = NodePath("TurretPlacer")
+
+[node name="GridRenderer" parent="." unique_id=76182152 instance=ExtResource("2_bo1nx")]
+
+[node name="TurretPlacer" parent="." unique_id=1881251108 instance=ExtResource("5_kry3j")]
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=341152257]
-position = Vector2(573, 323)
-
-[node name="StructurePlacer" parent="." unique_id=1843712961 instance=ExtResource("4_jjvhh")]
-temporaryConstructionInfo = Array[Object]([ExtResource("2_jjvhh"), ExtResource("4_21xkr"), ExtResource("5_6bp64")])
-
-[node name="PlayArea" parent="." unique_id=1275724900 instance=ExtResource("3_8gbba")]
+position = Vector2(415, 532)
