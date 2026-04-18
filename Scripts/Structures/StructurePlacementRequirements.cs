@@ -20,7 +20,7 @@ public partial class StructurePlacementRequirements : Resource
         GroundTile[] adjacentTiles = placementGrid.GetNeighbors(placementCoordinates.X, placementCoordinates.Y, considerDiagonals: false);
         for (int i = 0; i < 4; i++)
         {
-            adjacentBiomes[i] = adjacentTiles[i].biome;
+            adjacentBiomes[i] = adjacentTiles[i]?.biome;
         }
         if (!AreAdjacentBiomesValid(adjacentBiomes)) return false;
 

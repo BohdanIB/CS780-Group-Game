@@ -5,6 +5,9 @@ using System.Linq;
 
 public partial class StructurePlacer : Node2D
 {
+	[Signal] public delegate void OnStructurePlacedEventHandler();
+	[Signal] public delegate void OnPlacementStoppedEventHandler();
+
 	[Export] private Sprite2D _placementGhost;
 	[Export] Color _validPlacementColor, _invalidPlacementColor;
 	[Export] BoxContainer _selectorContainer;
@@ -18,6 +21,9 @@ public partial class StructurePlacer : Node2D
 	private bool _isEnabled;
 	private bool _isPlacementValid = false;
 
+	[Export] public ConstructionInformation[] temporaryConstructionInfo; //TODO: Remove
+	private int infoIndex = 0;
+
     public override void _Ready()
     {
 		List<OptionSelector> selectors = [];
@@ -30,7 +36,7 @@ public partial class StructurePlacer : Node2D
 		}
 		_optionSelectors = [.. selectors];
 
-		SetStructure(null);
+		DisablePlacement();
     }
 
 
@@ -45,11 +51,8 @@ public partial class StructurePlacer : Node2D
 	{
 		if (constructionInformation == null)
 		{
-			// Disable, no structure to place\
-			_constructionInformation = null;
-			_placementGhost.Texture = null;
-			_isEnabled = false;
-			Visible = false;
+			// Disable, no structure to place
+			DisablePlacement();
 		} 
 		else
 		{
@@ -83,8 +86,24 @@ public partial class StructurePlacer : Node2D
 		}
 	}
 
+	public void DisablePlacement()
+	{
+		_constructionInformation = null;
+		_placementGhost.Texture = null;
+		_isEnabled = false;
+		Visible = false;
+
+		EmitSignal(SignalName.OnPlacementStopped);
+	}
+
     public override void _Process(double delta)
     {
+		if (Input.IsActionJustPressed("ToggleTurretPlacementMode")) // TODO: remove.  This is just a placeholder before UI is integrated
+		{
+			infoIndex = (infoIndex+1) % temporaryConstructionInfo.Length;
+			SetStructure(temporaryConstructionInfo[infoIndex]);
+		}
+
 		if (!_isEnabled) return;
 
         UpdatePosition();
@@ -93,6 +112,12 @@ public partial class StructurePlacer : Node2D
 		if (Input.IsActionJustPressed("Left Click"))
 		{
 			if (_isPlacementValid) PlaceStructure();
+		}
+
+		if (Input.IsActionJustPressed("Escape"))
+		{
+			// Cancel Placement
+			DisablePlacement();
 		}
     }
 
@@ -143,11 +168,10 @@ public partial class StructurePlacer : Node2D
 				placedStructure.SetConfigurationOption(selector.OptionsName, selector.GetOptionSelection());
 			}
 		}
-
+		
 		placedStructure.Initialize();
-
-
 		PlayArea.instance.AddChild(placedStructure);
+
 	}
 
 }

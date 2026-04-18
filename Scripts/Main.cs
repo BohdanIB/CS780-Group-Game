@@ -25,7 +25,7 @@ public partial class Main : Node2D
 		PlayArea.instance.Render();
 
 		_structurePlacer.Initialize(PlayArea.instance, null);
-		_structurePlacer.SetStructure(tempConstructionInformation);
+		
 
 		Enemy.TempEnemyDemo(this, grid, PlayArea.instance.GridRenderer.TerrainMap, hubLocation);
 		Friendly.TempFriendlyDemo(this, grid, PlayArea.instance.GridRenderer.TerrainMap, hubLocation);
