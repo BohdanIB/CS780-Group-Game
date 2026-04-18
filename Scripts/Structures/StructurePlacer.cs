@@ -54,7 +54,8 @@ public partial class StructurePlacer : Node2D
 		else
 		{
 			_constructionInformation = constructionInformation;
-			_placementGhost.Texture = constructionInformation.DisplayImage;
+			_placementGhost.Texture = constructionInformation.DisplayImageAtlas;
+			_placementGhost.RegionRect = constructionInformation.DisplayImageRect;
 			
 
 			for (int i = 0; i < _optionSelectors.Length; i++)

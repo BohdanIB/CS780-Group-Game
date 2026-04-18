@@ -15,6 +15,7 @@ _selectorContainer = NodePath("Option Selectors")
 [node name="PlacementGhost" type="Sprite2D" parent="." unique_id=1148194564]
 modulate = Color(1, 1, 1, 0.4392157)
 texture = ExtResource("2_wos0y")
+region_enabled = true
 
 [node name="Option Selectors" type="VBoxContainer" parent="." unique_id=34133604]
 offset_right = 200.0
