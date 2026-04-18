@@ -10,7 +10,8 @@ public partial class Main : Node2D
 
 	public override void _Ready()
 	{
-		Random randomizer = new Random((int)MAIN_SEED);
+		Random randomizer = new Random();
+		MAIN_SEED = (ulong)randomizer.NextInt64();
 		GD.Seed(MAIN_SEED);
 
 		var hubLocation = new Vector2I(50, 50);

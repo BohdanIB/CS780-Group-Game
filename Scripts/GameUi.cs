@@ -14,23 +14,32 @@ public partial class GameUi : CanvasLayer
 	public const int StartingBaseHP = 100;
 	private int currentBaseHP = StartingBaseHP;
 
+	private bool game_over = false;
+
 	public override void _Ready()
 	{
 		var sideMenu = GetNode<SideMenuContainer>("SideMenuContainer");
 		_warningLabel = GetNode<Label>("UI/WarningLabel");
 		
 		var turretPlacer = GetTree().GetRoot().GetNode<TurretPlacer>("Main/TurretPlacer");
-		coinCountLabel = GetNode<Label>("UI/HBoxContainer/CoinCount/CoinCountLabel");
+		coinCountLabel = GetNode<Label>("UI/Panel/HBoxContainer/CoinCount/CoinCountLabel");
 
-		_BaseHPLabel = GetNode<Label>("UI/HBoxContainer/BaseHealth/BaseHPLabel");
+		_BaseHPLabel = GetNode<Label>("UI/Panel/HBoxContainer/BaseHealth/BaseHPLabel");
 		_BaseHPLabel.Text = $"{StartingBaseHP}";
 		
-		killCountLabel = GetNode<Label>("UI/HBoxContainer/KillCount/KillCountLabel");
+		killCountLabel = GetNode<Label>("UI/Panel/HBoxContainer/KillCount/KillCountLabel");
 		coinCountLabel.Text = $"{coins}";
+
+		GD.Print("=== Children of GameUI ===");
+foreach (Node child in GetChildren())
+{
+    GD.Print(" - ", child.Name);
+}
+
 		
 		
 		sideMenu.TurretSelected += (turretType) => {
-    		turretPlacer.BeginPlacement((int)turretType);
+			turretPlacer.BeginPlacement((int)turretType);
 	};
 
 
@@ -53,7 +62,7 @@ public partial class GameUi : CanvasLayer
 		_warningLabel.AddThemeStyleboxOverride("normal", styleBox);
 
 		// Timer setup
-		timerLabel = GetNode<Label>("UI/HBoxContainer/TimerLabel");
+		timerLabel = GetNode<Label>("UI/Panel/HBoxContainer/TimerLabel");
 		var timer = new Timer();
 		timer.WaitTime = 1.0;
 		timer.Autostart = true;
@@ -74,9 +83,17 @@ public partial class GameUi : CanvasLayer
 	{
 		_warningLabel.Text = message;
 		_warningLabel.Visible = true;
+		
 		if(!GameOver){
+			
 			var timer = GetTree().CreateTimer(3.0f); // show for 3 seconds
 			timer.Timeout += () => _warningLabel.Visible = false;
+		}
+		else
+		{
+			game_over = true; 
+			GetNode<GameOverScreen>("GameOverScreen").onGameOver();
+
 		}
 	}
 
@@ -91,6 +108,8 @@ public partial class GameUi : CanvasLayer
 
 	public void TakeDamage(int amount)
 	{
+		if (game_over){return;}
+        
 		currentBaseHP -= amount;
 		_BaseHPLabel.Text = $"{currentBaseHP}";
 	if (currentBaseHP <= 0)

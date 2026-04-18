@@ -4,30 +4,29 @@
 [ext_resource type="Script" uid="uid://c21fjsrl23hps" path="res://Scripts/units/Enemy.cs" id="2_1f0kj"]
 [ext_resource type="PackedScene" uid="uid://b1picus170nmk" path="res://Scenes/projectile.tscn" id="3_287tu"]
 [ext_resource type="SpriteFrames" uid="uid://bpbko2n2qgxyk" path="res://Assets/Animations/enemy_idle.tres" id="5_ghaa6"]
-[ext_resource type="Script" uid="uid://2ug0etwgadcd" path="res://Scripts/Animation/AnimationManager.cs" id="6_anim"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_0830c"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_287tu"]
 resource_local_to_scene = true
 radius = 20.0
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_ghaa6"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_0830c"]
 resource_local_to_scene = true
 radius = 40.0
 
-[node name="Enemy" unique_id=382514737 instance=ExtResource("1_hghv2")]
+[node name="Area2D" unique_id=382514737 instance=ExtResource("1_hghv2")]
+scale = Vector2(4, 4)
 script = ExtResource("2_1f0kj")
 _stats = null
 _targetingMode = 4
 _projectileScene = ExtResource("3_287tu")
 
 [node name="HitboxCollisionShape2D" parent="." index="0" unique_id=1358123789]
-shape = SubResource("CircleShape2D_0830c")
+shape = SubResource("CircleShape2D_287tu")
 
 [node name="AggroCollisionShape2D" parent="AggroArea2D" parent_id_path=PackedInt32Array(1396697523) index="0" unique_id=1901836338]
-shape = SubResource("CircleShape2D_ghaa6")
+shape = SubResource("CircleShape2D_0830c")
 
 [node name="IdleAnimations" parent="." index="2" unique_id=1606845345]
-script = ExtResource("6_anim")
 position = Vector2(0, -4)
 sprite_frames = ExtResource("5_ghaa6")
 animation = &"north_east"

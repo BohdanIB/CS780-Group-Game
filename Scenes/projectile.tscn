@@ -10,6 +10,7 @@ resource_local_to_scene = true
 radius = 5.0
 
 [node name="Projectile" type="Area2D" unique_id=196749450 node_paths=PackedStringArray("_idleAnimations")]
+scale = Vector2(2, 2)
 script = ExtResource("1_yr2qt")
 _stats = ExtResource("2_tl4hk")
 _idleAnimations = NodePath("IdleAnimations")
@@ -18,7 +19,6 @@ _idleAnimations = NodePath("IdleAnimations")
 shape = SubResource("CircleShape2D_xjght")
 
 [node name="IdleAnimations" type="AnimatedSprite2D" parent="." unique_id=225913893]
-scale = Vector2(0.5, 0.5)
 sprite_frames = ExtResource("3_tl4hk")
 autoplay = "default"
 script = ExtResource("4_d4467")

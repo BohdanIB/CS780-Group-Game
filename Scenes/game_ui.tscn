@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://leh7amw6quj0" path="res://Scripts/GameUi.cs" id="1_3t1kc"]
 [ext_resource type="Script" uid="uid://bsj066idkmqi8" path="res://Scripts/SideMenuContainer.cs" id="1_bw2rt"]
+[ext_resource type="Script" uid="uid://bds4wmxom0mg7" path="res://Scripts/GameOverScreen.cs" id="2_1pjl6"]
 [ext_resource type="Script" uid="uid://ckkvwrabsbiar" path="res://Scripts/ToggleMenuButton.cs" id="2_xjnnq"]
 [ext_resource type="Texture2D" uid="uid://cpobui6wfjvkf" path="res://Sprites/skull (3).png" id="3_gjn1n"]
 [ext_resource type="Script" uid="uid://cvfvi3foxci1i" path="res://Scripts/TimerLabel.cs" id="3_rxsu6"]
@@ -9,6 +10,9 @@
 [ext_resource type="Texture2D" uid="uid://dwkxkagqql27x" path="res://Assets/Sprites/heart pixel art 32x32.png" id="4_1t2s1"]
 [ext_resource type="Texture2D" uid="uid://did4qqhay3op1" path="res://Assets/Sprites/coin.png" id="5_3t1kc"]
 [ext_resource type="Script" uid="uid://e0mn8kx5s333" path="res://Scripts/QuitButton.cs" id="6_3t1kc"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_y8vuf"]
+bg_color = Color(0, 0, 0, 1)
 
 [sub_resource type="Theme" id="Theme_bw2rt"]
 
@@ -21,79 +25,136 @@ texture = SubResource("CompressedTexture2D_gjn1n")
 [node name="GameUI" type="CanvasLayer" unique_id=556209750]
 script = ExtResource("1_3t1kc")
 
+[node name="GameOverScreen" type="Control" parent="." unique_id=425578995]
+visible = false
+z_index = 999
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_1pjl6")
+
+[node name="ColorRect" type="ColorRect" parent="GameOverScreen" unique_id=1615617001]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+color = Color(0, 0, 0, 1)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GameOverScreen" unique_id=263250032]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -48.0
+offset_top = -33.0
+offset_right = 48.0
+offset_bottom = 33.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="GameOverScreen/VBoxContainer" unique_id=1384337138]
+layout_mode = 2
+theme_override_font_sizes/font_size = 52
+text = "Game Over"
+
+[node name="RetryButton" type="Button" parent="GameOverScreen/VBoxContainer" unique_id=283003703]
+layout_mode = 2
+text = "Retry?"
+
+[node name="MainMenuButton" type="Button" parent="GameOverScreen/VBoxContainer" unique_id=1475691884]
+layout_mode = 2
+text = "Main Menu"
+
 [node name="UI" type="CanvasLayer" parent="." unique_id=384932]
 
-[node name="HBoxContainer" type="HBoxContainer" parent="UI" unique_id=2119936225]
+[node name="Panel" type="Panel" parent="UI" unique_id=2145057956]
+custom_minimum_size = Vector2(50, 50)
 anchors_preset = 10
 anchor_right = 1.0
-offset_bottom = 32.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_y8vuf")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/Panel" unique_id=2119936225]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_right = 290.0
+offset_bottom = 45.0
 grow_horizontal = 2
 size_flags_horizontal = 3
 size_flags_vertical = 2
 alignment = 1
 
-[node name="KillCount" type="HBoxContainer" parent="UI/HBoxContainer" unique_id=2068956033]
+[node name="KillCount" type="HBoxContainer" parent="UI/Panel/HBoxContainer" unique_id=2068956033]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Skull Icon" type="TextureRect" parent="UI/HBoxContainer/KillCount" unique_id=1326603523]
+[node name="Skull Icon" type="TextureRect" parent="UI/Panel/HBoxContainer/KillCount" unique_id=1326603523]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 texture = ExtResource("3_gjn1n")
 stretch_mode = 5
 
-[node name="KillCountLabel" type="Label" parent="UI/HBoxContainer/KillCount" unique_id=1643478985]
+[node name="KillCountLabel" type="Label" parent="UI/Panel/HBoxContainer/KillCount" unique_id=1643478985]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.29411766, 0, 0.50980395, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/font_size = 32
 text = "0"
 script = ExtResource("3_y8vuf")
 
-[node name="TimerLabel" type="Label" parent="UI/HBoxContainer" unique_id=986703465]
+[node name="TimerLabel" type="Label" parent="UI/Panel/HBoxContainer" unique_id=986703465]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0.29411766, 0, 0.50980395, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/font_size = 32
 text = "0:00"
 script = ExtResource("3_rxsu6")
 
-[node name="Timer" type="Timer" parent="UI/HBoxContainer" unique_id=1220636980]
+[node name="Timer" type="Timer" parent="UI/Panel/HBoxContainer" unique_id=1220636980]
 autostart = true
 
-[node name="BaseHealth" type="HBoxContainer" parent="UI/HBoxContainer" unique_id=231965292]
+[node name="BaseHealth" type="HBoxContainer" parent="UI/Panel/HBoxContainer" unique_id=231965292]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="TextureRect" type="TextureRect" parent="UI/HBoxContainer/BaseHealth" unique_id=848130792]
+[node name="TextureRect" type="TextureRect" parent="UI/Panel/HBoxContainer/BaseHealth" unique_id=848130792]
 layout_mode = 2
 mouse_filter = 2
 texture = ExtResource("4_1t2s1")
 stretch_mode = 3
 
-[node name="BaseHPLabel" type="Label" parent="UI/HBoxContainer/BaseHealth" unique_id=1183692357]
+[node name="BaseHPLabel" type="Label" parent="UI/Panel/HBoxContainer/BaseHealth" unique_id=1183692357]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.29411766, 0, 0.50980395, 1)
+theme_override_colors/font_color = Color(0.9946539, 0.99191445, 0.99999994, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/font_size = 32
 text = "100"
 
-[node name="CoinCount" type="HBoxContainer" parent="UI/HBoxContainer" unique_id=1027251394]
+[node name="CoinCount" type="HBoxContainer" parent="UI/Panel/HBoxContainer" unique_id=1027251394]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="TextureRect" type="TextureRect" parent="UI/HBoxContainer/CoinCount" unique_id=985502370]
+[node name="TextureRect" type="TextureRect" parent="UI/Panel/HBoxContainer/CoinCount" unique_id=985502370]
 layout_mode = 2
 mouse_filter = 2
 texture = ExtResource("5_3t1kc")
 
-[node name="CoinCountLabel" type="Label" parent="UI/HBoxContainer/CoinCount" unique_id=1692703589]
+[node name="CoinCountLabel" type="Label" parent="UI/Panel/HBoxContainer/CoinCount" unique_id=1692703589]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.29411766, 0, 0.50980395, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/font_size = 32
@@ -148,6 +209,7 @@ stretch_mode = 3
 
 [node name="Label" type="Label" parent="SideMenuContainer/VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=794649894]
 layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
 text = "100"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -170,6 +232,7 @@ stretch_mode = 3
 
 [node name="Label" type="Label" parent="SideMenuContainer/VBoxContainer/HBoxContainer/VBoxContainer2/HBoxContainer" unique_id=734518355]
 layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
 text = "75"
 
 [node name="BallistaTurret" type="Button" parent="SideMenuContainer/VBoxContainer/HBoxContainer/VBoxContainer2" unique_id=613986699]

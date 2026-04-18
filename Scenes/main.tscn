@@ -22,13 +22,20 @@ _turretPlacer = NodePath("TurretPlacer")
 _projectileScene = null
 
 [node name="TurretPlacer" parent="." unique_id=1881251108 instance=ExtResource("5_kry3j")]
+scale = Vector2(2, 2)
 
 [node name="GameUI" parent="." unique_id=556209750 instance=ExtResource("6_21xkr")]
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=341152257]
 position = Vector2(415, 532)
+zoom = Vector2(0.5, 0.5)
 script = ExtResource("7_344ge")
 HubLocation = Vector2i(50, 50)
 
 [node name="EnemySpawner" type="Node" parent="." unique_id=1904352068]
 script = ExtResource("9_ynf5e")
+WaveIntervalSeconds = 10.0
+EnemiesPerWave = 20
+Number_of_Enemies_added_per_wave = 10
+
+[node name="Enemies" type="Node2D" parent="." unique_id=1260695484]

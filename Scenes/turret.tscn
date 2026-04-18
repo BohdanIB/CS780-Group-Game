@@ -11,6 +11,7 @@ resource_local_to_scene = true
 radius = 16.0
 
 [node name="Turret" unique_id=440596787 node_paths=PackedStringArray("_shotCooldownTimer") instance=ExtResource("1_hskch")]
+scale = Vector2(4, 4)
 script = ExtResource("1_fcprl")
 _stats = ExtResource("3_ahfaj")
 _targetingMode = 1

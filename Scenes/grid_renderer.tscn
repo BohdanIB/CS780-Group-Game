@@ -10,6 +10,7 @@ WaterMap = NodePath("IsometricWaterMap")
 TerrainMap = NodePath("IsometricTerrainMap")
 
 [node name="IsometricWaterMap" type="Node2D" parent="." unique_id=1871212287 node_paths=PackedStringArray("_layers")]
+scale = Vector2(2, 2)
 script = ExtResource("4_w2gk3")
 _layers = [NodePath("Layer0")]
 
@@ -18,6 +19,7 @@ z_index = -1
 tile_set = ExtResource("4_103ga")
 
 [node name="IsometricTerrainMap" type="Node2D" parent="." unique_id=335113738 node_paths=PackedStringArray("_layers")]
+scale = Vector2(2, 2)
 script = ExtResource("4_w2gk3")
 _layers = [NodePath("Layer0"), NodePath("Layer1"), NodePath("Layer2")]
 

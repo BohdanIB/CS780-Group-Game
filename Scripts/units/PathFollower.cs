@@ -19,7 +19,8 @@ public partial class PathFollower : Area2D
 	[Signal] public delegate void UnitReachedGoalEventHandler();
 
 	protected float _health = 100.0f;
-	protected float _movementSpeed = 50.0f;
+	[Export]
+	protected float _movementSpeed = 150.0f;
 
 	protected List<Vector2> _path;
 	protected int _currentPathIndex;
