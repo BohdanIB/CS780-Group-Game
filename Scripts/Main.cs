@@ -8,6 +8,10 @@ public partial class Main : Node2D
 	[Export] private GridRenderer _gridRenderer;
 	[Export] private TurretPlacer _turretPlacer;
 
+	private GenericGrid<GroundTile> _grid;
+	private Vector2I _hubLocation = new Vector2I(20, 10);
+	
+
 	public override void _Ready()
 	{
 		Random randomizer = new Random();
@@ -21,6 +25,7 @@ public partial class Main : Node2D
 				new Vector2I(100, 100),
 				hubLocation
 			);
+		_grid = WorldGenerator.GenerateWorldAStar(new Vector2I(41, 21), _hubLocation);
 
 		_gridRenderer.RenderGrid(grid);
 
@@ -39,11 +44,12 @@ public partial class Main : Node2D
 
 		Camera2D camera = GetNode<Camera2D>("Camera2D");
 
-		_turretPlacer.Initialize(grid, _gridRenderer.TerrainMap);
+		_turretPlacer.Initialize(_grid, _gridRenderer.TerrainMap);
 
 		EnemySpawner spawner = GetNode<EnemySpawner>("EnemySpawner");
 		spawner.Initialize(grid, hubLocation, randomizer, _gridRenderer.TerrainMap.GetLayers()[0]);
 
 		Friendly.TempFriendlyDemo(this, grid, _gridRenderer.TerrainMap, hubLocation);
 	}
+
 }

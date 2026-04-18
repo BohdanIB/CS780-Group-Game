@@ -1,12 +1,20 @@
 
+using CS780GroupProject.Scripts.Utils;
 using Godot;
 using System;
-using System.Collections.Generic;
 
-public partial class PathFollower : Area2D
+public partial class PathFollower : Node2D
 {
-	protected const float DISTANCE_THRESHOLD = 0.01f;
+	public const Groups.GroupTypes TYPES = Groups.GroupTypes.None; // todo
 
+	// Components //
+	[ExportGroup("Components")]
+	[Export] protected HealthComponent _health;
+	[Export] protected HurtComponent _hurt;
+	[Export] protected DetectorComponent _detector;
+	[Export] protected DetectableComponent _detectable;
+	[Export] protected MoverComponent _mover;
+	[Export] protected AnimationComponent _animation;
 	// Scene Children
 	[Export] protected Area2D _aggroArea2D;
 	[Export] protected CollisionShape2D _aggroCollisionShape2D, _hitboxCollisionShape2D;
@@ -25,13 +33,16 @@ public partial class PathFollower : Area2D
 	protected List<Vector2> _path;
 	protected int _currentPathIndex;
 
-	public override void _PhysicsProcess(double delta)
+	public override void _Ready()
 	{
-		FollowCurrentPath(delta);
+		if (_health == null || _hurt == null || _detector == null || _detectable == null || _mover == null || _animation == null)
+		{
+			GD.Print($"WARNING - PathFollower {this} was unable to find components on _Ready()");
+		}
 	}
 
-	protected void FollowCurrentPath(double delta)
-	{
+		// // Change sprite to turn towards next path point
+		// _idleAnimations.SetDirection(Position, _path[_currentPathIndex]);
 		if (_path == null) return;
 		if (Position.DistanceTo(_path[_currentPathIndex]) < DISTANCE_THRESHOLD)
 		{
@@ -52,11 +63,13 @@ public partial class PathFollower : Area2D
 		_idleAnimations.SetDirection(Position, _path[_currentPathIndex]);
 	}
 
-	public void SetPath(List<Vector2> newPath)
+	public void SetPath(Vector2[] path)
 	{
-		_path = newPath;
-		_currentPathIndex = 0;
+		_mover.SetMoverPath(path);
 	}
+	public void StartMoving()
+	{
+		_mover.Start();
 
 	public void ChangeHealth(float healthChangeValue)
 	{
@@ -74,25 +87,9 @@ public partial class PathFollower : Area2D
 	{
 		return _health;
 	}
-
-	public float GetDistanceToGoalPixels()
+	public void StopMoving()
 	{
-		if (_path == null)
-		{
-			return 0.0f; // todo?
-		}
-		else if (_currentPathIndex >= _path.Count)
-		{
-			return 0.0f;
-		}
-
-		float distance = Position.DistanceTo(_path[_currentPathIndex]);
-		for (int i = _currentPathIndex+1; i < _path.Count; i++)
-		{
-			distance += _path[i-1].DistanceTo(_path[i]);
-		}
-		// GD.Print($"Follower {Name} distance to goal: {distance}");
-		return distance;
+		_mover.Stop();
 	}
 
 }

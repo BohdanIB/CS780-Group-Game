@@ -1,185 +1,129 @@
-
 using Godot;
-using System;
-using System.Collections.Generic;
+using CS780GroupProject.Scripts.Utils;
 
-/// <summary>
-/// 
-/// </summary>
-// public partial class Turret : GenericStructure<TurretStats.Category>
 public partial class Turret : GenericStructure
 {
-	// Stolen from BloonsTD; Targeting priorities for turret
-	public enum TargetingMode
-	{
-		Random, // Random
-		First,  // Furthest down path
-		Last,   // Closest to spawn
-		Close,  // Closest to tower
-		Weak,   // Weakest enemies
-		Strong, // Strongest enemies
-	}
+    [Export] private TurretStats _stats;
+    [Export] private TargetingMode _targetingMode = TargetingMode.Close;
 
-	private bool _disabled = false;
-	private bool _visibleTurretRadius = true;
-	[Export] private TurretStats _stats;
-	[Export] private TargetingMode _targetingMode = TargetingMode.First;
+    [ExportGroup("Types")]
+    [Export] public Groups.GroupTypes _turretTypes = GenericStructure.TYPES | Groups.GroupTypes.Turret;
+    [Export] public Groups.GroupTypes _targetTypes = Groups.GroupTypes.Enemy;
 
-	// Scene Children
-	[Export] private Timer _shotCooldownTimer;
+    [ExportGroup("Components")]
+    [Export] private DetectorComponent _detector;
+    [Export] private DetectableComponent _detectable;
+    [Export] private ShooterComponent _shooter;
+    [Export] private TargetingComponent _targeting;
+    [Export] private SpawnerComponent _projectileSpawner;
 
-	// Preloaded Scenes
-	[Export] private PackedScene _projectileScene;
+    private bool _visibleTurretRadius = true;
 
-	private List<Enemy> _enemiesInRange = new();
+    public override void _Ready()
+    {
+        base._Ready();
 
-	/// <summary>
-	/// Initializes turret with given stats.
-	/// </summary>
-	/// <param name="turretStats"></param>
-	public void Initialize(TurretStats turretStats, TargetingMode targetingMode = TargetingMode.First)
-	{
-		_targetingMode = targetingMode;
-		UpdateStats(turretStats);
-	}
+        if (_detector == null || _detectable == null || _shooter == null || _targeting == null || _projectileSpawner == null)
+        {
+            GD.PrintErr($"WARNING - Turret {Name} is missing one or more components.");
+        }
 
-	public override void _Ready()
-	{
-		UpdateStats(_stats);
+        InitializeComponents();
+        UpdateStats();
 
-		// Todo: Primarily to support ghost mode turret in TurretPlacer. Probably better way of doing this.
-		if (_disabled) { return; }
+        // Death handling
+        _health.OnNoHealthLeft += () =>
+        {
+            GD.Print($"Turret {Name} destroyed.");
+            QueueFree();
+        };
 
-		AreaEntered += (area) => {
-			if (area is Enemy pf)
-			{
-				// GD.Print($"TURRET BODY ENTERED BY PATH FOLLOWER '{pf.Name}'");
-				_enemiesInRange.Add(pf);
-			}
-		};
-		AreaExited += (area) => // todo: Case where path follower dies within area? Does it still send exit signal?
-		{
-			if (area is Enemy pf)
-			{
-				// GD.Print($"TURRET BODY EXITED BY PATH FOLLOWER '{pf.Name}'");
-				_enemiesInRange.Remove(pf);
-			}
-		};
+        // Damage handling
+        _hurt.OnHurt += (area, damage) =>
+        {
+            _health.ApplyDamage(damage);
+        };
 
-		// GD.Print($"Turret Stats: {_stats}");
-	}
+        // Rotate sprite toward target
+        _targeting.OnTargetSelect += (target) =>
+        {
+            if (target != null)
+            {
+                float angle = GlobalPosition.AngleToPoint(target.GlobalPosition);
+                _animation.SetDirection(angle);
+            }
+        };
 
-		public void HideRadius()
-	{
-		_visibleTurretRadius = false;
-		QueueRedraw();
-	}
+        // Shooting callback
+        _shooter.OnShoot += () =>
+        {
+            var projectile = _projectileSpawner.SpawnProjectile();
+            if (projectile != null)
+            {
+                projectile.GlobalPosition = GlobalPosition;
+            }
+        };
+    }
 
-	public override void _PhysicsProcess(double delta)
-	{
-		// Todo: Primarily to support ghost mode turret in TurretPlacer.
-		if (_disabled) { return; }
+    // Initialize all components using stats
+    private void InitializeComponents()
+    {
+        if (_stats == null)
+            return;
 
-		// Shoot at an enemy if there is one in range.
-		if (_enemiesInRange.Count > 0 && _shotCooldownTimer.IsStopped())
-		{
-			Enemy currTargetEnemy;
-			if (_targetingMode == TargetingMode.Random)
-			{
-				currTargetEnemy = _enemiesInRange[GD.RandRange(0, _enemiesInRange.Count-1)];
-			}
-			else
-			{
-				// Look for an appropriate enemy to shoot at within turret's radius given TargetingMode for turret.
-				currTargetEnemy = _enemiesInRange[0];
-				float currTargetDistanceFromTurret = Position.DistanceTo(currTargetEnemy.Position);
-				float currTargetDistanceFromGoal = currTargetEnemy.GetDistanceToGoalPixels();
-				float currTargetHealth = currTargetEnemy.GetCurrentHealth();
-				for (int i = 1; i < _enemiesInRange.Count; i++)
-				{
-					var enemy = _enemiesInRange[i];
-					float enemyDistanceFromTurret = Position.DistanceTo(enemy.Position);
-					float enemyDistanceFromGoal = enemy.GetDistanceToGoalPixels();
-					float enemyHealth = enemy.GetCurrentHealth();
-					if ((_targetingMode == TargetingMode.First  && enemyDistanceFromGoal < currTargetDistanceFromGoal) || 
-						(_targetingMode == TargetingMode.Last   && currTargetDistanceFromGoal < enemyDistanceFromGoal) || 
-						(_targetingMode == TargetingMode.Close  && enemyDistanceFromTurret < currTargetDistanceFromTurret) ||
-						(_targetingMode == TargetingMode.Weak   && enemyHealth < currTargetHealth) ||
-						(_targetingMode == TargetingMode.Strong && currTargetHealth < enemyHealth))
-					{
-						currTargetEnemy = enemy;
-						currTargetDistanceFromTurret = enemyDistanceFromTurret;
-						currTargetDistanceFromGoal = enemyDistanceFromGoal;
-						currTargetHealth = enemyHealth;
-					}
-				}
-			}
-			// Shoot at the target enemy
-			// GD.Print($"Turret {Name} firing Projectile at target {currTargetEnemy} with stats: {_stats.ProjectileStats}");
-			_shotCooldownTimer.Start(1 / _stats.FireRate);
-			var projectile = _projectileScene.Instantiate<Projectile>();
-			projectile.GlobalPosition = GlobalPosition;
-			projectile.Initialize(currTargetEnemy, _stats.ProjectileStats);
-			GetTree().GetRoot().AddChild(projectile);
+        _health.SetHealth(_stats.Health);
+        _hurt.Initialize(_stats.HitboxRadius, _turretTypes, _targetTypes);
+        _detector.Initialize(_stats.AggroRadius, _turretTypes, _targetTypes);
+        _detectable.Initialize(_turretTypes, _targetTypes);
+        _shooter.Initialize(_stats.FireRate, _turretTypes, _targetTypes, _stats.ProjectileStats);
+        _targeting.TargetingStyle = _targetingMode;
+        _animation.Initialize(_stats.Animations);
 
-			// Change sprite to turn towards target
-			_idleAnimations.SetDirection(GlobalPosition, currTargetEnemy.GlobalPosition);
-		}
-	}
+        QueueRedraw();
+    }
 
-	public override void _Draw()
-	{
-		if (_visibleTurretRadius)
-		{
-			DrawCircle(Vector2.Zero, _stats.AggroRadius, new Color(0xff000020), filled: true);
-		}
-	}
+    public void UpdateStats(TurretStats newStats = null)
+    {
+        if (newStats != null)
+            _stats = newStats;
 
-	public void UpdateTargetingMode(TargetingMode newMode)
-	{
-		_targetingMode = newMode;
-	}
+        if (_stats == null)
+            return;
 
-	/// <summary>
-	/// Replace current stats with newStats, then update all necessary components which react to stat changes.
-	/// </summary>
-	/// <param name="newStats"></param>
-	public void UpdateStats(TurretStats newStats = null)
-	{
-		if (newStats != null)
-		{
-			_stats = newStats;
-		}
-		UpdateTurretRadius();
-		UpdateTurretSpriteFrames();
+        _health.SetHealth(_stats.Health);
+        _hurt.SetRadius(_stats.HitboxRadius);
+        _detector.SetRadius(_stats.AggroRadius);
+        _detectable.SetRadius(_stats.DetectableRadius);
+        _shooter.SetProjectileStats(_stats.ProjectileStats);
+        _targeting.TargetingStyle = _targetingMode;
+        _animation.Animations = _stats.Animations;
 
-		// Todo: Add more updates
+        QueueRedraw();
+    }
 
-		UpdateTurretHealth();
+    public void UpdateTargetingMode(TargetingMode newMode)
+    {
+        _targetingMode = newMode;
+        if (IsNodeReady())
+            _targeting.TargetingStyle = newMode;
+    }
 
-		// Redraw aggro radius
-		QueueRedraw();
-	}
-	private void UpdateTurretRadius()
-	{
-		((CircleShape2D)_collisionShape2D.Shape).Radius = _stats.AggroRadius; // TODO: Better way of doing this?
-	}
-	private void UpdateTurretSpriteFrames()
-	
-	{
-		if (_idleAnimations == null || _stats?.Animations?.Idle == null) return;
-   
+    public void HideRadius()
+    {
+        _visibleTurretRadius = false;
+        QueueRedraw();
+    }
 
-		_idleAnimations.Frames = _stats.Animations.Idle; // TODO: This needs to be expanded in future
-	}
-	private void UpdateTurretHealth()
-	{
-		_health = _stats.Health;
-	}
+    public override void _Draw()
+    {
+        if (_visibleTurretRadius && _stats != null)
+        {
+            DrawCircle(Vector2.Zero, _stats.AggroRadius, new Color(0xff000020), filled: true);
+        }
+    }
 
-	public override string ToString()
-	{
-		return $"{Name}: {_stats}";
-	}
-
+    public override string ToString()
+    {
+        return $"{Name}: {_stats}";
+    }
 }

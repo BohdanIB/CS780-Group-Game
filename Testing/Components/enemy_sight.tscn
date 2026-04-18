@@ -1,0 +1,58 @@
+[gd_scene format=3 uid="uid://ch00055ip72s0"]
+
+[ext_resource type="PackedScene" uid="uid://cvx7nxyaghhrx" path="res://Scenes/enemy.tscn" id="1_0cfo2"]
+[ext_resource type="Script" uid="uid://dpdoqjtnrwi8b" path="res://Testing/Components/EnemySight.cs" id="1_bsodh"]
+[ext_resource type="Script" uid="uid://c35fcs4mhqjbm" path="res://Resources/Unit/EnemyStats.cs" id="3_wd7cv"]
+[ext_resource type="Script" uid="uid://bawwkshhg5psh" path="res://Resources/Turret/TurretStats.cs" id="4_0cfo2"]
+[ext_resource type="PackedScene" uid="uid://b2w8csm5vypb0" path="res://Scenes/turret.tscn" id="5_bsodh"]
+[ext_resource type="Script" uid="uid://db7kn4h7v1jqa" path="res://Resources/Turret/ProjectileStats.cs" id="6_7u720"]
+
+[sub_resource type="Resource" id="Resource_388wp"]
+resource_local_to_scene = true
+script = ExtResource("6_7u720")
+_speed = 20.0
+_damage = 5.0
+metadata/_custom_type_script = "uid://db7kn4h7v1jqa"
+
+[sub_resource type="Resource" id="Resource_ji6vo"]
+resource_local_to_scene = true
+script = ExtResource("3_wd7cv")
+_type = 1
+_hitboxRadius = 16.0
+_aggroRadius = 50.0
+_detectableRadius = 16.0
+_health = 50.0
+_fireRate = 2.0
+_movementSpeed = 20.0
+_projectileStats = SubResource("Resource_388wp")
+metadata/_custom_type_script = "uid://c35fcs4mhqjbm"
+
+[sub_resource type="Resource" id="Resource_rjvbl"]
+resource_local_to_scene = true
+script = ExtResource("6_7u720")
+_speed = 20.0
+_damage = 10.0
+metadata/_custom_type_script = "uid://db7kn4h7v1jqa"
+
+[sub_resource type="Resource" id="Resource_tmcy7"]
+resource_local_to_scene = true
+script = ExtResource("4_0cfo2")
+_hitboxRadius = 16.0
+_detectableRadius = 16.0
+_health = 10.0
+_fireRate = 2.0
+_projectileStats = SubResource("Resource_rjvbl")
+metadata/_custom_type_script = "uid://bawwkshhg5psh"
+
+[node name="EnemySight" type="Node2D" unique_id=726302098 node_paths=PackedStringArray("_enemy", "_turret")]
+script = ExtResource("1_bsodh")
+_enemy = NodePath("Enemy")
+_turret = NodePath("Turret")
+
+[node name="Enemy" parent="." unique_id=382514737 instance=ExtResource("1_0cfo2")]
+position = Vector2(404, 198)
+_stats = SubResource("Resource_ji6vo")
+
+[node name="Turret" parent="." unique_id=440596787 instance=ExtResource("5_bsodh")]
+position = Vector2(457, 197)
+_stats = SubResource("Resource_tmcy7")

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 [GlobalClass]
 public partial class TurretStats : Resource
 {
+	public static readonly List<TurretStats> ALL_TURRETS = LoadAllStats();
 	private const string TURRET_DIRECTORY_PATH = "res://Resources/Turret/";
 
 	public enum Category
@@ -14,7 +15,7 @@ public partial class TurretStats : Resource
 
 
 	[Export] public Category Type;
-	[Export] public float AggroRadius;
+	[Export] public float AggroRadius, DetectableRadius, HitboxRadius;
 	[Export] public float Health;
 	[Export] public float FireRate; 
 	[Export] public ProjectileStats ProjectileStats;
@@ -47,6 +48,6 @@ public partial class TurretStats : Resource
 
 	public override string ToString()
 	{
-		return $"{Type} - AggroRadius: {AggroRadius} - Health: {Health} - FireRate: {FireRate} - Cost: {Cost}";
+		return $"{Type} - AggroRadius: {AggroRadius} - DetectableRadius: {DetectableRadius} - HitboxRadius: {HitboxRadius} - Health: {Health} - FireRate: {FireRate} - Cost: {Cost}";
 	}
 }
