@@ -15,14 +15,14 @@ public partial class GenericStructure: Node2D
 	public enum ConfigurationType
 	{
 		None,
-		TurretTargetting
+		TurretTargeting
 	}
 
 	public const Groups.GroupTypes TYPES = Groups.GroupTypes.Structure;
 
 	[ExportGroup("Components")]
 	[Export] protected HealthComponent _health;
-	[Export] protected HurtComponent _hurt;
+	[Export] protected HurtComponent _hurt; // Do ALL structures really need these components?
 	[Export] protected AnimationComponent _animation;
 
 	public virtual void Initialize() { }
@@ -43,7 +43,7 @@ public partial class GenericStructure: Node2D
         return configurationType switch
         {
             ConfigurationType.None => null,
-            ConfigurationType.TurretTargetting => new()
+            ConfigurationType.TurretTargeting => new()
 				{
 					["Target"] = Enum.GetNames(typeof(TargetingMode))
 				},

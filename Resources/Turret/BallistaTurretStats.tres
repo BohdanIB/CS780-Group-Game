@@ -7,6 +7,8 @@
 [resource]
 script = ExtResource("1_etjm6")
 AggroRadius = 100.0
+DetectableRadius = 16.0
+HitboxRadius = 16.0
 Health = 100.0
 FireRate = 2.0
 ProjectileStats = ExtResource("1_ljd0c")
