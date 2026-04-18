@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://b7mem5sukuawb"]
+
+[ext_resource type="Script" uid="uid://b6tk8mvlxpufn" path="res://Testing/Components/HitHurt/HitHurtTestScene.cs" id="1_qnn72"]
+[ext_resource type="PackedScene" uid="uid://7n3xh2bxsdyb" path="res://Scenes/Components/hit_component.tscn" id="3_i6x2a"]
+[ext_resource type="PackedScene" uid="uid://bu5bt5d2jv3iu" path="res://Scenes/Components/hurt_component.tscn" id="5_beuku"]
+
+[node name="HitHurtTestScene" type="Node2D" unique_id=1254857674 node_paths=PackedStringArray("HitComponent", "HitComponent2", "HurtComponent", "HurtComponent2")]
+script = ExtResource("1_qnn72")
+HitComponent = NodePath("HitComponent")
+HitComponent2 = NodePath("HitComponent2")
+HurtComponent = NodePath("HurtComponent")
+HurtComponent2 = NodePath("HurtComponent2")
+
+[node name="HitComponent" parent="." unique_id=610990885 instance=ExtResource("3_i6x2a")]
+
+[node name="HitComponent2" parent="." unique_id=890378108 instance=ExtResource("3_i6x2a")]
+
+[node name="HurtComponent" parent="." unique_id=495543674 instance=ExtResource("5_beuku")]
+
+[node name="HurtComponent2" parent="." unique_id=665622855 instance=ExtResource("5_beuku")]

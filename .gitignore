@@ -19,7 +19,6 @@ mono_crash.*.json
 
 # Custom ignores
 .vscode
-
 # *.csproj
 *.sln
 

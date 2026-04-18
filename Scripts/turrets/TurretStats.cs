@@ -8,6 +8,7 @@ using System.Collections.Generic;
 [GlobalClass]
 public partial class TurretStats : Resource
 {
+	public static readonly List<TurretStats> ALL_TURRETS = LoadAllStats();
 	private const string TURRET_DIRECTORY_PATH = "res://Resources/Turret/";
 	public enum Category
 	{
@@ -17,7 +18,7 @@ public partial class TurretStats : Resource
 
 	// Turret Stats
 	[Export] public Category Type;
-	[Export] public float AggroRadius;
+	[Export] public float AggroRadius, DetectableRadius, HitboxRadius;
 	[Export] public float Health;
 	[Export] public float FireRate; // shots per second, so (1/FireRate) will give you the time between shots for this turret.
 	[Export] public ProjectileStats ProjectileStats; 
@@ -27,7 +28,7 @@ public partial class TurretStats : Resource
 	/// Get list of all turret stats.
 	/// </summary>
 	/// <returns></returns>
-	public static List<TurretStats> LoadAllStats()
+	private static List<TurretStats> LoadAllStats()
 	{
 		DirAccess directory = DirAccess.Open(TURRET_DIRECTORY_PATH);
 		if (directory == null) return null;
@@ -47,7 +48,7 @@ public partial class TurretStats : Resource
 	}
 	public override string ToString()
 	{
-		return $"{Type} - AggroRadius: {AggroRadius} - Health: {Health} - FireRate: {FireRate} - Projectile: [{ProjectileStats}] - Animations: [{Animations}]";
+		return $"{Type} - AggroRadius: {AggroRadius} - DetectableRadius: {DetectableRadius} - HitboxRadius: {HitboxRadius} - Health: {Health} - FireRate: {FireRate} - Projectile: [{ProjectileStats}] - Animations: [{Animations}]";
 	}
 
 

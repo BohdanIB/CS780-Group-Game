@@ -1,99 +1,108 @@
 
-using Godot;
 using System;
 using System.Collections.Generic;
+using CS780GroupProject.Scripts.Utils;
+using Godot;
 
-/// <summary>
-/// TODO: Merge functionality between turrets and enemies somehow (shooter component which gets plugged into enemy and turret?)
-///   - Shares a lot of functions with turret honestly...
-/// </summary>
 public partial class Enemy: PathFollower
 {
-	// Stolen from BloonsTD; Targeting priorities for turret
-	public enum TargetingMode
-	{
-		Random, // Random
-		First,  // Furthest down path
-		Last,   // Closest to spawn
-		Close,  // Closest to tower
-		Weak,   // Weakest enemies
-		Strong, // Strongest enemies
-	}
-
 	[Export] private EnemyStats _stats;
 	[Export] private TargetingMode _targetingMode = TargetingMode.Weak;
 
-	protected List<Friendly> _targetsInRange = new(); // todo
+	[ExportGroup("Types")]
+	[Export] public Groups.GroupTypes _enemyTypes = PathFollower.TYPES | Groups.GroupTypes.Enemy;
+	[Export] public Groups.GroupTypes _targetTypes = Groups.GroupTypes.Friendly | Groups.GroupTypes.Turret | Groups.GroupTypes.Structure;
+	// [Export] public Groups.GroupTypes _hurtTypes = Groups.GroupTypes.Enemy;
+	// [Export] public Groups.GroupTypes _detectorTypes = Groups.GroupTypes.Enemy;
+	// [Export] public Groups.GroupTypes _detectableTypes = Groups.GroupTypes.Enemy;
+
+	[ExportGroup("Components")]
+	[Export] private ShooterComponent _shooter;
+	[Export] private TargetingComponent _targeting;
+	[Export] protected SpawnerComponent _projectileSpawner;
 
 	/// <summary>
 	/// Initializes enemy with custom stats.
 	/// </summary>
 	/// <param name="stats"></param>
-	public void Initialize(EnemyStats stats)
+	/// <param name="path"></param>
+	public void Initialize(EnemyStats stats, Vector2[] path = null)
 	{
-		UpdateStats(stats);
+		SetPath(path);
+		_stats = stats;
+		InitializeComponents();
+		UpdateStats();
 	}
 
 	public override void _Ready()
 	{
 		base._Ready();
 
-		_aggroArea2D.AreaEntered += (area) => 
+		if (_shooter == null || _targeting == null || _projectileSpawner == null)
 		{
-			if (area is Friendly t)
+			GD.Print($"WARNING - Enemy {this} was unable to find one of its components on _Ready()");
+		}
+
+		// Component callbacks //
+
+		_health.OnNoHealthLeft += () =>
+		{
+			GD.Print($"Enemy {Name} died.");
+			QueueFree();
+		};
+		_hurt.OnHurt += (area, damage) => 
+		{
+			_health.ApplyDamage(damage); 
+		}; 
+
+		_mover.OnPathPointReached += (hasNextPoint, nextPoint) =>
+		{
+			if (hasNextPoint)
 			{
-				// GD.Print($"ENEMY '{Name}' AGGRO RANGE ENTERED BY {t.Name}");
-				_targetsInRange.Add(t);
+				var directionRads = GlobalPosition.AngleToPoint(nextPoint);
+				// _animation.SetState(AnimationPackEntry.State.Idle, directionRads); // TODO: Update this with new animations
+				_animation.SetDirection(directionRads);
 			}
 		};
-		_aggroArea2D.AreaExited += (area) =>
+
+	}
+
+	public void UpdateStats(EnemyStats newStats = null)
+	{
+		if (newStats != null)
 		{
-			if (area is Friendly t)
-			{
-				// GD.Print($"ENEMY '{Name}' AGGRO RANGE EXITED BY {t.Name}");
-				_targetsInRange.Remove(t);
-			}
-		};
+			_stats = newStats;
+		}
+		UpdateComponents();
 	}
 
-	public override void _PhysicsProcess(double delta)
+	private void InitializeComponents()
 	{
-		base._PhysicsProcess(delta);
-		// Todo: Shoot at friendlies in range. Components?
-		FireAtValidTarget();
+		if (_stats != null)
+		{
+			_health.SetHealth(_stats.Health); // todo: this might not want to update everytime components are updated.
+			_hurt.Initialize(_enemyTypes, _targetTypes);
+			_detector.Initialize(_enemyTypes, _targetTypes);
+			_detectable.Initialize(_enemyTypes, _targetTypes);
+			_mover.Initialize(_stats.MovementSpeed, this, start: true);
+			_shooter.Initialize(_stats.FireRate, _enemyTypes, _targetTypes, _stats.ProjectileStats);
+			_animation.Initialize(_stats.Animations);
+		}
+	}
+	private void UpdateComponents()
+	{
+		if (_stats != null)
+		{
+			_health.SetHealth(_stats.Health); // todo: this might not want to update everytime components are updated.
+			_hurt.SetRadius(_stats.HitboxRadius);
+			_detector.SetRadius(_stats.AggroRadius);
+			_detectable.SetRadius(_stats.DetectableRadius);
+			_mover.Speed = _stats.MovementSpeed;
+			_shooter.SetProjectileStats(_stats.ProjectileStats);
+			_animation.Animations = _stats.Animations;
+		}
 	}
 
-	public void UpdateStats(EnemyStats newStats)
-	{
-		_stats = newStats;
-		UpdateStats();
-	}
-	public void UpdateStats()
-	{
-		UpdateEnemyHitboxRadius();
-		UpdateEnemyAggroRadius();
-		UpdateEnemySprite();
-
-		// Todo: Add more updates
-
-		UpdateEnemyHealth();
-	}
-	private void UpdateEnemyHitboxRadius()
-	{
-		((CircleShape2D)_hitboxCollisionShape2D.Shape).Radius = _stats.HitboxRadius; // TODO: Better way of doing this?
-	}
-	private void UpdateEnemyAggroRadius()
-	{
-		((CircleShape2D)_aggroCollisionShape2D.Shape).Radius = _stats.AggroRadius; // TODO: Better way of doing this?
-	}
-	private void UpdateEnemySprite()
-	{
-		_idleAnimations.Frames = _stats.Animations.Idle;
-	}
-	private void UpdateEnemyHealth()
-	{
-		_health = _stats.Health;
-	}
 	public override string ToString()
 	{
 		return $"Enemy '{Name}': {_stats}";
@@ -152,11 +161,15 @@ public partial class Enemy: PathFollower
 		}
 		var layer = layers[0];
 		List<Enemy> testEnemies = [];
-		var allEnemyStats = EnemyStats.LoadAllStats();
 		for (int i = 0; i < 6; i++)
 		{
+			// Set enemy as child of parent
 			var enemy = GD.Load<PackedScene>("res://Scenes/enemy.tscn").Instantiate<Enemy>();
-			foreach(var stats in allEnemyStats)
+			parent.CallDeferred("add_child", enemy); // Cannot add children in _Ready() calls
+
+			// Initialize
+			testEnemies.Add(enemy);
+			foreach(var stats in EnemyStats.ALL_ENEMIES)
 			{
 				if (stats.Type == EnemyStats.Category.Regular)
 				{
@@ -164,11 +177,6 @@ public partial class Enemy: PathFollower
 					break;
 				}
 			}
-			
-			// enemy.Initialize(i == 0 ? EnemyStats.Category.Strong : EnemyStats.Category.Regular); // Make one 'strong' enemy for testing
-			// TODO
-			testEnemies.Add(enemy);
-			parent.GetTree().GetRoot().CallDeferred("add_child", enemy); // Cannot add children in _Ready() calls
 
 			// Set enemy paths
 			var spawnPoint = potentialEnemySpawnPoints[GD.RandRange(0, potentialEnemySpawnPoints.Count-1)].position;
@@ -178,61 +186,11 @@ public partial class Enemy: PathFollower
 			{
 				path.Add(IsometricTileMap.MapCoordToGlobalPosition(layer, point));
 			}
-			enemy.SetPath(path);
+			enemy.SetPath(path.ToArray());
 			enemy.GlobalPosition = IsometricTileMap.MapCoordToGlobalPosition(layer, spawnPoint);
 
 			// GD.Print($"{enemy}");
 		}
 	}
-
-	/// <summary>
-	/// If there is a valid target in range of current PathFollower, choose and fire at target given TargetingMode.
-	/// </summary>
-	private void FireAtValidTarget()
-	{
-		if (_targetsInRange.Count > 0 && _shotCooldownTimer.IsStopped())
-		{
-			Friendly currTarget;
-			if (_targetingMode == TargetingMode.Random)
-			{
-				currTarget = _targetsInRange[GD.RandRange(0, _targetsInRange.Count-1)];
-			}
-			else
-			{
-				// Look for an appropriate target to shoot at within PathFollower's radius given TargetingMode.
-				currTarget = _targetsInRange[0];
-				float currTargetDistanceFromSelf = Position.DistanceTo(currTarget.Position);
-				float currTargetDistanceFromGoal = currTarget.GetDistanceToGoalPixels();
-				float currTargetHealth = currTarget.GetCurrentHealth();
-				for (int i = 1; i < _targetsInRange.Count; i++)
-				{
-					var target = _targetsInRange[i];
-					float targetDistanceFromSelf = Position.DistanceTo(target.Position);
-					float targetDistanceFromGoal = target.GetDistanceToGoalPixels();
-					float targetHealth = target.GetCurrentHealth();
-					if ((_targetingMode == TargetingMode.First  && targetDistanceFromGoal < currTargetDistanceFromGoal) || 
-						(_targetingMode == TargetingMode.Last   && currTargetDistanceFromGoal < targetDistanceFromGoal) || 
-						(_targetingMode == TargetingMode.Close  && targetDistanceFromSelf < currTargetDistanceFromSelf) ||
-						(_targetingMode == TargetingMode.Weak   && targetHealth < currTargetHealth) ||
-						(_targetingMode == TargetingMode.Strong && currTargetHealth < targetHealth))
-					{
-						currTarget = target;
-						currTargetDistanceFromSelf = targetDistanceFromSelf;
-						currTargetDistanceFromGoal = targetDistanceFromGoal;
-						currTargetHealth = targetHealth;
-					}
-				}
-			}
-
-			// Shoot at the target
-			// GD.Print($"Enemy {Name} firing Projectile at target {currTarget} with stats: {_stats.ProjectileStats}");
-			_shotCooldownTimer.Start(1 / _stats.FireRate);
-			var projectile = _projectileScene.Instantiate<Projectile>();
-			projectile.GlobalPosition = GlobalPosition;
-			projectile.Initialize(currTarget, _stats.ProjectileStats);
-			GetTree().GetRoot().AddChild(projectile);
-		}
-	}
-
 
 }

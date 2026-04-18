@@ -7,11 +7,12 @@ using System;
 [GlobalClass]
 public partial class AnimationPack : Resource
 {
-	[Export] public SpriteFrames Idle, Firing; // Todo: more definitions to come?
+	[Export] public AnimationPackEntry[] Animations;
 
-	public override string ToString()
-	{
-		return $"Idle: {Idle} - Firing: {Firing}";
-	}
+
+	// public override string ToString()
+	// {
+	// 	return $"Idle: {Idle} - Firing: {Firing}";
+	// }
 
 }

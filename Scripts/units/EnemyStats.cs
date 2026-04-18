@@ -9,6 +9,7 @@ using System.Collections.Generic;
 [GlobalClass]
 public partial class EnemyStats : Resource
 {
+	public static readonly List<EnemyStats> ALL_ENEMIES = LoadAllStats();
 	private const string ENEMY_DIRECTORY_PATH = "res://Resources/Unit/Enemy/";
 	public enum Category
 	{
@@ -18,8 +19,7 @@ public partial class EnemyStats : Resource
 
 	// Enemy Stats
 	[Export] public Category Type;
-	[Export] public float HitboxRadius;
-	[Export] public float AggroRadius;
+	[Export] public float AggroRadius, DetectableRadius, HitboxRadius;
 	[Export] public float Health;
 	
 	[Export] public float FireRate; // Shots per second, so (1/FireRate) will give you the time between shote.
@@ -31,7 +31,7 @@ public partial class EnemyStats : Resource
 	/// Get list of all enemy stats.
 	/// </summary>
 	/// <returns></returns>
-	public static List<EnemyStats> LoadAllStats()
+	private static List<EnemyStats> LoadAllStats()
 	{
 		DirAccess directory = DirAccess.Open(ENEMY_DIRECTORY_PATH);
 		if (directory == null) return null;
@@ -51,7 +51,7 @@ public partial class EnemyStats : Resource
 	}
 	public override string ToString()
 	{
-		return $"{Type} - HitboxRadius: {HitboxRadius} - AggroRadius: {AggroRadius} - Health: {Health} - FireRate: {FireRate} - MovementSpeed: {MovementSpeed} - Projectile: [{ProjectileStats}] - Animations: [{Animations}]";
+		return $"{Type} - AggroRadius: {AggroRadius} - DetectableRadius: {DetectableRadius} - HitboxRadius: {HitboxRadius} - Health: {Health} - FireRate: {FireRate} - MovementSpeed: {MovementSpeed} - Projectile: [{ProjectileStats}] - Animations: [{Animations}]";
 	}
 
 }
