@@ -33,8 +33,10 @@ public partial class Turret : GenericStructure
 	/// </summary>
 	/// <param name="stats"></param>
 	/// <param name="targetingMode"></param>
-	public override void Initialize()
+	public void Initialize(TurretStats stats, TargetingMode targetingMode = TargetingMode.Close)
 	{
+		_targetingMode = targetingMode;
+		_stats = stats;
 		InitializeComponents();
 		UpdateStats();
 	}
@@ -155,21 +157,5 @@ public partial class Turret : GenericStructure
 	{
 		return $"{Name}: {_stats}";
 	}
-
-    public override void SetConfigurationOption(string configurationName, string configurationSelection)
-    {
-		
-        if (configurationName.Equals("Target"))
-		{
-			foreach (TargetingMode mode in System.Enum.GetValues(typeof(TargetingMode)))
-			{
-				if (mode.ToString().Equals(configurationSelection)) 
-				{
-					UpdateTargetingMode(mode);				
-				}
-			}
-		}
-    }
-
 
 }
