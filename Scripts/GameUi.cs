@@ -30,12 +30,6 @@ public partial class GameUi : CanvasLayer
 		killCountLabel = GetNode<Label>("UI/Panel/HBoxContainer/KillCount/KillCountLabel");
 		coinCountLabel.Text = $"{coins}";
 
-		GD.Print("=== Children of GameUI ===");
-foreach (Node child in GetChildren())
-{
-	GD.Print(" - ", child.Name);
-}
-
 		
 		
 		sideMenu.TurretSelected += (turretType) => {
@@ -43,12 +37,7 @@ foreach (Node child in GetChildren())
 	};
 
 
-		/*
-		turretPlacer.OnTurretPlaced += () =>{
-			coins -= 100; 
-			coinCountLabel.Text = $"{coins}";
-		};
-		*/
+		
 
 
 		_warningLabel.MouseFilter = Control.MouseFilterEnum.Ignore;

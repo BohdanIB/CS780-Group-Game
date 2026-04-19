@@ -21,7 +21,6 @@ public partial class TurretStats : Resource
 	[Export] public ProjectileStats ProjectileStats;
 	[Export] public AnimationPack Animations;
 
-	// Your cost system (needed by TurretPlacer)
 	[Export] public int Cost;
 
 	public static List<TurretStats> LoadAllStats()

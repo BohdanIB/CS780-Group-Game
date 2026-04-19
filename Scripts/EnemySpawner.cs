@@ -169,9 +169,7 @@ public partial class EnemySpawner : Node
 		var enemiesParent = main.GetNode("Enemies");
 		enemiesParent.CallDeferred("add_child", enemy);
 
-		// ---------------------------------------------------------
-		// CORRECT SIGNAL CONNECTIONS
-		// ---------------------------------------------------------
+	
 		enemy.UnitDied += (_) => _gameUi.IncrementKillCount();
 		enemy.UnitReachedGoal += (damage) => _gameUi.TakeDamage(damage);
 	}
@@ -181,37 +179,7 @@ public partial class EnemySpawner : Node
 		_gameUi.TakeDamage(5);
 	}
 
-	// =========================================================
-	// GAME RESET / CLEANUP SUPPORT
-	// =========================================================
 
-	public void CleanupDynamicNodes()
-	{
-		GD.Print("Cleaning up turrets, enemies, and projectiles...");
 
-		foreach (Node turret in GetTree().GetNodesInGroup("placed_turrets"))
-			turret.QueueFree();
 
-		foreach (Node enemy in GetTree().GetNodesInGroup("enemies"))
-			enemy.QueueFree();
-
-		foreach (Node proj in GetTree().GetNodesInGroup("projectiles"))
-			proj.QueueFree();
-	}
-
-	public void ResetGame()
-	{
-		CleanupDynamicNodes();
-
-		CurrentWave = 0;
-		EnemiesPerWave = 5;
-
-		if (_waveTimer != null)
-		{
-			_waveTimer.Stop();
-			_waveTimer.Start();
-		}
-
-		GD.Print("Game reset complete.");
-	}
 }

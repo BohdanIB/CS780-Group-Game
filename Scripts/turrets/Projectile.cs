@@ -20,10 +20,6 @@ public partial class Projectile : Node2D
 	[Export] public HitComponent _hit;
 	[Export] public AnimationComponent _animation;
 
-	// -------------------------------------------------------------------------
-	// INITIALIZATION
-	// -------------------------------------------------------------------------
-
 	public void Initialize(Vector2 targetPosition, ProjectileStats projectileStats,
 						   Groups.GroupTypes senderTypes, Groups.GroupTypes hurtableTypes)
 	{
@@ -59,18 +55,12 @@ public partial class Projectile : Node2D
 		UpdateStats();
 	}
 
-	// -------------------------------------------------------------------------
-	// READY
-	// -------------------------------------------------------------------------
-
+	
 	public override void _Ready()
 	{
 		// Leave empty — components are not assigned until Initialize() is called.
 	}
 
-	// -------------------------------------------------------------------------
-	// PHYSICS
-	// -------------------------------------------------------------------------
 
 	public override void _PhysicsProcess(double delta)
 	{
@@ -96,19 +86,11 @@ public partial class Projectile : Node2D
 		}
 	}
 
-	// -------------------------------------------------------------------------
-	// IMPACT
-	// -------------------------------------------------------------------------
-
 	private void ProjectileImpact()
 	{
 		EmitSignal(SignalName.OnProjectileImpact, GlobalPosition, _stats);
 		QueueFree();
 	}
-
-	// -------------------------------------------------------------------------
-	// COMPONENT INITIALIZATION
-	// -------------------------------------------------------------------------
 
 	private void InitializeComponents()
 	{
@@ -134,10 +116,7 @@ public partial class Projectile : Node2D
 		_animation.Animations = _stats.Animations;
 	}
 
-	// -------------------------------------------------------------------------
-	// STATS UPDATE
-	// -------------------------------------------------------------------------
-
+	
 	public void UpdateStats(ProjectileStats newStats = null)
 	{
 		if (newStats != null)
@@ -146,10 +125,7 @@ public partial class Projectile : Node2D
 		UpdateComponents();
 	}
 
-	// -------------------------------------------------------------------------
-	// GETTERS
-	// -------------------------------------------------------------------------
-
+	
 	public ProjectileStats GetStats() => _stats;
 	public HurtComponent GetTarget() => _target;
 }

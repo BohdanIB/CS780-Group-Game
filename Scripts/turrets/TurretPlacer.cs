@@ -175,9 +175,10 @@ public partial class TurretPlacer : Node2D
 				turret.Initialize(turretStats, _currentTurretTargetMode);
 				turret.GlobalPosition = IsometricTileMap.MapCoordToGlobalPosition(_currentTileMapLayer, tile.position);
 
-				//GetTree().GetRoot().AddChild(turret);
+			
 				var main = GetTree().GetRoot().GetNode("Main");
 				main.AddChild(turret);
+				
 				GD.Print($"Placed turrets in scene: {GetTree().GetNodesInGroup("placed_turrets").Count}");
 				turret.HideRadius();
 
