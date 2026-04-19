@@ -6,8 +6,8 @@ public partial class EnemySpawner : Node
 {
 	[Export] public float WaveIntervalSeconds = 30f;
 	[Export] public int EnemiesPerWave = 5;
-	[Export] public int Final_wave_number = 10;
-	[Export] public int Number_of_Enemies_added_per_wave = 5;
+	[Export] public int FinalWaveNumber = 10;
+	[Export] public int EnemiesAddedPerWave = 5;
 
 	public int CurrentWave { get; private set; } = 0;
 
@@ -33,20 +33,20 @@ public partial class EnemySpawner : Node
 
 		BuildSpawnPointList();
 		BuildPathfinder();
-
-		// NEW: Place the goal sprite at the hub
 		SpawnGoalSprite();
 
-		_waveTimer = new Timer();
-		_waveTimer.WaitTime = WaveIntervalSeconds;
-		_waveTimer.OneShot = false;
+		_waveTimer = new Timer
+		{
+			WaitTime = WaveIntervalSeconds,
+			OneShot = false
+		};
 		_waveTimer.Timeout += SpawnWave;
 		AddChild(_waveTimer);
 		_waveTimer.Start();
 
 		_gameUi = GetTree().GetRoot().GetNode<GameUi>("Main/GameUI");
 
-		GD.Print("EnemySpawner initialized. First wave in " + WaveIntervalSeconds + " seconds.");
+		GD.Print($"EnemySpawner initialized. First wave in {WaveIntervalSeconds} seconds.");
 	}
 
 	private void BuildSpawnPointList()
@@ -94,7 +94,6 @@ public partial class EnemySpawner : Node
 		);
 	}
 
-
 	private void SpawnGoalSprite()
 	{
 		var goalScene = GD.Load<PackedScene>("res://Scenes/base_scene.tscn");
@@ -103,26 +102,25 @@ public partial class EnemySpawner : Node
 		Vector2 worldPos = IsometricTileMap.MapCoordToGlobalPosition(_tileMapLayer, _hub);
 		goal.Position = worldPos;
 
-		//GetTree().GetRoot().AddChild(goal);
 		var main = GetTree().Root.GetNode("Main");
 		main.AddChild(goal);
 
-		GD.Print("Goal sprite placed at hub: " + _hub);
+		GD.Print($"Goal sprite placed at hub: {_hub}");
 	}
 
 	private void SpawnWave()
 	{
-		if (CurrentWave >= Final_wave_number)
+		if (CurrentWave >= FinalWaveNumber)
 		{
-			//_gameUi.ShowWarning("Final wave reached! No more enemies will spawn!", GameOver: true);
 			GD.Print("Final wave reached. No more enemies will spawn.");
-			GD.Print("Player survived " + CurrentWave + " waves!");
+			GD.Print($"Player survived {CurrentWave} waves!");
 			_waveTimer.Stop();
 			return;
 		}
 
-		EnemiesPerWave += Number_of_Enemies_added_per_wave;
-		GD.Print("Spawning enemy wave...");
+		EnemiesPerWave += EnemiesAddedPerWave;
+
+		GD.Print($"Spawning wave {CurrentWave + 1} with {EnemiesPerWave} enemies...");
 		for (int i = 0; i < EnemiesPerWave; i++)
 			SpawnSingleEnemy();
 
@@ -152,13 +150,6 @@ public partial class EnemySpawner : Node
 
 		enemy.Initialize(regularStats);
 
-		//GetTree().GetRoot().CallDeferred("add_child", enemy);
-
-		var main = GetTree().Root.GetNode("Main");
-		var enemiesParent = main.GetNode("Enemies");
-		enemiesParent.CallDeferred("add_child", enemy);
-
-
 		var pathGrid = _pathfinder.GetPath(spawnPos, _hub);
 		if (pathGrid == null || pathGrid.Count == 0)
 		{
@@ -166,14 +157,61 @@ public partial class EnemySpawner : Node
 			return;
 		}
 
-		var pathWorld = new List<Vector2>();
+		List<Vector2> pathWorld = new();
 		foreach (var p in pathGrid)
 			pathWorld.Add(IsometricTileMap.MapCoordToGlobalPosition(_tileMapLayer, p));
 
-		enemy.SetPath(pathWorld);
 		enemy.GlobalPosition = pathWorld[0];
+		enemy.SetPath(pathWorld.ToArray());
+		enemy.StartMoving();
 
-		enemy.UnitDied += (_) => { _gameUi.IncrementKillCount(); };
-		enemy.UnitReachedGoal += () => _gameUi.TakeDamage(5);
+		var main = GetTree().Root.GetNode("Main");
+		var enemiesParent = main.GetNode("Enemies");
+		enemiesParent.CallDeferred("add_child", enemy);
+
+		// ---------------------------------------------------------
+		// CORRECT SIGNAL CONNECTIONS
+		// ---------------------------------------------------------
+		enemy.UnitDied += (_) => _gameUi.IncrementKillCount();
+		enemy.UnitReachedGoal += (damage) => _gameUi.TakeDamage(damage);
+	}
+
+	private void OnEnemyReachedGoal()
+	{
+		_gameUi.TakeDamage(5);
+	}
+
+	// =========================================================
+	// GAME RESET / CLEANUP SUPPORT
+	// =========================================================
+
+	public void CleanupDynamicNodes()
+	{
+		GD.Print("Cleaning up turrets, enemies, and projectiles...");
+
+		foreach (Node turret in GetTree().GetNodesInGroup("placed_turrets"))
+			turret.QueueFree();
+
+		foreach (Node enemy in GetTree().GetNodesInGroup("enemies"))
+			enemy.QueueFree();
+
+		foreach (Node proj in GetTree().GetNodesInGroup("projectiles"))
+			proj.QueueFree();
+	}
+
+	public void ResetGame()
+	{
+		CleanupDynamicNodes();
+
+		CurrentWave = 0;
+		EnemiesPerWave = 5;
+
+		if (_waveTimer != null)
+		{
+			_waveTimer.Stop();
+			_waveTimer.Start();
+		}
+
+		GD.Print("Game reset complete.");
 	}
 }

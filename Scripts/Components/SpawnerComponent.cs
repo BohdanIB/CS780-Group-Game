@@ -49,7 +49,9 @@ public partial class SpawnerComponent : Node2D
 			if (_scene == null) { return null; }
 		}
 
-		var node = _scene.Instantiate<Node>();
+		//var node = _scene.Instantiate<Node>();
+		var node = _scene.Instantiate();
+
 		if (node is Node2D node2D && node2D != null)
 		{
 			node2D.GlobalPosition = GlobalPosition;

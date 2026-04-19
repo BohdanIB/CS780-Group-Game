@@ -1,42 +1,16 @@
 [gd_scene format=3 uid="uid://braeaociys3xn"]
 
-[ext_resource type="PackedScene" uid="uid://dtv7kt7wo8omt" path="res://Scenes/path_follower.tscn" id="1_jgycc"]
-[ext_resource type="Script" uid="uid://bs25gk004xjd8" path="res://Scripts/units/Friendly.cs" id="2_50fos"]
-[ext_resource type="Resource" uid="uid://bx02gj3gjk2w5" path="res://Resources/Unit/Friendly/RegularFriendlyStats.tres" id="3_5vdkv"]
-[ext_resource type="Resource" uid="uid://ks5bvpdhp2ev" path="res://Resources/Animations/AnimationPacks/FriendlyAnimations.tres" id="4_5vdkv"]
-[ext_resource type="PackedScene" uid="uid://b1picus170nmk" path="res://Scenes/projectile.tscn" id="3_5vdkv"]
-[ext_resource type="Resource" uid="uid://bx02gj3gjk2w5" path="res://Resources/Unit/Friendly/RegularFriendlyStats.tres" id="3_ljipm"]
-[ext_resource type="SpriteFrames" uid="uid://be25vodgonygm" path="res://Assets/Animations/friendly_idle.tres" id="5_ljipm"]
+[ext_resource type="PackedScene" uid="uid://dtv7kt7wo8omt" path="res://Scenes/path_follower.tscn" id="1_path"]
+[ext_resource type="Script" uid="uid://bs25gk004xjd8" path="res://Scripts/units/Friendly.cs" id="2_script"]
+[ext_resource type="Resource" uid="uid://bx02gj3gjk2w5" path="res://Resources/Unit/Friendly/RegularFriendlyStats.tres" id="3_stats"]
+[ext_resource type="Resource" uid="uid://ks5bvpdhp2ev" path="res://Resources/Animations/AnimationPacks/FriendlyAnimations.tres" id="4_animpack"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_ljipm"]
-resource_local_to_scene = true
-radius = 20.0
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_r41ou"]
-resource_local_to_scene = true
-radius = 40.0
-
-[node name="Friendly" unique_id=382514737 groups=["friendly"] instance=ExtResource("1_jgycc")]
+[node name="Friendly" unique_id=382514737 groups=["friendly"] instance=ExtResource("1_path")]
 scale = Vector2(4, 4)
-script = ExtResource("2_50fos")
-_stats = ExtResource("3_5vdkv")
+script = ExtResource("2_script")
+_stats = ExtResource("3_stats")
 _friendlyTypes = 8
 _enemyTypes = 16
 
 [node name="AnimationComponent" parent="." index="5" unique_id=1805975540]
-Animations = ExtResource("4_5vdkv")
-_stats = ExtResource("3_ljipm")
-_projectileScene = ExtResource("3_5vdkv")
-
-[node name="HitboxCollisionShape2D" parent="." index="0" unique_id=1358123789]
-shape = SubResource("CircleShape2D_ljipm")
-
-[node name="AggroCollisionShape2D" parent="AggroArea2D" parent_id_path=PackedInt32Array(1396697523) index="0" unique_id=1901836338]
-shape = SubResource("CircleShape2D_r41ou")
-
-[node name="IdleAnimations" parent="." index="2" unique_id=1606845345]
-position = Vector2(0, -4)
-sprite_frames = ExtResource("5_ljipm")
-animation = &"south_west"
-autoplay = "north_east"
-Frames = ExtResource("5_ljipm")
+Animations = ExtResource("4_animpack")

@@ -1,4 +1,3 @@
-
 using CS780GroupProject.Scripts.Utils;
 using Godot;
 using System;
@@ -13,16 +12,16 @@ public partial class TurretPlacer : Node2D
 	[Export] private PackedScene _turretScene;
 
 	private int _currentTurretIndex = 0;
-	private Turret.TargetingMode _currentTurretTargetMode = Turret.TargetingMode.First;
-
-	private GameUi _gameUi;
 	private TargetingMode _currentTurretTargetMode = TargetingMode.First;
 
+	private GameUi _gameUi;
 	private GenericGrid<GroundTile> _grid;
 	private IsometricTileMap _tileMap;
 	private TileMapLayer _currentTileMapLayer;
 
 	private bool _turretPlacerEnabled = false;
+
+	private List<TurretStats> _allTurretStats;
 
 	public void Initialize(GenericGrid<GroundTile> grid, IsometricTileMap tileMap)
 	{
@@ -35,7 +34,10 @@ public partial class TurretPlacer : Node2D
 	}
 
 	public void BeginPlacement(int turretIndex)
-	{
+	{    
+		GD.Print($"BeginPlacement called with index {turretIndex}, stats count: {_allTurretStats?.Count}");
+
+		
 		if (_allTurretStats == null || _allTurretStats.Count == 0)
 			return;
 
@@ -43,7 +45,7 @@ public partial class TurretPlacer : Node2D
 			turretIndex = 0;
 
 		_currentTurretIndex = turretIndex;
-		_currentTurretTargetMode = Turret.TargetingMode.First;
+		_currentTurretTargetMode = TargetingMode.First;
 		_turretPlacerEnabled = true;
 
 		_ghostTurret.Initialize(_allTurretStats[_currentTurretIndex], _currentTurretTargetMode);
@@ -52,20 +54,21 @@ public partial class TurretPlacer : Node2D
 
 	public override void _Ready()
 	{
-		if (TurretStats.ALL_TURRETS.Count > 0)
 		_allTurretStats = TurretStats.LoadAllStats();
 
-		if (_allTurretStats.Count > 0)
+		if (_allTurretStats != null && _allTurretStats.Count > 0)
 		{
-			_ghostTurret.Initialize(TurretStats.ALL_TURRETS[_currentTurretIndex], _currentTurretTargetMode);
+			_ghostTurret.Initialize(_allTurretStats[_currentTurretIndex], _currentTurretTargetMode);
 		}
-		
-		_ghostTurret.DisableTurret();
 
+		_ghostTurret.DisableTurret();
 		_ghostTurret.Visible = false;
 
 		_gameUi = GetTree().GetRoot().GetNode<GameUi>("Main/GameUI");
-		if (_gameUi == null) GD.PrintErr("GameUI not found!");
+		if (_gameUi == null)
+			GD.PrintErr("GameUI not found!");
+
+		GD.Print($"Ghost turret node: {_ghostTurret?.Name}, valid: {IsInstanceValid(_ghostTurret)}");
 	}
 
 	public override void _Process(double delta)
@@ -76,81 +79,13 @@ public partial class TurretPlacer : Node2D
 		UpdatePlacerState();
 		UpdateGhostTurretState();
 
-		// Toggle existing turret's targeting priority mode
 		var tile = GetTile();
-
-		if (Input.IsActionJustPressed("ToggleTurretPlacementMode"))
-		{
-			_turretPlacerEnabled = !_turretPlacerEnabled;
-			GD.Print($"TurretPlacer {(_turretPlacerEnabled ? "enabled" : "disabled")}");
-		}
-
-		if (Input.IsActionJustPressed("SwitchTurretType"))
-		{
-			_currentTurretIndex++;
-			if (_currentTurretIndex >= _allTurretStats.Count)
-				_currentTurretIndex = 0;
-
-			GD.Print($"Current turret type for placement: {_allTurretStats[_currentTurretIndex].Type}");
-		}
-
-		if (Input.IsActionJustPressed("SwitchTurretTargetingMode"))
-		{
-			_currentTurretTargetMode++;
-			if (!Enum.IsDefined(typeof(Turret.TargetingMode), _currentTurretTargetMode))
-				_currentTurretTargetMode = 0;
-
-			GD.Print($"Current turret target mode: {_currentTurretTargetMode}");
-		}
-
-		GroundTile tile = GetTileIfStructurePlacementValid();
-
-		if (_turretPlacerEnabled && tile != null)
-		{
-			var turretStats = _allTurretStats[_currentTurretIndex];
-
-			if (Input.IsActionJustPressed("Left Click"))
-			{
-				int cost = turretStats.Cost;
-				if (_gameUi != null && !_gameUi.TryToSpendCoins(cost))
-				{
-					_gameUi.ShowWarning("Not enough coins!");
-					_turretPlacerEnabled = false;
-					return;
-				}
-
-				GD.Print($"Placing turret of type {turretStats.Type}");
-
-				var turret = _turretScene.Instantiate<Turret>();
-				turret.AddToGroup("placed_turrets");
-				tile.Turret = turret;
-
-				turret.Initialize(turretStats, _currentTurretTargetMode);
-				turret.GlobalPosition = IsometricTileMap.MapCoordToGlobalPosition(_currentTileMapLayer, tile.position);
-
-				GetTree().GetRoot().AddChild(turret);
-				turret.HideRadius();
-
-				EmitSignal(SignalName.OnTurretPlaced);
-				_turretPlacerEnabled = false;
-			}
-			else
-			{
-				_ghostTurret.Visible = true;
-				_ghostTurret.GlobalPosition =
-					IsometricTileMap.MapCoordToGlobalPosition(_currentTileMapLayer, tile.position);
-
-				_ghostTurret.UpdateStats(turretStats);
-			}
-		}
-		else
-		{
-			_ghostTurret.Visible = false;
-		}
-
-		tile = GetTile();
 		if (Input.IsActionJustPressed("Right Click") && tile != null && tile.Turret != null)
 		{
+			    GD.Print($"PLACING TURRET - stack: {System.Environment.StackTrace}");
+				GD.Print($"LEFT CLICK PLACEMENT FIRED - frame: {Engine.GetProcessFrames()}");
+
+
 			var turret = tile.Turret;
 			turret.UpdateTargetingMode(_currentTurretTargetMode);
 		}
@@ -192,12 +127,15 @@ public partial class TurretPlacer : Node2D
 		if (Input.IsActionJustPressed("SwitchTurretType"))
 		{
 			_currentTurretIndex++;
-			if (_currentTurretIndex >= TurretStats.ALL_TURRETS.Count)
+			if (_allTurretStats != null && _currentTurretIndex >= _allTurretStats.Count)
 			{
 				_currentTurretIndex = 0;
 			}
-			GD.Print($"Current turret type for placement: {TurretStats.ALL_TURRETS[_currentTurretIndex].Type}");
+
+			if (_allTurretStats != null && _allTurretStats.Count > 0)
+				GD.Print($"Current turret type for placement: {_allTurretStats[_currentTurretIndex].Type}");
 		}
+
 		if (Input.IsActionJustPressed("SwitchTurretTargetingMode"))
 		{
 			_currentTurretTargetMode++;
@@ -207,33 +145,52 @@ public partial class TurretPlacer : Node2D
 			}
 			GD.Print($"Current turret target mode for placement and changing: {_currentTurretTargetMode}");
 		}
-
 	}
 
 	private void UpdateGhostTurretState()
 	{
 		GroundTile tile = GetTileIfStructurePlacementValid();
-		if (_turretPlacerEnabled && tile != null)
+		if (_turretPlacerEnabled && tile != null && _allTurretStats != null && _allTurretStats.Count > 0)
 		{
-			var turretStats = TurretStats.ALL_TURRETS[_currentTurretIndex];
-			// Turret Placement
+			var turretStats = _allTurretStats[_currentTurretIndex];
+
 			if (Input.IsActionJustPressed("Left Click"))
 			{
+				   GD.Print($"LEFT CLICK PLACEMENT FIRED - frame: {Engine.GetProcessFrames()}");
+    GD.Print(System.Environment.StackTrace);
+				int cost = turretStats.Cost;
+				if (_gameUi != null && !_gameUi.TryToSpendCoins(cost))
+				{
+					_gameUi.ShowWarning("Not enough coins!");
+					_turretPlacerEnabled = false;
+					return;
+				}
+
 				GD.Print($"Placing turret of type {turretStats.Type}");
+
 				var turret = _turretScene.Instantiate<Turret>();
+				turret.AddToGroup("placed_turrets");
 				tile.Turret = turret;
+
 				turret.Initialize(turretStats, _currentTurretTargetMode);
 				turret.GlobalPosition = IsometricTileMap.MapCoordToGlobalPosition(_currentTileMapLayer, tile.position);
-				GetTree().GetRoot().AddChild(turret);
+
+				//GetTree().GetRoot().AddChild(turret);
+				var main = GetTree().GetRoot().GetNode("Main");
+				main.AddChild(turret);
+				GD.Print($"Placed turrets in scene: {GetTree().GetNodesInGroup("placed_turrets").Count}");
+				turret.HideRadius();
+
+				EmitSignal(SignalName.OnTurretPlaced);
+				_turretPlacerEnabled = false;
 			}
-			// Display "ghost" turret to show where it's going to go and radius
-			// Ghost turret hover
 			else
 			{
 				_ghostTurret.Visible = true;
-				_ghostTurret.GlobalPosition = IsometricTileMap.MapCoordToGlobalPosition(_currentTileMapLayer, tile.position);
-				_ghostTurret.UpdateStats(turretStats); // todo
-				// GD.Print($"Ghost Turret: {_ghostTurret}");
+				_ghostTurret.GlobalPosition =
+					IsometricTileMap.MapCoordToGlobalPosition(_currentTileMapLayer, tile.position);
+
+				_ghostTurret.UpdateStats(turretStats);
 			}
 		}
 		else
@@ -241,5 +198,4 @@ public partial class TurretPlacer : Node2D
 			_ghostTurret.Visible = false;
 		}
 	}
-
 }

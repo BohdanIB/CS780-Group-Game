@@ -33,7 +33,7 @@ public partial class GameUi : CanvasLayer
 		GD.Print("=== Children of GameUI ===");
 foreach (Node child in GetChildren())
 {
-    GD.Print(" - ", child.Name);
+	GD.Print(" - ", child.Name);
 }
 
 		
@@ -109,7 +109,7 @@ foreach (Node child in GetChildren())
 	public void TakeDamage(int amount)
 	{
 		if (game_over){return;}
-        
+		
 		currentBaseHP -= amount;
 		_BaseHPLabel.Text = $"{currentBaseHP}";
 	if (currentBaseHP <= 0)

@@ -6,11 +6,13 @@
 
 [resource]
 script = ExtResource("1_etjm6")
+Type = 0
 AggroRadius = 100.0
 DetectableRadius = 16.0
 HitboxRadius = 16.0
 Health = 100.0
 FireRate = 2.0
-ProjectileStats = ExtResource("2_vd56s")
+ProjectileStats = ExtResource("1_ljd0c")
+Animations = ExtResource("1_v0m1v")
 Cost = 75
 metadata/_custom_type_script = "uid://bawwkshhg5psh"

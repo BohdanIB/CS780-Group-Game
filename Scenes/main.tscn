@@ -19,7 +19,6 @@ _turretPlacer = NodePath("TurretPlacer")
 [node name="TileShapePlacer" parent="." unique_id=1636893986 instance=ExtResource("3_jjvhh")]
 
 [node name="PathFollower" parent="." unique_id=142391362 instance=ExtResource("4_jjvhh")]
-_projectileScene = null
 
 [node name="TurretPlacer" parent="." unique_id=1881251108 instance=ExtResource("5_kry3j")]
 scale = Vector2(2, 2)
@@ -36,6 +35,5 @@ HubLocation = Vector2i(50, 50)
 script = ExtResource("9_ynf5e")
 WaveIntervalSeconds = 10.0
 EnemiesPerWave = 20
-Number_of_Enemies_added_per_wave = 10
 
 [node name="Enemies" type="Node2D" parent="." unique_id=1260695484]

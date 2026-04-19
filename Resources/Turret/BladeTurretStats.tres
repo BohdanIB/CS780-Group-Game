@@ -13,5 +13,6 @@ HitboxRadius = 16.0
 Health = 100.0
 FireRate = 5.0
 ProjectileStats = ExtResource("1_vj1tk")
+Animations = ExtResource("1_wk7r1")
 Cost = 100
 metadata/_custom_type_script = "uid://bawwkshhg5psh"
