@@ -11,9 +11,22 @@ public partial class Friendly : PathFollower
     [Export] public Groups.GroupTypes _friendlyTypes = PathFollower.TYPES | Groups.GroupTypes.Friendly;
     [Export] public Groups.GroupTypes _enemyTypes = Groups.GroupTypes.Enemy;
 
+    [ExportGroup("Components")]
+    [Export] private ShooterComponent _shooter;
+    [Export] private TargetingComponent _targeting;
+    [Export] private SpawnerComponent _projectileSpawner;
+
     public void Initialize(FriendlyStats stats, Vector2[] path = null)
     {
         _stats = stats;
+
+        _shooter ??= GetNodeOrNull<ShooterComponent>("ShooterComponent");
+        _targeting ??= GetNodeOrNull<TargetingComponent>("ShooterComponent/TargetingComponent");
+        _projectileSpawner ??= GetNodeOrNull<SpawnerComponent>("ShooterComponent/ProjectileSpawnerComponent");
+        _detector ??= GetNodeOrNull<DetectorComponent>("DetectorComponent");
+
+        if (_targeting != null && _detector != null)
+            _targeting.SetDetector(_detector);
 
         InitializeComponents();
         UpdateStats();
@@ -29,7 +42,14 @@ public partial class Friendly : PathFollower
     {
         base._Ready();
 
-        // Health + damage
+        _shooter ??= GetNodeOrNull<ShooterComponent>("ShooterComponent");
+        _targeting ??= GetNodeOrNull<TargetingComponent>("ShooterComponent/TargetingComponent");
+        _projectileSpawner ??= GetNodeOrNull<SpawnerComponent>("ShooterComponent/ProjectileSpawnerComponent");
+        _detector ??= GetNodeOrNull<DetectorComponent>("DetectorComponent");
+
+        if (_targeting != null && _detector != null)
+            _targeting.SetDetector(_detector);
+
         _health.OnNoHealthLeft += () =>
         {
             GD.Print($"Friendly {Name} died.");
@@ -41,7 +61,6 @@ public partial class Friendly : PathFollower
             _health.ApplyDamage(damage);
         };
 
-        // Movement direction updates
         _mover.Connect(
             MoverComponent.SignalName.OnPathPointReached,
             new Callable(this, nameof(OnPathPointReached))
@@ -75,6 +94,11 @@ public partial class Friendly : PathFollower
             _detectable.Initialize(_friendlyTypes, _enemyTypes);
             _mover.Initialize(_stats.MovementSpeed, this, start: false);
             _animation.Initialize(_stats.Animations);
+
+            if (_shooter != null)
+                _shooter.Initialize(_stats.FireRate, _friendlyTypes, _enemyTypes, _stats.ProjectileStats);
+            if (_targeting != null)
+                _targeting.TargetingStyle = TargetingMode.Close;
         }
     }
 
@@ -88,6 +112,9 @@ public partial class Friendly : PathFollower
             _detectable.SetRadius(_stats.DetectableRadius);
             _mover.Speed = _stats.MovementSpeed;
             _animation.Animations = _stats.Animations;
+
+            if (_shooter != null)
+                _shooter.SetProjectileStats(_stats.ProjectileStats);
         }
     }
 

@@ -35,6 +35,8 @@ public partial class SpawnerComponent : Node2D
 	public override void _Ready()
 	{
 		if (ScenePath != null) { Initialize(ScenePath); }
+		
+		
 	}
 
 	public Node Spawn()

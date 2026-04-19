@@ -9,6 +9,9 @@ public partial class EnemySpawner : Node
 	[Export] public int FinalWaveNumber = 10;
 	[Export] public int EnemiesAddedPerWave = 5;
 
+	private int _aliveEnemies = 0;
+
+
 	public int CurrentWave { get; private set; } = 0;
 
 	private GenericGrid<GroundTile> _grid;
@@ -115,6 +118,7 @@ public partial class EnemySpawner : Node
 			GD.Print("Final wave reached. No more enemies will spawn.");
 			GD.Print($"Player survived {CurrentWave} waves!");
 			_waveTimer.Stop();
+			CheckForVictory();
 			return;
 		}
 
@@ -126,6 +130,18 @@ public partial class EnemySpawner : Node
 
 		CurrentWave++;
 	}
+
+	private void CheckForVictory()
+	{
+		var enemiesParent = GetTree().Root.GetNode("Main/Enemies");
+
+			if (CurrentWave >= FinalWaveNumber && _aliveEnemies == 0)
+		{
+			GD.Print("All enemies defeated. Player wins!");
+			_gameUi.ShowVictory();
+		}
+	}
+
 
 	private void SpawnSingleEnemy()
 	{
@@ -169,9 +185,22 @@ public partial class EnemySpawner : Node
 		var enemiesParent = main.GetNode("Enemies");
 		enemiesParent.CallDeferred("add_child", enemy);
 
-	
-		enemy.UnitDied += (_) => _gameUi.IncrementKillCount();
-		enemy.UnitReachedGoal += (damage) => _gameUi.TakeDamage(damage);
+		_aliveEnemies++;
+
+		enemy.UnitDied += (_) =>
+	{
+		_aliveEnemies--;
+		_gameUi.IncrementKillCount();
+		CheckForVictory();
+	};
+
+	enemy.UnitReachedGoal += (damage) =>
+	{
+		_aliveEnemies--;
+		_gameUi.TakeDamage(damage);
+		CheckForVictory();
+	};
+
 	}
 
 	private void OnEnemyReachedGoal()

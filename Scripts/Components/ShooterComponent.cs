@@ -35,12 +35,17 @@ public partial class ShooterComponent : Node2D
 	{
 		_projectileSpawner ??= GetNodeOrNull<SpawnerComponent>("ProjectileSpawnerComponent");
 		_targeting ??= GetNodeOrNull<TargetingComponent>("TargetingComponent");
+		
+		//GD.Print($"ShooterComponent _Ready: spawner={_projectileSpawner}, targeting={_targeting}, cooldown={_shotCooldown}");
+
 
 		if (_projectileSpawner == null || _targeting == null || _shotCooldown == null)
 		{
 			GD.PrintErr($"ShooterComponent {Name}: missing components (spawner={_projectileSpawner}, targeting={_targeting}, cooldown={_shotCooldown})");
 			return;
 		}
+
+		
 
 		SubscribeToTargeting();
 	}
@@ -55,7 +60,7 @@ public partial class ShooterComponent : Node2D
 
 	private void OnTargetSelected(DetectableComponent target)
 	{
-		GD.Print($"OnTargetSelected fired, target={target}, cooldownStopped={_shotCooldown?.IsStopped()}, entityTypes={_thisEntityTypes}, stats={_projectileStats}");
+		//GD.Print($"OnTargetSelected fired, target={target}, cooldownStopped={_shotCooldown?.IsStopped()}, entityTypes={_thisEntityTypes}, stats={_projectileStats}");
 
 		if (!_shotCooldown.IsStopped()) return;
 		if (_thisEntityTypes == Groups.GroupTypes.None || _projectileStats == null)

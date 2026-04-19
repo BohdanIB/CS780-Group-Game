@@ -49,12 +49,10 @@ public partial class Enemy : PathFollower
 			GD.PrintErr($"WARNING - Enemy {Name} missing components.");
 		}
 
-		// Health + damage
 		_health.OnNoHealthLeft += () =>
 		{
 			GD.Print($"Enemy {Name} died.");
-			EmitSignal(SignalName.UnitDied);
-			
+			EmitSignal(SignalName.UnitDied, this);
 			QueueFree();
 		};
 

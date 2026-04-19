@@ -37,9 +37,6 @@ public partial class GameUi : CanvasLayer
 	};
 
 
-		
-
-
 		_warningLabel.MouseFilter = Control.MouseFilterEnum.Ignore;
 		var styleBox = new StyleBoxFlat();
 		styleBox.BgColor = new Color(0, 0, 0, 0.7f);
@@ -67,6 +64,17 @@ public partial class GameUi : CanvasLayer
 		killCountLabel.Text = $"Kills: {enemyKillCount}";
 
 	}
+
+
+	public void ShowVictory()
+	{
+		game_over = true;
+
+		var screen = GetNode<GameOverScreen>("GameOverScreen");
+		screen.onVictory();   
+	}
+
+	
 
 	public void ShowWarning(string message , bool GameOver = false)
 	{

@@ -22,12 +22,18 @@ public partial class GameOverScreen : Control
 	{
 	}
 
-	public void onGameOver()
-	{
-		GD.Print("GameOverScreen: onGameOver() called");
-		Visible = true;
-		//MoveToFront();
-	}
+	
+	public void onVictory()
+    {
+        Visible = true;
+        GetNode<Label>("VBoxContainer/TitleLabel").Text = "YOU WON!";
+    }
+
+    public void onGameOver()
+    {
+        Visible = true;
+        GetNode<Label>("VBoxContainer/TitleLabel").Text = "GAME OVER";
+    }
 
 	public void OnRetryPressed()
 	{
