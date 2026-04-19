@@ -19,6 +19,7 @@ _targeting = NodePath("ShooterComponent/TargetingComponent")
 _projectileSpawner = NodePath("ShooterComponent/ProjectileSpawnerComponent")
 
 [node name="AnimationComponent" parent="." index="5" unique_id=1805975540]
+offset = Vector2(2, -4)
 Animations = ExtResource("4_1dp5w")
 
 [node name="ShooterComponent" parent="." index="6" unique_id=1054008556 node_paths=PackedStringArray("_projectileSpawner", "_targeting", "_shotCooldown") instance=ExtResource("5_0830c")]

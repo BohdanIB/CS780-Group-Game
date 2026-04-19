@@ -12,4 +12,5 @@ _friendlyTypes = 8
 _enemyTypes = 16
 
 [node name="AnimationComponent" parent="." index="5" unique_id=1805975540]
+offset = Vector2(2, -4)
 Animations = ExtResource("4_5vdkv")
