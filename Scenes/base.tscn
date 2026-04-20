@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://dqkhjhwfymxwv"]
+
+[ext_resource type="Script" uid="uid://ck1rejkl4d3uw" path="res://Scripts/Base.cs" id="1_1w1q6"]
+[ext_resource type="Texture2D" uid="uid://bqfgb48yp77js" path="res://Sprites/fort_base_sprite.svg" id="2_6qyon"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jdayy"]
+
+[node name="Base" type="Node2D" unique_id=322375666]
+script = ExtResource("1_1w1q6")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=315190736]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1083590452]
+shape = SubResource("RectangleShape2D_jdayy")
+
+[node name="Sprite2D" type="Sprite2D" parent="Area2D" unique_id=1824999016]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_6qyon")

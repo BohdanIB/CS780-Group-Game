@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Composition;
 using CS780GroupProject.Scripts.Utils;
 using Godot;
 
+using Export = Godot.ExportAttribute;
 public partial class Enemy : PathFollower
 {
 	[Export] private EnemyStats _stats;
@@ -16,6 +18,10 @@ public partial class Enemy : PathFollower
 	[Export] private ShooterComponent _shooter;
 	[Export] private TargetingComponent _targeting;
 	[Export] protected SpawnerComponent _projectileSpawner;
+
+	[Export] public int MaxHealth = 100;
+
+	
 
 	public void Initialize(EnemyStats stats, Vector2[] path = null)
 	{

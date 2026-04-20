@@ -25,6 +25,8 @@ public partial class EnemySpawner : Node
 
 	private List<EnemyStats> _enemyStats;
 
+	private Base _base;
+
 	public void Initialize(GenericGrid<GroundTile> grid, Vector2I hub, Random randomizer, TileMapLayer tileMapLayer)
 	{
 		_grid = grid;
@@ -36,7 +38,8 @@ public partial class EnemySpawner : Node
 
 		BuildSpawnPointList();
 		BuildPathfinder();
-		SpawnGoalSprite();
+		//SpawnGoalSprite();
+		SpawnBase();
 
 		_waveTimer = new Timer
 		{
@@ -96,6 +99,24 @@ public partial class EnemySpawner : Node
 			}
 		);
 	}
+
+
+	
+
+	//TODO It shouldn't be the responsiblity of EnemySpawner to spawn base, but its actually a scene for now so progress.
+	private void SpawnBase()
+	{
+		var baseScene = GD.Load<PackedScene>("res://Scenes/Base.tscn");
+		_base = baseScene.Instantiate<Base>();
+
+		Vector2 worldPos = IsometricTileMap.MapCoordToGlobalPosition(_tileMapLayer, _hub);
+		_base.Position = worldPos;
+
+		var main = GetTree().Root.GetNode("Main");
+		main.AddChild(_base);
+
+		GD.Print($"Base placed at hub: {_hub}");
+}
 
 	private void SpawnGoalSprite()
 	{
