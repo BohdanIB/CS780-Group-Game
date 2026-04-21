@@ -19,6 +19,7 @@ public partial class ProjectileStats : Resource
 	{
 		Bolt,
 		Blade,
+		Electro,
 	};
 
 	// Projectile Stats

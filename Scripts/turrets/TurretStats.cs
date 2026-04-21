@@ -14,6 +14,8 @@ public partial class TurretStats : Resource
 	{
 		Ballista,
 		Blade,
+		Electro,
+		Log,
 	};
 
 	// Turret Stats
