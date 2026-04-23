@@ -65,7 +65,7 @@ public partial class AnimationComponent : AnimatedSprite2D
 	// 	// from.AngleToPoint(to)
 		var dir = RadsToDirection(directionRads);
 		var animationName = DirectionToAnimationName(dir);
-		if (SpriteFrames.HasAnimation(animationName))
+		if (SpriteFrames.HasAnimation(animationName)/* && this.Animation != animationName*/)
 		{
 			Play(animationName);
 		}

@@ -2,8 +2,9 @@
 
 [ext_resource type="Resource" uid="uid://bc6kubxjpy144" path="res://Resources/Animations/AnimationPackEntries/friendly_idle_animation_entry.tres" id="1_0dfh4"]
 [ext_resource type="Script" uid="uid://b8k2bijsjc1da" path="res://Scripts/Animation/AnimationPack.cs" id="1_d84wc"]
+[ext_resource type="Resource" uid="uid://l65fidd3aup" path="res://Resources/Animations/AnimationPackEntries/friendly_bob_animation_entry.tres" id="2_2o5ih"]
 
 [resource]
 script = ExtResource("1_d84wc")
-Animations = Array[Object]([ExtResource("1_0dfh4")])
+Animations = Array[Object]([ExtResource("1_0dfh4"), ExtResource("2_2o5ih")])
 metadata/_custom_type_script = "uid://b8k2bijsjc1da"
