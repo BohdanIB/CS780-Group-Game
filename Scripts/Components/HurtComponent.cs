@@ -72,7 +72,7 @@ public partial class HurtComponent : Area2D
 	{
 		// Todo: Might want to split hitter types and receiver types for hurt?
 		return ((hit.GetEntityTypes() & _validHitterTypes) != Groups.GroupTypes.None) && // hitter types are valid for hurt
-		       ((hit.GetSenderTypes() & _validHitterTypes) != Groups.GroupTypes.None); // hitter sender is valid for hurt
+			   ((hit.GetSenderTypes() & _validHitterTypes) != Groups.GroupTypes.None); // hitter sender is valid for hurt
 	}
 
 	public float GetRadius()
@@ -83,7 +83,7 @@ public partial class HurtComponent : Area2D
 	{
 		((CircleShape2D)_hurtCollisionShape2D.Shape).Radius = newRadius;
 	}
-    public Groups.GroupTypes GetEntityTypes()
+	public Groups.GroupTypes GetEntityTypes()
 	{
 		return _thisEntityTypes;
 	}

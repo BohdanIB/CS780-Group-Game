@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ProjectileStats" format=3 uid="uid://8up6n72scnpd"]
+
+[ext_resource type="Script" uid="uid://db7kn4h7v1jqa" path="res://Scripts/turrets/ProjectileStats.cs" id="1_ihrkt"]
+
+[resource]
+script = ExtResource("1_ihrkt")
+Type = 2
+Speed = 100.0
+Damage = 35.0
+Hitbox = 16.0
+metadata/_custom_type_script = "uid://db7kn4h7v1jqa"

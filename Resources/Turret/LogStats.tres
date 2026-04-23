@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="TurretStats" format=3 uid="uid://csn3po3hxc2oa"]
+
+[ext_resource type="Script" uid="uid://bawwkshhg5psh" path="res://Scripts/turrets/TurretStats.cs" id="1_4rvq4"]
+
+[resource]
+script = ExtResource("1_4rvq4")
+Type = 3
+HitboxRadius = 1.0
+Health = 50.0
+metadata/_custom_type_script = "uid://bawwkshhg5psh"
