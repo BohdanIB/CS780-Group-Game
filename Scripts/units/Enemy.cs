@@ -18,11 +18,14 @@ public partial class Enemy : PathFollower
 	[Export] private ShooterComponent _shooter;
 	[Export] private TargetingComponent _targeting;
 	[Export] protected SpawnerComponent _projectileSpawner;
-
 	[Export] public int MaxHealth = 100;
 
-	
 
+		/// <summary>
+	/// Initializes enemy with custom stats.
+	/// </summary>
+	/// <param name="stats"></param>
+	/// <param name="path"></param>
 	public void Initialize(EnemyStats stats, Vector2[] path = null)
 	{
 		_stats = stats;
@@ -123,7 +126,15 @@ public partial class Enemy : PathFollower
 	{
 		return $"Enemy '{Name}': {_stats}";
 	}
-
+	
+	/// <summary>
+	/// TODO - This is a temporary function for testing enemy functionality on the game. This should go away at some point.
+	/// 
+	/// Spawn enemies at random tiles with dead-end roads to head towards hub
+	/// </summary>
+	/// <param name="parent"></param>
+	/// <param name="grid"></param>
+	/// <param name="hub"></param>
 	public static void TempEnemyDemo(Node parent, GenericGrid<GroundTile> grid, IsometricTileMap tileMap, Vector2I hub)
 	{
 		GridAStarPathfinder<GroundTile> pathfinder = new GridAStarPathfinder<GroundTile>(grid,

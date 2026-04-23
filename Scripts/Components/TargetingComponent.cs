@@ -14,6 +14,26 @@ public partial class TargetingComponent : Node2D
 	private List<DetectableComponent> _targets = [];
 	private bool _detectorSubscribed = false;
 
+
+	// /// <summary>
+	// /// Initialize associated detector with stats. Convenience function
+	// /// </summary>
+	// /// <param name="radius"></param>
+	// /// <param name="entityTypes"></param>
+	// /// <param name="validTargets"></param>
+	// public void Initialize(float radius, Groups.GroupTypes entityTypes, Groups.GroupTypes validTargets)
+	// {
+	// 	_detector.Initialize(radius, entityTypes, validTargets);
+	// }
+	// /// <summary>
+	// /// Initialize associated detector with stats. Convenience function
+	// /// </summary>
+	// /// <param name="entityTypes"></param>
+	// /// <param name="validTargets"></param>
+	// public void Initialize(Groups.GroupTypes entityTypes, Groups.GroupTypes validTargets)
+	// {
+	// 	_detector.Initialize(entityTypes, validTargets);
+	// }
 	public void Initialize(TargetingMode targetingMode)
 	{
 		TargetingStyle = targetingMode;
@@ -78,12 +98,20 @@ public partial class TargetingComponent : Node2D
 		}
 	}
 
+	// <summary>
+	/// Pick a random valid target.
+	/// </summary>
+	/// <returns></returns>
 	private Area2D RandomPick()
 	{
 		if (_targets.Count == 0) { return null; }
 		return _targets[GD.RandRange(0, _targets.Count)];
 	}
 
+	/// <summary>
+	/// Pick the valid target that is closest to finishing its path.
+	/// </summary>
+	/// <returns></returns>
 	private Area2D FirstPick()
 	{
 		if (_targets.Count == 0) { return null; }
@@ -113,6 +141,11 @@ public partial class TargetingComponent : Node2D
 		return currTarget;
 	}
 
+
+	/// <summary>
+	/// Pick the valid target that is furthest from finishing its path.
+	/// </summary>
+	/// <returns></returns>
 	private Area2D LastPick()
 	{
 		if (_targets.Count == 0) { return null; }
@@ -142,6 +175,10 @@ public partial class TargetingComponent : Node2D
 		return currTarget;
 	}
 
+	/// <summary>
+	/// Pick the closest valid target to the targeting position.
+	/// </summary>
+	/// <returns></returns>
 	private Area2D ClosePick()
 	{
 		if (_targets.Count == 0) { return null; }
@@ -160,6 +197,10 @@ public partial class TargetingComponent : Node2D
 		return currTarget;
 	}
 
+	/// <summary>
+	/// Pick the weakest valid target.
+	/// </summary>
+	/// <returns></returns>
 	private Area2D WeakPick()
 	{
 		if (_targets.Count == 0) { return null; }
@@ -189,6 +230,10 @@ public partial class TargetingComponent : Node2D
 		return currTarget;
 	}
 
+	/// <summary>
+	/// Pick the strongest valid target.
+	/// </summary>
+	/// <returns></returns>
 	private Area2D StrongPick()
 	{
 		if (_targets.Count == 0) { return null; }
@@ -223,6 +268,10 @@ public partial class TargetingComponent : Node2D
 		_detector?.SetRadius(newRadius);
 	}
 
+	/// <summary>
+	/// Used for testing to see what the current target list is for TargetingComponent
+	/// </summary>
+	/// <returns></returns>
 	public List<DetectableComponent> GetTargetList()
 	{
 		return _targets;

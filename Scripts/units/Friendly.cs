@@ -16,6 +16,10 @@ public partial class Friendly : PathFollower
     [Export] private TargetingComponent _targeting;
     [Export] private SpawnerComponent _projectileSpawner;
 
+    /// <summary>
+	/// Initializes friendly with custom stats.
+	/// </summary>
+	/// <param name="stats"></param>
     public void Initialize(FriendlyStats stats, Vector2[] path = null)
     {
         _stats = stats;

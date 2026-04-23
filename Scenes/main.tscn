@@ -34,6 +34,6 @@ HubLocation = Vector2i(50, 50)
 [node name="EnemySpawner" type="Node" parent="." unique_id=1904352068]
 script = ExtResource("9_ynf5e")
 WaveIntervalSeconds = 10.0
-EnemiesPerWave = 20
+EnemiesPerWave = 30
 
 [node name="Enemies" type="Node2D" parent="." unique_id=1260695484]

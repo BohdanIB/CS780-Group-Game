@@ -6,6 +6,7 @@ public partial class PathFollower : Node2D
 {
 	public const Groups.GroupTypes TYPES = Groups.GroupTypes.None;
 
+	// Components //
 	[ExportGroup("Components")]
 	[Export] protected HealthComponent _health;
 	[Export] protected HurtComponent _hurt;
