@@ -12,9 +12,10 @@ public partial class Main : Node2D
 
     public override void _Ready()
     {
-        Random randomizer = new Random();
-        MAIN_SEED = (ulong)randomizer.NextInt64();
-        GD.Seed(MAIN_SEED);
+        //Random randomizer = new Random();
+        //MAIN_SEED = (ulong)randomizer.NextInt64();
+        //GD.Seed(MAIN_SEED);
+        GD.Randomize();
 
         var hubLocation = new Vector2I(50, 50);
 
@@ -41,7 +42,7 @@ public partial class Main : Node2D
         _turretPlacer.Initialize(_grid, _gridRenderer.TerrainMap);
 
         EnemySpawner spawner = GetNode<EnemySpawner>("EnemySpawner");
-        spawner.Initialize(grid, hubLocation, randomizer, _gridRenderer.TerrainMap.GetLayers()[0]);
+        spawner.Initialize(grid, hubLocation, _gridRenderer.TerrainMap.GetLayers()[0]);
 
         Friendly.TempFriendlyDemo(this, grid, _gridRenderer.TerrainMap, hubLocation);
     }

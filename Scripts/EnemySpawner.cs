@@ -27,11 +27,10 @@ public partial class EnemySpawner : Node
 
 	private Base _base;
 
-	public void Initialize(GenericGrid<GroundTile> grid, Vector2I hub, Random randomizer, TileMapLayer tileMapLayer)
+	public void Initialize(GenericGrid<GroundTile> grid, Vector2I hub, TileMapLayer tileMapLayer)
 	{
 		_grid = grid;
 		_hub = hub;
-		_random = randomizer;
 		_tileMapLayer = tileMapLayer;
 
 		_enemyStats = EnemyStats.LoadAllStats();
@@ -172,7 +171,9 @@ public partial class EnemySpawner : Node
 			return;
 		}
 
-		var spawnTile = _spawnPoints[_random.Next(_spawnPoints.Count)];
+		int Spawnindex = (int)(GD.Randi() % (uint)_spawnPoints.Count);
+		var spawnTile = _spawnPoints[Spawnindex];
+
 		var spawnPos = spawnTile.position;
 
 		var enemyScene = GD.Load<PackedScene>("res://Scenes/enemy.tscn");
