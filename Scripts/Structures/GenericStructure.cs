@@ -25,7 +25,7 @@ public partial class GenericStructure: Node2D
 	[Export] protected HurtComponent _hurt; // Do ALL structures really need these components?
 	[Export] protected AnimationComponent _animation;
 
-	public virtual void Initialize() { }
+	public virtual void Initialize(StructureStats stats) { }
 
 	public override void _Ready()
 	{

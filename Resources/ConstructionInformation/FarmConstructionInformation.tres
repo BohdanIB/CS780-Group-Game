@@ -1,10 +1,14 @@
 [gd_resource type="Resource" script_class="ConstructionInformation" format=3 uid="uid://x2da3uinl30n"]
 
 [ext_resource type="Texture2D" uid="uid://5f34lbmq0pcd" path="res://Assets/Sprites/WindmillSprites.png" id="1_1r01g"]
-[ext_resource type="PackedScene" uid="uid://cm3eatpdvef7o" path="res://Scenes/Structures/Farm.tscn" id="1_am0n2"]
 [ext_resource type="Script" uid="uid://c5a4sxpqqv1sn" path="res://Scripts/Structures/ConstructionInformation.cs" id="1_droj7"]
 [ext_resource type="Resource" uid="uid://xr3cl5h2rxfa" path="res://Resources/Terrain/Plains.tres" id="2_qm5nw"]
 [ext_resource type="Script" uid="uid://xqmubjkmtno0" path="res://Scripts/Structures/StructurePlacementRequirements.cs" id="3_dn3s7"]
+[ext_resource type="Script" uid="uid://dex17oa2474e5" path="res://Scripts/Structures/MaterialGatherer.cs" id="4_8splb"]
+[ext_resource type="PackedScene" uid="uid://bu5bt5d2jv3iu" path="res://Scenes/Components/hurt_component.tscn" id="5_ate5l"]
+[ext_resource type="PackedScene" uid="uid://e5vy6kbwqw12" path="res://Scenes/Components/health_component.tscn" id="6_r1824"]
+[ext_resource type="PackedScene" uid="uid://c1wk4dy8g10qq" path="res://Scenes/Components/animation_component.tscn" id="7_3en5k"]
+[ext_resource type="Resource" uid="uid://c1h7wxlwa66wd" path="res://Resources/Animations/AnimationPacks/FarmAnimations.tres" id="8_vgvfo"]
 
 [sub_resource type="Resource" id="Resource_2to2x"]
 script = ExtResource("3_dn3s7")
@@ -12,10 +16,25 @@ _validPlacementBiomes = Array[Object]([ExtResource("2_qm5nw")])
 _requiredAdjacentBiomes = Array[Object]([])
 metadata/_custom_type_script = "uid://xqmubjkmtno0"
 
+[sub_resource type="PackedScene" id="PackedScene_wasu2"]
+_bundled = {
+"conn_count": 0,
+"conns": PackedInt32Array(),
+"editable_instances": [],
+"id_paths": [PackedInt32Array(), PackedInt32Array(), PackedInt32Array()],
+"names": PackedStringArray("MaterialGatherer", "Node2D", "script", "_health", "_hurt", "_animation", "HurtComponent", "HealthComponent", "AnimationComponent", "Animations"),
+"node_count": 4,
+"node_ids": PackedInt32Array(17333711, 495543674, 1408774868, 1805975540),
+"node_paths": [NodePath("."), NodePath("."), NodePath(".")],
+"nodes": PackedInt32Array(-1, -1, 1, 0, -1, 4, 2, 0, 1073741827, 1, 1073741828, 2, 1073741829, 3, 0, 1073741824, 0, 2147483647, 6, 4, 0, 0, 1073741825, 0, 2147483647, 7, 5, 0, 0, 1073741826, 0, 2147483647, 8, 6, 1, 9, 7, 0),
+"variants": [ExtResource("4_8splb"), NodePath("HealthComponent"), NodePath("HurtComponent"), NodePath("AnimationComponent"), ExtResource("5_ate5l"), ExtResource("6_r1824"), ExtResource("7_3en5k"), ExtResource("8_vgvfo")],
+"version": 3
+}
+
 [resource]
 script = ExtResource("1_droj7")
 DisplayImageAtlas = ExtResource("1_1r01g")
 DisplayImageRect = Rect2(0, 0, 64, 64)
 PlacementRequirements = SubResource("Resource_2to2x")
-Structure = ExtResource("1_am0n2")
+Structure = SubResource("PackedScene_wasu2")
 metadata/_custom_type_script = "uid://c5a4sxpqqv1sn"

@@ -16,6 +16,6 @@ tempConstructionInformation = ExtResource("2_jjvhh")
 position = Vector2(573, 323)
 
 [node name="StructurePlacer" parent="." unique_id=1843712961 instance=ExtResource("4_jjvhh")]
-temporaryConstructionInfo = Array[Object]([ExtResource("2_jjvhh"), ExtResource("4_21xkr"), ExtResource("5_6bp64")])
+temporaryConstructionInfo = Array[Object]([ExtResource("4_21xkr"), ExtResource("5_6bp64")])
 
 [node name="PlayArea" parent="." unique_id=1275724900 instance=ExtResource("3_8gbba")]

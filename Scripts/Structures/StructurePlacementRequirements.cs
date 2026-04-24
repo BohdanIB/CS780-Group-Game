@@ -10,6 +10,7 @@ public partial class StructurePlacementRequirements : Resource
     /// </summary>
     [Export] private BiomeType[] _validPlacementBiomes;
     [Export] private BiomeType[] _requiredAdjacentBiomes;
+    [Export] private bool _allowWaterPlacement = false;
 
     public bool IsPlacementValid(GenericGrid<GroundTile> placementGrid, Vector2I placementCoordinates)
     {

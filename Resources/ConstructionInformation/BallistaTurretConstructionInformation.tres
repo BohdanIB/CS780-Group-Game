@@ -3,11 +3,13 @@
 [ext_resource type="Texture2D" uid="uid://bdw64kon78x3y" path="res://Assets/Sprites/isometric_turret_temp.png" id="1_jmky6"]
 [ext_resource type="PackedScene" uid="uid://b2w8csm5vypb0" path="res://Scenes/Structures/turret.tscn" id="2_c0dp6"]
 [ext_resource type="Script" uid="uid://c5a4sxpqqv1sn" path="res://Scripts/Structures/ConstructionInformation.cs" id="3_05mw7"]
+[ext_resource type="Resource" uid="uid://b65p4eimakib4" path="res://Resources/Turret/BallistaTurretStats.tres" id="3_wpexm"]
 
 [resource]
 script = ExtResource("3_05mw7")
 DisplayImageAtlas = ExtResource("1_jmky6")
 DisplayImageRect = Rect2(0, 0, 64, 64)
 Structure = ExtResource("2_c0dp6")
+StructureStats = ExtResource("3_wpexm")
 ConfigurationType = 1
 metadata/_custom_type_script = "uid://c5a4sxpqqv1sn"

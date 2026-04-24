@@ -33,8 +33,9 @@ public partial class Turret : GenericStructure
 	/// </summary>
 	/// <param name="stats"></param>
 	/// <param name="targetingMode"></param>
-	public override void Initialize()
+	public override void Initialize(StructureStats stats)
 	{
+		if (stats is TurretStats turretStats) _stats = turretStats;
 		InitializeComponents();
 		UpdateStats();
 	}

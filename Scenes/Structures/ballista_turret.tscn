@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://d4nsvmae5qepr"]
+[gd_scene format=3 uid="uid://da75vob33ocqb"]
 
 [ext_resource type="PackedScene" uid="uid://27mmcge0cxrm" path="res://Scenes/generic_structure.tscn" id="1_flmsr"]
 [ext_resource type="Script" uid="uid://bk3drg0y2r1ku" path="res://Scripts/turrets/Turret.cs" id="2_4rdq3"]

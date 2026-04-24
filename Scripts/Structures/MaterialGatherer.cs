@@ -7,7 +7,7 @@ public partial class MaterialGatherer : GenericStructure
     public int currentMaterialQuantity;
     [Export] public float gatherTime;
 
-    public override void Initialize()
+    public override void Initialize(StructureStats stats)
     {
         _animation.Initialize(_animation.Animations, AnimationPackEntry.State.Idle);
     }

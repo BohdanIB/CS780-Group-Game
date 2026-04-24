@@ -10,5 +10,6 @@ public partial class ConstructionInformation : Resource
     [Export] public StructurePlacementRequirements PlacementRequirements {get; private set;}
 	[Export] public MaterialRequirements MaterialRequirements {get; private set;}
     [Export] public PackedScene Structure {get; private set;}
+    [Export] public StructureStats StructureStats {get; private set;}
     [Export] public GenericStructure.ConfigurationType ConfigurationType {get; private set;}
 }
