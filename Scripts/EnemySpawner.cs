@@ -16,7 +16,6 @@ public partial class EnemySpawner : Node
 
 	private GenericGrid<GroundTile> _grid;
 	private Vector2I _hub;
-	private Random _random;
 	private List<GroundTile> _spawnPoints;
 	private GridAStarPathfinder<GroundTile> _pathfinder;
 	private Timer _waveTimer;
