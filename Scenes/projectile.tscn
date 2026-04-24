@@ -7,7 +7,7 @@
 [ext_resource type="Resource" uid="uid://dor2re0k01blp" path="res://Resources/Animations/AnimationPacks/BoltAnimations.tres" id="5_bolt"]
 
 [node name="Projectile" type="Node2D" unique_id=1280801555 node_paths=PackedStringArray("_hit", "_animation") groups=["projectile"]]
-scale = Vector2(0.5, 0.5)
+scale = Vector2(2.5, 2.5)
 script = ExtResource("1")
 _stats = ExtResource("2")
 _hit = NodePath("HitComponent")

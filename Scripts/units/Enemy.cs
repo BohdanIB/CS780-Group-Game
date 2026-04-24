@@ -98,7 +98,7 @@ public partial class Enemy : PathFollower
 	{
 		if (_stats != null)
 		{
-			_health.SetHealth(_stats.Health);
+			_health.SetHealth(_stats.Health);// todo: this might not want to update everytime components are updated.
 			_hurt.Initialize(_enemyTypes, _targetTypes);
 			_detector.Initialize(_enemyTypes, _targetTypes);
 			_detectable.Initialize(_enemyTypes, _targetTypes);
@@ -112,7 +112,7 @@ public partial class Enemy : PathFollower
 	{
 		if (_stats != null)
 		{
-			_health.SetHealth(_stats.Health);
+			_health.SetHealth(_stats.Health); // todo: this might not want to update everytime components are updated.
 			_hurt.SetRadius(_stats.HitboxRadius);
 			_detector.SetRadius(_stats.AggroRadius);
 			_detectable.SetRadius(_stats.DetectableRadius);
@@ -197,6 +197,7 @@ public partial class Enemy : PathFollower
 				}
 			}
 
+			// Set enemy paths
 			var spawnPoint = potentialEnemySpawnPoints[GD.RandRange(0, potentialEnemySpawnPoints.Count - 1)].position;
 
 			var path = new List<Vector2>();

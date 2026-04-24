@@ -40,6 +40,9 @@ public partial class PathFollower : Node2D
 		_mover.Connect(MoverComponent.SignalName.OnPathCompleted, new Callable(this, nameof(HandleReachedGoal)));
 	}
 
+
+	// // Change sprite to turn towards next path point
+	// _idleAnimations.SetDirection(Position, _path[_currentPathIndex]);
 	private void HandleReachedGoal()
 	{
 		EmitSignal(SignalName.UnitReachedGoal, 10);
