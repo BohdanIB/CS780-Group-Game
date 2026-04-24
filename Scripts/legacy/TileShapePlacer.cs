@@ -22,7 +22,6 @@ public partial class TileShapePlacer : Node2D
 
 	public override void _Process(double delta)
 	{
-		if (currentShape == null || targetGrid == null) return;
 	
 		if (Input.IsActionJustPressed("Left Click"))
 		{
