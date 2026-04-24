@@ -3,6 +3,9 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
+/// <summary>
+/// TODO
+/// </summary>
 public partial class TurretPlacer : Node2D
 {
 	[Signal]
@@ -104,6 +107,11 @@ public partial class TurretPlacer : Node2D
 		return null;
 	}
 
+
+	/// <summary>
+	/// Can return null
+	/// </summary>
+	/// <returns></returns>
 	private GroundTile GetTile()
 	{
 		var coord = IsometricTileMap.GlobalPositionToMapCoord(_currentTileMapLayer, GlobalPosition);
@@ -187,11 +195,14 @@ public partial class TurretPlacer : Node2D
 			}
 			else
 			{
+				// Display "ghost" turret to show where it's going to go and radius
+				// Ghost turret hover
 				_ghostTurret.Visible = true;
 				_ghostTurret.GlobalPosition =
 					IsometricTileMap.MapCoordToGlobalPosition(_currentTileMapLayer, tile.position);
 
 				_ghostTurret.UpdateStats(turretStats);
+				// GD.Print($"Ghost Turret: {_ghostTurret}");
 			}
 		}
 		else
