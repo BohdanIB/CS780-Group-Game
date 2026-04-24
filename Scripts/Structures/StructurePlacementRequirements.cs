@@ -15,6 +15,9 @@ public partial class StructurePlacementRequirements : Resource
     public bool IsPlacementValid(GenericGrid<GroundTile> placementGrid, Vector2I placementCoordinates)
     {
         GroundTile placementTile = placementGrid.GetGridValueOrDefault(placementCoordinates.X, placementCoordinates.Y);
+
+        if (placementTile.HasRoadConnection() && !_allowWaterPlacement) return false;
+
         if (!IsBiomeValid(placementTile.biome)) return false;
 
         BiomeType[] adjacentBiomes = new BiomeType[4];

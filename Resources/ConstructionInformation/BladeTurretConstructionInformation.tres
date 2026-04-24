@@ -3,21 +3,21 @@
 [ext_resource type="Texture2D" uid="uid://bdw64kon78x3y" path="res://Assets/Sprites/isometric_turret_temp.png" id="1_2hpb2"]
 [ext_resource type="PackedScene" uid="uid://b2w8csm5vypb0" path="res://Scenes/Structures/turret.tscn" id="1_xlprp"]
 [ext_resource type="Resource" uid="uid://balv7lonn2d" path="res://Resources/Turret/BladeTurretStats.tres" id="2_2hpb2"]
-[ext_resource type="Resource" uid="uid://r4wamk14k7h3" path="res://Resources/Terrain/Water.tres" id="2_12i6w"]
 [ext_resource type="Script" uid="uid://c5a4sxpqqv1sn" path="res://Scripts/Structures/ConstructionInformation.cs" id="3_douf5"]
 [ext_resource type="Script" uid="uid://xqmubjkmtno0" path="res://Scripts/Structures/StructurePlacementRequirements.cs" id="3_stsya"]
 
-[sub_resource type="Resource" id="Resource_6pc6m"]
+[sub_resource type="Resource" id="Resource_3cwy6"]
 script = ExtResource("3_stsya")
 _validPlacementBiomes = null
-_requiredAdjacentBiomes = Array[Object]([ExtResource("2_12i6w")])
+_requiredAdjacentBiomes = null
+_allowWaterPlacement = true
 metadata/_custom_type_script = "uid://xqmubjkmtno0"
 
 [resource]
 script = ExtResource("3_douf5")
 DisplayImageAtlas = ExtResource("1_2hpb2")
 DisplayImageRect = Rect2(0, 0, 64, 64)
-PlacementRequirements = SubResource("Resource_6pc6m")
+PlacementRequirements = SubResource("Resource_3cwy6")
 Structure = ExtResource("1_xlprp")
 StructureStats = ExtResource("2_2hpb2")
 ConfigurationType = 1

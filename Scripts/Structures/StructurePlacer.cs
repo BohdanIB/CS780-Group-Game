@@ -131,7 +131,7 @@ public partial class StructurePlacer : Node2D
 	private void UpdatePlacementValidity()
 	{
 		GroundTile tile = _placementGrid.GetGridValueOrDefault(_currentGridCoordinates.X, _currentGridCoordinates.Y);
-		if (tile == null || tile.HasRoadConnection() || tile.HasStructure()) 
+		if (tile == null || tile.HasStructure() || (_constructionInformation.PlacementRequirements == null && tile.HasRoadConnection())) 
 		{
 			_isPlacementValid = false;
 		} 
