@@ -1,6 +1,8 @@
+
 using static CS780GroupProject.Scripts.Utils.NodeComponentChecking;
 using CS780GroupProject.Scripts.Utils;
 using Godot;
+using System.Diagnostics;
 
 public partial class ShooterComponent : Node2D
 {
@@ -14,8 +16,9 @@ public partial class ShooterComponent : Node2D
 	[Export] private TargetingComponent _targeting;
 	[Export] private Timer _shotCooldown;
 
+	// private Node2D _sender;
 	private ProjectileStats _projectileStats;
-	private float
+	private float 
 		_shotsPerSecond = -1, // How many shots are there per second? Human readability 
 		_shotTime = -1; // The actual cooldown time between shots
 
@@ -25,19 +28,13 @@ public partial class ShooterComponent : Node2D
 	/// <param name="fireRate"></param>
 	/// <param name="entityTypes"></param>
 	/// <param name="stats"></param>
-
 	public void Initialize(float fireRate, Groups.GroupTypes entityTypes, Groups.GroupTypes targetTypes, ProjectileStats stats)
 	{
 		SetFireRate(fireRate);
 		SetProjectileStats(stats);
 		_thisEntityTypes = entityTypes;
 		_targetTypes = targetTypes;
-
-		_projectileSpawner ??= GetNodeOrNull<SpawnerComponent>("ProjectileSpawnerComponent");
-		_targeting ??= GetNodeOrNull<TargetingComponent>("TargetingComponent");
-		SubscribeToTargeting();
 	}
-
 	/// <summary>
 	/// Initialize shooter and targeting component (which in-turn will initialize the detectable component associated with targeting component).
 	/// </br></br>
@@ -56,74 +53,59 @@ public partial class ShooterComponent : Node2D
 	// 	_targeting.Initialize(range, entityTypes, targetTypes);
 	// }
 
-
 	public override void _Ready()
 	{
-		_projectileSpawner ??= GetNodeOrNull<SpawnerComponent>("ProjectileSpawnerComponent");
-		_targeting ??= GetNodeOrNull<TargetingComponent>("TargetingComponent");
 		
-		//GD.Print($"ShooterComponent _Ready: spawner={_projectileSpawner}, targeting={_targeting}, cooldown={_shotCooldown}");
+		Debug.Assert(IsInstanceValid(_projectileSpawner));
+		Debug.Assert(IsInstanceValid(_targeting));
+		Debug.Assert(IsInstanceValid(_shotCooldown));
 
-
-		if (_projectileSpawner == null || _targeting == null || _shotCooldown == null)
+		_targeting.OnTargetSelect += (target) =>
 		{
-			GD.PrintErr($"ShooterComponent {Name}: missing components (spawner={_projectileSpawner}, targeting={_targeting}, cooldown={_shotCooldown})");
-			return;
-		}
-
-		
-
-		SubscribeToTargeting();
-	}
-
-	private void SubscribeToTargeting()
-	{
-		if (_targeting == null) return;
-
-		_targeting.OnTargetSelect -= OnTargetSelected;
-		_targeting.OnTargetSelect += OnTargetSelected;
-	}
-
-	private void OnTargetSelected(DetectableComponent target)
-	{
-		//GD.Print($"OnTargetSelected fired, target={target}, cooldownStopped={_shotCooldown?.IsStopped()}, entityTypes={_thisEntityTypes}, stats={_projectileStats}");
-
-		if (!_shotCooldown.IsStopped()) return;
-		if (_thisEntityTypes == Groups.GroupTypes.None || _projectileStats == null)
-		{
-			GD.Print($"WARNING - Target selected by ShooterComponent {this}, but shooter is not properly initialized.");
-			return;
-		}
-
-		_shotCooldown.Start(_shotTime);
-
-		var projectile = _projectileSpawner.Spawn() as Projectile;
-		_projectileSpawner.GetParent().AddChild(projectile);
-
-		if (GetComponentInSiblingsOrNull<HurtComponent>(target) is var hurt)
-		{
-			// Initialize ONCE, immediately after adding to the tree
-			projectile.Initialize(hurt, _projectileStats, _thisEntityTypes, _targetTypes);
-
-			EmitSignal(SignalName.OnShoot, hurt, projectile);
-		}
-		else
-		{
-			GD.Print($"WARNING - Target selected by ShooterComponent {this}, but target does not have a hurt component?");
-			projectile.QueueFree();
-		}
+			if (!_shotCooldown.IsStopped()) { return; }
+			// if (_sender == null && _projectileStats == null)
+			if (_thisEntityTypes == Groups.GroupTypes.None || _projectileStats == null)
+			{
+				GD.Print($"WARNING - Target selected by ShooterComponent {this}, but shooter is not properly initialized.");
+				return;
+			}
+			_shotCooldown.Start(_shotTime);
+			var projectile = _projectileSpawner.Spawn() as Projectile;
+			GetTree().GetRoot().AddChild(projectile); // todo: Might not be right
+			if (GetComponentInSiblingsOrNull<HurtComponent>(target) is var hurt)
+			{
+				projectile.Initialize(hurt, _projectileStats, _thisEntityTypes, _targetTypes);
+				EmitSignal(SignalName.OnShoot, hurt, projectile);
+			}
+			else
+			{
+				GD.Print($"WARNING - Target selected by ShooterComponent {this}, but target does not have a hurt component?");
+				projectile.QueueFree(); // todo
+				return;
+			}
+			
+		};
+		// _projectileSpawner.OnSpawned += (node) =>
+		// {
+		// 	if (node is Projectile p)
+		// 	{
+		// 		p.Initialize()
+		// 	}
+		// 	// if (node is Node2D node2D)
+		// 	// {
+		// 	// 	node2D.
+		// 	// }
+		// };
 	}
 
 	public Groups.GroupTypes GetEntityTypes()
 	{
 		return _thisEntityTypes;
 	}
-
 	public float GetFireRate()
 	{
 		return _shotsPerSecond;
 	}
-
 	public ProjectileStats GetProjectileStats()
 	{
 		return _projectileStats;
@@ -139,4 +121,5 @@ public partial class ShooterComponent : Node2D
 		_shotsPerSecond = shotsPerSecond;
 		_shotTime = 1 / shotsPerSecond;
 	}
+
 }

@@ -1,3 +1,4 @@
+
 using CS780GroupProject.Scripts.Utils;
 using static CS780GroupProject.Scripts.Utils.NodeComponentChecking;
 using Godot;
@@ -10,10 +11,9 @@ public partial class TargetingComponent : Node2D
 
 	[Export] public TargetingMode TargetingStyle = TargetingMode.Close;
 	[Export] private DetectorComponent _detector;
+	// [Export] private HitComponent _hit; // todo: To detect hurt components
 
 	private List<DetectableComponent> _targets = [];
-	private bool _detectorSubscribed = false;
-
 
 	// /// <summary>
 	// /// Initialize associated detector with stats. Convenience function
@@ -34,44 +34,23 @@ public partial class TargetingComponent : Node2D
 	// {
 	// 	_detector.Initialize(entityTypes, validTargets);
 	// }
-	public void Initialize(TargetingMode targetingMode)
+	public void Initialize (TargetingMode targetingMode)
 	{
 		TargetingStyle = targetingMode;
 	}
 
-	public void SetDetector(DetectorComponent detector)
-	{
-		if (_detectorSubscribed && _detector != null)
-		{
-			_detector.OnEnterDetector -= OnEnterDetector;
-			_detector.OnExitDetector -= OnExitDetector;
-		}
-		_detector = detector;
-		if (_detector != null)
-		{
-			_detector.OnEnterDetector += OnEnterDetector;
-			_detector.OnExitDetector += OnExitDetector;
-			_detectorSubscribed = true;
-		}
-	}
-
-	private void OnEnterDetector(DetectableComponent detectable)
-	{
-		_targets.Add(detectable);
-	}
-
-	private void OnExitDetector(DetectableComponent detectable)
-	{
-		_targets.Remove(detectable);
-	}
-
 	public override void _Ready()
 	{
-		if (_detector != null && !_detectorSubscribed)
+		if (IsInstanceValid(_detector))
 		{
-			_detector.OnEnterDetector += OnEnterDetector;
-			_detector.OnExitDetector += OnExitDetector;
-			_detectorSubscribed = true;
+			_detector.OnEnterDetector += (detectable) => 
+			{
+				_targets.Add(detectable);
+			};
+			_detector.OnExitDetector += (detectable) => 
+			{
+				_targets.Remove(detectable);
+			};
 		}
 	}
 
@@ -94,11 +73,12 @@ public partial class TargetingComponent : Node2D
 				TargetingMode.Strong => StrongPick(),
 				_                    => throw new NotImplementedException(),
 			};
+			// We have a valid target!
 			EmitSignal(SignalName.OnTargetSelect, currTarget);
 		}
 	}
 
-	// <summary>
+	/// <summary>
 	/// Pick a random valid target.
 	/// </summary>
 	/// <returns></returns>
@@ -107,7 +87,6 @@ public partial class TargetingComponent : Node2D
 		if (_targets.Count == 0) { return null; }
 		return _targets[GD.RandRange(0, _targets.Count)];
 	}
-
 	/// <summary>
 	/// Pick the valid target that is closest to finishing its path.
 	/// </summary>
@@ -115,9 +94,10 @@ public partial class TargetingComponent : Node2D
 	private Area2D FirstPick()
 	{
 		if (_targets.Count == 0) { return null; }
+
 		Area2D currTarget = null;
 		float currTargetPathLength = float.PositiveInfinity;
-		{
+		{ // Scope mover variable
 			var target = _targets[0];
 			if (GetComponentInSiblingsOrNull<MoverComponent>(target) is var mover && mover != null)
 			{
@@ -135,13 +115,11 @@ public partial class TargetingComponent : Node2D
 				{
 					currTarget = target;
 					currTargetPathLength = targetPathLength;
-				}
+				} 
 			}
 		}
 		return currTarget;
 	}
-
-
 	/// <summary>
 	/// Pick the valid target that is furthest from finishing its path.
 	/// </summary>
@@ -149,9 +127,10 @@ public partial class TargetingComponent : Node2D
 	private Area2D LastPick()
 	{
 		if (_targets.Count == 0) { return null; }
+
 		Area2D currTarget = null;
 		float currTargetPathLength = 0.0f;
-		{
+		{ // Scope mover variable
 			var target = _targets[0];
 			if (GetComponentInSiblingsOrNull<MoverComponent>(target) is var mover && mover != null)
 			{
@@ -169,12 +148,11 @@ public partial class TargetingComponent : Node2D
 				{
 					currTarget = target;
 					currTargetPathLength = targetPathLength;
-				}
+				} 
 			}
 		}
 		return currTarget;
 	}
-
 	/// <summary>
 	/// Pick the closest valid target to the targeting position.
 	/// </summary>
@@ -182,6 +160,7 @@ public partial class TargetingComponent : Node2D
 	private Area2D ClosePick()
 	{
 		if (_targets.Count == 0) { return null; }
+
 		Area2D currTarget = _targets[0];
 		float currTargetDistanceFromPosition = GlobalPosition.DistanceTo(currTarget.GlobalPosition);
 		for (int i = 1; i < _targets.Count; i++)
@@ -192,11 +171,10 @@ public partial class TargetingComponent : Node2D
 			{
 				currTarget = target;
 				currTargetDistanceFromPosition = targetDistanceFromPosition;
-			}
+			} 
 		}
 		return currTarget;
 	}
-
 	/// <summary>
 	/// Pick the weakest valid target.
 	/// </summary>
@@ -204,9 +182,10 @@ public partial class TargetingComponent : Node2D
 	private Area2D WeakPick()
 	{
 		if (_targets.Count == 0) { return null; }
+
 		Area2D currTarget = null;
 		float currTargetHealth = float.PositiveInfinity;
-		{
+		{ // Scope health variable
 			var target = _targets[0];
 			if (GetComponentInSiblingsOrNull<HealthComponent>(target) is var health && health != null)
 			{
@@ -224,12 +203,11 @@ public partial class TargetingComponent : Node2D
 				{
 					currTarget = target;
 					currTargetHealth = targetHealth;
-				}
+				} 
 			}
 		}
 		return currTarget;
 	}
-
 	/// <summary>
 	/// Pick the strongest valid target.
 	/// </summary>
@@ -237,9 +215,10 @@ public partial class TargetingComponent : Node2D
 	private Area2D StrongPick()
 	{
 		if (_targets.Count == 0) { return null; }
+
 		Area2D currTarget = null;
 		float currTargetHealth = 0.0f;
-		{
+		{ // Scope health variable
 			var target = _targets[0];
 			if (GetComponentInSiblingsOrNull<HealthComponent>(target) is var health && health != null)
 			{
@@ -257,7 +236,7 @@ public partial class TargetingComponent : Node2D
 				{
 					currTarget = target;
 					currTargetHealth = targetHealth;
-				}
+				} 
 			}
 		}
 		return currTarget;
@@ -265,9 +244,8 @@ public partial class TargetingComponent : Node2D
 
 	public void SetRadius(float newRadius)
 	{
-		_detector?.SetRadius(newRadius);
+		_detector.SetRadius(newRadius);
 	}
-
 	/// <summary>
 	/// Used for testing to see what the current target list is for TargetingComponent
 	/// </summary>
@@ -276,4 +254,5 @@ public partial class TargetingComponent : Node2D
 	{
 		return _targets;
 	}
+
 }

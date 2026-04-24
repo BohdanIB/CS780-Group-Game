@@ -35,8 +35,6 @@ public partial class SpawnerComponent : Node2D
 	public override void _Ready()
 	{
 		if (ScenePath != null) { Initialize(ScenePath); }
-		
-		
 	}
 
 	public Node Spawn()
@@ -51,9 +49,7 @@ public partial class SpawnerComponent : Node2D
 			if (_scene == null) { return null; }
 		}
 
-		//var node = _scene.Instantiate<Node>();
-		var node = _scene.Instantiate();
-
+		var node = _scene.Instantiate<Node>();
 		if (node is Node2D node2D && node2D != null)
 		{
 			node2D.GlobalPosition = GlobalPosition;

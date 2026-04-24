@@ -9,16 +9,17 @@
 [ext_resource type="PackedScene" uid="uid://bxnd3hgmx5vi6" path="res://Scenes/Components/spawner_component.tscn" id="7_auwsv"]
 [ext_resource type="SpriteFrames" uid="uid://bpbko2n2qgxyk" path="res://Assets/AnimationFrames/enemy_idle_frames.tres" id="8_anim"]
 
-[node name="Enemy" unique_id=1651465167 groups=["enemy"] instance=ExtResource("1_hghv2")]
+[node name="Enemy" unique_id=1651465167 node_paths=PackedStringArray("_shooter", "_targeting", "_projectileSpawner") groups=["enemy"] instance=ExtResource("1_hghv2")]
 scale = Vector2(4, 4)
 script = ExtResource("2_1f0kj")
 _stats = ExtResource("3_1dp5w")
 _targetingMode = 4
 _enemyTypes = 16
 _targetTypes = 11
-
-[node name="MoverComponent" parent="." index="4" unique_id=1975334598]
-Speed = 300.0
+_shooter = NodePath("ShooterComponent")
+_targeting = NodePath("ShooterComponent/TargetingComponent")
+_projectileSpawner = NodePath("ShooterComponent/ProjectileSpawnerComponent")
+MaxHealth = 100
 
 [node name="AnimationComponent" parent="." index="5" unique_id=1805975540]
 Animations = ExtResource("4_1dp5w")
@@ -29,7 +30,9 @@ sprite_frames = ExtResource("8_anim")
 animation = &"north_east"
 autoplay = "north_east"
 
-[node name="ShooterComponent" parent="." index="7" unique_id=206378310 instance=ExtResource("5_0830c")]
+[node name="ShooterComponent" parent="." index="7" unique_id=206378310 node_paths=PackedStringArray("_projectileSpawner", "_targeting") instance=ExtResource("5_0830c")]
+_projectileSpawner = NodePath("ProjectileSpawnerComponent")
+_targeting = NodePath("TargetingComponent")
 
 [node name="TargetingComponent" parent="ShooterComponent" index="1" unique_id=302949712 instance=ExtResource("6_1dp5w")]
 

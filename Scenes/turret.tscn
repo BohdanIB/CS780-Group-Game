@@ -9,13 +9,18 @@
 [ext_resource type="PackedScene" uid="uid://cxvwrh12elf1m" path="res://Scenes/Components/targeting_component.tscn" id="8_targeting"]
 [ext_resource type="PackedScene" uid="uid://bxnd3hgmx5vi6" path="res://Scenes/Components/spawner_component.tscn" id="9_spawner"]
 
-[node name="Turret" unique_id=2082542263 groups=["turret"] instance=ExtResource("2_base")]
+[node name="Turret" unique_id=2082542263 node_paths=PackedStringArray("_detector", "_detectable", "_shooter", "_targeting", "_projectileSpawner") groups=["turret"] instance=ExtResource("2_base")]
 scale = Vector2(4, 4)
 script = ExtResource("1_script")
 _stats = null
 _targetingMode = 3
 _turretTypes = 3
 _targetTypes = 16
+_detector = NodePath("DetectorComponent")
+_detectable = NodePath("DetectableComponent")
+_shooter = NodePath("ShooterComponent")
+_targeting = NodePath("ShooterComponent/TargetingComponent")
+_projectileSpawner = NodePath("ShooterComponent/ProjectileSpawnerComponent")
 
 [node name="AnimationComponent" parent="." index="2" unique_id=1834183178]
 Animations = ExtResource("4_anims")
@@ -24,9 +29,12 @@ Animations = ExtResource("4_anims")
 
 [node name="DetectableComponent" parent="." index="4" unique_id=843466507 instance=ExtResource("5_detectable")]
 
-[node name="ShooterComponent" parent="." index="5" unique_id=505730975 instance=ExtResource("6_shooter")]
+[node name="ShooterComponent" parent="." index="5" unique_id=505730975 node_paths=PackedStringArray("_projectileSpawner", "_targeting") instance=ExtResource("6_shooter")]
+_projectileSpawner = NodePath("ProjectileSpawnerComponent")
+_targeting = NodePath("TargetingComponent")
 
-[node name="TargetingComponent" parent="ShooterComponent" index="1" unique_id=187863657 instance=ExtResource("8_targeting")]
+[node name="TargetingComponent" parent="ShooterComponent" index="1" unique_id=187863657 node_paths=PackedStringArray("_detector") instance=ExtResource("8_targeting")]
+_detector = NodePath("../../DetectorComponent")
 
 [node name="ProjectileSpawnerComponent" parent="ShooterComponent" index="2" unique_id=1630108137 instance=ExtResource("9_spawner")]
 ScenePath = "res://Scenes/projectile.tscn"
