@@ -11,7 +11,9 @@ public partial class TurretPlacer : Node2D
 	[Signal]
 	public delegate void OnTurretPlacedEventHandler();
 
+	// Scene Children
 	[Export] private Turret _ghostTurret;
+	// Preloaded Scenes
 	[Export] private PackedScene _turretScene;
 
 	private int _currentTurretIndex = 0;
@@ -20,7 +22,7 @@ public partial class TurretPlacer : Node2D
 	private GameUi _gameUi;
 	private GenericGrid<GroundTile> _grid;
 	private IsometricTileMap _tileMap;
-	private TileMapLayer _currentTileMapLayer;
+	private TileMapLayer _currentTileMapLayer; // todo: Potentially expand to other layers depending on hover location?
 
 	private bool _turretPlacerEnabled = false;
 
@@ -79,9 +81,10 @@ public partial class TurretPlacer : Node2D
 		if (_currentTileMapLayer == null) return;
 
 		FollowMouse();
-		UpdatePlacerState();
+		UpdatePlacerState();	
 		UpdateGhostTurretState();
 
+		// Toggle existing turret's targeting priority mode
 		var tile = GetTile();
 		if (Input.IsActionJustPressed("Right Click") && tile != null && tile.Turret != null)
 		{
@@ -101,8 +104,11 @@ public partial class TurretPlacer : Node2D
 		if (_grid.GetGridValueOrDefault(coord.X, coord.Y) is GroundTile tile &&
 			tile != null && !tile.HasRoadConnection() && !tile.HasStructure())
 		{
+			// GD.Print($"Structure placement valid for tile: {tile}");
 			return tile;
 		}
+
+		
 
 		return null;
 	}
