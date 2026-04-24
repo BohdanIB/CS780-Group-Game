@@ -127,7 +127,10 @@ public partial class TurretPlacer : Node2D
 	private void FollowMouse()
 	{
 		Vector2 mousePosition = GetGlobalMousePosition();
+			// _currentOriginCoordinates = (Vector2I) (mousePosition / _grid.cellSize).Clamp(Vector2I.Zero, _grid.GetGridDimensions());
 		GlobalPosition = IsometricTileMap.CenterTilePosition(_currentTileMapLayer, mousePosition);
+		// GD.Print($"Current origin position for mouse: {_currentOriginCoordinates}");
+		// GD.Print($"Coordinate: {IsometricTileMap.GlobalPositionToMapCoord(_currentTileMapLayer, mousePosition)} - Global Position: {IsometricTileMap.CenterTilePosition(_currentTileMapLayer, mousePosition)}");
 	}
 
 	private void UpdatePlacerState()
@@ -166,6 +169,7 @@ public partial class TurretPlacer : Node2D
 		GroundTile tile = GetTileIfStructurePlacementValid();
 		if (_turretPlacerEnabled && tile != null && _allTurretStats != null && _allTurretStats.Count > 0)
 		{
+			// Turret Placement
 			var turretStats = _allTurretStats[_currentTurretIndex];
 
 			if (Input.IsActionJustPressed("Left Click"))

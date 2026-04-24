@@ -4,7 +4,7 @@ using System;
 
 public partial class PathFollower : Node2D
 {
-	public const Groups.GroupTypes TYPES = Groups.GroupTypes.None;
+	public const Groups.GroupTypes TYPES = Groups.GroupTypes.None; // todo
 
 	// Components //
 	[ExportGroup("Components")]
