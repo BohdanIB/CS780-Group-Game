@@ -14,6 +14,10 @@ public partial class Enemy : PathFollower
 	[Export] public Groups.GroupTypes _enemyTypes = PathFollower.TYPES | Groups.GroupTypes.Enemy;
 	[Export] public Groups.GroupTypes _targetTypes = Groups.GroupTypes.Friendly | Groups.GroupTypes.Turret | Groups.GroupTypes.Structure;
 
+	// [Export] public Groups.GroupTypes _hurtTypes = Groups.GroupTypes.Enemy;
+	// [Export] public Groups.GroupTypes _detectorTypes = Groups.GroupTypes.Enemy;
+	// [Export] public Groups.GroupTypes _detectableTypes = Groups.GroupTypes.Enemy;
+
 	[ExportGroup("Components")]
 	[Export] private ShooterComponent _shooter;
 	[Export] private TargetingComponent _targeting;
