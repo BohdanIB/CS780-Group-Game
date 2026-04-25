@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="MaterialGathererStats" format=3 uid="uid://c2ke6cwkljr4f"]
+
+[ext_resource type="Script" uid="uid://6aa1ye00hd8k" path="res://Scripts/Structures/gatherers/MaterialGathererStats.cs" id="1_k1jv7"]
+[ext_resource type="Resource" uid="uid://c1h7wxlwa66wd" path="res://Resources/Animations/AnimationPacks/FarmAnimations.tres" id="1_o71oy"]
+
+[resource]
+script = ExtResource("1_k1jv7")
+Animations = ExtResource("1_o71oy")
+metadata/_custom_type_script = "uid://6aa1ye00hd8k"

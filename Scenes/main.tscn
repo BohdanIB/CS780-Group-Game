@@ -16,6 +16,8 @@ tempConstructionInformation = ExtResource("2_jjvhh")
 position = Vector2(573, 323)
 
 [node name="StructurePlacer" parent="." unique_id=1843712961 instance=ExtResource("4_jjvhh")]
-temporaryConstructionInfo = Array[Object]([ExtResource("4_21xkr"), ExtResource("5_6bp64")])
+_validPlacementColor = Color(0, 0.7882353, 0, 0.78431374)
+_invalidPlacementColor = Color(0.6666667, 0, 0, 0.78431374)
+temporaryConstructionInfo = Array[Object]([ExtResource("4_21xkr"), ExtResource("5_6bp64"), ExtResource("2_jjvhh")])
 
 [node name="PlayArea" parent="." unique_id=1275724900 instance=ExtResource("3_8gbba")]
