@@ -37,4 +37,5 @@ _targeting = NodePath("TargetingComponent")
 _detector = NodePath("../../DetectorComponent")
 
 [node name="ProjectileSpawnerComponent" parent="ShooterComponent" index="2" unique_id=1630108137 instance=ExtResource("9_spawner")]
+position = Vector2(0, -20)
 ScenePath = "res://Scenes/projectile.tscn"
