@@ -52,6 +52,7 @@ public partial class Enemy: PathFollower
 		};
 		_hurt.OnHurt += (area, damage) => 
 		{
+			
 			_health.ApplyDamage(damage); 
 		}; 
 

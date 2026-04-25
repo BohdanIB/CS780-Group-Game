@@ -33,6 +33,7 @@ public partial class HealthComponent : Node2D
 		GD.Print($"HealthComponent applying damage {damage} to current health of {oldHealth}. New health value: {_currentHealth}.");
 		CheckHealthLeft();
 	}
+	
 	public void ApplyHealth(float health)
 	{
 		float oldHealth = _currentHealth;

@@ -28,6 +28,8 @@ public partial class ProjectileStats : Resource
 	[Export] public float Damage;
 	[Export] public float Hitbox;
 	[Export] public AnimationPack Animations;
+	[Export] public float AOERadius;
+	[Export] public bool AOEFalloff;
 
 	/// <summary>
 	/// Get list of all projectile stats.
