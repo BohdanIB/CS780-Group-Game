@@ -23,6 +23,7 @@ public partial class PathFollower : Node2D
 
 	[Signal] public delegate void UnitDiedEventHandler(PathFollower unit);
 	[Signal] public delegate void UnitReachedGoalEventHandler(int damage);
+	[Export] protected ShooterComponent _shooter;
 
 	protected float _healthValue = 100.0f;
 

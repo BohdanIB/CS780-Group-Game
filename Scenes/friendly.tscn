@@ -8,17 +8,20 @@
 [ext_resource type="PackedScene" uid="uid://cxvwrh12elf1m" path="res://Scenes/Components/targeting_component.tscn" id="6_targeting"]
 [ext_resource type="PackedScene" uid="uid://bxnd3hgmx5vi6" path="res://Scenes/Components/spawner_component.tscn" id="7_spawner"]
 
-[node name="Friendly" unique_id=1967935745 groups=["friendly"] instance=ExtResource("1_path")]
+[node name="Friendly" unique_id=1967935745 node_paths=PackedStringArray("_shooter") groups=["friendly"] instance=ExtResource("1_path")]
 scale = Vector2(4, 4)
 script = ExtResource("2_script")
 _stats = ExtResource("3_stats")
 _friendlyTypes = 8
 _enemyTypes = 16
+_shooter = NodePath("ShooterComponent")
 
 [node name="AnimationComponent" parent="." index="5" unique_id=1805975540]
 Animations = ExtResource("4_animpack")
 
 [node name="ShooterComponent" parent="." index="6" unique_id=1232969517 node_paths=PackedStringArray("_projectileSpawner", "_targeting") instance=ExtResource("5_shooter")]
+_thisEntityTypes = 8
+_targetTypes = 16
 _projectileSpawner = NodePath("ProjectileSpawnerComponent")
 _targeting = NodePath("TargetingComponent")
 
