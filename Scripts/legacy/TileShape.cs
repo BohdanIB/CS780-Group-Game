@@ -50,8 +50,8 @@ public class TileShape
 				newRoadConnections = [false, false, false, false];
 			}
 
-			GroundTile newTile = new GroundTile(tileToCopy.terrain, tileToCopy.position);
-			newTile.roadConnections = newRoadConnections;
+            GroundTile newTile = new GroundTile(tileToCopy._biome, tileToCopy.position);
+            newTile.roadConnections = newRoadConnections;
 
 			return newTile;
 		});

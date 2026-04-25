@@ -1,9 +1,9 @@
 [gd_scene format=3 uid="uid://caafjqfx010mq"]
 
-[ext_resource type="Script" uid="uid://bwyae206qebn8" path="res://Scripts/turrets/TurretPlacer.cs" id="1_00fsi"]
+[ext_resource type="Script" uid="uid://bwyae206qebn8" path="res://Scripts/legacy/TurretPlacer.cs" id="1_00fsi"]
 [ext_resource type="PackedScene" uid="uid://tw6j84txs1a1" path="res://Scenes/grid_renderer.tscn" id="2_f3ru2"]
-[ext_resource type="PackedScene" uid="uid://b2w8csm5vypb0" path="res://Scenes/turret.tscn" id="3_ub6b8"]
-[ext_resource type="Script" uid="uid://bawwkshhg5psh" path="res://Resources/Turret/TurretStats.cs" id="4_u8r2s"]
+[ext_resource type="PackedScene" uid="uid://b2w8csm5vypb0" path="res://Scenes/Structures/turret.tscn" id="3_ub6b8"]
+[ext_resource type="Script" uid="uid://bawwkshhg5psh" path="res://Scripts/turrets/TurretStats.cs" id="4_u8r2s"]
 
 [sub_resource type="Resource" id="Resource_t88li"]
 script = ExtResource("4_u8r2s")
@@ -19,6 +19,7 @@ _turretScene = ExtResource("3_ub6b8")
 [node name="GhostTurret" parent="." unique_id=1985475119 instance=ExtResource("3_ub6b8")]
 visible = false
 modulate = Color(1, 1, 1, 0.49019608)
-scale = Vector2(2, 2)
+_projectileScene = null
 monitoring = false
 monitorable = false
+_stats = SubResource("Resource_t88li")

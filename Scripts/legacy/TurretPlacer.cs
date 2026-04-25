@@ -63,7 +63,7 @@ public partial class TurretPlacer : Node2D
 
 		if (_allTurretStats != null && _allTurretStats.Count > 0)
 		{
-			_ghostTurret.Initialize(_allTurretStats[_currentTurretIndex], _currentTurretTargetMode);
+			// _ghostTurret.Initialize(TurretStats.ALL_TURRETS[_currentTurretIndex], _currentTurretTargetMode);
 		}
 
 		_ghostTurret.DisableTurret();
@@ -189,8 +189,7 @@ public partial class TurretPlacer : Node2D
 				var turret = _turretScene.Instantiate<Turret>();
 				turret.AddToGroup("placed_turrets");
 				tile.Turret = turret;
-
-				turret.Initialize(turretStats, _currentTurretTargetMode);
+				// turret.Initialize(turretStats, _currentTurretTargetMode);
 				turret.GlobalPosition = IsometricTileMap.MapCoordToGlobalPosition(_currentTileMapLayer, tile.position);
 
 			

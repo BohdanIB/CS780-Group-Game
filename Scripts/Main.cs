@@ -5,45 +5,28 @@ public partial class Main : Node2D
 {
     [Export] public ulong MAIN_SEED = 12345;
 
-    [Export] private GridRenderer _gridRenderer;
-    [Export] private TurretPlacer _turretPlacer;
 
-    private GenericGrid<GroundTile> _grid;
+	[Export] private StructurePlacer _structurePlacer;
 
-    public override void _Ready()
-    {
-        //Random randomizer = new Random();
-        //MAIN_SEED = (ulong)randomizer.NextInt64();
-        //GD.Seed(MAIN_SEED);
-        GD.Randomize();
+	[Export] public ConstructionInformation tempConstructionInformation;
 
-        var hubLocation = new Vector2I(50, 50);
+	private Vector2I _hubLocation = new Vector2I(20, 10);
+	
 
-        GenericGrid<GroundTile> grid = WorldGenerator.GenerateWorldAStar(
-            new Vector2I(100, 100),
-            hubLocation
-        );
-        _grid = grid;
+	public override void _Ready()
+	{
+		GD.Seed(MAIN_SEED);
 
-        _gridRenderer.RenderGrid(grid);
+		var hubLocation = new Vector2I(20, 10);
+		GenericGrid<GroundTile> grid = WorldGenerator.GenerateWorldAStar(new Vector2I(41, 21), hubLocation);
+		PlayArea.instance.Initialize(grid);
+		PlayArea.instance.Render();
 
-        var tileSize = new Vector2I(1, 1);
-        var mapWidth = grid.GetWidth() * tileSize.X;
-        var mapHeight = grid.GetHeight() * tileSize.Y;
+		_structurePlacer.Initialize(PlayArea.instance, null);
+		
 
-        float zoomX = 1920f / mapWidth;
-        float zoomY = 1080f / mapHeight;
-        float zoom = Mathf.Min(zoomX, zoomY);
+		Enemy.TempEnemyDemo(this, grid, PlayArea.instance.GridRenderer.TerrainMap, hubLocation);
+		Friendly.TempFriendlyDemo(this, grid, PlayArea.instance.GridRenderer.TerrainMap, hubLocation);
+	}
 
-        GD.Print($"zoomX: {zoomX}, zoomY: {zoomY}");
-
-        Camera2D camera = GetNode<Camera2D>("Camera2D");
-
-        _turretPlacer.Initialize(_grid, _gridRenderer.TerrainMap);
-
-        EnemySpawner spawner = GetNode<EnemySpawner>("EnemySpawner");
-        spawner.Initialize(grid, hubLocation, _gridRenderer.TerrainMap.GetLayers()[0]);
-
-        Friendly.TempFriendlyDemo(this, grid, _gridRenderer.TerrainMap, hubLocation);
-    }
 }

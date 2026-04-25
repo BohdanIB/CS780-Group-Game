@@ -2,23 +2,23 @@ using Godot;
 
 public class GroundTile
 {
-	// Tile features
-	public BiomeType terrain;
-	public Vector2I position;
-	public bool[] roadConnections = new bool[4]; // N,E,S,W
-	private GenericStructure _structure;
+    // Tile features
+    public BiomeType biome;
+    public Vector2I position;
+    public bool[] roadConnections = new bool[4]; // N,E,S,W
+    private GenericStructure _structure;
 
 	// Getters + Setters
 	public GenericStructure Structure { get => _structure; set => _structure = value; }
 	public Turret Turret { get => _structure as Turret; set => _structure = value; }
 
-	public GroundTile(BiomeType terrain, Vector2I position, bool[] roads = null, GenericStructure structure = null)
-	{
-		this.terrain = terrain;
-		this.position = position;
-		roadConnections = roads ?? [false, false, false, false];
-		_structure = structure;
-	}
+    public GroundTile(BiomeType terrain, Vector2I position, bool[] roads = null, GenericStructure structure = null)
+    {
+        this.biome = terrain;
+        this.position = position;
+        roadConnections = roads ?? [false, false, false, false];
+        _structure = structure;
+    }
 
 	// public Vector2I GetGridPosition()
 	// {
@@ -77,9 +77,9 @@ public class GroundTile
 		return _structure != null;
 	}
 
-	public override string ToString()
-	{
-		return $"{terrain} {position} {roadConnections} {(HasStructure() ? _structure : "No Structure")}";
-	}
+    public override string ToString()
+    {
+        return $"{biome} {position} {roadConnections} {(HasStructure() ? _structure : "No Structure")}";
+    }
 
 }

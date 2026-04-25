@@ -7,7 +7,8 @@ using System.Collections.Generic;
 /// <summary>
 /// 
 /// </summary>
-public partial class TurretStats : Resource
+[GlobalClass]
+public partial class TurretStats : StructureStats
 {
 	public static readonly List<TurretStats> ALL_TURRETS = LoadAllStats();
 	private const string TURRET_DIRECTORY_PATH = "res://Resources/Turret/";

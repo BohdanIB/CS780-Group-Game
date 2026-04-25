@@ -1,0 +1,44 @@
+[gd_scene format=3 uid="uid://da75vob33ocqb"]
+
+[ext_resource type="PackedScene" uid="uid://27mmcge0cxrm" path="res://Scenes/generic_structure.tscn" id="1_flmsr"]
+[ext_resource type="Script" uid="uid://bk3drg0y2r1ku" path="res://Scripts/turrets/Turret.cs" id="2_4rdq3"]
+[ext_resource type="Resource" uid="uid://b65p4eimakib4" path="res://Resources/Turret/BallistaTurretStats.tres" id="3_g1jj1"]
+[ext_resource type="SpriteFrames" uid="uid://divrawug5fwn" path="res://Assets/AnimationFrames/turret_idle_frames.tres" id="4_mjool"]
+[ext_resource type="Resource" uid="uid://cop41bqffhdhj" path="res://Resources/Animations/AnimationPacks/TurretAnimations.tres" id="5_qhao5"]
+[ext_resource type="PackedScene" uid="uid://c43d2uh68714x" path="res://Scenes/Components/detector_component.tscn" id="6_celfg"]
+[ext_resource type="PackedScene" uid="uid://cbnk8jcd7c4v3" path="res://Scenes/Components/detectable_component.tscn" id="7_5htox"]
+[ext_resource type="PackedScene" uid="uid://1xnv73ih3ekh" path="res://Scenes/Components/shooter_component.tscn" id="8_cn7b0"]
+[ext_resource type="PackedScene" uid="uid://cxvwrh12elf1m" path="res://Scenes/Components/targeting_component.tscn" id="9_ypp8o"]
+[ext_resource type="PackedScene" uid="uid://bxnd3hgmx5vi6" path="res://Scenes/Components/spawner_component.tscn" id="10_yc23m"]
+
+[node name="Turret" unique_id=440596787 node_paths=PackedStringArray("_detector", "_detectable", "_shooter", "_targeting", "_projectileSpawner") groups=["friendly", "turret"] instance=ExtResource("1_flmsr")]
+script = ExtResource("2_4rdq3")
+_stats = ExtResource("3_g1jj1")
+_targetingMode = 3
+_turretTypes = 3
+_targetTypes = 16
+_detector = NodePath("DetectorComponent")
+_detectable = NodePath("DetectableComponent")
+_shooter = NodePath("ShooterComponent")
+_targeting = NodePath("ShooterComponent/TargetingComponent")
+_projectileSpawner = NodePath("ShooterComponent/ProjectileSpawnerComponent")
+
+[node name="AnimationComponent" parent="." index="2" unique_id=1834183178]
+sprite_frames = ExtResource("4_mjool")
+animation = &"north_west"
+Animations = ExtResource("5_qhao5")
+
+[node name="DetectorComponent" parent="." index="3" unique_id=1994671651 instance=ExtResource("6_celfg")]
+_validDetectableTypes = 16
+
+[node name="DetectableComponent" parent="." index="4" unique_id=1835049866 instance=ExtResource("7_5htox")]
+
+[node name="ShooterComponent" parent="." index="5" unique_id=1054008556 node_paths=PackedStringArray("_projectileSpawner", "_targeting") instance=ExtResource("8_cn7b0")]
+_projectileSpawner = NodePath("ProjectileSpawnerComponent")
+_targeting = NodePath("TargetingComponent")
+
+[node name="TargetingComponent" parent="ShooterComponent" index="1" unique_id=564942499 node_paths=PackedStringArray("_detector") instance=ExtResource("9_ypp8o")]
+_detector = NodePath("../../DetectorComponent")
+
+[node name="ProjectileSpawnerComponent" parent="ShooterComponent" index="2" unique_id=391563213 instance=ExtResource("10_yc23m")]
+ScenePath = "uid://b1picus170nmk"

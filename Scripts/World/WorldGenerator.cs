@@ -3,9 +3,8 @@ using System.Collections.Generic;
 
 public partial class WorldGenerator : Node
 {
-	private const float ROAD_TRAVERSAL_COST = 1;
-	private const float ROAD_CONSTRUCTION_COST = 0.3f;
-	private const float ELEVATION_COST_SCALAR = 3;
+    private const float ROAD_TRAVERSAL_COST = 1, ROAD_CONSTRUCTION_COST = .3f, ELEVATION_COST_SCALAR = 3;
+    private const int WATER_BIOME_INDEX = 0;
 
 	private const string TERRAIN_DIRECTORY_PATH = "res://Resources/Terrain/";
 
@@ -15,14 +14,9 @@ public partial class WorldGenerator : Node
 		float[,] humidityNoise = GenerateNoiseMatrix(dimensions.X, dimensions.Y, seed: (int)GD.Randi(), frequency: 0.03f);
 		float[,] temperatureNoise = GenerateNoiseMatrix(dimensions.X, dimensions.Y, seed: (int)GD.Randi(), lucanarity: 1);
 
-		BiomeType[] loadedTerrains = LoadTerrains();
+        BiomeType[] loadedBiomes = LoadTerrains();
 
-		GenericGrid<GroundTile> newWorld =
-			new GenericGrid<GroundTile>(dimensions.X, dimensions.Y,
-				(g, x, y) =>
-					new GroundTile(
-						SelectTerrain(elevationNoise[x, y], humidityNoise[x, y], temperatureNoise[x, y], loadedTerrains),
-						new Vector2I(x, y)));
+        GenericGrid<GroundTile> newWorld = new GenericGrid<GroundTile>(dimensions.X, dimensions.Y, (g, x, y) => new GroundTile(SelectTerrain(elevationNoise[x, y], humidityNoise[x, y], temperatureNoise[x, y], loadedBiomes), new Vector2I(x, y)));
 
 		GridAStarPathfinder<GroundTile> pathfinder =
 			new GridAStarPathfinder<GroundTile>(newWorld, (x, y) =>
@@ -117,8 +111,17 @@ public partial class WorldGenerator : Node
 				currentPoint = nextPoint;
 			}
 
-			pathfinder.UpdateGrid();
-		}
+            pathfinder.UpdateGrid();
+        }
+
+        newWorld.ForEach((tile) =>
+        {
+            if (tile.HasRoadConnection())
+            {
+                tile.biome = loadedBiomes[WATER_BIOME_INDEX];
+            }
+        });
+
 
 		return newWorld;
 	}
@@ -150,19 +153,30 @@ public partial class WorldGenerator : Node
 		DirAccess directory = DirAccess.Open(TERRAIN_DIRECTORY_PATH);
 		if (directory == null) return null;
 
-		List<BiomeType> loadedTerrains = new();
+        List<BiomeType> loadedBiomes = [];
 
 		directory.ListDirBegin();
 
-		foreach (string terrainFileName in directory.GetFiles())
-		{
-			loadedTerrains.Add(ResourceLoader.Load<BiomeType>($"{TERRAIN_DIRECTORY_PATH}/{terrainFileName}"));
-		}
+        foreach (string terrainFileName in directory.GetFiles())
+        {
+            BiomeType loadedBiome = ResourceLoader.Load<BiomeType>($"{TERRAIN_DIRECTORY_PATH}/{terrainFileName}");
+
+            if (loadedBiome.ResourceName.Equals("Water"))
+            {
+                GD.Print("Detected Water Biome");
+                loadedBiomes.Insert(WATER_BIOME_INDEX, loadedBiome);
+            }
+            else
+            {
+                loadedBiomes.Add(loadedBiome);
+            }
+            
+        }
 
 		directory.ListDirEnd();
 
-		return loadedTerrains.ToArray();
-	}
+        return [.. loadedBiomes];
+    }
 
 	public static float[,] GenerateNoiseMatrix(int width, int height, int seed = 42, float zoom = 1, bool normalize = true, float frequency = 0.06f, int octaves = 6, float lucanarity = 1.5f)
 	{
