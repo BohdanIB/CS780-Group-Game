@@ -1,0 +1,292 @@
+[gd_scene format=3 uid="uid://bxnekokl8stoa"]
+
+[ext_resource type="Script" uid="uid://leh7amw6quj0" path="res://Scripts/GameUi.cs" id="1_3t1kc"]
+[ext_resource type="Script" uid="uid://bsj066idkmqi8" path="res://Scripts/SideMenuContainer.cs" id="1_bw2rt"]
+[ext_resource type="Script" uid="uid://bds4wmxom0mg7" path="res://Scripts/GameOverScreen.cs" id="2_1pjl6"]
+[ext_resource type="Script" uid="uid://ckkvwrabsbiar" path="res://Scripts/ToggleMenuButton.cs" id="2_xjnnq"]
+[ext_resource type="Texture2D" uid="uid://cpobui6wfjvkf" path="res://Sprites/skull (3).png" id="3_gjn1n"]
+[ext_resource type="Script" uid="uid://cvfvi3foxci1i" path="res://Scripts/TimerLabel.cs" id="3_rxsu6"]
+[ext_resource type="Script" uid="uid://chwa6vyek0ul5" path="res://Scripts/KillLabel.cs" id="3_y8vuf"]
+[ext_resource type="Texture2D" uid="uid://dwkxkagqql27x" path="res://Assets/Sprites/heart pixel art 32x32.png" id="4_1t2s1"]
+[ext_resource type="Texture2D" uid="uid://did4qqhay3op1" path="res://Assets/Sprites/coin.png" id="5_3t1kc"]
+[ext_resource type="Script" uid="uid://e0mn8kx5s333" path="res://Scripts/QuitButton.cs" id="6_3t1kc"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_y8vuf"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="Theme" id="Theme_bw2rt"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_gjn1n"]
+load_path = "res://.godot/imported/Parchment.jpg-6b7657cd5e0849ed9a3137c8cf763e01.ctex"
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_3t1kc"]
+texture = SubResource("CompressedTexture2D_gjn1n")
+
+[node name="GameUI" type="CanvasLayer" unique_id=556209750]
+script = ExtResource("1_3t1kc")
+
+[node name="GameOverScreen" type="Control" parent="." unique_id=425578995]
+visible = false
+z_index = 999
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_1pjl6")
+
+[node name="ColorRect" type="ColorRect" parent="GameOverScreen" unique_id=1615617001]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+color = Color(0, 0, 0, 1)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GameOverScreen" unique_id=263250032]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -48.0
+offset_top = -33.0
+offset_right = 48.0
+offset_bottom = 33.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TitleLabel" type="Label" parent="GameOverScreen/VBoxContainer" unique_id=1384337138]
+layout_mode = 2
+theme_override_font_sizes/font_size = 52
+text = "Game Over"
+
+[node name="RetryButton" type="Button" parent="GameOverScreen/VBoxContainer" unique_id=283003703]
+layout_mode = 2
+text = "Retry?"
+
+[node name="MainMenuButton" type="Button" parent="GameOverScreen/VBoxContainer" unique_id=1475691884]
+layout_mode = 2
+text = "Main Menu"
+
+[node name="UI" type="CanvasLayer" parent="." unique_id=384932]
+
+[node name="Panel" type="Panel" parent="UI" unique_id=2145057956]
+custom_minimum_size = Vector2(50, 50)
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_y8vuf")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/Panel" unique_id=2119936225]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_right = 290.0
+offset_bottom = 45.0
+grow_horizontal = 2
+size_flags_horizontal = 3
+size_flags_vertical = 2
+alignment = 1
+
+[node name="KillCount" type="HBoxContainer" parent="UI/Panel/HBoxContainer" unique_id=2068956033]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Skull Icon" type="TextureRect" parent="UI/Panel/HBoxContainer/KillCount" unique_id=1326603523]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+texture = ExtResource("3_gjn1n")
+stretch_mode = 5
+
+[node name="KillCountLabel" type="Label" parent="UI/Panel/HBoxContainer/KillCount" unique_id=1643478985]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 32
+text = "0"
+script = ExtResource("3_y8vuf")
+
+[node name="TimerLabel" type="Label" parent="UI/Panel/HBoxContainer" unique_id=986703465]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 32
+text = "0:00"
+script = ExtResource("3_rxsu6")
+
+[node name="Timer" type="Timer" parent="UI/Panel/HBoxContainer" unique_id=1220636980]
+autostart = true
+
+[node name="BaseHealth" type="HBoxContainer" parent="UI/Panel/HBoxContainer" unique_id=231965292]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TextureRect" type="TextureRect" parent="UI/Panel/HBoxContainer/BaseHealth" unique_id=848130792]
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("4_1t2s1")
+stretch_mode = 3
+
+[node name="BaseHPLabel" type="Label" parent="UI/Panel/HBoxContainer/BaseHealth" unique_id=1183692357]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9946539, 0.99191445, 0.99999994, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 32
+text = "100"
+
+[node name="CoinCount" type="HBoxContainer" parent="UI/Panel/HBoxContainer" unique_id=1027251394]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TextureRect" type="TextureRect" parent="UI/Panel/HBoxContainer/CoinCount" unique_id=985502370]
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("5_3t1kc")
+
+[node name="CoinCountLabel" type="Label" parent="UI/Panel/HBoxContainer/CoinCount" unique_id=1692703589]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 32
+text = "1000"
+
+[node name="WarningLabel" type="Label" parent="UI" unique_id=389522481]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.9488593, 0.21690774, 0.14402792, 1)
+theme_override_font_sizes/font_size = 40
+
+[node name="SideMenuContainer" type="PanelContainer" parent="." unique_id=1423852120]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(250, 0)
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -250.0
+theme = SubResource("Theme_bw2rt")
+theme_override_styles/panel = SubResource("StyleBoxTexture_3t1kc")
+script = ExtResource("1_bw2rt")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SideMenuContainer" unique_id=1335139940]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SideMenuContainer/VBoxContainer" unique_id=180445247]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SideMenuContainer/VBoxContainer/HBoxContainer" unique_id=981618266]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SideMenuContainer/VBoxContainer/HBoxContainer/VBoxContainer" unique_id=1545012627]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="SideMenuContainer/VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=2141844475]
+layout_mode = 2
+texture = ExtResource("5_3t1kc")
+stretch_mode = 3
+
+[node name="Label" type="Label" parent="SideMenuContainer/VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=794649894]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+text = "100"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BladeTurret" type="Button" parent="SideMenuContainer/VBoxContainer/HBoxContainer/VBoxContainer" unique_id=1127094194]
+layout_mode = 2
+text = "Blade Turret
+"
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="SideMenuContainer/VBoxContainer/HBoxContainer" unique_id=1258693969]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SideMenuContainer/VBoxContainer/HBoxContainer/VBoxContainer2" unique_id=450652729]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="SideMenuContainer/VBoxContainer/HBoxContainer/VBoxContainer2/HBoxContainer" unique_id=469188479]
+layout_mode = 2
+texture = ExtResource("5_3t1kc")
+stretch_mode = 3
+
+[node name="Label" type="Label" parent="SideMenuContainer/VBoxContainer/HBoxContainer/VBoxContainer2/HBoxContainer" unique_id=734518355]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+text = "75"
+
+[node name="BallistaTurret" type="Button" parent="SideMenuContainer/VBoxContainer/HBoxContainer/VBoxContainer2" unique_id=613986699]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Ballista Turret"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SideMenuContainer" unique_id=666790940]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+
+[node name="QuitButton" type="Button" parent="SideMenuContainer/HBoxContainer" unique_id=1147703337]
+layout_mode = 2
+text = "Main Menu"
+script = ExtResource("6_3t1kc")
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=288390893]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=68244084]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -2290.0
+offset_top = -1479.0
+offset_right = -2290.0
+offset_bottom = -1479.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ToggleMenuButton" type="Button" parent="." unique_id=1290876495]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -4.0
+offset_top = -8.0
+offset_right = 4.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "Menu
+"
+script = ExtResource("2_xjnnq")
+
+[node name="QuitConfirmDialog" type="ConfirmationDialog" parent="." unique_id=1699950496]
+title = "Quit Game?"
+dialog_text = "Are you sure you want to quit to the main menu?
+"
+
+[connection signal="confirmed" from="QuitConfirmDialog" to="SideMenuContainer/HBoxContainer/QuitButton" method="_on_quit_confirm_dialog_confirmed"]

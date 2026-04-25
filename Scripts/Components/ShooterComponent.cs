@@ -55,6 +55,7 @@ public partial class ShooterComponent : Node2D
 
 	public override void _Ready()
 	{
+		
 		Debug.Assert(IsInstanceValid(_projectileSpawner));
 		Debug.Assert(IsInstanceValid(_targeting));
 		Debug.Assert(IsInstanceValid(_shotCooldown));
@@ -97,7 +98,7 @@ public partial class ShooterComponent : Node2D
 		// };
 	}
 
-    public Groups.GroupTypes GetEntityTypes()
+	public Groups.GroupTypes GetEntityTypes()
 	{
 		return _thisEntityTypes;
 	}

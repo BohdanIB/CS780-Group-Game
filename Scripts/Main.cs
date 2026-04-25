@@ -3,7 +3,7 @@ using System;
 
 public partial class Main : Node2D
 {
-	[Export] public ulong MAIN_SEED = 12345;
+    [Export] public ulong MAIN_SEED = 12345;
 
 	[Export] private StructurePlacer _structurePlacer;
 	[Export] public ConstructionInformation tempConstructionInformation;
