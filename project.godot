@@ -21,7 +21,7 @@ project/assembly_name="CS780 Group Project"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/gdUnit4/plugin.cfg")
+enabled=PackedStringArray()
 
 [file_customization]
 

@@ -6,6 +6,7 @@
 
 [resource]
 script = ExtResource("1_ga68c")
+Type = 2
 AggroRadius = 50.0
 DetectableRadius = 16.0
 HitboxRadius = 16.0

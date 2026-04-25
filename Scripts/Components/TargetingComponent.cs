@@ -63,14 +63,21 @@ public partial class TargetingComponent : Node2D
 	{
 		if (_targets.Count > 0)
 		{
+			// Filter out frozen targets
+			List<DetectableComponent> validTargets = _targets.FindAll(target =>
+			{
+				var mover = GetComponentInSiblingsOrNull<MoverComponent>(target);
+				return mover == null || !mover.IsFrozen();
+			});
+			
 			Area2D currTarget = TargetingStyle switch
 			{
-				TargetingMode.Random => RandomPick(),
-				TargetingMode.First  => FirstPick(),
-				TargetingMode.Last   => LastPick(),
-				TargetingMode.Close  => ClosePick(),
-				TargetingMode.Weak   => WeakPick(),
-				TargetingMode.Strong => StrongPick(),
+				TargetingMode.Random => RandomPick(validTargets),
+				TargetingMode.First  => FirstPick(validTargets),
+				TargetingMode.Last   => LastPick(validTargets),
+				TargetingMode.Close  => ClosePick(validTargets),
+				TargetingMode.Weak   => WeakPick(validTargets),
+				TargetingMode.Strong => StrongPick(validTargets),
 				_                    => throw new NotImplementedException(),
 			};
 			// We have a valid target!
@@ -82,32 +89,32 @@ public partial class TargetingComponent : Node2D
 	/// Pick a random valid target.
 	/// </summary>
 	/// <returns></returns>
-	private Area2D RandomPick()
+	private Area2D RandomPick(List<DetectableComponent> targets)
 	{
-		if (_targets.Count == 0) { return null; }
-		return _targets[GD.RandRange(0, _targets.Count)];
+		if (targets.Count == 0) { return null; }
+		return targets[GD.RandRange(0, targets.Count)];
 	}
 	/// <summary>
 	/// Pick the valid target that is closest to finishing its path.
 	/// </summary>
 	/// <returns></returns>
-	private Area2D FirstPick()
+	private Area2D FirstPick(List<DetectableComponent> targets)
 	{
-		if (_targets.Count == 0) { return null; }
+		if (targets.Count == 0) { return null; }
 
 		Area2D currTarget = null;
 		float currTargetPathLength = float.PositiveInfinity;
 		{ // Scope mover variable
-			var target = _targets[0];
+			var target = targets[0];
 			if (GetComponentInSiblingsOrNull<MoverComponent>(target) is var mover && mover != null)
 			{
 				currTarget = target;
 				currTargetPathLength = mover.GetPathLengthFromCurrentPosition();
 			}
 		}
-		for (int i = 1; i < _targets.Count; i++)
+		for (int i = 1; i < targets.Count; i++)
 		{
-			var target = _targets[i];
+			var target = targets[i];
 			if (GetComponentInSiblingsOrNull<MoverComponent>(target) is var mover && mover != null)
 			{
 				float targetPathLength = mover.GetPathLengthFromCurrentPosition();
@@ -124,23 +131,23 @@ public partial class TargetingComponent : Node2D
 	/// Pick the valid target that is furthest from finishing its path.
 	/// </summary>
 	/// <returns></returns>
-	private Area2D LastPick()
+	private Area2D LastPick(List<DetectableComponent> targets)
 	{
 		if (_targets.Count == 0) { return null; }
 
 		Area2D currTarget = null;
 		float currTargetPathLength = 0.0f;
 		{ // Scope mover variable
-			var target = _targets[0];
+			var target = targets[0];
 			if (GetComponentInSiblingsOrNull<MoverComponent>(target) is var mover && mover != null)
 			{
 				currTarget = target;
 				currTargetPathLength = mover.GetPathLengthFromCurrentPosition();
 			}
 		}
-		for (int i = 1; i < _targets.Count; i++)
+		for (int i = 1; i < targets.Count; i++)
 		{
-			var target = _targets[i];
+			var target = targets[i];
 			if (GetComponentInSiblingsOrNull<MoverComponent>(target) is var mover && mover != null)
 			{
 				float targetPathLength = mover.GetPathLengthFromCurrentPosition();
@@ -157,15 +164,15 @@ public partial class TargetingComponent : Node2D
 	/// Pick the closest valid target to the targeting position.
 	/// </summary>
 	/// <returns></returns>
-	private Area2D ClosePick()
+	private Area2D ClosePick(List<DetectableComponent> targets)
 	{
-		if (_targets.Count == 0) { return null; }
+		if (targets.Count == 0) { return null; }
 
-		Area2D currTarget = _targets[0];
+		Area2D currTarget = targets[0];
 		float currTargetDistanceFromPosition = GlobalPosition.DistanceTo(currTarget.GlobalPosition);
-		for (int i = 1; i < _targets.Count; i++)
+		for (int i = 1; i < targets.Count; i++)
 		{
-			var target = _targets[i];
+			var target = targets[i];
 			float targetDistanceFromPosition = GlobalPosition.DistanceTo(target.GlobalPosition);
 			if (targetDistanceFromPosition < currTargetDistanceFromPosition)
 			{
@@ -179,23 +186,23 @@ public partial class TargetingComponent : Node2D
 	/// Pick the weakest valid target.
 	/// </summary>
 	/// <returns></returns>
-	private Area2D WeakPick()
+	private Area2D WeakPick(List<DetectableComponent> targets)
 	{
-		if (_targets.Count == 0) { return null; }
+		if (targets.Count == 0) { return null; }
 
 		Area2D currTarget = null;
 		float currTargetHealth = float.PositiveInfinity;
 		{ // Scope health variable
-			var target = _targets[0];
+			var target = targets[0];
 			if (GetComponentInSiblingsOrNull<HealthComponent>(target) is var health && health != null)
 			{
 				currTarget = target;
 				currTargetHealth = health.GetHealth();
 			}
 		}
-		for (int i = 1; i < _targets.Count; i++)
+		for (int i = 1; i < targets.Count; i++)
 		{
-			var target = _targets[i];
+			var target = targets[i];
 			if (GetComponentInSiblingsOrNull<HealthComponent>(target) is var health && health != null)
 			{
 				float targetHealth = health.GetHealth();
@@ -212,23 +219,23 @@ public partial class TargetingComponent : Node2D
 	/// Pick the strongest valid target.
 	/// </summary>
 	/// <returns></returns>
-	private Area2D StrongPick()
+	private Area2D StrongPick(List<DetectableComponent> targets)
 	{
 		if (_targets.Count == 0) { return null; }
 
 		Area2D currTarget = null;
 		float currTargetHealth = 0.0f;
 		{ // Scope health variable
-			var target = _targets[0];
+			var target = targets[0];
 			if (GetComponentInSiblingsOrNull<HealthComponent>(target) is var health && health != null)
 			{
 				currTarget = target;
 				currTargetHealth = health.GetHealth();
 			}
 		}
-		for (int i = 1; i < _targets.Count; i++)
+		for (int i = 1; i < targets.Count; i++)
 		{
-			var target = _targets[i];
+			var target = targets[i];
 			if (GetComponentInSiblingsOrNull<HealthComponent>(target) is var health && health != null)
 			{
 				float targetHealth = health.GetHealth();

@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="AnimationPack" format=3 uid="uid://dd6fwj0g2qjmc"]
+
+[ext_resource type="Script" uid="uid://b8k2bijsjc1da" path="res://Scripts/Animation/AnimationPack.cs" id="1_vaowq"]
+
+[resource]
+script = ExtResource("1_vaowq")
+Animations = Array[Object]([null])
+metadata/_custom_type_script = "uid://b8k2bijsjc1da"

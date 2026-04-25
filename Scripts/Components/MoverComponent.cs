@@ -7,12 +7,16 @@ public partial class MoverComponent : Node2D
 
 	[Signal] public delegate void OnPathPointReachedEventHandler(bool HasNextPoint, Vector2 NextPoint);
 	[Signal] public delegate void OnPathCompletedEventHandler();
+	[Signal] public delegate void OnFreezeEventHandler();
+	[Signal] public delegate void OnUnfreezeEventHandler();
 
 	[Export] public float Speed = 20f;
 	[Export] public Node2D ParentNode;
 	public bool CurrentlyMoving { get; private set; } = true;
 	private Vector2[] _moverPath = [];
 	private int _currentPathIndex = START_PATH_INDEX;
+	private bool _isFrozen = false;
+	private Timer _freezeTimer;
 
 	public void Initialize(float speed, Node2D parent = null, bool start = true, Vector2[] moverPath = null)
 	{
@@ -20,6 +24,14 @@ public partial class MoverComponent : Node2D
 		if (parent != null) { ParentNode = parent; }
 		if (start) {Start();} else {Stop();}
 		if (moverPath != null) { SetMoverPath(moverPath); }
+	}
+	
+	public override void _Ready()
+	{
+		_freezeTimer = new Timer();
+		_freezeTimer.OneShot = true;
+		AddChild(_freezeTimer);
+		_freezeTimer.Timeout += Unfreeze;
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -93,5 +105,21 @@ public partial class MoverComponent : Node2D
 		_moverPath = path;
 		_currentPathIndex = START_PATH_INDEX;
 	}
-
+	
+	public void Freeze(float duration) 
+	{
+		if (_isFrozen) return;
+		_isFrozen = true;
+		Stop();
+		_freezeTimer.Start(duration);
+		EmitSignal(SignalName.OnFreeze);
+	}
+	
+	private void Unfreeze()
+	{
+		_isFrozen = false;
+		Start();
+		EmitSignal(SignalName.OnUnfreeze);
+	}
+	public bool IsFrozen() => _isFrozen;
 }

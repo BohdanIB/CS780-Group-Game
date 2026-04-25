@@ -4,6 +4,7 @@ using CS780GroupProject.Scripts.Utils;
 using Godot;
 using System.Diagnostics;
 
+
 public partial class ShooterComponent : Node2D
 {
 	[Signal] public delegate void OnShootEventHandler(HurtComponent Target, Projectile Projectile);
@@ -74,13 +75,6 @@ public partial class ShooterComponent : Node2D
 			if (GetComponentInSiblingsOrNull<HurtComponent>(target) is var hurt)
 			{
 				projectile.Initialize(hurt, _projectileStats, _thisEntityTypes, _targetTypes);
-				projectile.OnProjectileImpact += (position, stats)
-				{
-					if (stats.AOERadius > 0f)
-						ApplyAOEDamage(position, stats);
-					if (stats.Chaining > );
-						ApplyChainDamage(position, stats);
-				}
 				EmitSignal(SignalName.OnShoot, hurt, projectile);
 			}
 			else
@@ -128,69 +122,4 @@ public partial class ShooterComponent : Node2D
 		_shotTime = 1 / shotsPerSecond;
 	}
 	
-	private void ApplyAOEDamage(Vector2 position, ProjectileStats stats)
-	{
-		foreach (Node node in GetTree().GetNodesInGroup(Groups.GetGroupName(_targetTypes)))
-		{
-			if (node is not HurtComponent hurt || !IsInstanceValid(hurt))
-			{
-				continue;
-			}
-			float dist = position.DistanceTo(hurt.GlobalPosition);
-			if (dist > stats.AOERadius)
-			{
-				continue;
-			}
-			float falloff = 1f - Mathf.Clamp(dist / stats.AOERadius, 0f, 1f);
-			float aoeDamage = stats.Damage * falloff
-			
-			health.ApplyDamage(aoeDamage);
-		}
-	}
-	
-	private void ApplyChainDamage(Vector2 position, ProjectileStats stats) 
-	{
-		alreadyHit ??= new HashSet<HurtComponent>();
-		
-		List<(HurtComponent hurt, float dist)> candidates = new();
-		
-		foreach (Node node in GetTree().GetNodesInGroup(Groups.GetGroupName(_targetTypes)))
-		{
-			if (node is not HurtComponent hurt || !IsInstanceValid(hurt))
-			{
-				continue;
-			}
-			if (alreadyHit.Contains(hurt))
-			{
-				continue;
-			}
-			float dist = position.DistanceTo(hurt.GlobalPosition);
-			if (dist > stats.AOERadius)
-			{
-				continue;
-			}
-			candidates.Add(hurt, dist);
-		}
-		foreach (var (hurt,dist) in candidates)
-		{
-			float falloff = 1f - Mathf.Clamp(dist / stats.AOERadius, 0f, 1f);
-			float aoeDamage = stats.Damage * falloff
-			
-			health.ApplyDamage(aoeDamage);
-			alreadyHit.Add(hurt);
-			
-			if (chainsRemaining > 0) 
-			{
-				float chainDamageMulti = stats.ChainDamageFalloff;
-				ProjectileState chainedStats = stats with
-				{
-					Damage = stats.Damage * chainDamageMulti,
-					AOERadius = stats.AOERadius * stats.ChainRadiusFalloff;
-				}
-				ApplyChainDamage(hurt.GlobalPostion, chainedStats, chainsRemaining - 1, alreadyHit);
-			}
-		}
-	}
-	
-
 }

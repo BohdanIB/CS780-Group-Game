@@ -15,7 +15,8 @@ public partial class TurretStats : Resource
 		Ballista,
 		Blade,
 		Electro,
-		Log,
+		Bomb,
+		Freeze,
 	};
 
 	// Turret Stats
@@ -52,6 +53,4 @@ public partial class TurretStats : Resource
 	{
 		return $"{Type} - AggroRadius: {AggroRadius} - DetectableRadius: {DetectableRadius} - HitboxRadius: {HitboxRadius} - Health: {Health} - FireRate: {FireRate} - Projectile: [{ProjectileStats}] - Animations: [{Animations}]";
 	}
-
-
 }

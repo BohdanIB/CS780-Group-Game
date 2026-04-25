@@ -42,7 +42,6 @@ public partial class Enemy: PathFollower
 		{
 			GD.Print($"WARNING - Enemy {this} was unable to find one of its components on _Ready()");
 		}
-
 		// Component callbacks //
 
 		_health.OnNoHealthLeft += () =>
