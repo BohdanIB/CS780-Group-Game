@@ -14,9 +14,11 @@ public partial class Main : Node2D
 
 	public override void _Ready()
 	{
+
+		//GD.Seed(MAIN_SEED);
 		GD.Randomize();
 
-	
+
 
 		var coinsMaterial = GD.Load<MaterialType>("res://Resources/Materials/Coins.tres");
 		PlayerInventory = new Inventory(); 
