@@ -152,6 +152,8 @@ texture_region_size = Vector2i(64, 64)
 4:3/animation_frame_15/duration = 1.0
 4:3/0 = 0
 4:3/0/texture_origin = Vector2i(0, -16)
+0:14/0 = 0
+0:14/0/texture_origin = Vector2i(0, -16)
 
 [resource]
 tile_shape = 1

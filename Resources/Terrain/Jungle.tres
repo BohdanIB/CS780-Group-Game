@@ -4,7 +4,6 @@
 
 [resource]
 script = ExtResource("1_vi40i")
-groundTileAtlasCoords = Vector2i(8, 2)
 humidityGenerationRange = Vector2(0.6, 1)
 temperatureGenerationRange = Vector2(0.6, 1)
 generationPriority = 0.2
