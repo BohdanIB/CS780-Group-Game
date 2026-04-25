@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// <summary>
 /// 
 /// </summary>
-[GlobalClass]
+//[GlobalClass]
 public partial class TurretStats : StructureStats
 {
 	public static readonly List<TurretStats> ALL_TURRETS = LoadAllStats();

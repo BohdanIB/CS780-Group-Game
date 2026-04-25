@@ -53,7 +53,8 @@ public partial class TurretPlacer : Node2D
 		_currentTurretTargetMode = TargetingMode.First;
 		_turretPlacerEnabled = true;
 
-		_ghostTurret.Initialize(_allTurretStats[_currentTurretIndex], _currentTurretTargetMode);
+		_ghostTurret.Initialize(_allTurretStats[_currentTurretIndex]);
+		_ghostTurret.UpdateTargetingMode(_currentTurretTargetMode);
 		_ghostTurret.Visible = true;
 	}
 
@@ -88,7 +89,7 @@ public partial class TurretPlacer : Node2D
 		var tile = GetTile();
 		if (Input.IsActionJustPressed("Right Click") && tile != null && tile.Turret != null)
 		{
-			    GD.Print($"PLACING TURRET - stack: {System.Environment.StackTrace}");
+				GD.Print($"PLACING TURRET - stack: {System.Environment.StackTrace}");
 				GD.Print($"LEFT CLICK PLACEMENT FIRED - frame: {Engine.GetProcessFrames()}");
 
 
@@ -175,7 +176,7 @@ public partial class TurretPlacer : Node2D
 			if (Input.IsActionJustPressed("Left Click"))
 			{
 				   GD.Print($"LEFT CLICK PLACEMENT FIRED - frame: {Engine.GetProcessFrames()}");
-    GD.Print(System.Environment.StackTrace);
+	GD.Print(System.Environment.StackTrace);
 				int cost = turretStats.Cost;
 				if (_gameUi != null && !_gameUi.TryToSpendCoins(cost))
 				{

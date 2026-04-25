@@ -110,9 +110,9 @@ public partial class StructurePlacer : Node2D
 	{
 		Vector2 mouseWorldPos = GetGlobalMousePosition();
 		
-		GD.Print("Mouse world pos: ", mouseWorldPos);
-		GD.Print("Ghost global pos: ", _placementGhost.GlobalPosition);
-		GD.Print("Camera zoom: ", GetViewport().GetCamera2D().Zoom);
+		//GD.Print("Mouse world pos: ", mouseWorldPos);
+		//GD.Print("Ghost global pos: ", _placementGhost.GlobalPosition);
+		//GD.Print("Camera zoom: ", GetViewport().GetCamera2D().Zoom);
 		
 		_currentGridCoordinates = IsometricTileMap.GlobalPositionToMapCoord(_placementTilemap, mouseWorldPos);
 		_placementGhost.GlobalPosition = IsometricTileMap.MapCoordToGlobalPosition(_placementTilemap, _currentGridCoordinates);
@@ -143,25 +143,40 @@ public partial class StructurePlacer : Node2D
 	}
 
 	private void PlaceStructure()
-	{
-		_constructionInformation.MaterialRequirements?.SpendMaterials(_paymentInventory);
+{
+    GD.Print("MaterialRequirements null: ", _constructionInformation.MaterialRequirements == null);
+    GD.Print("PaymentInventory null: ", _paymentInventory == null);
 
-		
-		GenericStructure placedStructure = _constructionInformation.Structure.Instantiate<GenericStructure>();
-		placedStructure.GlobalPosition = IsometricTileMap.MapCoordToGlobalPosition(_placementTilemap, _currentGridCoordinates);
-		_placementGrid.GetGridValueOrDefault(_currentGridCoordinates.X, _currentGridCoordinates.Y).Structure = placedStructure;
+    
+    if (_constructionInformation.MaterialRequirements != null)
+    {
+        bool spent = _constructionInformation.MaterialRequirements.SpendMaterials(_paymentInventory);
+        GD.Print("SpendMaterials result: ", spent);
+        if (!spent)
+        {
+            GD.Print("Not enough materials!");
+            return;
+        }
+    }
 
-		foreach (OptionSelector selector in _optionSelectors)
-		{
-			if (selector.Visible)
-			{
-				placedStructure.SetConfigurationOption(selector.OptionsName, selector.GetOptionSelection());
-			}
-		}
-		
-		placedStructure.Initialize(_constructionInformation.StructureStats);
-		PlayArea.instance.AddChild(placedStructure);
+    // Notify GameUI to update the coin label
+    var gameUi = GetTree().GetRoot().GetNode<GameUi>("Main/GameUI");
+    gameUi?.UpdateCoinDisplay();
 
-	}
+    GenericStructure placedStructure = _constructionInformation.Structure.Instantiate<GenericStructure>();
+    placedStructure.GlobalPosition = IsometricTileMap.MapCoordToGlobalPosition(_placementTilemap, _currentGridCoordinates);
+    _placementGrid.GetGridValueOrDefault(_currentGridCoordinates.X, _currentGridCoordinates.Y).Structure = placedStructure;
 
+    foreach (OptionSelector selector in _optionSelectors)
+    {
+        if (selector.Visible && selector.HasOptions)
+        {
+            placedStructure.SetConfigurationOption(selector.OptionsName, selector.GetOptionSelection());
+        }
+    }
+
+    placedStructure.Initialize(_constructionInformation.StructureStats);
+    PlayArea.instance.AddChild(placedStructure);
+	DisablePlacement(); 
+}
 }
