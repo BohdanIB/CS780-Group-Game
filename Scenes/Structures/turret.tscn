@@ -2,12 +2,11 @@
 
 [ext_resource type="Script" uid="uid://bk3drg0y2r1ku" path="res://Scripts/turrets/Turret.cs" id="1_fcprl"]
 [ext_resource type="PackedScene" uid="uid://27mmcge0cxrm" path="res://Scenes/generic_structure.tscn" id="2_base"]
-[ext_resource type="Resource" uid="uid://b65p4eimakib4" path="res://Resources/Turret/BallistaTurretStats.tres" id="3_hxjjt"]
 [ext_resource type="SpriteFrames" uid="uid://divrawug5fwn" path="res://Assets/AnimationFrames/turret_idle_frames.tres" id="4_ahfaj"]
 [ext_resource type="Resource" uid="uid://cop41bqffhdhj" path="res://Resources/Animations/AnimationPacks/TurretAnimations.tres" id="4_hxjjt"]
 [ext_resource type="PackedScene" uid="uid://cbnk8jcd7c4v3" path="res://Scenes/Components/detectable_component.tscn" id="5_detectable"]
-[ext_resource type="PackedScene" uid="uid://1xnv73ih3ekh" path="res://Scenes/Components/shooter_component.tscn" id="6_shooter"]
 [ext_resource type="PackedScene" uid="uid://c43d2uh68714x" path="res://Scenes/Components/detector_component.tscn" id="6_628tr"]
+[ext_resource type="PackedScene" uid="uid://1xnv73ih3ekh" path="res://Scenes/Components/shooter_component.tscn" id="6_shooter"]
 [ext_resource type="PackedScene" uid="uid://cxvwrh12elf1m" path="res://Scenes/Components/targeting_component.tscn" id="8_targeting"]
 [ext_resource type="PackedScene" uid="uid://bxnd3hgmx5vi6" path="res://Scenes/Components/spawner_component.tscn" id="9_spawner"]
 
@@ -42,4 +41,5 @@ _targeting = NodePath("TargetingComponent")
 _detector = NodePath("../../DetectorComponent")
 
 [node name="ProjectileSpawnerComponent" parent="ShooterComponent" index="2" unique_id=1630108137 instance=ExtResource("9_spawner")]
+position = Vector2(0, -20)
 ScenePath = "res://Scenes/projectile.tscn"

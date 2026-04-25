@@ -176,6 +176,11 @@ public partial class StructurePlacer : Node2D
     }
 
     placedStructure.Initialize(_constructionInformation.StructureStats);
+
+	if (placedStructure is Turret turret)
+		{
+			turret.HideRadius();
+		}
     PlayArea.instance.AddChild(placedStructure);
 	DisablePlacement(); 
 }
