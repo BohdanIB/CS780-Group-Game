@@ -3,7 +3,7 @@ using Godot;
 public class GroundTile
 {
     // Tile features
-    public BiomeType terrain;
+    public BiomeType biome;
     public Vector2I position;
     public bool[] roadConnections = new bool[4]; // N,E,S,W
     private GenericStructure _structure;
@@ -14,7 +14,7 @@ public class GroundTile
 
     public GroundTile(BiomeType terrain, Vector2I position, bool[] roads = null, GenericStructure structure = null)
     {
-        this.terrain = terrain;
+        this.biome = terrain;
         this.position = position;
         roadConnections = roads ?? [false, false, false, false];
         _structure = structure;
@@ -79,7 +79,7 @@ public class GroundTile
 
     public override string ToString()
     {
-        return $"{terrain} {position} {roadConnections} {(HasStructure() ? _structure : "No Structure")}";
+        return $"{biome} {position} {roadConnections} {(HasStructure() ? _structure : "No Structure")}";
     }
 
 }

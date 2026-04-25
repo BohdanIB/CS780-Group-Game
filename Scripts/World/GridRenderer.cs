@@ -3,18 +3,16 @@ using Godot;
 public partial class GridRenderer : Node2D
 {
 	// [Export] public TileMapLayer TopDownTerrainMap, TopDownRoadMap;
-	[Export] public IsometricTileMap WaterMap, TerrainMap;
+	[Export] public IsometricTileMap TerrainMap;
 
 	public void RenderGrid(GenericGrid<GroundTile> grid)
 	{
 		TerrainMap.Clear();
-		WaterMap.Clear();
 
 		// Todo: Just working on 0th layer for now.
 		var terrainLayers = TerrainMap.GetLayers();
 		var terrainLayer0 = terrainLayers[0];
-		var waterLayers = WaterMap.GetLayers();
-		var waterLayer0 = waterLayers[0];
+
 		for (int x = 0; x < grid.GetWidth(); x++)
 		{
 			for (int y = 0; y < grid.GetHeight(); y++)
@@ -32,11 +30,11 @@ public partial class GridRenderer : Node2D
 				
 				// roadMap.SetCell(new Vector2I(x, y), 0, new Vector2I(roadIndex, 0));
 
-				terrainLayer0.SetCell(new Vector2I(x, y), 1, tile.terrain.groundTileAtlasCoords);
-				if (tile.HasRoadConnection())
-				{
-					waterLayer0.SetCell(new Vector2I(x, y), 1, new Vector2I(0,0));
-				}
+				terrainLayer0.SetCell(new Vector2I(x, y), 1, tile.biome.groundTileAtlasCoords);
+				// if (tile.HasRoadConnection())
+				// {
+				// 	waterLayer0.SetCell(new Vector2I(x, y), 1, new Vector2I(0,0));
+				// }
 
 			}
 		}

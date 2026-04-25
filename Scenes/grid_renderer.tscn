@@ -4,18 +4,9 @@
 [ext_resource type="TileSet" uid="uid://q0v2aa8x440" path="res://Resources/IsometricTilesets/new_tile_set.tres" id="4_103ga"]
 [ext_resource type="Script" uid="uid://bb03ubmk3np8y" path="res://Scripts/World/IsometricTileMap.cs" id="4_w2gk3"]
 
-[node name="GridRenderer" type="Node2D" unique_id=76182152 node_paths=PackedStringArray("WaterMap", "TerrainMap")]
+[node name="GridRenderer" type="Node2D" unique_id=76182152 node_paths=PackedStringArray("TerrainMap")]
 script = ExtResource("1_m4t5i")
-WaterMap = NodePath("IsometricWaterMap")
 TerrainMap = NodePath("IsometricTerrainMap")
-
-[node name="IsometricWaterMap" type="Node2D" parent="." unique_id=1871212287 node_paths=PackedStringArray("_layers")]
-script = ExtResource("4_w2gk3")
-_layers = [NodePath("Layer0")]
-
-[node name="Layer0" type="TileMapLayer" parent="IsometricWaterMap" unique_id=1441229112]
-z_index = -1
-tile_set = ExtResource("4_103ga")
 
 [node name="IsometricTerrainMap" type="Node2D" parent="." unique_id=335113738 node_paths=PackedStringArray("_layers")]
 script = ExtResource("4_w2gk3")
