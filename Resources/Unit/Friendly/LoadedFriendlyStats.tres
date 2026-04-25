@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="FriendlyStats" format=3 uid="uid://d0xj5pvru1wt2"]
 
-[ext_resource type="Resource" uid="uid://ks5bvpdhp2ev" path="res://Resources/Animations/AnimationPacks/FriendlyAnimations.tres" id="1_y8mhc"]
+[ext_resource type="Resource" uid="uid://ks5bvpdhp2ev" path="res://Resources/Animations/AnimationPacks/Unit/FriendlyAnimations.tres" id="1_y8mhc"]
 [ext_resource type="Resource" uid="uid://dbmns5gjywp51" path="res://Resources/Projectiles/BoltStats.tres" id="2_vyi1t"]
 [ext_resource type="Script" uid="uid://catyueyep0aer" path="res://Scripts/units/FriendlyStats.cs" id="3_arp38"]
 

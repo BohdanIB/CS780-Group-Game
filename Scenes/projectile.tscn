@@ -4,7 +4,7 @@
 [ext_resource type="Resource" uid="uid://dbmns5gjywp51" path="res://Resources/Projectiles/BoltStats.tres" id="2_d4467"]
 [ext_resource type="PackedScene" uid="uid://c1wk4dy8g10qq" path="res://Scenes/Components/animation_component.tscn" id="3_d4467"]
 [ext_resource type="PackedScene" uid="uid://7n3xh2bxsdyb" path="res://Scenes/Components/hit_component.tscn" id="3_tl4hk"]
-[ext_resource type="Resource" uid="uid://dor2re0k01blp" path="res://Resources/Animations/AnimationPacks/BoltAnimations.tres" id="5_e1077"]
+[ext_resource type="Resource" uid="uid://dor2re0k01blp" path="res://Resources/Animations/AnimationPacks/Projectile/BoltAnimations.tres" id="5_e1077"]
 
 [node name="Projectile" type="Node2D" unique_id=1257787249 node_paths=PackedStringArray("_hit", "_animation") groups=["projectile"]]
 script = ExtResource("1_yr2qt")
