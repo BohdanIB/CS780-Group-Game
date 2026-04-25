@@ -31,7 +31,7 @@ public partial class EnemyStats : Resource
 	/// Get list of all enemy stats.
 	/// </summary>
 	/// <returns></returns>
-	private static List<EnemyStats> LoadAllStats()
+	public static List<EnemyStats> LoadAllStats()
 	{
 		DirAccess directory = DirAccess.Open(ENEMY_DIRECTORY_PATH);
 		if (directory == null) return null;
