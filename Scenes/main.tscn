@@ -12,7 +12,8 @@
 [ext_resource type="PackedScene" uid="uid://caafjqfx010mq" path="res://Scenes/legacy/turret_placer.tscn" id="5_kry3j"]
 [ext_resource type="PackedScene" uid="uid://bxnekokl8stoa" path="res://Scenes/game_ui.tscn" id="6_21xkr"]
 [ext_resource type="Script" uid="uid://dp5rjda24qxii" path="res://Scripts/EnemySpawner.cs" id="7_6bp64"]
-[ext_resource type="Script" path="res://Scripts/CameraController.cs" id="7_344ge"]
+[ext_resource type="Script" uid="uid://c7j48ea8ghddd" path="res://Scripts/CameraController.cs" id="7_344ge"]
+[ext_resource type="Script" uid="uid://cxywbq0qfpgfg" path="res://Scripts/FriendlySpawner.cs" id="14_jkdf5"]
 
 [node name="Main" type="Node2D" unique_id=1822167308 node_paths=PackedStringArray("_structurePlacer")]
 script = ExtResource("1_jjgbg")
@@ -48,5 +49,5 @@ temporaryConstructionInfo = Array[Object]([ExtResource("4_21xkr"), ExtResource("
 
 [node name="PlayArea" parent="." unique_id=1275724900 instance=ExtResource("3_8gbba")]
 
-[node name="EnemySpawner2" type="Node" parent="." unique_id=580379008]
-script = ExtResource("7_6bp64")
+[node name="FriendlySpawner" type="Node" parent="." unique_id=53342767]
+script = ExtResource("14_jkdf5")

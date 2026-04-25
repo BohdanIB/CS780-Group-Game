@@ -53,11 +53,11 @@ public partial class Main : Node2D
 			PlayArea.instance.GridRenderer.TerrainMap.GetLayers()[0]
 		);
 
-		Friendly.TempFriendlyDemo(
-			this,
+		var friendlySpawner = GetNode<FriendlySpawner>("FriendlySpawner");
+			friendlySpawner.Initialize(
 			grid,
-			PlayArea.instance.GridRenderer.TerrainMap,
-			_hubLocation
-		);
+			_hubLocation,
+			PlayArea.instance.GridRenderer.TerrainMap.GetLayers()[0]
+);
 	}
 }
