@@ -10,6 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://dwkxkagqql27x" path="res://Assets/Sprites/heart pixel art 32x32.png" id="4_1t2s1"]
 [ext_resource type="Texture2D" uid="uid://did4qqhay3op1" path="res://Assets/Sprites/coin.png" id="5_3t1kc"]
 [ext_resource type="Script" uid="uid://e0mn8kx5s333" path="res://Scripts/QuitButton.cs" id="6_3t1kc"]
+[ext_resource type="PackedScene" uid="uid://kadpj6pgjsg3" path="res://Scenes/option_selector.tscn" id="11_dvsk4"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_y8vuf"]
 bg_color = Color(0, 0, 0, 1)
@@ -288,5 +289,13 @@ script = ExtResource("2_xjnnq")
 title = "Quit Game?"
 dialog_text = "Are you sure you want to quit to the main menu?
 "
+
+[node name="OptionSelector" parent="." unique_id=839933324 instance=ExtResource("11_dvsk4")]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -32.0
+offset_bottom = 0.0
+grow_vertical = 0
 
 [connection signal="confirmed" from="QuitConfirmDialog" to="SideMenuContainer/HBoxContainer/QuitButton" method="_on_quit_confirm_dialog_confirmed"]

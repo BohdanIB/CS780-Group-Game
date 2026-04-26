@@ -46,20 +46,21 @@ public partial class Main : Node2D
 			_hubLocation
 		);
 
-		_structurePlacer.Initialize(PlayArea.instance, PlayerInventory); // ← was: playerInventory
+		_structurePlacer.Initialize(PlayArea.instance, PlayerInventory);
+
 
 		var enemySpawner = GetNode<EnemySpawner>("EnemySpawner");
-		enemySpawner.Initialize(
-			grid,
-			_hubLocation,
-			PlayArea.instance.GridRenderer.TerrainMap.GetLayers()[0]
-		);
+		enemySpawner.WaveIntervalSeconds = GameSettings.Instance.WaveIntervalSeconds;
+		enemySpawner.EnemiesPerWave = GameSettings.Instance.EnemiesPerWave;
+		enemySpawner.FinalWaveNumber = GameSettings.Instance.FinalWaveNumber;
+		enemySpawner.EnemiesAddedPerWave = GameSettings.Instance.EnemiesAddedPerWave;
+		enemySpawner.Initialize(grid, _hubLocation, PlayArea.instance.GridRenderer.TerrainMap.GetLayers()[0]);
 
 		var friendlySpawner = GetNode<FriendlySpawner>("FriendlySpawner");
-			friendlySpawner.Initialize(
-			grid,
-			_hubLocation,
-			PlayArea.instance.GridRenderer.TerrainMap.GetLayers()[0]
-);
+		friendlySpawner.SpawnIntervalSeconds = GameSettings.Instance.FriendlySpawnIntervalSeconds;
+		friendlySpawner.FriendliesPerInterval = GameSettings.Instance.FriendliesPerInterval;
+		friendlySpawner.Initialize(grid, _hubLocation, PlayArea.instance.GridRenderer.TerrainMap.GetLayers()[0]);
+		
+	
 	}
 }
