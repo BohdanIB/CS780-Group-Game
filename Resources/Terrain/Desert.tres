@@ -1,33 +1,30 @@
 [gd_resource type="Resource" script_class="BiomeType" format=3 uid="uid://dxlyat08vvtbj"]
 
-[ext_resource type="Script" uid="uid://b1nppbqcimkor" path="res://Scripts/World/BiomeTileType.cs" id="1_4rpvk"]
+[ext_resource type="Script" path="res://Scripts/World/BiomeTileType.cs" id="1_4rpvk"]
 [ext_resource type="Script" uid="uid://dff1fbgdyals4" path="res://Scripts/World/BiomeType.cs" id="1_jn6m6"]
 
 [sub_resource type="Resource" id="Resource_dnlv8"]
 script = ExtResource("1_4rpvk")
 GroundTileAtlasCoords = Vector2i(8, 2)
-SpawnWeight = 6
-metadata/_custom_type_script = "uid://b1nppbqcimkor"
+SpawnWeight = 10
 
 [sub_resource type="Resource" id="Resource_4rpvk"]
 script = ExtResource("1_4rpvk")
 GroundTileAtlasCoords = Vector2i(2, 3)
 SpawnWeight = 2
-metadata/_custom_type_script = "uid://b1nppbqcimkor"
 
 [sub_resource type="Resource" id="Resource_87j1b"]
 script = ExtResource("1_4rpvk")
 GroundTileAtlasCoords = Vector2i(3, 3)
-metadata/_custom_type_script = "uid://b1nppbqcimkor"
+SpawnWeight = 2
 
 [sub_resource type="Resource" id="Resource_qwmkr"]
 script = ExtResource("1_4rpvk")
 GroundTileAtlasCoords = Vector2i(4, 3)
-metadata/_custom_type_script = "uid://b1nppbqcimkor"
 
 [resource]
 script = ExtResource("1_jn6m6")
-TileTypes = Array[Resource]([SubResource("Resource_dnlv8"), SubResource("Resource_4rpvk"), SubResource("Resource_87j1b"), SubResource("Resource_qwmkr")])
+TileTypes = [SubResource("Resource_dnlv8"), SubResource("Resource_4rpvk"), SubResource("Resource_87j1b"), SubResource("Resource_qwmkr")]
 humidityGenerationRange = Vector2(0, 0.5)
 temperatureGenerationRange = Vector2(0.5, 1)
 generationPriority = 0.1

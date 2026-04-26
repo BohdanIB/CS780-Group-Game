@@ -1,10 +1,31 @@
 [gd_resource type="Resource" script_class="BiomeType" format=3 uid="uid://dxmt4lkaw6sf1"]
 
+[ext_resource type="Script" path="res://Scripts/World/BiomeTileType.cs" id="1_h3of7"]
 [ext_resource type="Script" uid="uid://dff1fbgdyals4" path="res://Scripts/World/BiomeType.cs" id="1_uscgg"]
+
+[sub_resource type="Resource" id="Resource_30gny"]
+script = ExtResource("1_h3of7")
+GroundTileAtlasCoords = Vector2i(8, 6)
+SpawnWeight = 4
+
+[sub_resource type="Resource" id="Resource_h3of7"]
+script = ExtResource("1_h3of7")
+GroundTileAtlasCoords = Vector2i(0, 7)
+SpawnWeight = 8
+
+[sub_resource type="Resource" id="Resource_rnvoe"]
+script = ExtResource("1_h3of7")
+GroundTileAtlasCoords = Vector2i(1, 7)
+SpawnWeight = 8
+
+[sub_resource type="Resource" id="Resource_6sv3k"]
+script = ExtResource("1_h3of7")
+GroundTileAtlasCoords = Vector2i(4, 7)
+SpawnWeight = 2
 
 [resource]
 script = ExtResource("1_uscgg")
-groundTileAtlasCoords = Vector2i(8, 3)
+TileTypes = [SubResource("Resource_30gny"), SubResource("Resource_h3of7"), SubResource("Resource_rnvoe"), SubResource("Resource_6sv3k")]
 elevationGenerationRange = Vector2(0.8, 1)
 generationPriority = 0.5
 harvestableMaterials = null
