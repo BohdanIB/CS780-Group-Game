@@ -1,37 +1,57 @@
 using Godot;
-
 using System;
 
-public partial class Base : Node2D
+public partial class Base : GenericStructure
 {
-    [Export] public int MaxHealth = 100;
-    public int CurrentHealth { get; private set; }
+    public static Base instance;
 
-    public event Action<int> BaseDamaged;
+    public event Action<float> BaseDamaged;
     public event Action BaseDestroyed;
 
     public override void _Ready()
     {
-        CurrentHealth = MaxHealth;
+        instance ??= this;
+
+        base._Ready();
+
+        if (_health == null)
+        {
+            GD.Print($"WARNING - Base {this} was unable to find health component on _Ready()");
+            return;
+        }
+
+        _health.OnNoHealthLeft += OnHealthDepleted;
+
         var area = GetNode<Area2D>("Area2D");
         area.BodyEntered += OnBodyEntered;
+    }
+
+    public override void _ExitTree()
+    {
+        if (instance == this)
+            instance = null;
+    }
+
+    public static void ResetInstance()
+    {
+        instance = null;
     }
 
     private void OnBodyEntered(Node2D body)
     {
         if (body is Enemy enemy)
         {
-            TakeDamage(5);
+            GD.Print($"Base taking damage from enemy {enemy}. Current health before damage: {_health.GetHealth()}");
+            _health.ApplyDamage(5);
+            BaseDamaged?.Invoke(_health.GetHealth());
+            GD.Print($"Base health after damage: {_health.GetHealth()}");
             enemy.QueueFree();
         }
     }
 
-    private void TakeDamage(int amount)
+    private void OnHealthDepleted()
     {
-        CurrentHealth -= amount;
-        BaseDamaged?.Invoke(CurrentHealth);
-
-        if (CurrentHealth <= 0)
-            BaseDestroyed?.Invoke();
+        GD.Print($"Base health depleted. Invoking BaseDestroyed.");
+        BaseDestroyed?.Invoke();
     }
 }

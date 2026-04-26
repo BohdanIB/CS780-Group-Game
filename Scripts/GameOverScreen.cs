@@ -37,7 +37,7 @@ public partial class GameOverScreen : Control
 
 	public void OnRetryPressed()
 	{
-		
+		PlayArea.ResetInstance();
 		GetTree().ChangeSceneToFile("Scenes/main.tscn");
 	}
 

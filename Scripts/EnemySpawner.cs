@@ -32,7 +32,7 @@ public partial class EnemySpawner : Node
 		_hub = hub;
 		_tileMapLayer = tileMapLayer;
 
-		_enemyStats = EnemyStats.LoadAllStats();
+		_enemyStats = EnemyStats.ALL_ENEMIES;
 
 		BuildSpawnPointList();
 		BuildPathfinder();

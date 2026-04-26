@@ -9,8 +9,7 @@ public partial class PlayArea : Node
 
     public override void _Ready()
     {
-        //instance ??= this; Changing this to try and get play area to reset on gameover for reloading the world
-        instance = this;
+        instance ??= this;
     }
 
     public void Initialize(GenericGrid<GroundTile> grid)
@@ -21,6 +20,11 @@ public partial class PlayArea : Node
     public void Render()
     {
         GridRenderer.RenderGrid(Grid);
+    }
+
+      public static void ResetInstance()
+    {
+        instance = null;
     }
 
 }

@@ -19,10 +19,12 @@ public partial class Enemy : PathFollower
 	// [Export] public Groups.GroupTypes _detectableTypes = Groups.GroupTypes.Enemy;
 
 	[ExportGroup("Components")]
-	[Export] private ShooterComponent _shooter;
 	[Export] private TargetingComponent _targeting;
 	[Export] protected SpawnerComponent _projectileSpawner;
 	[Export] public int MaxHealth = 100;
+
+	[Signal] public delegate void UnitReachedGoalEventHandler(int damage);
+	[Export] private int _goalDamage = 10;
 
 
 		/// <summary>
@@ -74,11 +76,8 @@ public partial class Enemy : PathFollower
 			_health.ApplyDamage(damage);
 		};
 
-		// Movement direction updates
-		_mover.Connect(
-			MoverComponent.SignalName.OnPathPointReached,
-			new Callable(this, nameof(OnPathPointReached))
-		);
+		_mover.OnPathPointReached += OnPathPointReached;
+		_mover.OnPathCompleted += HandleReachedGoal;
 	}
 
 	private void OnPathPointReached(bool hasNextPoint, Vector2 nextPoint)
@@ -139,6 +138,13 @@ public partial class Enemy : PathFollower
 	/// <param name="parent"></param>
 	/// <param name="grid"></param>
 	/// <param name="hub"></param>
+	private void HandleReachedGoal()
+	{
+		EmitSignal(SignalName.UnitReachedGoal, _goalDamage);
+		QueueFree();
+	}
+
+
 	public static void TempEnemyDemo(Node parent, GenericGrid<GroundTile> grid, IsometricTileMap tileMap, Vector2I hub)
 	{
 		GridAStarPathfinder<GroundTile> pathfinder = new GridAStarPathfinder<GroundTile>(grid,
