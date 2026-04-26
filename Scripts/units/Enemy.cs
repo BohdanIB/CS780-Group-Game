@@ -60,9 +60,13 @@ public partial class Enemy: PathFollower
 			if (hasNextPoint)
 			{
 				var directionRads = GlobalPosition.AngleToPoint(nextPoint);
-				// _animation.SetState(AnimationPackEntry.State.Idle, directionRads); // TODO: Update this with new animations
+				_animation.SetState(AnimationPackEntry.State.Bob);
 				_animation.SetDirection(directionRads);
 			}
+		};
+		_mover.OnPathCompleted += () =>
+		{
+			_animation.SetState(AnimationPackEntry.State.Idle);
 		};
 
 	}

@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="AnimationPack" format=3 uid="uid://c1h7wxlwa66wd"]
 
-[ext_resource type="Resource" uid="uid://d25fl4t8d4aih" path="res://Resources/Animations/AnimationPackEntries/farm_idle_animation_entry.tres" id="1_b57dq"]
+[ext_resource type="Resource" uid="uid://d25fl4t8d4aih" path="res://Resources/Animations/AnimationPackEntries/Structure/farm_idle_animation_entry.tres" id="1_b57dq"]
 [ext_resource type="Script" uid="uid://b8k2bijsjc1da" path="res://Scripts/Animation/AnimationPack.cs" id="1_y6jha"]
 
 [resource]

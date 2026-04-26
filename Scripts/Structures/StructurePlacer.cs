@@ -171,6 +171,7 @@ public partial class StructurePlacer : Node2D
 		
 		placedStructure.Initialize(_constructionInformation.StructureStats);
 		PlayArea.instance.AddChild(placedStructure);
+		PlayArea.instance.Render();
 
 	}
 

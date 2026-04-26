@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="AnimationPackEntry" format=3 uid="uid://2gssmssdvb3i"]
 
-[ext_resource type="SpriteFrames" uid="uid://canpa0od65bwj" path="res://Assets/AnimationFrames/blade_idle_frames.tres" id="1_0ukt2"]
+[ext_resource type="SpriteFrames" uid="uid://canpa0od65bwj" path="res://Assets/AnimationFrames/Projectile/blade_idle_frames.tres" id="1_0ukt2"]
 [ext_resource type="Script" uid="uid://bc14nr141nonp" path="res://Scripts/Animation/AnimationPackEntry.cs" id="2_moup3"]
 
 [resource]
