@@ -3,12 +3,22 @@
 [ext_resource type="Texture2D" uid="uid://bdw64kon78x3y" path="res://Assets/Sprites/isometric_turret_temp.png" id="1_2hpb2"]
 [ext_resource type="PackedScene" uid="uid://b2w8csm5vypb0" path="res://Scenes/Structures/turret.tscn" id="1_xlprp"]
 [ext_resource type="Resource" uid="uid://balv7lonn2d" path="res://Resources/Turret/BladeTurretStats.tres" id="2_2hpb2"]
+[ext_resource type="Script" uid="uid://cyuxxj1ajju4u" path="res://Scripts/Item System/MaterialRequirements.cs" id="2_3cwy6"]
+[ext_resource type="Resource" uid="uid://cvhvxvqfmwhiw" path="res://Resources/Materials/Coins.tres" id="2_12i6w"]
 [ext_resource type="Script" uid="uid://c5a4sxpqqv1sn" path="res://Scripts/Structures/ConstructionInformation.cs" id="3_douf5"]
+
+[sub_resource type="Resource" id="Resource_12i6w"]
+script = ExtResource("2_3cwy6")
+_requirements = Dictionary[Object, int]({
+ExtResource("2_12i6w"): 100
+})
+metadata/_custom_type_script = "uid://cyuxxj1ajju4u"
 
 [resource]
 script = ExtResource("3_douf5")
 DisplayImageAtlas = ExtResource("1_2hpb2")
 DisplayImageRect = Rect2(0, 0, 64, 64)
+MaterialRequirements = SubResource("Resource_12i6w")
 Structure = ExtResource("1_xlprp")
 StructureStats = ExtResource("2_2hpb2")
 ConfigurationType = 1

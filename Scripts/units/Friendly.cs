@@ -71,6 +71,8 @@ public partial class Friendly : PathFollower
 			_detectable.Initialize(_friendlyTypes, _enemyTypes);
 			_mover.Initialize(_stats.MovementSpeed, this, start: true);
 			_animation.Initialize(_stats.Animations);
+			_shooter.Initialize(_stats.FireRate, _friendlyTypes, _enemyTypes, _stats.ProjectileStats); // ← add this
+
 		}
 	}
 	public void UpdateComponents()

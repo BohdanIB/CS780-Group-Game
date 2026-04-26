@@ -1,15 +1,32 @@
 [gd_scene format=3 uid="uid://braeaociys3xn"]
 
-[ext_resource type="PackedScene" uid="uid://dtv7kt7wo8omt" path="res://Scenes/path_follower.tscn" id="1_jgycc"]
-[ext_resource type="Script" uid="uid://bs25gk004xjd8" path="res://Scripts/units/Friendly.cs" id="2_50fos"]
-[ext_resource type="Resource" uid="uid://bx02gj3gjk2w5" path="res://Resources/Unit/Friendly/RegularFriendlyStats.tres" id="3_5vdkv"]
-[ext_resource type="Resource" uid="uid://ks5bvpdhp2ev" path="res://Resources/Animations/AnimationPacks/FriendlyAnimations.tres" id="4_5vdkv"]
+[ext_resource type="PackedScene" uid="uid://dtv7kt7wo8omt" path="res://Scenes/path_follower.tscn" id="1_path"]
+[ext_resource type="Script" uid="uid://bs25gk004xjd8" path="res://Scripts/units/Friendly.cs" id="2_script"]
+[ext_resource type="Resource" uid="uid://bx02gj3gjk2w5" path="res://Resources/Unit/Friendly/RegularFriendlyStats.tres" id="3_stats"]
+[ext_resource type="Resource" uid="uid://ks5bvpdhp2ev" path="res://Resources/Animations/AnimationPacks/FriendlyAnimations.tres" id="4_animpack"]
+[ext_resource type="PackedScene" uid="uid://1xnv73ih3ekh" path="res://Scenes/Components/shooter_component.tscn" id="5_shooter"]
+[ext_resource type="PackedScene" uid="uid://cxvwrh12elf1m" path="res://Scenes/Components/targeting_component.tscn" id="6_targeting"]
+[ext_resource type="PackedScene" uid="uid://bxnd3hgmx5vi6" path="res://Scenes/Components/spawner_component.tscn" id="7_spawner"]
 
-[node name="Friendly" unique_id=382514737 groups=["friendly"] instance=ExtResource("1_jgycc")]
-script = ExtResource("2_50fos")
-_stats = ExtResource("3_5vdkv")
+[node name="Friendly" unique_id=1967935745 node_paths=PackedStringArray("_shooter") groups=["friendly"] instance=ExtResource("1_path")]
+scale = Vector2(4, 4)
+script = ExtResource("2_script")
+_stats = ExtResource("3_stats")
 _friendlyTypes = 8
 _enemyTypes = 16
+_shooter = NodePath("ShooterComponent")
 
 [node name="AnimationComponent" parent="." index="5" unique_id=1805975540]
-Animations = ExtResource("4_5vdkv")
+Animations = ExtResource("4_animpack")
+
+[node name="ShooterComponent" parent="." index="6" unique_id=1232969517 node_paths=PackedStringArray("_projectileSpawner", "_targeting") instance=ExtResource("5_shooter")]
+_thisEntityTypes = 8
+_targetTypes = 16
+_projectileSpawner = NodePath("ProjectileSpawnerComponent")
+_targeting = NodePath("TargetingComponent")
+
+[node name="TargetingComponent" parent="ShooterComponent" index="1" unique_id=1132419283 node_paths=PackedStringArray("_detector") instance=ExtResource("6_targeting")]
+_detector = NodePath("../../DetectorComponent")
+
+[node name="ProjectileSpawnerComponent" parent="ShooterComponent" index="2" unique_id=1487015078 instance=ExtResource("7_spawner")]
+ScenePath = "res://Scenes/projectile.tscn"
