@@ -39,12 +39,13 @@ public partial class Base : GenericStructure
 
     private void OnBodyEntered(Node2D body)
     {
-        if (body is Enemy enemy)
+        if (body is Enemy enemy && IsInstanceValid(enemy))
         {
             GD.Print($"Base taking damage from enemy {enemy}. Current health before damage: {_health.GetHealth()}");
             _health.ApplyDamage(5);
             BaseDamaged?.Invoke(_health.GetHealth());
             GD.Print($"Base health after damage: {_health.GetHealth()}");
+            enemy.SetDeferred("monitoring", false); // Disable collisions before freeing
             enemy.QueueFree();
         }
     }
