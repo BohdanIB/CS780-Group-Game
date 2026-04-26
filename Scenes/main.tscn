@@ -6,6 +6,7 @@
 [ext_resource type="Resource" uid="uid://nbjv8l8rk1xm" path="res://Resources/ConstructionInformation/BallistaTurretConstructionInformation.tres" id="4_21xkr"]
 [ext_resource type="PackedScene" uid="uid://5e8ht0mldott" path="res://Scenes/structure_placer.tscn" id="4_jjvhh"]
 [ext_resource type="Resource" uid="uid://7o5m0v8ccfo2" path="res://Resources/ConstructionInformation/BladeTurretConstructionInformation.tres" id="5_6bp64"]
+[ext_resource type="Resource" uid="uid://dvy7ft02jq0di" path="res://Resources/ConstructionInformation/PortConstructionInformation.tres" id="6_6bp64"]
 
 [node name="Main" type="Node2D" unique_id=1822167308 node_paths=PackedStringArray("_structurePlacer")]
 script = ExtResource("1_jjgbg")
@@ -18,6 +19,6 @@ position = Vector2(573, 323)
 [node name="StructurePlacer" parent="." unique_id=1843712961 instance=ExtResource("4_jjvhh")]
 _validPlacementColor = Color(0, 0.7882353, 0, 0.78431374)
 _invalidPlacementColor = Color(0.6666667, 0, 0, 0.78431374)
-temporaryConstructionInfo = Array[Object]([ExtResource("4_21xkr"), ExtResource("5_6bp64"), ExtResource("2_jjvhh")])
+temporaryConstructionInfo = Array[Object]([ExtResource("4_21xkr"), ExtResource("5_6bp64"), ExtResource("2_jjvhh"), ExtResource("6_6bp64")])
 
 [node name="PlayArea" parent="." unique_id=1275724900 instance=ExtResource("3_8gbba")]

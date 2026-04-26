@@ -168,6 +168,14 @@ public partial class StructurePlacer : Node2D
 				placedStructure.SetConfigurationOption(selector.OptionsName, selector.GetOptionSelection());
 			}
 		}
+
+		GroundTile[] adjacentTiles = _placementGrid.GetNeighbors(_currentGridCoordinates.X, _currentGridCoordinates.Y, considerDiagonals: false);
+		int largestPortProximity = 0;
+		for (int i = 0; i < 4; i++)
+		{
+			largestPortProximity = Mathf.Max(largestPortProximity, (adjacentTiles[i].Structure != null) ? adjacentTiles[i].Structure.PortConnectionProximity : 0);
+		}
+		placedStructure.PortConnectionProximity = largestPortProximity - 1;
 		
 		placedStructure.Initialize(_constructionInformation.StructureStats);
 		PlayArea.instance.AddChild(placedStructure);
