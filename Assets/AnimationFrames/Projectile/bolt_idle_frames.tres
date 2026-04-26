@@ -2,17 +2,59 @@
 
 [ext_resource type="Texture2D" uid="uid://djpqivk2pwl35" path="res://Assets/Sprites/temp_projectiles.png" id="1_gs38n"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_gs38n"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_goo31"]
 atlas = ExtResource("1_gs38n")
 region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0toqo"]
+atlas = ExtResource("1_gs38n")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xllal"]
+atlas = ExtResource("1_gs38n")
+region = Rect2(128, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_60b0g"]
+atlas = ExtResource("1_gs38n")
+region = Rect2(192, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xxatq"]
+atlas = ExtResource("1_gs38n")
+region = Rect2(256, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gxidt"]
+atlas = ExtResource("1_gs38n")
+region = Rect2(320, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hus5y"]
+atlas = ExtResource("1_gs38n")
+region = Rect2(384, 0, 64, 64)
 
 [resource]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_gs38n")
+"texture": SubResource("AtlasTexture_goo31")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0toqo")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xllal")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_60b0g")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xxatq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gxidt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hus5y")
 }],
 "loop": true,
 "name": &"default",
-"speed": 5.0
+"speed": 10.0
 }]
