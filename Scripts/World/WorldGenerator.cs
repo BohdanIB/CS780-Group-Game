@@ -119,7 +119,7 @@ public partial class WorldGenerator : Node
         {
             if (tile.HasRoadConnection())
             {
-                tile.biome = loadedBiomes[WATER_BIOME_INDEX];
+                tile.Biome = loadedBiomes[WATER_BIOME_INDEX];
             }
         });
 

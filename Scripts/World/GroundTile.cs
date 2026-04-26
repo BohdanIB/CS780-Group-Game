@@ -3,21 +3,47 @@ using Godot;
 public class GroundTile
 {
     // Tile features
-    public BiomeType biome;
+    public BiomeType Biome
+    {
+        get => _biome;
+        set
+        {
+            if (value != null)
+            {
+                TileAtlasCoordinates = (Structure == null) ? 
+                    value.GetTile().GroundTileAtlasCoords : 
+                    value.GetDefaultTile().GroundTileAtlasCoords;
+            }
+            _biome = value;
+        }
+    }
+    public GenericStructure Structure 
+    { 
+        get => _structure; 
+        set
+        {
+            if (value != null)
+            {
+                TileAtlasCoordinates = Biome.GetDefaultTile().GroundTileAtlasCoords; // When a structure is set on tile, flatten tile terrain permanantly
+            }
+            _structure = value;
+        }
+    }
+    public Turret Turret { get => Structure as Turret; set => Structure = value; }
     public Vector2I position;
+    public Vector2I TileAtlasCoordinates { get; private set; }
     public bool[] roadConnections = new bool[4]; // N,E,S,W
+
+    private BiomeType _biome;
     private GenericStructure _structure;
 
-    // Getters + Setters
-    public GenericStructure Structure { get => _structure; set => _structure = value; }
-    public Turret Turret { get => _structure as Turret; set => _structure = value; }
 
     public GroundTile(BiomeType terrain, Vector2I position, bool[] roads = null, GenericStructure structure = null)
     {
-        this.biome = terrain;
+        Biome = terrain;
         this.position = position;
         roadConnections = roads ?? [false, false, false, false];
-        _structure = structure;
+        Structure = structure;
     }
 
     // public Vector2I GetGridPosition()
@@ -79,7 +105,7 @@ public class GroundTile
 
     public override string ToString()
     {
-        return $"{biome} {position} {roadConnections} {(HasStructure() ? _structure : "No Structure")}";
+        return $"{Biome} {position} {roadConnections} {(HasStructure() ? Structure : "No Structure")}";
     }
 
 }
