@@ -35,19 +35,16 @@ public partial class AnimationComponent : AnimatedSprite2D
 
 	/// <summary>
 	/// Set state of animation component. If the state exists in the current AnimationPack, then set and play state.
-	/// </br>
-	/// Direction determines animation set to play within selected SpriteFrames.
 	/// </summary>
 	/// <param name="state"></param>
-	/// <param name="direction"></param>
 	public void SetState(AnimationPackEntry.State state)
 	{
 		foreach (var entry in Animations.Animations)
 		{
-			if (entry.EntryState == state)
+			if (entry.EntryState == state && this.SpriteFrames != entry.Frames)
 			{
 				this.SpriteFrames = entry.Frames;
-				if (SpriteFrames.GetAnimationNames() is var animationNames && animationNames != null && animationNames.Length > 0)
+				if (this.SpriteFrames.GetAnimationNames() is var animationNames && animationNames != null && animationNames.Length > 0)
 				{
 					Play(animationNames[0]); // start playing some animation within spriteframes state
 				}
@@ -57,15 +54,14 @@ public partial class AnimationComponent : AnimatedSprite2D
 	}
 
 	/// <summary>
-	/// Given a point for this animation to look at from current
+	/// Set the animation to play by direction (only applicable to animations which use direction)
 	/// </summary>
 	/// <param name="directionRads"></param>
 	public void SetDirection(float directionRads)
 	{
-	// 	// from.AngleToPoint(to)
 		var dir = RadsToDirection(directionRads);
 		var animationName = DirectionToAnimationName(dir);
-		if (SpriteFrames.HasAnimation(animationName)/* && this.Animation != animationName*/)
+		if (SpriteFrames.HasAnimation(animationName) && this.Animation != animationName)
 		{
 			Play(animationName);
 		}
