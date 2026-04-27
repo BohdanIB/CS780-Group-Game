@@ -1,86 +1,160 @@
+
+using CS780GroupProject.Scripts.Utils;
 using Godot;
 using System;
+using System.Collections.Generic;
 
-public partial class TileShapePlacer : Node2D
+/// <summary>
+/// TODO
+/// </summary>
+public partial class TurretPlacer : Node2D
 {
+	[Signal] 
+	public delegate void OnTurretPlacedEventHandler();
 
-	/*
+	// Scene Children
+	[Export] private Turret _ghostTurret;
 
-	private TileShape currentShape;
-	private GenericGrid<GroundTile> targetGrid;
-	private Vector2I currentOriginCoordinates;
+	// Preloaded Scenes
+	[Export] private PackedScene _turretScene;
 
-	[Signal] public delegate void OnShapePlacedEventHandler();
+	private int _currentTurretIndex = 0;
+	private TargetingMode _currentTurretTargetMode = TargetingMode.First;
 
-	public void Initialize(TileShape shapeToPlace, GenericGrid<GroundTile> targetGrid)
+	private GenericGrid<GroundTile> _grid;
+	private IsometricTileMap _tileMap;
+	private TileMapLayer _currentTileMapLayer; // todo: Potentially expand to other layers depending on hover location?
+
+	private bool _turretPlacerEnabled = false;
+
+	public void Initialize(GenericGrid<GroundTile> grid, IsometricTileMap tileMap)
 	{
-		currentShape = shapeToPlace;
-		this.targetGrid = targetGrid;
-
-		GetNode<GridRenderer>("GridRenderer").RenderGrid(shapeToPlace.grid);
+		_grid = grid;
+		_tileMap = tileMap;
+		var layer = tileMap.GetLayers()[0];
+		if (layer != null)
+		{
+			_currentTileMapLayer = layer;
+		}
 	}
 
-    public override void _Process(double delta)
-    {
-    
-		if (Input.IsActionJustPressed("Left Click"))
-		{
-			// Attempt Placement
-			if (IsPlacementValid())
-			{
-				GD.Print("Valid Placement Position");
-				PlaceShape();
-			}
-		}
-		if (Input.IsActionJustPressed("Rotate"))
-		{
-			// Rotate Shape
-			currentShape = currentShape.GetRotatedShape(1);
-			GetNode<GridRenderer>("GridRenderer").RenderGrid(currentShape.grid);
-		}
-
-		FollowMouse();
-    }
-
-	private bool IsPlacementValid()
+	public override void _Ready()
 	{
-		for (int x = 0; x < currentShape.grid.GetWidth(); x++)
+		if (TurretStats.ALL_TURRETS.Count > 0)
 		{
-			for (int y = 0; y < currentShape.grid.GetHeight(); y++)
-			{
-				if (currentShape.grid.GetGridValueOrDefault(x, y) != null)
-				{
-					if (targetGrid.GetGridValueOrDefault(currentOriginCoordinates.X+x, currentOriginCoordinates.Y+y) != null)
-					{
-						return false;
-					}
-				}
-			}
+			// _ghostTurret.Initialize(TurretStats.ALL_TURRETS[_currentTurretIndex], _currentTurretTargetMode);
 		}
-		return true;
+		
+		_ghostTurret.DisableTurret();
+		_ghostTurret.Visible = false;
+	}
+
+	public override void _Process(double delta)
+	{
+		FollowMouse();
+		UpdatePlacerState();
+		UpdateGhostTurretState();
+
+		// Toggle existing turret's targeting priority mode
+		var tile = GetTile();
+		if (Input.IsActionJustPressed("Right Click") && tile != null && tile.Turret != null)
+		{
+			var turret = tile.Turret;
+			GD.Print($"Updating turret {turret.Name} targeting mode to {_currentTurretTargetMode}");
+			turret.UpdateTargetingMode(_currentTurretTargetMode);
+		}
+	}
+
+	private GroundTile GetTileIfStructurePlacementValid()
+	{
+		var coord = IsometricTileMap.GlobalPositionToMapCoord(_currentTileMapLayer, GlobalPosition);
+		if (_grid.GetGridValueOrDefault(coord.X, coord.Y) is GroundTile tile && 
+			tile != null && !tile.HasRoadConnection() && !tile.HasStructure())
+		{
+			// GD.Print($"Structure placement valid for tile: {tile}");
+			return tile;
+		}
+		return null;
+	}
+
+	/// <summary>
+	/// Can return null
+	/// </summary>
+	/// <returns></returns>
+	private GroundTile GetTile()
+	{
+		var coord = IsometricTileMap.GlobalPositionToMapCoord(_currentTileMapLayer, GlobalPosition);
+		return _grid.GetGridValueOrDefault(coord.X, coord.Y);
 	}
 
 	private void FollowMouse()
 	{
-		Vector2 mousePosition = GetViewport().GetMousePosition();
-
-		currentOriginCoordinates = (Vector2I) (mousePosition / targetGrid.cellSize).Clamp(Vector2I.Zero, targetGrid.GetGridDimensions() - currentShape.grid.GetGridDimensions());
-
-		Position = (Vector2) currentOriginCoordinates * targetGrid.cellSize;
+		Vector2 mousePosition = GetGlobalMousePosition();
+		// _currentOriginCoordinates = (Vector2I) (mousePosition / _grid.cellSize).Clamp(Vector2I.Zero, _grid.GetGridDimensions());
+		GlobalPosition = IsometricTileMap.CenterTilePosition(_currentTileMapLayer, mousePosition);
+		// GD.Print($"Current origin position for mouse: {_currentOriginCoordinates}");
+		// GD.Print($"Coordinate: {IsometricTileMap.GlobalPositionToMapCoord(_currentTileMapLayer, mousePosition)} - Global Position: {IsometricTileMap.CenterTilePosition(_currentTileMapLayer, mousePosition)}");
 	}
 
-	private void PlaceShape()
+	private void UpdatePlacerState()
 	{
-		for (int x = 0; x < currentShape.grid.GetWidth(); x++)
+		if (Input.IsActionJustPressed("ToggleTurretPlacementMode"))
 		{
-			for (int y = 0; y < currentShape.grid.GetHeight(); y++)
+			_turretPlacerEnabled = !_turretPlacerEnabled;
+			GD.Print($"TurretPlacer {(_turretPlacerEnabled ? "enabled" : "disabled")}");
+		}
+
+		if (Input.IsActionJustPressed("SwitchTurretType"))
+		{
+			_currentTurretIndex++;
+			if (_currentTurretIndex >= TurretStats.ALL_TURRETS.Count)
 			{
-				if (targetGrid.GetGridValueOrDefault(currentOriginCoordinates.X+x, currentOriginCoordinates.Y+y) == null) targetGrid.SetGridValue(currentOriginCoordinates.X+x, currentOriginCoordinates.Y+y, currentShape.grid.GetGridValueOrDefault(x, y));
+				_currentTurretIndex = 0;
+			}
+			GD.Print($"Current turret type for placement: {TurretStats.ALL_TURRETS[_currentTurretIndex].Type}");
+		}
+		if (Input.IsActionJustPressed("SwitchTurretTargetingMode"))
+		{
+			_currentTurretTargetMode++;
+			if (!Enum.IsDefined(typeof(TargetingMode), _currentTurretTargetMode))
+			{
+				_currentTurretTargetMode = 0;
+			}
+			GD.Print($"Current turret target mode for placement and changing: {_currentTurretTargetMode}");
+		}
+
+	}
+
+	private void UpdateGhostTurretState()
+	{
+		GroundTile tile = GetTileIfStructurePlacementValid();
+		if (_turretPlacerEnabled && tile != null)
+		{
+			var turretStats = TurretStats.ALL_TURRETS[_currentTurretIndex];
+			// Turret Placement
+			if (Input.IsActionJustPressed("Left Click"))
+			{
+				GD.Print($"Placing turret of type {turretStats.Type}");
+				var turret = _turretScene.Instantiate<Turret>();
+				tile.Turret = turret;
+				// turret.Initialize(turretStats, _currentTurretTargetMode);
+				turret.GlobalPosition = IsometricTileMap.MapCoordToGlobalPosition(_currentTileMapLayer, tile.position);
+				GetTree().GetRoot().AddChild(turret);
+			}
+			// Display "ghost" turret to show where it's going to go and radius
+			// Ghost turret hover
+			else
+			{
+				_ghostTurret.Visible = true;
+				_ghostTurret.GlobalPosition = IsometricTileMap.MapCoordToGlobalPosition(_currentTileMapLayer, tile.position);
+				_ghostTurret.UpdateStats(turretStats); // todo
+				// GD.Print($"Ghost Turret: {_ghostTurret}");
 			}
 		}
-		EmitSignal(nameof(OnShapePlaced));
+		else
+		{
+			_ghostTurret.Visible = false;
+		}
 	}
-
-	*/
 
 }
