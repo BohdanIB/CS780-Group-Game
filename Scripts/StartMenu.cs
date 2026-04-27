@@ -27,6 +27,8 @@ public partial class StartMenu : Control
 	}
 
 	private void OnPlayPressed(){
+		PlayArea.ResetInstance();
+    	Base.ResetInstance();
 		GetTree().ChangeSceneToFile("res://Scenes/main.tscn");
 
 	}
