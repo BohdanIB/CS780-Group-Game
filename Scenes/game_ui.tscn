@@ -4,11 +4,11 @@
 [ext_resource type="Script" uid="uid://bsj066idkmqi8" path="res://Scripts/SideMenuContainer.cs" id="1_bw2rt"]
 [ext_resource type="Script" uid="uid://bds4wmxom0mg7" path="res://Scripts/GameOverScreen.cs" id="2_1pjl6"]
 [ext_resource type="Script" uid="uid://ckkvwrabsbiar" path="res://Scripts/ToggleMenuButton.cs" id="2_xjnnq"]
-[ext_resource type="Texture2D" uid="uid://cpobui6wfjvkf" path="res://Sprites/skull (3).png" id="3_gjn1n"]
+[ext_resource type="Texture2D" uid="uid://cpobui6wfjvkf" path="res://Assets/Sprites/skull (3).png" id="3_gjn1n"]
 [ext_resource type="Script" uid="uid://cvfvi3foxci1i" path="res://Scripts/TimerLabel.cs" id="3_rxsu6"]
 [ext_resource type="Script" uid="uid://chwa6vyek0ul5" path="res://Scripts/KillLabel.cs" id="3_y8vuf"]
 [ext_resource type="Texture2D" uid="uid://dwkxkagqql27x" path="res://Assets/Sprites/heart pixel art 32x32.png" id="4_1t2s1"]
-[ext_resource type="Texture2D" uid="uid://did4qqhay3op1" path="res://Assets/Sprites/coin.png" id="5_3t1kc"]
+[ext_resource type="Texture2D" uid="uid://beegdda2lfujw" path="res://Assets/Sprites/coin.png" id="5_3t1kc"]
 [ext_resource type="Script" uid="uid://e0mn8kx5s333" path="res://Scripts/QuitButton.cs" id="6_3t1kc"]
 [ext_resource type="PackedScene" uid="uid://kadpj6pgjsg3" path="res://Scenes/option_selector.tscn" id="11_dvsk4"]
 

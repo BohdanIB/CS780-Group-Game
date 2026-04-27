@@ -51,6 +51,7 @@ public partial class Enemy: PathFollower
 		_health.OnNoHealthLeft += () =>
 		{
 			GD.Print($"Enemy {Name} died.");
+			EmitSignal(SignalName.UnitDied, this);
 			QueueFree();
 		};
 		_hurt.OnHurt += (area, damage) => 

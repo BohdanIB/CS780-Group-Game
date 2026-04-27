@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cpobui6wfjvkf"
-path="res://.godot/imported/skull (3).png-0965cce4ad2ec6f2ba33ef40e691742b.ctex"
+uid="uid://btxfjoiuel7cn"
+path="res://.godot/imported/Button Sprite Sheet.jpg-255eb4658ccbde3f87e7c2b4dd980e2d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Sprites/skull (3).png"
-dest_files=["res://.godot/imported/skull (3).png-0965cce4ad2ec6f2ba33ef40e691742b.ctex"]
+source_file="res://Assets/Sprites/Button Sprite Sheet.jpg"
+dest_files=["res://.godot/imported/Button Sprite Sheet.jpg-255eb4658ccbde3f87e7c2b4dd980e2d.ctex"]
 
 [params]
 

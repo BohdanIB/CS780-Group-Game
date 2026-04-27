@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b2kp8b24h5lg"
-path="res://.godot/imported/Parchment.jpg-6b7657cd5e0849ed9a3137c8cf763e01.ctex"
+uid="uid://cpobui6wfjvkf"
+path="res://.godot/imported/skull (3).png-55d701ab67c6112035ef7e097178d1ba.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Sprites/Parchment.jpg"
-dest_files=["res://.godot/imported/Parchment.jpg-6b7657cd5e0849ed9a3137c8cf763e01.ctex"]
+source_file="res://Assets/Sprites/skull (3).png"
+dest_files=["res://.godot/imported/skull (3).png-55d701ab67c6112035ef7e097178d1ba.ctex"]
 
 [params]
 

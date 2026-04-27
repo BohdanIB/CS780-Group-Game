@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://be7u602qsxl5k"
-path="res://.godot/imported/Heart.png-e910d028e12b6ab43422798cb5418f7e.ctex"
+uid="uid://bqfgb48yp77js"
+path="res://.godot/imported/fort_base_sprite.svg-ed7fd667ab51ffb3612779c1d830844d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Sprites/Heart.png"
-dest_files=["res://.godot/imported/Heart.png-e910d028e12b6ab43422798cb5418f7e.ctex"]
+source_file="res://Assets/Sprites/fort_base_sprite.svg"
+dest_files=["res://.godot/imported/fort_base_sprite.svg-ed7fd667ab51ffb3612779c1d830844d.ctex"]
 
 [params]
 
@@ -38,3 +38,6 @@ process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
 detect_3d/compress_to=1
+svg/scale=1.0
+editor/scale_with_editor_scale=false
+editor/convert_colors_with_editor_theme=false
