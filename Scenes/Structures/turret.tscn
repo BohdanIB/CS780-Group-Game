@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bk3drg0y2r1ku" path="res://Scripts/turrets/Turret.cs" id="1_fcprl"]
 [ext_resource type="PackedScene" uid="uid://27mmcge0cxrm" path="res://Scenes/generic_structure.tscn" id="2_base"]
+[ext_resource type="Resource" uid="uid://by57g36impn2j" path="res://Resources/Turret/BallistaTurretStats.tres" id="3_bcjiu"]
 [ext_resource type="SpriteFrames" uid="uid://divrawug5fwn" path="res://Assets/AnimationFrames/turret_idle_frames.tres" id="4_ahfaj"]
 [ext_resource type="Resource" uid="uid://cop41bqffhdhj" path="res://Resources/Animations/AnimationPacks/TurretAnimations.tres" id="4_hxjjt"]
 [ext_resource type="PackedScene" uid="uid://cbnk8jcd7c4v3" path="res://Scenes/Components/detectable_component.tscn" id="5_detectable"]
@@ -12,7 +13,7 @@
 
 [node name="Turret" unique_id=2082542263 node_paths=PackedStringArray("_detector", "_detectable", "_shooter", "_targeting", "_projectileSpawner") groups=["turret"] instance=ExtResource("2_base")]
 script = ExtResource("1_fcprl")
-_stats = null
+_stats = ExtResource("3_bcjiu")
 _targetingMode = 3
 _turretTypes = 3
 _targetTypes = 16
