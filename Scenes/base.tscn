@@ -2,11 +2,16 @@
 
 [ext_resource type="Script" uid="uid://ck1rejkl4d3uw" path="res://Scripts/Base.cs" id="1_1w1q6"]
 [ext_resource type="Texture2D" uid="uid://bqfgb48yp77js" path="res://Sprites/fort_base_sprite.svg" id="2_6qyon"]
+[ext_resource type="PackedScene" uid="uid://bu5bt5d2jv3iu" path="res://Scenes/Components/hurt_component.tscn" id="3_jdayy"]
+[ext_resource type="PackedScene" uid="uid://e5vy6kbwqw12" path="res://Scenes/Components/health_component.tscn" id="4_8nfiu"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_jdayy"]
 
-[node name="Base" type="Node2D" unique_id=322375666]
+[node name="Base" type="Node2D" unique_id=322375666 node_paths=PackedStringArray("_health", "_hurt")]
+scale = Vector2(0.4, 0.4)
 script = ExtResource("1_1w1q6")
+_health = NodePath("HealthComponent")
+_hurt = NodePath("HurtComponent")
 
 [node name="Area2D" type="Area2D" parent="." unique_id=315190736]
 
@@ -16,3 +21,7 @@ shape = SubResource("RectangleShape2D_jdayy")
 [node name="Sprite2D" type="Sprite2D" parent="Area2D" unique_id=1824999016]
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("2_6qyon")
+
+[node name="HurtComponent" parent="." unique_id=495543674 instance=ExtResource("3_jdayy")]
+
+[node name="HealthComponent" parent="." unique_id=1408774868 instance=ExtResource("4_8nfiu")]
