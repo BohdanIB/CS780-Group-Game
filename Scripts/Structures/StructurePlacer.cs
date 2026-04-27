@@ -39,7 +39,6 @@ public partial class StructurePlacer : Node2D
 		DisablePlacement();
 	}
 
-
 	public void Initialize(PlayArea targetPlayArea, Inventory paymentInventory)
 	{
 		_placementTilemap = targetPlayArea.GridRenderer.TerrainMap.GetLayers()[0]; // This is not clean
@@ -48,28 +47,41 @@ public partial class StructurePlacer : Node2D
 	}
 
 	public void SetStructure(ConstructionInformation constructionInformation)
-{
-	GD.Print("SetStructure called, info is null: ", constructionInformation == null);
-	
-	if (constructionInformation == null)
 	{
-		DisablePlacement();
-	} 
-	else
-	{
-		GD.Print("Texture: ", constructionInformation.DisplayImageAtlas);
-		GD.Print("Ghost node: ", _placementGhost);
-		
-		_constructionInformation = constructionInformation;
-		_placementGhost.Texture = constructionInformation.DisplayImageAtlas;
-		_placementGhost.RegionRect = constructionInformation.DisplayImageRect;
-		
-		_isEnabled = true;
-		Visible = true;
-		
-		GD.Print("IsEnabled: ", _isEnabled, " Visible: ", Visible);
+		if (constructionInformation == null)
+		{
+			// Disable, no structure to place
+			DisablePlacement();
+		}
+		else
+		{
+			_constructionInformation = constructionInformation;
+			_placementGhost.Texture = constructionInformation.DisplayImageAtlas;
+			_placementGhost.RegionRect = constructionInformation.DisplayImageRect;
+
+			// Hide all option selectors first
+			for (int i = 0; i < _optionSelectors.Length; i++)
+			{
+				_optionSelectors[i].Visible = false;
+			}
+
+			// Show relevant option selectors based on configuration type
+			if (constructionInformation.ConfigurationType != GenericStructure.ConfigurationType.None)
+			{
+				int j = 0;
+				Dictionary<string, string[]> configDictionary = GenericStructure.GetConfigurationOptions(constructionInformation.ConfigurationType);
+				foreach (string key in configDictionary.Keys)
+				{
+					_optionSelectors[j].SetOptions(configDictionary[key], key);
+					_optionSelectors[j].Visible = true;
+					j++;
+				}
+			}
+
+			_isEnabled = true;
+			Visible = true;
+		}
 	}
-}
 
 	public void DisablePlacement()
 	{
@@ -83,9 +95,9 @@ public partial class StructurePlacer : Node2D
 
 	public override void _Process(double delta)
 	{
-		if (Input.IsActionJustPressed("ToggleTurretPlacementMode")) // TODO: remove.  This is just a placeholder before UI is integrated
+		if (Input.IsActionJustPressed("ToggleTurretPlacementMode")) // TODO: remove. This is just a placeholder before UI is integrated
 		{
-			infoIndex = (infoIndex+1) % temporaryConstructionInfo.Length;
+			infoIndex = (infoIndex + 1) % temporaryConstructionInfo.Length;
 			SetStructure(temporaryConstructionInfo[infoIndex]);
 		}
 
@@ -96,7 +108,11 @@ public partial class StructurePlacer : Node2D
 
 		if (Input.IsActionJustPressed("Left Click"))
 		{
-			if (_isPlacementValid) PlaceStructure();
+			// Don't place if clicking on UI
+			if (GetViewport().GuiGetHoveredControl() == null)
+			{
+				if (_isPlacementValid) PlaceStructure();
+			}
 		}
 
 		if (Input.IsActionJustPressed("Escape"))
@@ -109,11 +125,11 @@ public partial class StructurePlacer : Node2D
 	private void UpdatePosition()
 	{
 		Vector2 mouseWorldPos = GetGlobalMousePosition();
-		
+
 		//GD.Print("Mouse world pos: ", mouseWorldPos);
 		//GD.Print("Ghost global pos: ", _placementGhost.GlobalPosition);
 		//GD.Print("Camera zoom: ", GetViewport().GetCamera2D().Zoom);
-		
+
 		_currentGridCoordinates = IsometricTileMap.GlobalPositionToMapCoord(_placementTilemap, mouseWorldPos);
 		_placementGhost.GlobalPosition = IsometricTileMap.MapCoordToGlobalPosition(_placementTilemap, _currentGridCoordinates);
 	}
@@ -121,10 +137,10 @@ public partial class StructurePlacer : Node2D
 	private void UpdatePlacementValidity()
 	{
 		GroundTile tile = _placementGrid.GetGridValueOrDefault(_currentGridCoordinates.X, _currentGridCoordinates.Y);
-		if (tile == null || tile.HasStructure() || (_constructionInformation.PlacementRequirements == null && tile.HasRoadConnection())) 
+		if (tile == null || tile.HasStructure() || (_constructionInformation.PlacementRequirements == null && tile.HasRoadConnection()))
 		{
 			_isPlacementValid = false;
-		} 
+		}
 		else if (_constructionInformation.PlacementRequirements != null && !_constructionInformation.PlacementRequirements.IsPlacementValid(_placementGrid, _currentGridCoordinates))
 		{
 			_isPlacementValid = false;
@@ -132,56 +148,52 @@ public partial class StructurePlacer : Node2D
 		else if (_constructionInformation.MaterialRequirements != null && !_constructionInformation.MaterialRequirements.AreMaterialsAvailiable(_paymentInventory))
 		{
 			_isPlacementValid = false;
-		} 
+		}
 		else
 		{
 			_isPlacementValid = true;
 		}
 
-		_placementGhost.SelfModulate = _isPlacementValid ? _validPlacementColor : _invalidPlacementColor; 
-
+		_placementGhost.SelfModulate = _isPlacementValid ? _validPlacementColor : _invalidPlacementColor;
 	}
 
 	private void PlaceStructure()
-{
-    GD.Print("MaterialRequirements null: ", _constructionInformation.MaterialRequirements == null);
-    GD.Print("PaymentInventory null: ", _paymentInventory == null);
+	{
+		if (_constructionInformation.MaterialRequirements != null)
+		{
+			bool spent = _constructionInformation.MaterialRequirements.SpendMaterials(_paymentInventory);
+			if (!spent)
+			{
+				GD.Print("Not enough materials!");
+				return;
+			}
+		}
 
-    
-    if (_constructionInformation.MaterialRequirements != null)
-    {
-        bool spent = _constructionInformation.MaterialRequirements.SpendMaterials(_paymentInventory);
-        GD.Print("SpendMaterials result: ", spent);
-        if (!spent)
-        {
-            GD.Print("Not enough materials!");
-            return;
-        }
-    }
+		// Notify GameUI to update the coin label
+		var gameUi = GetTree().GetRoot().GetNode<GameUi>("Main/GameUI");
+		gameUi?.UpdateCoinDisplay();
 
-    // Notify GameUI to update the coin label
-    var gameUi = GetTree().GetRoot().GetNode<GameUi>("Main/GameUI");
-    gameUi?.UpdateCoinDisplay();
+		GenericStructure placedStructure = _constructionInformation.Structure.Instantiate<GenericStructure>();
+		placedStructure.GlobalPosition = IsometricTileMap.MapCoordToGlobalPosition(_placementTilemap, _currentGridCoordinates);
+		_placementGrid.GetGridValueOrDefault(_currentGridCoordinates.X, _currentGridCoordinates.Y).Structure = placedStructure;
 
-    GenericStructure placedStructure = _constructionInformation.Structure.Instantiate<GenericStructure>();
-    placedStructure.GlobalPosition = IsometricTileMap.MapCoordToGlobalPosition(_placementTilemap, _currentGridCoordinates);
-    _placementGrid.GetGridValueOrDefault(_currentGridCoordinates.X, _currentGridCoordinates.Y).Structure = placedStructure;
+		foreach (OptionSelector selector in _optionSelectors)
+		{
+			if (selector.Visible && selector.HasOptions)
+			{
+				placedStructure.SetConfigurationOption(selector.OptionsName, selector.GetOptionSelection());
+			}
+		}
 
-    foreach (OptionSelector selector in _optionSelectors)
-    {
-        if (selector.Visible && selector.HasOptions)
-        {
-            placedStructure.SetConfigurationOption(selector.OptionsName, selector.GetOptionSelection());
-        }
-    }
+		placedStructure.Initialize(_constructionInformation.StructureStats);
 
-    placedStructure.Initialize(_constructionInformation.StructureStats);
-
-	if (placedStructure is Turret turret)
+		// Hide turret radius after placement
+		if (placedStructure is Turret turret)
 		{
 			turret.HideRadius();
 		}
-    PlayArea.instance.AddChild(placedStructure);
-	DisablePlacement(); 
-}
+
+		PlayArea.instance.AddChild(placedStructure);
+		DisablePlacement();
+	}
 }
