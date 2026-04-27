@@ -170,13 +170,16 @@ public partial class EnemySpawner : Node
 			return;
 		}
 
-		int Spawnindex = (int)(GD.Randi() % (uint)_spawnPoints.Count);
-		var spawnTile = _spawnPoints[Spawnindex];
-
+		int spawnIndex = (int)(GD.Randi() % (uint)_spawnPoints.Count);
+		var spawnTile = _spawnPoints[spawnIndex];
 		var spawnPos = spawnTile.position;
 
 		var enemyScene = GD.Load<PackedScene>("res://Scenes/enemy.tscn");
 		var enemy = enemyScene.Instantiate<Enemy>();
+
+		var main = GetTree().Root.GetNode("Main");
+		var enemiesParent = main.GetNode("Enemies");
+		enemiesParent.AddChild(enemy);
 
 		var regularStats = _enemyStats.Find(s => s.Type == EnemyStats.Category.Regular);
 		if (regularStats == null)
@@ -184,8 +187,6 @@ public partial class EnemySpawner : Node
 			GD.PrintErr("EnemySpawner: No EnemyStats with Type == Regular found!");
 			return;
 		}
-
-		enemy.Initialize(regularStats);
 
 		var pathGrid = _pathfinder.GetPath(spawnPos, _hub);
 		if (pathGrid == null || pathGrid.Count == 0)
@@ -199,34 +200,29 @@ public partial class EnemySpawner : Node
 			pathWorld.Add(IsometricTileMap.MapCoordToGlobalPosition(_tileMapLayer, p));
 
 		enemy.GlobalPosition = pathWorld[0];
+		enemy.Initialize(regularStats);
 		enemy.SetPath(pathWorld.ToArray());
 		enemy.StartMoving();
-
-		var main = GetTree().Root.GetNode("Main");
-		var enemiesParent = main.GetNode("Enemies");
-		enemiesParent.CallDeferred("add_child", enemy);
 
 		_aliveEnemies++;
 
 		enemy.UnitDied += (_) =>
-	{
-		_aliveEnemies--;
-		_gameUi.IncrementKillCount();
-		CheckForVictory();
-	};
+		{
+			_aliveEnemies--;
+			_gameUi.IncrementKillCount();
+			CheckForVictory();
+		};
 
-	enemy.UnitReachedGoal += (damage) =>
-	{
-		_aliveEnemies--;
-		_gameUi.TakeDamage(damage);
-		CheckForVictory();
-	};
-
+		enemy.UnitReachedGoal += (damage) =>
+		{
+			_aliveEnemies--;
+			_gameUi.TakeDamage(damage);
+			CheckForVictory();
+		};
 	}
 
 	private void OnEnemyReachedGoal()
 	{
 		_gameUi.TakeDamage(5);
 	}
-
 }
