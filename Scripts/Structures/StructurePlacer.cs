@@ -59,13 +59,11 @@ public partial class StructurePlacer : Node2D
 			_placementGhost.Texture = constructionInformation.DisplayImageAtlas;
 			_placementGhost.RegionRect = constructionInformation.DisplayImageRect;
 
-			// Hide all option selectors first
 			for (int i = 0; i < _optionSelectors.Length; i++)
 			{
 				_optionSelectors[i].Visible = false;
 			}
 
-			// Show relevant option selectors based on configuration type
 			if (constructionInformation.ConfigurationType != GenericStructure.ConfigurationType.None)
 			{
 				int j = 0;
@@ -95,9 +93,9 @@ public partial class StructurePlacer : Node2D
 
 	public override void _Process(double delta)
 	{
-		if (Input.IsActionJustPressed("ToggleTurretPlacementMode")) // TODO: remove. This is just a placeholder before UI is integrated
+		if (Input.IsActionJustPressed("ToggleTurretPlacementMode")) // TODO: remove.  This is just a placeholder before UI is integrated
 		{
-			infoIndex = (infoIndex + 1) % temporaryConstructionInfo.Length;
+			infoIndex = (infoIndex+1) % temporaryConstructionInfo.Length;
 			SetStructure(temporaryConstructionInfo[infoIndex]);
 		}
 
@@ -126,10 +124,6 @@ public partial class StructurePlacer : Node2D
 	{
 		Vector2 mouseWorldPos = GetGlobalMousePosition();
 
-		//GD.Print("Mouse world pos: ", mouseWorldPos);
-		//GD.Print("Ghost global pos: ", _placementGhost.GlobalPosition);
-		//GD.Print("Camera zoom: ", GetViewport().GetCamera2D().Zoom);
-
 		_currentGridCoordinates = IsometricTileMap.GlobalPositionToMapCoord(_placementTilemap, mouseWorldPos);
 		_placementGhost.GlobalPosition = IsometricTileMap.MapCoordToGlobalPosition(_placementTilemap, _currentGridCoordinates);
 	}
@@ -137,7 +131,7 @@ public partial class StructurePlacer : Node2D
 	private void UpdatePlacementValidity()
 	{
 		GroundTile tile = _placementGrid.GetGridValueOrDefault(_currentGridCoordinates.X, _currentGridCoordinates.Y);
-		if (tile == null || tile.HasStructure() || (_constructionInformation.PlacementRequirements == null && tile.HasRoadConnection()))
+		if (tile == null || tile.HasStructure() || (_constructionInformation.PlacementRequirements == null && tile.HasRoadConnection())) 
 		{
 			_isPlacementValid = false;
 		}
@@ -159,15 +153,7 @@ public partial class StructurePlacer : Node2D
 
 	private void PlaceStructure()
 	{
-		if (_constructionInformation.MaterialRequirements != null)
-		{
-			bool spent = _constructionInformation.MaterialRequirements.SpendMaterials(_paymentInventory);
-			if (!spent)
-			{
-				GD.Print("Not enough materials!");
-				return;
-			}
-		}
+		_constructionInformation.MaterialRequirements?.SpendMaterials(_paymentInventory);
 
 		// Notify GameUI to update the coin label
 		var gameUi = GetTree().GetRoot().GetNode<GameUi>("Main/GameUI");
@@ -179,7 +165,7 @@ public partial class StructurePlacer : Node2D
 
 		foreach (OptionSelector selector in _optionSelectors)
 		{
-			if (selector.Visible && selector.HasOptions)
+			if (selector.Visible)
 			{
 				placedStructure.SetConfigurationOption(selector.OptionsName, selector.GetOptionSelection());
 			}
