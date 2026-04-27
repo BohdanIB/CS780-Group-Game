@@ -20,7 +20,7 @@ public partial class OptionSelector : Panel
 		this._options = options;
 		this.OptionsName = name;
 		_nameLabel.Text = name;
-		_currentIndex = Math.Max(0, Math.Min(options.Length-1, index)); // ← was assigning to index, not _currentIndex
+		_currentIndex = Math.Max(0, Math.Min(options.Length-1, index));
 
 		if (options != null && options.Length > 0)
 		{
