@@ -13,6 +13,7 @@
 [ext_resource type="PackedScene" uid="uid://bxnekokl8stoa" path="res://Scenes/game_ui.tscn" id="6_21xkr"]
 [ext_resource type="Script" uid="uid://dp5rjda24qxii" path="res://Scripts/EnemySpawner.cs" id="7_6bp64"]
 [ext_resource type="Script" uid="uid://c7j48ea8ghddd" path="res://Scripts/CameraController.cs" id="7_344ge"]
+[ext_resource type="PackedScene" uid="uid://bxnd3hgmx5vi6" path="res://Scenes/Components/spawner_component.tscn" id="10_wsu2k"]
 [ext_resource type="Script" uid="uid://cxywbq0qfpgfg" path="res://Scripts/FriendlySpawner.cs" id="14_jkdf5"]
 
 [node name="Main" type="Node2D" unique_id=1822167308 node_paths=PackedStringArray("_structurePlacer")]
@@ -37,10 +38,14 @@ zoom = Vector2(0.5, 0.5)
 script = ExtResource("7_344ge")
 HubLocation = Vector2i(50, 50)
 
-[node name="EnemySpawner" type="Node" parent="." unique_id=1904352068]
+[node name="EnemySpawner" type="Node" parent="." unique_id=1904352068 node_paths=PackedStringArray("_spawner")]
 script = ExtResource("7_6bp64")
 WaveIntervalSeconds = 10.0
 EnemiesPerWave = 30
+_spawner = NodePath("SpawnerComponent")
+
+[node name="SpawnerComponent" parent="EnemySpawner" unique_id=391563213 instance=ExtResource("10_wsu2k")]
+ScenePath = "uid://cvx7nxyaghhrx"
 
 [node name="Enemies" type="Node2D" parent="." unique_id=1260695484]
 

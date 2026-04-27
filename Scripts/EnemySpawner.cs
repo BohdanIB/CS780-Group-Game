@@ -9,8 +9,11 @@ public partial class EnemySpawner : Node
 	[Export] public int FinalWaveNumber = 10;
 	[Export] public int EnemiesAddedPerWave = 5;
 
-	private int _aliveEnemies = 0;
+	[Export] private SpawnerComponent _spawner;
 
+	[Export] public float TileDistanceFromBaseEnemiesSpawnAt = 15f;
+
+	private int _aliveEnemies = 0;
 
 	public int CurrentWave { get; private set; } = 0;
 
@@ -36,7 +39,6 @@ public partial class EnemySpawner : Node
 
 		BuildSpawnPointList();
 		BuildPathfinder();
-		//SpawnGoalSprite();
 		SpawnBase();
 
 		_waveTimer = new Timer
@@ -62,8 +64,13 @@ public partial class EnemySpawner : Node
 			for (int y = 0; y < _grid.GetHeight(); y++)
 			{
 				var tile = _grid.GetGridValueOrDefault(x, y);
-				if (tile.HasRoadDeadEnd())
-					_spawnPoints.Add(tile);
+				if (!tile.HasRoadDeadEnd()) continue;
+
+				// Skip spawn points within TileDistancefrombase tiles of the hub
+				var distToHub = tile.position.DistanceTo(_hub);
+				if (distToHub < TileDistanceFromBaseEnemiesSpawnAt) continue;
+
+				_spawnPoints.Add(tile);
 			}
 		}
 
@@ -98,10 +105,7 @@ public partial class EnemySpawner : Node
 		);
 	}
 
-
-	
-
-	//TODO It shouldn't be the responsiblity of EnemySpawner to spawn base, but its actually a scene for now so progress.
+	// TODO: It shouldn't be the responsibility of EnemySpawner to spawn base, but it's a scene for now so progress.
 	private void SpawnBase()
 	{
 		var baseScene = GD.Load<PackedScene>("res://Scenes/Base.tscn");
@@ -114,20 +118,6 @@ public partial class EnemySpawner : Node
 		main.AddChild(_base);
 
 		GD.Print($"Base placed at hub: {_hub}");
-}
-
-	private void SpawnGoalSprite()
-	{
-		var goalScene = GD.Load<PackedScene>("res://Scenes/base_scene.tscn");
-		var goal = goalScene.Instantiate<Node2D>();
-
-		Vector2 worldPos = IsometricTileMap.MapCoordToGlobalPosition(_tileMapLayer, _hub);
-		goal.Position = worldPos;
-
-		var main = GetTree().Root.GetNode("Main");
-		main.AddChild(goal);
-
-		GD.Print($"Goal sprite placed at hub: {_hub}");
 	}
 
 	private void SpawnWave()
@@ -152,15 +142,12 @@ public partial class EnemySpawner : Node
 
 	private void CheckForVictory()
 	{
-		var enemiesParent = GetTree().Root.GetNode("Main/Enemies");
-
-			if (CurrentWave >= FinalWaveNumber && _aliveEnemies == 0)
+		if (CurrentWave >= FinalWaveNumber && _aliveEnemies == 0)
 		{
 			GD.Print("All enemies defeated. Player wins!");
 			_gameUi.ShowVictory();
 		}
 	}
-
 
 	private void SpawnSingleEnemy()
 	{
@@ -170,16 +157,11 @@ public partial class EnemySpawner : Node
 			return;
 		}
 
-		int spawnIndex = (int)(GD.Randi() % (uint)_spawnPoints.Count);
-		var spawnTile = _spawnPoints[spawnIndex];
-		var spawnPos = spawnTile.position;
-
-		var enemyScene = GD.Load<PackedScene>("res://Scenes/enemy.tscn");
-		var enemy = enemyScene.Instantiate<Enemy>();
-
-		var main = GetTree().Root.GetNode("Main");
-		var enemiesParent = main.GetNode("Enemies");
-		enemiesParent.AddChild(enemy);
+		if (_spawner == null)
+		{
+			GD.PrintErr("EnemySpawner: SpawnerComponent is not assigned!");
+			return;
+		}
 
 		var regularStats = _enemyStats.Find(s => s.Type == EnemyStats.Category.Regular);
 		if (regularStats == null)
@@ -187,6 +169,10 @@ public partial class EnemySpawner : Node
 			GD.PrintErr("EnemySpawner: No EnemyStats with Type == Regular found!");
 			return;
 		}
+
+		int spawnIndex = (int)(GD.Randi() % (uint)_spawnPoints.Count);
+		var spawnTile = _spawnPoints[spawnIndex];
+		var spawnPos = spawnTile.position;
 
 		var pathGrid = _pathfinder.GetPath(spawnPos, _hub);
 		if (pathGrid == null || pathGrid.Count == 0)
@@ -198,6 +184,17 @@ public partial class EnemySpawner : Node
 		List<Vector2> pathWorld = new();
 		foreach (var p in pathGrid)
 			pathWorld.Add(IsometricTileMap.MapCoordToGlobalPosition(_tileMapLayer, p));
+
+		var enemy = _spawner.Spawn() as Enemy;
+		if (enemy == null)
+		{
+			GD.PrintErr("EnemySpawner: SpawnerComponent failed to spawn enemy!");
+			return;
+		}
+
+		var main = GetTree().Root.GetNode("Main");
+		var enemiesParent = main.GetNode("Enemies");
+		enemiesParent.AddChild(enemy);
 
 		enemy.GlobalPosition = pathWorld[0];
 		enemy.Initialize(regularStats);

@@ -28,7 +28,7 @@ public partial class Main : Node2D
 
 		var camera = GetNode<Camera2D>("/root/Main/Camera2D");
 		camera.Enabled = true;
-		camera.Zoom = new Vector2(.75f, .75f);
+		camera.Zoom = new Vector2(1f, 1f);
 
 		Vector2I dimensions = new Vector2I(100, 100);
 
