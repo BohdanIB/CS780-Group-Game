@@ -142,7 +142,7 @@ theme_override_colors/font_color = Color(0.9946539, 0.99191445, 0.99999994, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/font_size = 32
-text = "100"
+text = "1000"
 
 [node name="CoinCount" type="HBoxContainer" parent="UI/Panel/HBoxContainer" unique_id=1027251394]
 layout_mode = 2

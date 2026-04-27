@@ -11,7 +11,7 @@ public partial class GameUi : CanvasLayer
 	private Label _warningLabel;	
 	private Label _BaseHPLabel;
 
-	public const int StartingBaseHP = 100;
+	public const int StartingBaseHP = 1000;
 	private int currentBaseHP = StartingBaseHP;
 
 	private bool game_over = false;

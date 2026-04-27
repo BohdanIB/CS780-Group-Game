@@ -20,7 +20,7 @@ public partial class Base : GenericStructure
 		return;
 	}
 
-	_health.SetHealth(100f);
+	_health.SetHealth(1000f);
 	_hurt.Initialize(Groups.GroupTypes.Friendly | Groups.GroupTypes.Structure, Groups.GroupTypes.Enemy);
 	_hurt.OnHurt += (hit, damage) =>
 	{
