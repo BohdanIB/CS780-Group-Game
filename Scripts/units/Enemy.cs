@@ -22,6 +22,7 @@ public partial class Enemy: PathFollower
 	[Export] private ShooterComponent _shooter;
 	[Export] private TargetingComponent _targeting;
 	[Export] protected SpawnerComponent _projectileSpawner;
+	[Export] private int _goalDamage = 10;
 
 	/// <summary>
 	/// Initializes enemy with custom stats.
@@ -66,6 +67,8 @@ public partial class Enemy: PathFollower
 				_animation.SetDirection(directionRads);
 			}
 		};
+
+		_mover.OnPathCompleted += HandleReachedGoal;
 
 	}
 
@@ -193,6 +196,13 @@ public partial class Enemy: PathFollower
 
 			// GD.Print($"{enemy}");
 		}
+	}
+
+
+	private void HandleReachedGoal()
+	{
+		EmitSignal(SignalName.UnitReachedGoal, _goalDamage);
+		QueueFree();
 	}
 
 }
