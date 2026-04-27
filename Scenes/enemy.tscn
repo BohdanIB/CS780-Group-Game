@@ -7,10 +7,8 @@
 [ext_resource type="PackedScene" uid="uid://1xnv73ih3ekh" path="res://Scenes/Components/shooter_component.tscn" id="5_0830c"]
 [ext_resource type="PackedScene" uid="uid://cxvwrh12elf1m" path="res://Scenes/Components/targeting_component.tscn" id="6_1dp5w"]
 [ext_resource type="PackedScene" uid="uid://bxnd3hgmx5vi6" path="res://Scenes/Components/spawner_component.tscn" id="7_auwsv"]
-[ext_resource type="SpriteFrames" uid="uid://bpbko2n2qgxyk" path="res://Assets/AnimationFrames/enemy_idle_frames.tres" id="8_anim"]
 
-[node name="Enemy" unique_id=1651465167 node_paths=PackedStringArray("_shooter", "_targeting", "_projectileSpawner") groups=["enemy"] instance=ExtResource("1_hghv2")]
-scale = Vector2(4, 4)
+[node name="Enemy" unique_id=382514737 node_paths=PackedStringArray("_shooter", "_targeting", "_projectileSpawner") groups=["enemy"] instance=ExtResource("1_hghv2")]
 script = ExtResource("2_1f0kj")
 _stats = ExtResource("3_1dp5w")
 _targetingMode = 4
@@ -19,22 +17,20 @@ _targetTypes = 11
 _shooter = NodePath("ShooterComponent")
 _targeting = NodePath("ShooterComponent/TargetingComponent")
 _projectileSpawner = NodePath("ShooterComponent/ProjectileSpawnerComponent")
-MaxHealth = 100
 
 [node name="AnimationComponent" parent="." index="5" unique_id=1805975540]
 Animations = ExtResource("4_1dp5w")
 
-[node name="IdleAnimations" type="AnimatedSprite2D" parent="." index="6" unique_id=437263339]
-position = Vector2(0, -4)
-sprite_frames = ExtResource("8_anim")
-animation = &"north_east"
-autoplay = "north_east"
-
-[node name="ShooterComponent" parent="." index="7" unique_id=206378310 node_paths=PackedStringArray("_projectileSpawner", "_targeting") instance=ExtResource("5_0830c")]
+[node name="ShooterComponent" parent="." index="6" unique_id=1054008556 node_paths=PackedStringArray("_projectileSpawner", "_targeting", "_shotCooldown") instance=ExtResource("5_0830c")]
 _projectileSpawner = NodePath("ProjectileSpawnerComponent")
 _targeting = NodePath("TargetingComponent")
+_shotCooldown = NodePath("ShotCooldown")
 
-[node name="TargetingComponent" parent="ShooterComponent" index="1" unique_id=302949712 instance=ExtResource("6_1dp5w")]
+[node name="TargetingComponent" parent="ShooterComponent" index="0" unique_id=564942499 node_paths=PackedStringArray("_detector") instance=ExtResource("6_1dp5w")]
+_detector = NodePath("../../DetectorComponent")
 
-[node name="ProjectileSpawnerComponent" parent="ShooterComponent" index="2" unique_id=803062640 instance=ExtResource("7_auwsv")]
-ScenePath = "res://Scenes/projectile.tscn"
+[node name="ProjectileSpawnerComponent" parent="ShooterComponent" index="1" unique_id=391563213 instance=ExtResource("7_auwsv")]
+ScenePath = "uid://b1picus170nmk"
+
+[node name="ShotCooldown" type="Timer" parent="ShooterComponent" index="2" unique_id=1150597860]
+one_shot = true
