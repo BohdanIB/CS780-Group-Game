@@ -11,7 +11,6 @@
 [ext_resource type="PackedScene" uid="uid://bxnd3hgmx5vi6" path="res://Scenes/Components/spawner_component.tscn" id="9_spawner"]
 
 [node name="Turret" unique_id=2082542263 node_paths=PackedStringArray("_detector", "_detectable", "_shooter", "_targeting", "_projectileSpawner") groups=["turret"] instance=ExtResource("2_base")]
-scale = Vector2(4, 4)
 script = ExtResource("1_fcprl")
 _stats = null
 _targetingMode = 3

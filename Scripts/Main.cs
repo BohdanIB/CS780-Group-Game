@@ -3,7 +3,7 @@ using System;
 
 public partial class Main : Node2D
 {
-    [Export] public ulong MAIN_SEED = 12345;
+	[Export] public ulong MAIN_SEED = 12345;
 
 	[Export] private StructurePlacer _structurePlacer;
 	[Export] public ConstructionInformation tempConstructionInformation;
@@ -28,7 +28,7 @@ public partial class Main : Node2D
 
 		var camera = GetNode<Camera2D>("/root/Main/Camera2D");
 		camera.Enabled = true;
-		camera.Zoom = new Vector2(.5f, .5f);
+		camera.Zoom = new Vector2(.75f, .75f);
 
 		Vector2I dimensions = new Vector2I(100, 100);
 
