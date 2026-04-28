@@ -18,7 +18,7 @@ bg_color = Color(0, 0, 0, 1)
 [sub_resource type="Theme" id="Theme_bw2rt"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_gjn1n"]
-load_path = "res://.godot/imported/Parchment.jpg-6b7657cd5e0849ed9a3137c8cf763e01.ctex"
+load_path = "res://.godot/imported/Parchment.jpg-fe8f57644b03f8173c5b76cb768c05fe.ctex"
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_3t1kc"]
 texture = SubResource("CompressedTexture2D_gjn1n")
