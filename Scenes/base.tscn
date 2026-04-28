@@ -8,7 +8,7 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_jdayy"]
 
 [node name="Base" type="Node2D" unique_id=322375666 node_paths=PackedStringArray("_health", "_hurt")]
-scale = Vector2(0.4, 0.4)
+scale = Vector2(0.3, 0.3)
 script = ExtResource("1_1w1q6")
 _health = NodePath("HealthComponent")
 _hurt = NodePath("HurtComponent")
