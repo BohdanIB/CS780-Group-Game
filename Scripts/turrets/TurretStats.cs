@@ -35,21 +35,18 @@ public partial class TurretStats : StructureStats
 	/// Get list of all turret stats.
 	/// </summary>
 	/// <returns></returns>
-	public static List<TurretStats> LoadAllStats()
+	private static List<TurretStats> LoadAllStats()
 	{
 		DirAccess directory = DirAccess.Open(TURRET_DIRECTORY_PATH);
 		if (directory == null) return null;
 
-		List<TurretStats> loadedTurrets = new();
+		List<TurretStats> loadedTurrets = [];
 
 		directory.ListDirBegin();
 
 		foreach (var turretFileName in directory.GetFiles())
 		{
-			if (turretFileName.EndsWith(".tres"))
-			{
 				loadedTurrets.Add(ResourceLoader.Load<TurretStats>($"{TURRET_DIRECTORY_PATH}/{turretFileName}"));
-			}
 		}
 
 		directory.ListDirEnd();
