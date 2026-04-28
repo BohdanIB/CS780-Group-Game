@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="TurretStats" format=3 uid="uid://b65p4eimakib4"]
+[gd_resource type="Resource" script_class="TurretStats" format=3 uid="uid://by57g36impn2j"]
 
 [ext_resource type="Script" uid="uid://bawwkshhg5psh" path="res://Scripts/turrets/TurretStats.cs" id="1_etjm6"]
 [ext_resource type="Resource" uid="uid://dbmns5gjywp51" path="res://Resources/Projectiles/BoltStats.tres" id="1_ljd0c"]
@@ -6,6 +6,7 @@
 
 [resource]
 script = ExtResource("1_etjm6")
+Type = 0
 AggroRadius = 100.0
 DetectableRadius = 16.0
 HitboxRadius = 16.0
@@ -13,4 +14,5 @@ Health = 100.0
 FireRate = 2.0
 ProjectileStats = ExtResource("1_ljd0c")
 Animations = ExtResource("1_v0m1v")
+Cost = 75
 metadata/_custom_type_script = "uid://bawwkshhg5psh"

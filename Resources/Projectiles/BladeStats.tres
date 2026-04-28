@@ -6,8 +6,8 @@
 [resource]
 script = ExtResource("1_wntad")
 Type = 1
-Speed = 100.0
-Damage = 20.0
+Speed = 200.0
+Damage = 40.0
 Hitbox = 16.0
 Animations = ExtResource("1_4mfcn")
 metadata/_custom_type_script = "uid://db7kn4h7v1jqa"
