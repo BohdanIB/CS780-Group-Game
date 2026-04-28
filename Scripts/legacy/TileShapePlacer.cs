@@ -20,9 +20,9 @@ public partial class TileShapePlacer : Node2D
 		GetNode<GridRenderer>("GridRenderer").RenderGrid(shapeToPlace.grid);
 	}
 
-	public override void _Process(double delta)
-	{
-	
+    public override void _Process(double delta)
+    {
+    
 		if (Input.IsActionJustPressed("Left Click"))
 		{
 			// Attempt Placement
@@ -40,7 +40,7 @@ public partial class TileShapePlacer : Node2D
 		}
 
 		FollowMouse();
-	}
+    }
 
 	private bool IsPlacementValid()
 	{
