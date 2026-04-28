@@ -26,7 +26,6 @@ _animation = NodePath("AnimationComponent")
 [node name="DetectableComponent" parent="." unique_id=734681606 instance=ExtResource("5_43wju")]
 
 [node name="MoverComponent" parent="." unique_id=1975334598 node_paths=PackedStringArray("ParentNode") instance=ExtResource("6_c3bam")]
-Speed = 300.0
 ParentNode = NodePath("..")
 
 [node name="AnimationComponent" parent="." unique_id=1805975540 instance=ExtResource("7_c3bam")]
