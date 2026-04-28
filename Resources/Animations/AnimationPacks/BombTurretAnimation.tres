@@ -1,8 +1,9 @@
 [gd_resource type="Resource" script_class="AnimationPack" format=3 uid="uid://dd6fwj0g2qjmc"]
 
+[ext_resource type="Resource" uid="uid://dj7kuyyq5j4ye" path="res://Resources/Animations/AnimationPackEntries/bomb__tower_idle_animation_entry.tres" id="1_hsub7"]
 [ext_resource type="Script" uid="uid://b8k2bijsjc1da" path="res://Scripts/Animation/AnimationPack.cs" id="1_vaowq"]
 
 [resource]
 script = ExtResource("1_vaowq")
-Animations = Array[Object]([null])
+Animations = Array[Object]([ExtResource("1_hsub7")])
 metadata/_custom_type_script = "uid://b8k2bijsjc1da"

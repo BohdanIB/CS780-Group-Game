@@ -1,4 +1,6 @@
 
+using System;
+using System.Collections.Generic;
 using CS780GroupProject.Scripts.Utils;
 using static CS780GroupProject.Scripts.Utils.NodeComponentChecking;
 using Godot;
@@ -10,12 +12,20 @@ using Godot;
 /// </summary>
 public partial class GenericStructure: Node2D
 {
+	public enum ConfigurationType
+	{
+		None,
+		TurretTargeting
+	}
+
 	public const Groups.GroupTypes TYPES = Groups.GroupTypes.Structure;
 
 	[ExportGroup("Components")]
 	[Export] protected HealthComponent _health;
-	[Export] protected HurtComponent _hurt;
+	[Export] protected HurtComponent _hurt; // Do ALL structures really need these components?
 	[Export] protected AnimationComponent _animation;
+
+	public virtual void Initialize(StructureStats stats) { }
 
 	public override void _Ready()
 	{
@@ -26,16 +36,20 @@ public partial class GenericStructure: Node2D
 		{
 			GD.Print($"WARNING - GenericStructure {this} was unable to find health and/or hurt components on _Ready()");
 		}
-		// _hurtComponent.OnHurt += (hitOwnerNode, damage) =>
-		// {
-		// 	_healthComponent.ApplyDamage(damage);
-		// };
-		// _healthComponent.OnNoHealthLeft += () =>
-		// {
-		// 	GD.Print($"Structure {Name} died.");
-		// 	QueueFree();
-		// };
 	}
 
+	public static Dictionary<string, string[]> GetConfigurationOptions(ConfigurationType configurationType)
+	{
+		return configurationType switch
+		{
+			ConfigurationType.None => null,
+			ConfigurationType.TurretTargeting => new()
+				{
+					["Target"] = Enum.GetNames(typeof(TargetingMode))
+				},
+			_ => null,
+		};
+	}
 
+	public virtual void SetConfigurationOption(string configurationName, string configurationSelection) { }
 }

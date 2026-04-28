@@ -92,7 +92,7 @@ public partial class TargetingComponent : Node2D
 	private Area2D RandomPick(List<DetectableComponent> targets)
 	{
 		if (targets.Count == 0) { return null; }
-		return targets[GD.RandRange(0, targets.Count)];
+		return targets[GD.RandRange(0, targets.Count-1)];
 	}
 	/// <summary>
 	/// Pick the valid target that is closest to finishing its path.

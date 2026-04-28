@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ConstructionInformation" format=3 uid="uid://2labqj7skqls"]
+
+[ext_resource type="Texture2D" uid="uid://58os2uojn07s" path="res://Assets/Sprites/isometric_freeze_turret.png" id="1_36wco"]
+[ext_resource type="Script" uid="uid://c5a4sxpqqv1sn" path="res://Scripts/Structures/ConstructionInformation.cs" id="1_15507"]
+[ext_resource type="PackedScene" uid="uid://b2w8csm5vypb0" path="res://Scenes/Structures/turret.tscn" id="2_36wco"]
+[ext_resource type="Resource" uid="uid://b7bplpg3mt7ea" path="res://Resources/Turret/FreezeTurretStats.tres" id="3_sm2ot"]
+
+[resource]
+script = ExtResource("1_15507")
+DisplayImageAtlas = ExtResource("1_36wco")
+DisplayImageRect = Rect2(0, 0, 64, 64)
+Structure = ExtResource("2_36wco")
+StructureStats = ExtResource("3_sm2ot")
+ConfigurationType = 1
+metadata/_custom_type_script = "uid://c5a4sxpqqv1sn"

@@ -1,17 +1,17 @@
 [gd_resource type="Resource" script_class="TurretStats" format=3 uid="uid://cece7aspbm6jr"]
 
-[ext_resource type="Resource" uid="uid://cop41bqffhdhj" path="res://Resources/Animations/AnimationPacks/TurretAnimations.tres" id="1_cewui"]
+[ext_resource type="Resource" uid="uid://8up6n72scnpd" path="res://Resources/Projectiles/ElectroStats.tres" id="1_cewui"]
 [ext_resource type="Script" uid="uid://bawwkshhg5psh" path="res://Scripts/turrets/TurretStats.cs" id="1_ga68c"]
-[ext_resource type="Resource" uid="uid://8up6n72scnpd" path="res://Resources/Projectiles/ElectroStats.tres" id="2_kd22d"]
+[ext_resource type="Resource" uid="uid://bhdwmej6ctgip" path="res://Resources/Animations/AnimationPacks/ElectroTurretAnimations.tres" id="1_kd22d"]
 
 [resource]
 script = ExtResource("1_ga68c")
 Type = 2
-AggroRadius = 50.0
+AggroRadius = 100.0
 DetectableRadius = 16.0
 HitboxRadius = 16.0
-Health = 125.0
-FireRate = 1.0
-ProjectileStats = ExtResource("2_kd22d")
-Animations = ExtResource("1_cewui")
+Health = 200.0
+FireRate = 2.0
+ProjectileStats = ExtResource("1_cewui")
+Animations = ExtResource("1_kd22d")
 metadata/_custom_type_script = "uid://bawwkshhg5psh"

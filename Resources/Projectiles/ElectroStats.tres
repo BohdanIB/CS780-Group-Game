@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="ProjectileStats" format=3 uid="uid://8up6n72scnpd"]
 
-[ext_resource type="Resource" uid="uid://bhdwmej6ctgip" path="res://Resources/Animations/AnimationPacks/ElectroAnimations.tres" id="1_7vs6c"]
+[ext_resource type="Resource" uid="uid://yht161tan3km" path="res://Resources/Animations/AnimationPacks/ElectroAnimations.tres" id="1_7vs6c"]
 [ext_resource type="Script" uid="uid://db7kn4h7v1jqa" path="res://Scripts/turrets/ProjectileStats.cs" id="1_ihrkt"]
 
 [resource]

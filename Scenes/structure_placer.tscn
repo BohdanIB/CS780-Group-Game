@@ -1,0 +1,35 @@
+[gd_scene format=3 uid="uid://5e8ht0mldott"]
+
+[ext_resource type="Script" uid="uid://d0kahbyhfc14x" path="res://Scripts/Structures/StructurePlacer.cs" id="1_2y6v2"]
+[ext_resource type="Texture2D" uid="uid://dbrmvykg7gy0r" path="res://icon.svg" id="2_wos0y"]
+[ext_resource type="PackedScene" uid="uid://kadpj6pgjsg3" path="res://Scenes/option_selector.tscn" id="3_5150u"]
+
+[node name="StructurePlacer" type="Node2D" unique_id=1843712961 node_paths=PackedStringArray("_placementGhost", "_selectorContainer")]
+top_level = true
+script = ExtResource("1_2y6v2")
+_placementGhost = NodePath("PlacementGhost")
+_validPlacementColor = Color(0, 0.7882353, 0, 0.5882353)
+_invalidPlacementColor = Color(0.6666667, 0, 0, 0.5882353)
+_selectorContainer = NodePath("Option Selectors")
+temporaryConstructionInfo = Array[Object]([])
+
+[node name="PlacementGhost" type="Sprite2D" parent="." unique_id=1148194564]
+modulate = Color(1, 1, 1, 0.4392157)
+texture = ExtResource("2_wos0y")
+region_enabled = true
+
+[node name="Option Selectors" type="VBoxContainer" parent="." unique_id=34133604]
+offset_right = 200.0
+offset_bottom = 104.0
+
+[node name="OptionSelector1" parent="Option Selectors" unique_id=839933324 instance=ExtResource("3_5150u")]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+
+[node name="OptionSelector2" parent="Option Selectors" unique_id=768693561 instance=ExtResource("3_5150u")]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+
+[node name="OptionSelector3" parent="Option Selectors" unique_id=1145831017 instance=ExtResource("3_5150u")]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2

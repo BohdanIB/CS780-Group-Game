@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="TurretStats" format=3 uid="uid://b7bplpg3mt7ea"]
+
+[ext_resource type="Resource" uid="uid://sjadoqd44fpe" path="res://Resources/Animations/AnimationPacks/FreezeTurretAnimations.tres" id="1_7s7be"]
+[ext_resource type="Resource" uid="uid://052224qk7xl4" path="res://Resources/Projectiles/FreezeStats.tres" id="2_8crns"]
+[ext_resource type="Script" uid="uid://bawwkshhg5psh" path="res://Scripts/turrets/TurretStats.cs" id="3_vt8ns"]
+
+[resource]
+script = ExtResource("3_vt8ns")
+Type = 4
+AggroRadius = 100.0
+DetectableRadius = 16.0
+HitboxRadius = 16.0
+Health = 100.0
+FireRate = 1.0
+ProjectileStats = ExtResource("2_8crns")
+Animations = ExtResource("1_7s7be")
+metadata/_custom_type_script = "uid://bawwkshhg5psh"
