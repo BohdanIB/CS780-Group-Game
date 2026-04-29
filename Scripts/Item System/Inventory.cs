@@ -60,4 +60,13 @@ public class Inventory
     {
         return [.. materialCounts.Keys];
     }
+
+    public void TransferContents(Inventory destinationInventory)
+    {
+        foreach (MaterialType material in materialCounts.Keys)
+        {
+            destinationInventory.AddMaterials(material, materialCounts[material]);
+            RemoveMaterials(material, materialCounts[material]);
+        }
+    }
 }
