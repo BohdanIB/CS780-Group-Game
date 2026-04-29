@@ -2,8 +2,11 @@
 
 [ext_resource type="Script" uid="uid://6aa1ye00hd8k" path="res://Scripts/Structures/gatherers/MaterialGathererStats.cs" id="1_k1jv7"]
 [ext_resource type="Resource" uid="uid://c1h7wxlwa66wd" path="res://Resources/Animations/AnimationPacks/FarmAnimations.tres" id="1_o71oy"]
+[ext_resource type="Resource" uid="uid://mg8qtq5xp7ij" path="res://Resources/Materials/Gold.tres" id="2_kkqg3"]
 
 [resource]
 script = ExtResource("1_k1jv7")
+gatheredMaterial = ExtResource("2_kkqg3")
+gatherTime = 6.0
 Animations = ExtResource("1_o71oy")
 metadata/_custom_type_script = "uid://6aa1ye00hd8k"

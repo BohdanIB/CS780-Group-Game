@@ -176,17 +176,17 @@ public partial class StructurePlacer : Node2D
 		{
 			if (adjacentTiles[i].Structure is GenericStructure adjacentStructure && adjacentStructure != null)
 			{
-				foreach (TradingPort port in adjacentStructure.ConnectedPorts.Keys)
+				if (adjacentStructure.ConnectedPort != null && adjacentStructure.ClosestPortProximity > largestPortProximity)
 				{
-					if (adjacentStructure.ConnectedPorts[port] > largestPortProximity)
-					{
-						largestPortProximity = adjacentStructure.ConnectedPorts[port];
-						closestPort = port;
-					}
+					largestPortProximity = adjacentStructure.ClosestPortProximity;
+					closestPort = adjacentStructure.ConnectedPort;
 				}
 			}
 		}
-		if (closestPort != null) placedStructure.ConnectedPorts.Add(closestPort, largestPortProximity-1); 
+		if (closestPort != null) {
+			placedStructure.ConnectedPort = closestPort;
+			placedStructure.ClosestPortProximity = Math.Max(0, largestPortProximity-1);	
+		}
 		
 		placedStructure.Initialize(_constructionInformation.StructureStats);
 		PlayArea.instance.AddChild(placedStructure);

@@ -60,7 +60,7 @@ public partial class StructurePlacementRequirements : Resource
         if (_minimumPortProximity <= 0) return true;
         foreach (GenericStructure structure in adjacentStructures)
         {
-            if (structure != null && structure.PortConnectionProximity > requiredProximity) return true;
+            if (structure != null && structure.ClosestPortProximity > requiredProximity) return true;
         }
         return false;
     }
