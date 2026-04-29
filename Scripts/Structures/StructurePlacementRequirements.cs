@@ -19,7 +19,7 @@ public partial class StructurePlacementRequirements : Resource
 
         if (placementTile.HasRoadConnection() && !_allowWaterPlacement) return false;
 
-        if (!IsBiomeValid(placementTile.biome)) return false;
+        if (!IsBiomeValid(placementTile.Biome)) return false;
 
         
         GroundTile[] adjacentTiles = placementGrid.GetNeighbors(placementCoordinates.X, placementCoordinates.Y, considerDiagonals: false);
@@ -28,7 +28,7 @@ public partial class StructurePlacementRequirements : Resource
 
         for (int i = 0; i < 4; i++)
         {
-            adjacentBiomes[i] = adjacentTiles[i]?.biome;
+            adjacentBiomes[i] = adjacentTiles[i]?.Biome;
             adjacentStructures[i] = adjacentTiles[i]?.Structure;
         }
         if (!AreAdjacentBiomesValid(adjacentBiomes)) return false;

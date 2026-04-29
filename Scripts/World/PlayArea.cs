@@ -22,4 +22,9 @@ public partial class PlayArea : Node
         GridRenderer.RenderGrid(Grid);
     }
 
+      public static void ResetInstance()
+    {
+        instance = null;
+    }
+
 }

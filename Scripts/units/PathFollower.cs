@@ -1,8 +1,6 @@
-
 using CS780GroupProject.Scripts.Utils;
 using Godot;
 using System;
-
 public partial class PathFollower : Node2D
 {
 	public const Groups.GroupTypes TYPES = Groups.GroupTypes.None; // todo
@@ -16,6 +14,8 @@ public partial class PathFollower : Node2D
 	[Export] protected MoverComponent _mover;
 	[Export] protected AnimationComponent _animation;
 
+	[Signal] public delegate void UnitDiedEventHandler(PathFollower unit);
+
 	public override void _Ready()
 	{
 		if (_health == null || _hurt == null || _detector == null || _detectable == null || _mover == null || _animation == null)
@@ -24,20 +24,20 @@ public partial class PathFollower : Node2D
 		}
 	}
 
-		// // Change sprite to turn towards next path point
-		// _idleAnimations.SetDirection(Position, _path[_currentPathIndex]);
-
+	// // Change sprite to turn towards next path point
+	// _idleAnimations.SetDirection(Position, _path[_currentPathIndex]);
 	public void SetPath(Vector2[] path)
 	{
 		_mover.SetMoverPath(path);
 	}
+
 	public void StartMoving()
 	{
 		_mover.Start();
 	}
+
 	public void StopMoving()
 	{
 		_mover.Stop();
 	}
-
 }

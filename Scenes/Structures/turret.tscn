@@ -1,19 +1,19 @@
 [gd_scene format=3 uid="uid://b2w8csm5vypb0"]
 
 [ext_resource type="Script" uid="uid://bk3drg0y2r1ku" path="res://Scripts/turrets/Turret.cs" id="1_fcprl"]
-[ext_resource type="PackedScene" uid="uid://27mmcge0cxrm" path="res://Scenes/generic_structure.tscn" id="1_hskch"]
-[ext_resource type="Resource" uid="uid://b65p4eimakib4" path="res://Resources/Turret/BallistaTurretStats.tres" id="3_hxjjt"]
+[ext_resource type="PackedScene" uid="uid://27mmcge0cxrm" path="res://Scenes/generic_structure.tscn" id="2_base"]
+[ext_resource type="Resource" uid="uid://by57g36impn2j" path="res://Resources/Turret/BallistaTurretStats.tres" id="3_bcjiu"]
 [ext_resource type="SpriteFrames" uid="uid://divrawug5fwn" path="res://Assets/AnimationFrames/turret_idle_frames.tres" id="4_ahfaj"]
 [ext_resource type="Resource" uid="uid://cop41bqffhdhj" path="res://Resources/Animations/AnimationPacks/TurretAnimations.tres" id="4_hxjjt"]
-[ext_resource type="PackedScene" uid="uid://cbnk8jcd7c4v3" path="res://Scenes/Components/detectable_component.tscn" id="5_ku01o"]
-[ext_resource type="PackedScene" uid="uid://1xnv73ih3ekh" path="res://Scenes/Components/shooter_component.tscn" id="6_74mb1"]
+[ext_resource type="PackedScene" uid="uid://cbnk8jcd7c4v3" path="res://Scenes/Components/detectable_component.tscn" id="5_detectable"]
 [ext_resource type="PackedScene" uid="uid://c43d2uh68714x" path="res://Scenes/Components/detector_component.tscn" id="6_628tr"]
-[ext_resource type="PackedScene" uid="uid://cxvwrh12elf1m" path="res://Scenes/Components/targeting_component.tscn" id="7_hxjjt"]
-[ext_resource type="PackedScene" uid="uid://bxnd3hgmx5vi6" path="res://Scenes/Components/spawner_component.tscn" id="8_74mb1"]
+[ext_resource type="PackedScene" uid="uid://1xnv73ih3ekh" path="res://Scenes/Components/shooter_component.tscn" id="6_shooter"]
+[ext_resource type="PackedScene" uid="uid://cxvwrh12elf1m" path="res://Scenes/Components/targeting_component.tscn" id="8_targeting"]
+[ext_resource type="PackedScene" uid="uid://bxnd3hgmx5vi6" path="res://Scenes/Components/spawner_component.tscn" id="9_spawner"]
 
-[node name="Turret" unique_id=440596787 node_paths=PackedStringArray("_detector", "_detectable", "_shooter", "_targeting", "_projectileSpawner") groups=["friendly", "turret"] instance=ExtResource("1_hskch")]
+[node name="Turret" unique_id=2082542263 node_paths=PackedStringArray("_detector", "_detectable", "_shooter", "_targeting", "_projectileSpawner") groups=["turret"] instance=ExtResource("2_base")]
 script = ExtResource("1_fcprl")
-_stats = ExtResource("3_hxjjt")
+_stats = ExtResource("3_bcjiu")
 _targetingMode = 3
 _turretTypes = 3
 _targetTypes = 16
@@ -31,14 +31,15 @@ Animations = ExtResource("4_hxjjt")
 [node name="DetectorComponent" parent="." index="3" unique_id=1994671651 instance=ExtResource("6_628tr")]
 _validDetectableTypes = 16
 
-[node name="DetectableComponent" parent="." index="4" unique_id=1835049866 instance=ExtResource("5_ku01o")]
+[node name="DetectableComponent" parent="." index="4" unique_id=843466507 instance=ExtResource("5_detectable")]
 
-[node name="ShooterComponent" parent="." index="5" unique_id=1054008556 node_paths=PackedStringArray("_projectileSpawner", "_targeting") instance=ExtResource("6_74mb1")]
+[node name="ShooterComponent" parent="." index="5" unique_id=505730975 node_paths=PackedStringArray("_projectileSpawner", "_targeting") instance=ExtResource("6_shooter")]
 _projectileSpawner = NodePath("ProjectileSpawnerComponent")
 _targeting = NodePath("TargetingComponent")
 
-[node name="TargetingComponent" parent="ShooterComponent" index="1" unique_id=564942499 node_paths=PackedStringArray("_detector") instance=ExtResource("7_hxjjt")]
+[node name="TargetingComponent" parent="ShooterComponent" index="1" unique_id=187863657 node_paths=PackedStringArray("_detector") instance=ExtResource("8_targeting")]
 _detector = NodePath("../../DetectorComponent")
 
-[node name="ProjectileSpawnerComponent" parent="ShooterComponent" index="2" unique_id=391563213 instance=ExtResource("8_74mb1")]
-ScenePath = "uid://b1picus170nmk"
+[node name="ProjectileSpawnerComponent" parent="ShooterComponent" index="2" unique_id=1630108137 instance=ExtResource("9_spawner")]
+position = Vector2(0, -20)
+ScenePath = "res://Scenes/projectile.tscn"

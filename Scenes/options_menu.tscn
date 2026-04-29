@@ -1,0 +1,194 @@
+[gd_scene format=3 uid="uid://cifo4611b0mwx"]
+
+[ext_resource type="Script" uid="uid://8ilobjs31yrt" path="res://Scripts/OptionsMenu.cs" id="1_options"]
+[ext_resource type="Texture2D" uid="uid://o4vxbpmw835q" path="res://Assets/Sprites/Mariano Taccola De Ingensis combat d.jpg" id="2_uj0ok"]
+
+[node name="OptionsMenu" type="Control" unique_id=433556261]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_options")
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=329382134]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_uj0ok")
+
+[node name="BackButton" type="Button" parent="." unique_id=743973160]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -50.0
+offset_top = -31.0
+offset_right = 50.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "Back"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="." unique_id=100000001]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 60.0
+offset_right = -20.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer" unique_id=100000002]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="EnemySectionLabel" type="Label" parent="ScrollContainer/VBoxContainer" unique_id=100000003]
+layout_mode = 2
+theme_override_font_sizes/font_size = 38
+text = "Enemy Settings"
+
+[node name="EnemySection" type="VBoxContainer" parent="ScrollContainer/VBoxContainer" unique_id=100000004]
+layout_mode = 2
+
+[node name="WaveInterval" type="HBoxContainer" parent="ScrollContainer/VBoxContainer/EnemySection" unique_id=100000005]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/EnemySection/WaveInterval" unique_id=100000006]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 26
+text = "Wave Interval (seconds)"
+
+[node name="HSlider" type="HSlider" parent="ScrollContainer/VBoxContainer/EnemySection/WaveInterval" unique_id=100000007]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 5.0
+max_value = 120.0
+value = 30.0
+
+[node name="ValueLabel" type="Label" parent="ScrollContainer/VBoxContainer/EnemySection/WaveInterval" unique_id=100000008]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+text = "30s"
+
+[node name="EnemiesPerWave" type="HBoxContainer" parent="ScrollContainer/VBoxContainer/EnemySection" unique_id=100000009]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/EnemySection/EnemiesPerWave" unique_id=100000010]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 26
+text = "Enemies Per Wave"
+
+[node name="HSlider" type="HSlider" parent="ScrollContainer/VBoxContainer/EnemySection/EnemiesPerWave" unique_id=100000011]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 1.0
+max_value = 50.0
+value = 5.0
+
+[node name="ValueLabel" type="Label" parent="ScrollContainer/VBoxContainer/EnemySection/EnemiesPerWave" unique_id=100000012]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+text = "5"
+
+[node name="FinalWave" type="HBoxContainer" parent="ScrollContainer/VBoxContainer/EnemySection" unique_id=100000013]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/EnemySection/FinalWave" unique_id=100000014]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 26
+text = "Final Wave Number"
+
+[node name="HSlider" type="HSlider" parent="ScrollContainer/VBoxContainer/EnemySection/FinalWave" unique_id=100000015]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 1.0
+max_value = 30.0
+value = 10.0
+
+[node name="ValueLabel" type="Label" parent="ScrollContainer/VBoxContainer/EnemySection/FinalWave" unique_id=100000016]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+text = "10"
+
+[node name="EnemiesAdded" type="HBoxContainer" parent="ScrollContainer/VBoxContainer/EnemySection" unique_id=100000017]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/EnemySection/EnemiesAdded" unique_id=100000018]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 26
+text = "Enemies Added Per Wave"
+
+[node name="HSlider" type="HSlider" parent="ScrollContainer/VBoxContainer/EnemySection/EnemiesAdded" unique_id=100000019]
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 20.0
+value = 5.0
+
+[node name="ValueLabel" type="Label" parent="ScrollContainer/VBoxContainer/EnemySection/EnemiesAdded" unique_id=100000020]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+text = "5"
+
+[node name="FriendlySectionLabel" type="Label" parent="ScrollContainer/VBoxContainer" unique_id=100000021]
+layout_mode = 2
+theme_override_font_sizes/font_size = 38
+text = "Friendly Settings"
+
+[node name="FriendlySection" type="VBoxContainer" parent="ScrollContainer/VBoxContainer" unique_id=100000022]
+layout_mode = 2
+
+[node name="FriendlyInterval" type="HBoxContainer" parent="ScrollContainer/VBoxContainer/FriendlySection" unique_id=100000023]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/FriendlySection/FriendlyInterval" unique_id=100000024]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 26
+text = "Spawn Interval (seconds)"
+
+[node name="HSlider" type="HSlider" parent="ScrollContainer/VBoxContainer/FriendlySection/FriendlyInterval" unique_id=100000025]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 5.0
+max_value = 60.0
+value = 10.0
+
+[node name="ValueLabel" type="Label" parent="ScrollContainer/VBoxContainer/FriendlySection/FriendlyInterval" unique_id=100000026]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+text = "10s"
+
+[node name="FriendliesPerInterval" type="HBoxContainer" parent="ScrollContainer/VBoxContainer/FriendlySection" unique_id=100000027]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/FriendlySection/FriendliesPerInterval" unique_id=100000028]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 26
+text = "Friendlies Per Interval"
+
+[node name="HSlider" type="HSlider" parent="ScrollContainer/VBoxContainer/FriendlySection/FriendliesPerInterval" unique_id=100000029]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 1.0
+max_value = 10.0
+value = 3.0
+
+[node name="ValueLabel" type="Label" parent="ScrollContainer/VBoxContainer/FriendlySection/FriendliesPerInterval" unique_id=100000030]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+text = "3"

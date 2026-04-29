@@ -5,6 +5,11 @@
 [ext_resource type="Script" uid="uid://xqmubjkmtno0" path="res://Scripts/Structures/StructurePlacementRequirements.cs" id="3_dn3s7"]
 [ext_resource type="PackedScene" uid="uid://yxa7mihcwpii" path="res://Scenes/Structures/material_gatherer.tscn" id="4_dn3s7"]
 [ext_resource type="Resource" uid="uid://c2ke6cwkljr4f" path="res://Resources/Materials/Gatherers/FarmStats.tres" id="5_2to2x"]
+[ext_resource type="Script" uid="uid://dex17oa2474e5" path="res://Scripts/Structures/MaterialGatherer.cs" id="4_8splb"]
+[ext_resource type="PackedScene" uid="uid://bu5bt5d2jv3iu" path="res://Scenes/Components/hurt_component.tscn" id="5_ate5l"]
+[ext_resource type="PackedScene" uid="uid://e5vy6kbwqw12" path="res://Scenes/Components/health_component.tscn" id="6_r1824"]
+[ext_resource type="PackedScene" uid="uid://c1wk4dy8g10qq" path="res://Scenes/Components/animation_component.tscn" id="7_3en5k"]
+[ext_resource type="Resource" uid="uid://c1h7wxlwa66wd" path="res://Resources/Animations/AnimationPacks/Structure/FarmAnimations.tres" id="8_vgvfo"]
 
 [sub_resource type="Resource" id="Resource_2to2x"]
 script = ExtResource("3_dn3s7")

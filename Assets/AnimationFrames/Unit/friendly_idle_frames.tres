@@ -1,0 +1,102 @@
+[gd_resource type="SpriteFrames" format=3 uid="uid://be25vodgonygm"]
+
+[ext_resource type="Texture2D" uid="uid://xfvl32pe0ms4" path="res://Assets/Sprites/isometric_friendly_temp.png" id="1_idv3t"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gdxco"]
+atlas = ExtResource("1_idv3t")
+region = Rect2(384, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vva1y"]
+atlas = ExtResource("1_idv3t")
+region = Rect2(256, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_iqpga"]
+atlas = ExtResource("1_idv3t")
+region = Rect2(320, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mfk7a"]
+atlas = ExtResource("1_idv3t")
+region = Rect2(192, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nkb46"]
+atlas = ExtResource("1_idv3t")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3u8a3"]
+atlas = ExtResource("1_idv3t")
+region = Rect2(448, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hqt60"]
+atlas = ExtResource("1_idv3t")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2gyeu"]
+atlas = ExtResource("1_idv3t")
+region = Rect2(128, 0, 64, 64)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gdxco")
+}],
+"loop": true,
+"name": &"east",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vva1y")
+}],
+"loop": true,
+"name": &"north",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_iqpga")
+}],
+"loop": true,
+"name": &"north_east",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mfk7a")
+}],
+"loop": true,
+"name": &"north_west",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nkb46")
+}],
+"loop": true,
+"name": &"south",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3u8a3")
+}],
+"loop": true,
+"name": &"south_east",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hqt60")
+}],
+"loop": true,
+"name": &"south_west",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2gyeu")
+}],
+"loop": true,
+"name": &"west",
+"speed": 5.0
+}]
