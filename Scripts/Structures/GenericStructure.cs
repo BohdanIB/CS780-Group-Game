@@ -25,7 +25,7 @@ public partial class GenericStructure: Node2D
 	[Export] protected HurtComponent _hurt; // Do ALL structures really need these components?
 	[Export] protected AnimationComponent _animation;
 
-	public int PortConnectionProximity {get; set;}
+	public Dictionary<TradingPort, int> ConnectedPorts {get; private set;} = [];
 
 	public virtual void Initialize(StructureStats stats)
 	{

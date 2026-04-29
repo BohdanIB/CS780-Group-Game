@@ -171,11 +171,22 @@ public partial class StructurePlacer : Node2D
 
 		GroundTile[] adjacentTiles = _placementGrid.GetNeighbors(_currentGridCoordinates.X, _currentGridCoordinates.Y, considerDiagonals: false);
 		int largestPortProximity = 0;
+		TradingPort closestPort = null;
 		for (int i = 0; i < 4; i++)
 		{
-			largestPortProximity = Mathf.Max(largestPortProximity, (adjacentTiles[i].Structure != null) ? adjacentTiles[i].Structure.PortConnectionProximity : 0);
+			if (adjacentTiles[i].Structure is GenericStructure adjacentStructure && adjacentStructure != null)
+			{
+				foreach (TradingPort port in adjacentStructure.ConnectedPorts.Keys)
+				{
+					if (adjacentStructure.ConnectedPorts[port] > largestPortProximity)
+					{
+						largestPortProximity = adjacentStructure.ConnectedPorts[port];
+						closestPort = port;
+					}
+				}
+			}
 		}
-		placedStructure.PortConnectionProximity = largestPortProximity - 1;
+		if (closestPort != null) placedStructure.ConnectedPorts.Add(closestPort, largestPortProximity-1); 
 		
 		placedStructure.Initialize(_constructionInformation.StructureStats);
 		PlayArea.instance.AddChild(placedStructure);
