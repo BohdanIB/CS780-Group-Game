@@ -6,7 +6,6 @@ public partial class Main : Node2D
 	[Export] public ulong MAIN_SEED = 12345;
 
 	[Export] private StructurePlacer _structurePlacer;
-	[Export] public ConstructionInformation tempConstructionInformation;
 
 	private Vector2I _hubLocation;
 

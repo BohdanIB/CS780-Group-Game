@@ -2,24 +2,22 @@
 
 [ext_resource type="Script" uid="uid://cuir3nismmvnr" path="res://Scripts/Main.cs" id="1_jjgbg"]
 [ext_resource type="PackedScene" uid="uid://tw6j84txs1a1" path="res://Scenes/grid_renderer.tscn" id="2_bo1nx"]
-[ext_resource type="Resource" uid="uid://x2da3uinl30n" path="res://Resources/ConstructionInformation/FarmConstructionInformation.tres" id="2_jjvhh"]
 [ext_resource type="PackedScene" uid="uid://defgp5uclysnk" path="res://Scenes/play_area.tscn" id="3_8gbba"]
 [ext_resource type="PackedScene" uid="uid://cundji84oafs3" path="res://Scenes/legacy/tile_shape_placer.tscn" id="3_jjvhh"]
 [ext_resource type="Resource" uid="uid://nbjv8l8rk1xm" path="res://Resources/ConstructionInformation/BallistaTurretConstructionInformation.tres" id="4_21xkr"]
 [ext_resource type="PackedScene" uid="uid://dtv7kt7wo8omt" path="res://Scenes/path_follower.tscn" id="4_jjvhh"]
 [ext_resource type="PackedScene" uid="uid://5e8ht0mldott" path="res://Scenes/structure_placer.tscn" id="4_structplacer"]
 [ext_resource type="Resource" uid="uid://7o5m0v8ccfo2" path="res://Resources/ConstructionInformation/BladeTurretConstructionInformation.tres" id="5_6bp64"]
-[ext_resource type="Resource" uid="uid://dvy7ft02jq0di" path="res://Resources/ConstructionInformation/PortConstructionInformation.tres" id="6_6bp64"]
-[ext_resource type="PackedScene" uid="uid://bxnekokl8stoa" path="res://Scenes/game_ui.tscn" id="6_21xkr"]
+[ext_resource type="PackedScene" path="res://Scenes/game_ui.tscn" id="6_21xkr"]
 [ext_resource type="Script" uid="uid://dp5rjda24qxii" path="res://Scripts/EnemySpawner.cs" id="7_6bp64"]
 [ext_resource type="Script" uid="uid://c7j48ea8ghddd" path="res://Scripts/CameraController.cs" id="7_344ge"]
 [ext_resource type="PackedScene" uid="uid://bxnd3hgmx5vi6" path="res://Scenes/Components/spawner_component.tscn" id="10_wsu2k"]
 [ext_resource type="Script" uid="uid://cxywbq0qfpgfg" path="res://Scripts/FriendlySpawner.cs" id="14_jkdf5"]
+[ext_resource type="Script" uid="uid://doh0wtguuc37u" path="res://Scripts/GameSettings.cs" id="14_wsu2k"]
 
 [node name="Main" type="Node2D" unique_id=1822167308 node_paths=PackedStringArray("_structurePlacer")]
 script = ExtResource("1_jjgbg")
 _structurePlacer = NodePath("StructurePlacer")
-tempConstructionInformation = ExtResource("2_jjvhh")
 
 [node name="GridRenderer" parent="." unique_id=76182152 instance=ExtResource("2_bo1nx")]
 
@@ -53,3 +51,6 @@ temporaryConstructionInfo = Array[Object]([ExtResource("4_21xkr"), ExtResource("
 
 [node name="FriendlySpawner" type="Node" parent="." unique_id=53342767]
 script = ExtResource("14_jkdf5")
+
+[node name="Game Settings" type="Node" parent="." unique_id=1046757037]
+script = ExtResource("14_wsu2k")
