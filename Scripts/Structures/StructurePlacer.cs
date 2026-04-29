@@ -22,7 +22,7 @@ public partial class StructurePlacer : Node2D
 	private bool _isPlacementValid = false;
 
 	[Export] public ConstructionInformation[] temporaryConstructionInfo; //TODO: Remove
-	private int infoIndex = 0;
+	private int infoIndex = -1;
 
 	public override void _Ready()
 	{
