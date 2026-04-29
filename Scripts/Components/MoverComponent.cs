@@ -16,6 +16,7 @@ public partial class MoverComponent : Node2D
 	private Vector2[] _moverPath = [];
 	private int _currentPathIndex = START_PATH_INDEX;
 	private bool _isFrozen = false;
+	private bool _isSlowed = false;
 	private Timer _freezeTimer;
 	private float _originalSpeed;
 	private Timer _slowTimer;
@@ -67,6 +68,7 @@ public partial class MoverComponent : Node2D
 			totalMovement -= distanceToTarget;
 			targetPosition = _moverPath[_currentPathIndex];
 			distanceToTarget = ParentNode.Position.DistanceTo(targetPosition);
+			
 			EmitSignal(SignalName.OnPathPointReached, true, targetPosition);
 		}
 		ParentNode.Position = ParentNode.Position.MoveToward(targetPosition, (float)totalMovement);
@@ -118,6 +120,7 @@ public partial class MoverComponent : Node2D
 		if (_isFrozen) return;
 		_isFrozen = true;
 		Stop();
+		if (_isSlowed) _slowTimer.Paused = true;
 		_freezeTimer.Start(duration);
 		EmitSignal(SignalName.OnFreeze);
 	}
@@ -126,13 +129,15 @@ public partial class MoverComponent : Node2D
 	{
 		_isFrozen = false;
 		Start();
+		if (_isSlowed) _slowTimer.Paused = false;
 		EmitSignal(SignalName.OnUnfreeze);
 	}
 	public bool IsFrozen() => _isFrozen;
 	
 	public void Slow(float multiplier, float duration)
 	{
-		if (_isFrozen) return;
+		if (_isFrozen || _isSlowed) return;
+		_isSlowed = true;
 		_originalSpeed = Speed;
 		Speed *= multiplier;
 		_slowTimer.Start(duration);
@@ -140,6 +145,7 @@ public partial class MoverComponent : Node2D
 	
 	public void Unslow()
 	{
+		_isSlowed = false;
 		Speed = _originalSpeed;
 	}
 }

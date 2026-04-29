@@ -11,7 +11,7 @@ _placementGhost = NodePath("PlacementGhost")
 _validPlacementColor = Color(0, 0.7882353, 0, 0.5882353)
 _invalidPlacementColor = Color(0.6666667, 0, 0, 0.5882353)
 _selectorContainer = NodePath("Option Selectors")
-temporaryConstructionInfo = Array[Object]([])
+temporaryConstructionInfo = Array[Object]([null])
 
 [node name="PlacementGhost" type="Sprite2D" parent="." unique_id=1148194564]
 modulate = Color(1, 1, 1, 0.4392157)

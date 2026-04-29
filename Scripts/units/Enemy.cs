@@ -33,6 +33,7 @@ public partial class Enemy: PathFollower
 		InitializeComponents();
 		UpdateStats();
 	}
+	
 
 	public override void _Ready()
 	{
@@ -55,7 +56,7 @@ public partial class Enemy: PathFollower
 				string animName = _animation.Animation;
 				_animation.SpriteFrames.SetAnimationLoop(animName, false);
 				_animation.AnimationFinished += () => QueueFree();
-				_animation.Play(animName);
+				//_animation.Play(animName);
 			}
 			else 
 			{
