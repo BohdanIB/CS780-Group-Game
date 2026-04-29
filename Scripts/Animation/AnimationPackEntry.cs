@@ -13,6 +13,7 @@ public partial class AnimationPackEntry : Resource
 		Idle,
 		Firing,
 		Impact,
+		Death,
 		// etc.
 	}
 	[Export] public State EntryState;

@@ -55,7 +55,6 @@ public partial class AnimationComponent : AnimatedSprite2D
 			}
 		}
 	}
-
 	/// <summary>
 	/// Given a point for this animation to look at from current
 	/// </summary>

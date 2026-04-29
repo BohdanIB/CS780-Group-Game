@@ -140,14 +140,7 @@ public partial class Projectile : Node2D
 	
 			// Ensure animation is not looping
 			string animName = _animation.Animation;
-			GD.Print($"[Projectile] Impact animation name: {animName}");
-			GD.Print($"[Projectile] SpriteFrames: {_animation.SpriteFrames}");
-			GD.Print($"[Projectile] Is playing: {_animation.IsPlaying()}");
-			GD.Print($"[Projectile] Frame count: {_animation.SpriteFrames?.GetFrameCount(animName)}");
-			GD.Print($"[Projectile] Looping: {_animation.SpriteFrames?.GetAnimationLoop(animName)}");
-			GD.Print($"[Projectile] Visible: {_animation.Visible}");
 			_animation.SpriteFrames.SetAnimationLoop(animName, false);
-	
 			_animation.AnimationFinished += () => QueueFree();
 			_animation.Play(animName);
 		}
