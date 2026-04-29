@@ -24,10 +24,10 @@ public partial class StructurePlacer : Node2D
 	[Export] public ConstructionInformation[] temporaryConstructionInfo; //TODO: Remove
 	private int infoIndex = 0;
 
-    public override void _Ready()
-    {
+	public override void _Ready()
+	{
 		List<OptionSelector> selectors = [];
-        foreach (Node child in _selectorContainer.GetChildren())
+		foreach (Node child in _selectorContainer.GetChildren())
 		{
 			if (child is OptionSelector selector)
 			{
@@ -37,8 +37,7 @@ public partial class StructurePlacer : Node2D
 		_optionSelectors = [.. selectors];
 
 		DisablePlacement();
-    }
-
+	}
 
 	public void Initialize(PlayArea targetPlayArea, Inventory paymentInventory)
 	{
@@ -53,13 +52,12 @@ public partial class StructurePlacer : Node2D
 		{
 			// Disable, no structure to place
 			DisablePlacement();
-		} 
+		}
 		else
 		{
 			_constructionInformation = constructionInformation;
 			_placementGhost.Texture = constructionInformation.DisplayImageAtlas;
 			_placementGhost.RegionRect = constructionInformation.DisplayImageRect;
-			
 
 			for (int i = 0; i < _optionSelectors.Length; i++)
 			{
@@ -68,7 +66,6 @@ public partial class StructurePlacer : Node2D
 
 			if (constructionInformation.ConfigurationType != GenericStructure.ConfigurationType.None)
 			{
-				
 				int j = 0;
 				Dictionary<string, string[]> configDictionary = GenericStructure.GetConfigurationOptions(constructionInformation.ConfigurationType);
 				foreach (string key in configDictionary.Keys)
@@ -77,9 +74,7 @@ public partial class StructurePlacer : Node2D
 					_optionSelectors[j].Visible = true;
 					j++;
 				}
-
 			}
-
 
 			_isEnabled = true;
 			Visible = true;
@@ -96,8 +91,8 @@ public partial class StructurePlacer : Node2D
 		EmitSignal(SignalName.OnPlacementStopped);
 	}
 
-    public override void _Process(double delta)
-    {
+	public override void _Process(double delta)
+	{
 		if (Input.IsActionJustPressed("ToggleTurretPlacementMode")) // TODO: remove.  This is just a placeholder before UI is integrated
 		{
 			infoIndex = (infoIndex+1) % temporaryConstructionInfo.Length;
@@ -106,12 +101,16 @@ public partial class StructurePlacer : Node2D
 
 		if (!_isEnabled) return;
 
-        UpdatePosition();
+		UpdatePosition();
 		UpdatePlacementValidity();
 
 		if (Input.IsActionJustPressed("Left Click"))
 		{
-			if (_isPlacementValid) PlaceStructure();
+			// Don't place if clicking on UI
+			if (GetViewport().GuiGetHoveredControl() == null)
+			{
+				if (_isPlacementValid) PlaceStructure();
+			}
 		}
 
 		if (Input.IsActionJustPressed("Escape"))
@@ -119,12 +118,13 @@ public partial class StructurePlacer : Node2D
 			// Cancel Placement
 			DisablePlacement();
 		}
-    }
+	}
 
 	private void UpdatePosition()
 	{
-		Vector2 mousePosition = GetViewport().GetMousePosition();
-		_currentGridCoordinates = IsometricTileMap.GlobalPositionToMapCoord(_placementTilemap, mousePosition);;
+		Vector2 mouseWorldPos = GetGlobalMousePosition();
+
+		_currentGridCoordinates = IsometricTileMap.GlobalPositionToMapCoord(_placementTilemap, mouseWorldPos);
 		_placementGhost.GlobalPosition = IsometricTileMap.MapCoordToGlobalPosition(_placementTilemap, _currentGridCoordinates);
 	}
 
@@ -134,7 +134,7 @@ public partial class StructurePlacer : Node2D
 		if (tile == null || tile.HasStructure() || (_constructionInformation.PlacementRequirements == null && tile.HasRoadConnection())) 
 		{
 			_isPlacementValid = false;
-		} 
+		}
 		else if (_constructionInformation.PlacementRequirements != null && !_constructionInformation.PlacementRequirements.IsPlacementValid(_placementGrid, _currentGridCoordinates))
 		{
 			_isPlacementValid = false;
@@ -142,21 +142,23 @@ public partial class StructurePlacer : Node2D
 		else if (_constructionInformation.MaterialRequirements != null && !_constructionInformation.MaterialRequirements.AreMaterialsAvailiable(_paymentInventory))
 		{
 			_isPlacementValid = false;
-		} 
+		}
 		else
 		{
 			_isPlacementValid = true;
 		}
 
-		_placementGhost.SelfModulate = _isPlacementValid ? _validPlacementColor : _invalidPlacementColor; 
-
+		_placementGhost.SelfModulate = _isPlacementValid ? _validPlacementColor : _invalidPlacementColor;
 	}
 
 	private void PlaceStructure()
 	{
 		_constructionInformation.MaterialRequirements?.SpendMaterials(_paymentInventory);
 
-		
+		// Notify GameUI to update the coin label
+		var gameUi = GetTree().GetRoot().GetNode<GameUi>("Main/GameUI");
+		gameUi?.UpdateCoinDisplay();
+
 		GenericStructure placedStructure = _constructionInformation.Structure.Instantiate<GenericStructure>();
 		placedStructure.GlobalPosition = IsometricTileMap.MapCoordToGlobalPosition(_placementTilemap, _currentGridCoordinates);
 		_placementGrid.GetGridValueOrDefault(_currentGridCoordinates.X, _currentGridCoordinates.Y).Structure = placedStructure;
@@ -168,10 +170,16 @@ public partial class StructurePlacer : Node2D
 				placedStructure.SetConfigurationOption(selector.OptionsName, selector.GetOptionSelection());
 			}
 		}
-		
+
 		placedStructure.Initialize(_constructionInformation.StructureStats);
+
+		// Hide turret radius after placement
+		if (placedStructure is Turret turret)
+		{
+			turret.HideRadius();
+		}
+
 		PlayArea.instance.AddChild(placedStructure);
-
+		DisablePlacement();
 	}
-
 }

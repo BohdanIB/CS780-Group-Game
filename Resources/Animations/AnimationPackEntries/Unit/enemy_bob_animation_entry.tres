@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="AnimationPackEntry" format=3 uid="uid://cdep6k27lkf1m"]
+
+[ext_resource type="Script" uid="uid://bc14nr141nonp" path="res://Scripts/Animation/AnimationPackEntry.cs" id="1_3uy7i"]
+[ext_resource type="SpriteFrames" uid="uid://84iwpihwq1d2" path="res://Assets/AnimationFrames/Unit/enemy_bob_frames.tres" id="1_htnws"]
+
+[resource]
+script = ExtResource("1_3uy7i")
+EntryState = 1
+Frames = ExtResource("1_htnws")
+metadata/_custom_type_script = "uid://bc14nr141nonp"

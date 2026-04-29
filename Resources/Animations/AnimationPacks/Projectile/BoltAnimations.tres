@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="AnimationPack" format=3 uid="uid://dor2re0k01blp"]
+
+[ext_resource type="Resource" uid="uid://dt5iig172ssn7" path="res://Resources/Animations/AnimationPackEntries/Projectile/bolt_idle_animation_entry.tres" id="1_31u2n"]
+[ext_resource type="Script" uid="uid://b8k2bijsjc1da" path="res://Scripts/Animation/AnimationPack.cs" id="1_bsnhk"]
+
+[resource]
+script = ExtResource("1_bsnhk")
+Animations = Array[Object]([ExtResource("1_31u2n")])
+metadata/_custom_type_script = "uid://b8k2bijsjc1da"

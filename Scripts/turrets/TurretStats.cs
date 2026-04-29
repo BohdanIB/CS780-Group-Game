@@ -1,28 +1,34 @@
-
 using Godot;
 using System.Collections.Generic;
+
+[GlobalClass]
+
 
 /// <summary>
 /// 
 /// </summary>
-[GlobalClass]
 public partial class TurretStats : StructureStats
 {
 	public static readonly List<TurretStats> ALL_TURRETS = LoadAllStats();
 	private const string TURRET_DIRECTORY_PATH = "res://Resources/Turret/";
+
 	public enum Category
 	{
 		Ballista,
-		Blade,
-	};
+		Blade
+	}
+
 
 	// Turret Stats
 	[Export] public Category Type;
 	[Export] public float AggroRadius, DetectableRadius, HitboxRadius;
 	[Export] public float Health;
 	[Export] public float FireRate; // shots per second, so (1/FireRate) will give you the time between shots for this turret.
-	[Export] public ProjectileStats ProjectileStats; 
+	[Export] public ProjectileStats ProjectileStats;
 	[Export] public AnimationPack Animations;
+
+	[Export] public int Cost;
+
 
 	/// <summary>
 	/// Get list of all turret stats.
@@ -39,17 +45,16 @@ public partial class TurretStats : StructureStats
 
 		foreach (var turretFileName in directory.GetFiles())
 		{
-			loadedTurrets.Add(ResourceLoader.Load<TurretStats>($"{TURRET_DIRECTORY_PATH}/{turretFileName}"));
+				loadedTurrets.Add(ResourceLoader.Load<TurretStats>($"{TURRET_DIRECTORY_PATH}/{turretFileName}"));
 		}
 
 		directory.ListDirEnd();
 
 		return loadedTurrets;
 	}
+
 	public override string ToString()
 	{
-		return $"{Type} - AggroRadius: {AggroRadius} - DetectableRadius: {DetectableRadius} - HitboxRadius: {HitboxRadius} - Health: {Health} - FireRate: {FireRate} - Projectile: [{ProjectileStats}] - Animations: [{Animations}]";
+		return $"{Type} - AggroRadius: {AggroRadius} - DetectableRadius: {DetectableRadius} - HitboxRadius: {HitboxRadius} - Health: {Health} - FireRate: {FireRate} - Cost: {Cost}";
 	}
-
-
 }
