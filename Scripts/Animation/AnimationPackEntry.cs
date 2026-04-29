@@ -11,6 +11,7 @@ public partial class AnimationPackEntry : Resource
 	public enum State
 	{
 		Idle,
+		Bob,
 		Firing,
 		Impact,
 		Death,

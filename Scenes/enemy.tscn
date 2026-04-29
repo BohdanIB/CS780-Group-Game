@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://dtv7kt7wo8omt" path="res://Scenes/path_follower.tscn" id="1_hghv2"]
 [ext_resource type="Script" uid="uid://c21fjsrl23hps" path="res://Scripts/units/Enemy.cs" id="2_1f0kj"]
 [ext_resource type="Resource" uid="uid://vu803a5ed7i0" path="res://Resources/Unit/Enemy/RegularEnemyStats.tres" id="3_1dp5w"]
-[ext_resource type="Resource" uid="uid://bg25ie1ckk3e0" path="res://Resources/Animations/AnimationPacks/EnemyAnimations.tres" id="4_1dp5w"]
+[ext_resource type="Resource" uid="uid://bg25ie1ckk3e0" path="res://Resources/Animations/AnimationPacks/Unit/EnemyAnimations.tres" id="4_1dp5w"]
 [ext_resource type="PackedScene" uid="uid://1xnv73ih3ekh" path="res://Scenes/Components/shooter_component.tscn" id="5_0830c"]
 [ext_resource type="PackedScene" uid="uid://cxvwrh12elf1m" path="res://Scenes/Components/targeting_component.tscn" id="6_1dp5w"]
 [ext_resource type="PackedScene" uid="uid://bxnd3hgmx5vi6" path="res://Scenes/Components/spawner_component.tscn" id="7_auwsv"]
@@ -19,6 +19,7 @@ _targeting = NodePath("ShooterComponent/TargetingComponent")
 _projectileSpawner = NodePath("ShooterComponent/ProjectileSpawnerComponent")
 
 [node name="AnimationComponent" parent="." index="5" unique_id=1805975540]
+offset = Vector2(2, -4)
 Animations = ExtResource("4_1dp5w")
 
 [node name="ShooterComponent" parent="." index="6" unique_id=1054008556 node_paths=PackedStringArray("_projectileSpawner", "_targeting", "_shotCooldown") instance=ExtResource("5_0830c")]

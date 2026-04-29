@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="AnimationPack" format=3 uid="uid://bg25ie1ckk3e0"]
+
+[ext_resource type="Script" uid="uid://b8k2bijsjc1da" path="res://Scripts/Animation/AnimationPack.cs" id="1_axcja"]
+<<<<<<< HEAD:Resources/Animations/AnimationPacks/EnemyAnimations.tres
+[ext_resource type="Resource" uid="uid://cr2tpe1tcy8n2" path="res://Resources/Animations/AnimationPackEntries/enemy_idle_animation_entry.tres" id="1_muh2a"]
+[ext_resource type="Resource" uid="uid://duidq0wjhjqyv" path="res://Resources/Animations/AnimationPackEntries/enemy_death_animation_entry.tres" id="2_2p2wc"]
+=======
+[ext_resource type="Resource" uid="uid://cr2tpe1tcy8n2" path="res://Resources/Animations/AnimationPackEntries/Unit/enemy_idle_animation_entry.tres" id="1_muh2a"]
+[ext_resource type="Resource" uid="uid://cdep6k27lkf1m" path="res://Resources/Animations/AnimationPackEntries/Unit/enemy_bob_animation_entry.tres" id="2_2p2wc"]
+>>>>>>> 64380d672355589d7e3734b41185dd95c7ee385c:Resources/Animations/AnimationPacks/Unit/EnemyAnimations.tres
+
+[resource]
+script = ExtResource("1_axcja")
+Animations = Array[Object]([ExtResource("1_muh2a"), ExtResource("2_2p2wc")])
+metadata/_custom_type_script = "uid://b8k2bijsjc1da"

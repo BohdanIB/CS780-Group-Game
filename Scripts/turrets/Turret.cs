@@ -137,6 +137,13 @@ public partial class Turret : GenericStructure
 			QueueRedraw(); // Draw aggro radius
 		}
 	}
+
+	public void HideRadius()
+	{
+		_visibleTurretRadius = false;
+		QueueRedraw();
+	}
+
 	private void UpdateComponents()
 	{
 		if (_stats != null)

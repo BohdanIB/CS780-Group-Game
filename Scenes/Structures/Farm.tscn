@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://bu5bt5d2jv3iu" path="res://Scenes/Components/hurt_component.tscn" id="2_u7gr0"]
 [ext_resource type="PackedScene" uid="uid://e5vy6kbwqw12" path="res://Scenes/Components/health_component.tscn" id="3_r4pnc"]
 [ext_resource type="PackedScene" uid="uid://c1wk4dy8g10qq" path="res://Scenes/Components/animation_component.tscn" id="4_r4kq0"]
-[ext_resource type="Resource" uid="uid://c1h7wxlwa66wd" path="res://Resources/Animations/AnimationPacks/FarmAnimations.tres" id="5_s3cib"]
+[ext_resource type="Resource" uid="uid://c1h7wxlwa66wd" path="res://Resources/Animations/AnimationPacks/Structure/FarmAnimations.tres" id="5_s3cib"]
 
 [node name="MaterialGatherer" type="Node2D" unique_id=17333711 node_paths=PackedStringArray("_health", "_hurt", "_animation")]
 script = ExtResource("1_b7x83")

@@ -9,6 +9,8 @@ public partial class Enemy: PathFollower
 	[Export] private EnemyStats _stats;
 	[Export] private TargetingMode _targetingMode = TargetingMode.Weak;
 
+	[Signal] public delegate void UnitReachedGoalEventHandler(int damage);
+
 	[ExportGroup("Types")]
 	[Export] public Groups.GroupTypes _enemyTypes = PathFollower.TYPES | Groups.GroupTypes.Enemy;
 	[Export] public Groups.GroupTypes _targetTypes = Groups.GroupTypes.Friendly | Groups.GroupTypes.Turret | Groups.GroupTypes.Structure;
@@ -20,6 +22,7 @@ public partial class Enemy: PathFollower
 	[Export] private ShooterComponent _shooter;
 	[Export] private TargetingComponent _targeting;
 	[Export] protected SpawnerComponent _projectileSpawner;
+	[Export] private int _goalDamage = 10;
 
 	/// <summary>
 	/// Initializes enemy with custom stats.
@@ -61,7 +64,8 @@ public partial class Enemy: PathFollower
 			{
 				QueueFree();
 			}
-			
+			EmitSignal(SignalName.UnitDied, this);
+			QueueFree();
 		};
 		_hurt.OnHurt += (area, damage) => 
 		{
@@ -84,10 +88,16 @@ public partial class Enemy: PathFollower
 			if (hasNextPoint)
 			{
 				var directionRads = GlobalPosition.AngleToPoint(nextPoint);
-				// _animation.SetState(AnimationPackEntry.State.Idle, directionRads); // TODO: Update this with new animations
+				_animation.SetState(AnimationPackEntry.State.Bob);
 				_animation.SetDirection(directionRads);
 			}
 		};
+		_mover.OnPathCompleted += () =>
+		{
+			_animation.SetState(AnimationPackEntry.State.Idle);
+		};
+
+		_mover.OnPathCompleted += HandleReachedGoal;
 
 	}
 
@@ -215,6 +225,13 @@ public partial class Enemy: PathFollower
 
 			// GD.Print($"{enemy}");
 		}
+	}
+
+
+	private void HandleReachedGoal()
+	{
+		EmitSignal(SignalName.UnitReachedGoal, _goalDamage);
+		QueueFree();
 	}
 
 }

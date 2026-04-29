@@ -16,7 +16,6 @@ public partial class WorldGenerator : Node
 		float[,] humidityNoise = GenerateNoiseMatrix(dimensions.X, dimensions.Y, seed: (int)GD.Randi(), frequency:0.03f);
 		float[,] temperatureNoise = GenerateNoiseMatrix(dimensions.X, dimensions.Y, seed: (int)GD.Randi(), lucanarity:1);
 
-
 		BiomeType[] loadedBiomes = LoadTerrains();
 
 		GenericGrid<GroundTile> newWorld = new GenericGrid<GroundTile>(dimensions.X, dimensions.Y, (g, x, y) => new GroundTile(SelectTerrain(elevationNoise[x, y], humidityNoise[x, y], temperatureNoise[x, y], loadedBiomes), new Vector2I(x, y)));
@@ -120,10 +119,9 @@ public partial class WorldGenerator : Node
 		{
 			if (tile.HasRoadConnection())
 			{
-				tile.biome = loadedBiomes[WATER_BIOME_INDEX];
+				tile.Biome = loadedBiomes[WATER_BIOME_INDEX];
 			}
 		});
-
 
 		return newWorld;
 	}

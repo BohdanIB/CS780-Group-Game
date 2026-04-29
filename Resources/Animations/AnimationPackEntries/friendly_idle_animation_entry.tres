@@ -1,9 +1,0 @@
-[gd_resource type="Resource" script_class="AnimationPackEntry" format=3 uid="uid://bc6kubxjpy144"]
-
-[ext_resource type="SpriteFrames" uid="uid://be25vodgonygm" path="res://Assets/AnimationFrames/friendly_idle_frames.tres" id="1_krshv"]
-[ext_resource type="Script" uid="uid://bc14nr141nonp" path="res://Scripts/Animation/AnimationPackEntry.cs" id="2_qnjd7"]
-
-[resource]
-script = ExtResource("2_qnjd7")
-Frames = ExtResource("1_krshv")
-metadata/_custom_type_script = "uid://bc14nr141nonp"
