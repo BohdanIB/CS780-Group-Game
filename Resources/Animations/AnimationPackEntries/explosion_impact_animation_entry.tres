@@ -1,10 +1,10 @@
 [gd_resource type="Resource" script_class="AnimationPackEntry" format=3 uid="uid://c4l8md50lt3hl"]
 
 [ext_resource type="Script" uid="uid://bc14nr141nonp" path="res://Scripts/Animation/AnimationPackEntry.cs" id="1_60q0e"]
-[ext_resource type="SpriteFrames" uid="uid://c4qllrus0lin4" path="res://Assets/AnimationFrames/explosion_impact_frames.tres" id="1_kd321"]
+[ext_resource type="SpriteFrames" uid="uid://c4qllrus0lin4" path="res://Assets/AnimationFrames/Projectile/explosion_impact_frames.tres" id="1_kd321"]
 
 [resource]
 script = ExtResource("1_60q0e")
-EntryState = 2
+EntryState = 3
 Frames = ExtResource("1_kd321")
 metadata/_custom_type_script = "uid://bc14nr141nonp"

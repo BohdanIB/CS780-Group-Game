@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="AnimationPackEntry" format=3 uid="uid://dj7kuyyq5j4ye"]
 
-[ext_resource type="SpriteFrames" uid="uid://dcc7kigsqmp4g" path="res://Assets/AnimationFrames/bomb_tower_idle_frames.tres" id="1_lt61y"]
+[ext_resource type="SpriteFrames" uid="uid://dcc7kigsqmp4g" path="res://Assets/AnimationFrames/Structure/bomb_tower_idle_frames.tres" id="1_lt61y"]
 [ext_resource type="Script" uid="uid://bc14nr141nonp" path="res://Scripts/Animation/AnimationPackEntry.cs" id="1_sdnxa"]
 
 [resource]

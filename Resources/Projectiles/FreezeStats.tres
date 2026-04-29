@@ -6,7 +6,7 @@
 [resource]
 script = ExtResource("1_e28o6")
 Type = 4
-Speed = 100.0
+Speed = 200.0
 Damage = 10.0
 Hitbox = 16.0
 Animations = ExtResource("1_pyuw6")

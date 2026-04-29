@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="AnimationPackEntry" format=3 uid="uid://br7pfskndpsdj"]
 
 [ext_resource type="Script" uid="uid://bc14nr141nonp" path="res://Scripts/Animation/AnimationPackEntry.cs" id="1_ff8w7"]
-[ext_resource type="SpriteFrames" uid="uid://bhgqg8lk5h5gp" path="res://Assets/AnimationFrames/electro_idle_frames.tres" id="1_nw7kh"]
+[ext_resource type="SpriteFrames" uid="uid://bhgqg8lk5h5gp" path="res://Assets/AnimationFrames/Projectile/electro_idle_frames.tres" id="1_nw7kh"]
 
 [resource]
 script = ExtResource("1_ff8w7")

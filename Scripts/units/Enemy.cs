@@ -58,14 +58,12 @@ public partial class Enemy: PathFollower
 				string animName = _animation.Animation;
 				_animation.SpriteFrames.SetAnimationLoop(animName, false);
 				_animation.AnimationFinished += () => QueueFree();
-				_animation.Play(animName);
 			}
 			else 
 			{
 				QueueFree();
 			}
 			EmitSignal(SignalName.UnitDied, this);
-			QueueFree();
 		};
 		_hurt.OnHurt += (area, damage) => 
 		{

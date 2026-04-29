@@ -1,101 +1,101 @@
 [gd_resource type="SpriteFrames" format=3 uid="uid://b7tvojwqs6rj2"]
 
-[ext_resource type="Texture2D" uid="uid://b4f7wbpa7kijd" path="res://Assets/Sprites/enemy_death.png" id="1_qp0pi"]
+[ext_resource type="Texture2D" uid="uid://b4f7wbpa7kijd" path="res://Assets/Sprites/enemy_death.png" id="1_k4cop"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ijtgv"]
-atlas = ExtResource("1_qp0pi")
+atlas = ExtResource("1_k4cop")
 region = Rect2(0, 192, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_xomhb"]
-atlas = ExtResource("1_qp0pi")
+atlas = ExtResource("1_k4cop")
 region = Rect2(64, 192, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1yh3d"]
-atlas = ExtResource("1_qp0pi")
+atlas = ExtResource("1_k4cop")
 region = Rect2(128, 192, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ey2by"]
-atlas = ExtResource("1_qp0pi")
+atlas = ExtResource("1_k4cop")
 region = Rect2(192, 192, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_8hxy1"]
-atlas = ExtResource("1_qp0pi")
+atlas = ExtResource("1_k4cop")
 region = Rect2(256, 192, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_keyhr"]
-atlas = ExtResource("1_qp0pi")
+atlas = ExtResource("1_k4cop")
 region = Rect2(320, 192, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_eotwa"]
-atlas = ExtResource("1_qp0pi")
+atlas = ExtResource("1_k4cop")
 region = Rect2(0, 128, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_3t0fr"]
-atlas = ExtResource("1_qp0pi")
+atlas = ExtResource("1_k4cop")
 region = Rect2(64, 128, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_td8ut"]
-atlas = ExtResource("1_qp0pi")
+atlas = ExtResource("1_k4cop")
 region = Rect2(128, 128, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_pab2n"]
-atlas = ExtResource("1_qp0pi")
+atlas = ExtResource("1_k4cop")
 region = Rect2(192, 128, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_f6a3f"]
-atlas = ExtResource("1_qp0pi")
+atlas = ExtResource("1_k4cop")
 region = Rect2(256, 128, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_3yqap"]
-atlas = ExtResource("1_qp0pi")
+atlas = ExtResource("1_k4cop")
 region = Rect2(320, 128, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_oye6r"]
-atlas = ExtResource("1_qp0pi")
+atlas = ExtResource("1_k4cop")
 region = Rect2(0, 0, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ae1xa"]
-atlas = ExtResource("1_qp0pi")
+atlas = ExtResource("1_k4cop")
 region = Rect2(64, 0, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_l3tek"]
-atlas = ExtResource("1_qp0pi")
+atlas = ExtResource("1_k4cop")
 region = Rect2(128, 0, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_fq7e5"]
-atlas = ExtResource("1_qp0pi")
+atlas = ExtResource("1_k4cop")
 region = Rect2(192, 0, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_tanos"]
-atlas = ExtResource("1_qp0pi")
+atlas = ExtResource("1_k4cop")
 region = Rect2(256, 0, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ah6o7"]
-atlas = ExtResource("1_qp0pi")
+atlas = ExtResource("1_k4cop")
 region = Rect2(320, 0, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ws36x"]
-atlas = ExtResource("1_qp0pi")
+atlas = ExtResource("1_k4cop")
 region = Rect2(0, 64, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_n5f7f"]
-atlas = ExtResource("1_qp0pi")
+atlas = ExtResource("1_k4cop")
 region = Rect2(64, 64, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_yjf6t"]
-atlas = ExtResource("1_qp0pi")
+atlas = ExtResource("1_k4cop")
 region = Rect2(128, 64, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ubskn"]
-atlas = ExtResource("1_qp0pi")
+atlas = ExtResource("1_k4cop")
 region = Rect2(192, 64, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_u6ooo"]
-atlas = ExtResource("1_qp0pi")
+atlas = ExtResource("1_k4cop")
 region = Rect2(256, 64, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_c6y62"]
-atlas = ExtResource("1_qp0pi")
+atlas = ExtResource("1_k4cop")
 region = Rect2(320, 64, 64, 64)
 
 [resource]
