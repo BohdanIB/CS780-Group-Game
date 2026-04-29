@@ -15,10 +15,17 @@ public partial class StructurePlacementRequirements : Resource
 	public bool IsPlacementValid(GenericGrid<GroundTile> placementGrid, Vector2I placementCoordinates)
 	{
 		GroundTile placementTile = placementGrid.GetGridValueOrDefault(placementCoordinates.X, placementCoordinates.Y);
+	
+		if (placementTile.HasRoadConnection() && !_allowWaterPlacement) 
+		{
+			return false;
+		}
+		
 
-		if (placementTile.HasRoadConnection() && !_allowWaterPlacement) return false;
-
-		if (!IsBiomeValid(placementTile.biome)) return false;
+		if (!IsBiomeValid(placementTile.biome))
+		{
+			return false;
+		} 
 
 		BiomeType[] adjacentBiomes = new BiomeType[4];
 		GroundTile[] adjacentTiles = placementGrid.GetNeighbors(placementCoordinates.X, placementCoordinates.Y, considerDiagonals: false);
@@ -26,16 +33,17 @@ public partial class StructurePlacementRequirements : Resource
 		{
 			adjacentBiomes[i] = adjacentTiles[i]?.biome;
 		}
-		if (!AreAdjacentBiomesValid(adjacentBiomes)) return false;
+		if (!AreAdjacentBiomesValid(adjacentBiomes))
+		{
+			return false;
+		} 
 
 		return true;
 	} 
 
-
 	public bool IsBiomeValid(BiomeType biome)
 	{
 		if (_validPlacementBiomes == null || _validPlacementBiomes.Length == 0) return true;
-
 		return Array.IndexOf(_validPlacementBiomes, biome) > -1;
 	}
 

@@ -12,8 +12,9 @@ public partial class AnimationPackEntry : Resource
 	{
 		Idle,
 		Firing,
+		Impact,
 		// etc.
 	}
-    [Export] public State EntryState;
-    [Export] public SpriteFrames Frames;
+	[Export] public State EntryState;
+	[Export] public SpriteFrames Frames;
 }

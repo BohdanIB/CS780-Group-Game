@@ -38,6 +38,7 @@ public partial class ProjectileStats : Resource
 	[Export] public float ChainRadiusFalloff;
 	[Export] public bool Freezes;
 	[Export] public float FreezeDuration;
+	[Export] public AnimationPack ImpactAnimations;
 
 	/// <summary>
 	/// Get list of all projectile stats.

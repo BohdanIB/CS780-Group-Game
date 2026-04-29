@@ -2,6 +2,7 @@
 
 [ext_resource type="Resource" uid="uid://yht161tan3km" path="res://Resources/Animations/AnimationPacks/ElectroAnimations.tres" id="1_7vs6c"]
 [ext_resource type="Script" uid="uid://db7kn4h7v1jqa" path="res://Scripts/turrets/ProjectileStats.cs" id="1_ihrkt"]
+[ext_resource type="Resource" uid="uid://dbc3lfiq3ddqg" path="res://Resources/Animations/AnimationPacks/ShockAnimations.tres" id="2_qaf0t"]
 
 [resource]
 script = ExtResource("1_ihrkt")
@@ -14,4 +15,5 @@ ChainCount = 3
 ChainDamageFalloff = 5.0
 ChainRadius = 10.0
 ChainRadiusFalloff = 10.0
+ImpactAnimations = ExtResource("2_qaf0t")
 metadata/_custom_type_script = "uid://db7kn4h7v1jqa"

@@ -54,6 +54,16 @@ public partial class Enemy: PathFollower
 			
 			_health.ApplyDamage(damage); 
 		}; 
+		
+		_mover.OnFreeze += () =>
+		{
+			_animation.Modulate = new Color(0.5f, 0.7f, 1.0f, 1.0f); // blueish tint
+		};
+
+		_mover.OnUnfreeze += () =>
+		{
+			_animation.Modulate = new Color(1f, 1f, 1f, 1f); // reset to normal
+		};
 
 		_mover.OnPathPointReached += (hasNextPoint, nextPoint) =>
 		{

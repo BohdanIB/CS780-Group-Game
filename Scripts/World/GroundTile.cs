@@ -29,7 +29,6 @@ public class GroundTile
 	// {
 	//     return new Vector2(position.X * )
 	// }
-
 	public bool HasRoadConnection(Vector2I direction)
 	{
 		if (direction == Vector2I.Up)

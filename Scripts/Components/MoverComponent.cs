@@ -17,6 +17,8 @@ public partial class MoverComponent : Node2D
 	private int _currentPathIndex = START_PATH_INDEX;
 	private bool _isFrozen = false;
 	private Timer _freezeTimer;
+	private float _originalSpeed;
+	private Timer _slowTimer;
 
 	public void Initialize(float speed, Node2D parent = null, bool start = true, Vector2[] moverPath = null)
 	{
@@ -32,6 +34,11 @@ public partial class MoverComponent : Node2D
 		_freezeTimer.OneShot = true;
 		AddChild(_freezeTimer);
 		_freezeTimer.Timeout += Unfreeze;
+		
+		_slowTimer = new Timer();
+		_slowTimer.OneShot = true;
+		AddChild(_slowTimer);
+		_slowTimer.Timeout += Unslow;
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -122,4 +129,17 @@ public partial class MoverComponent : Node2D
 		EmitSignal(SignalName.OnUnfreeze);
 	}
 	public bool IsFrozen() => _isFrozen;
+	
+	public void Slow(float multiplier, float duration)
+	{
+		if (_isFrozen) return;
+		_originalSpeed = Speed;
+		Speed *= multiplier;
+		_slowTimer.Start(duration);
+	}
+	
+	public void Unslow()
+	{
+		Speed = _originalSpeed;
+	}
 }

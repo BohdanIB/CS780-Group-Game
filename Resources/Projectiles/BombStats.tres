@@ -2,6 +2,7 @@
 
 [ext_resource type="Resource" uid="uid://db62e420mpwox" path="res://Resources/Animations/AnimationPacks/BombAnimations.tres" id="1_1n7bh"]
 [ext_resource type="Script" uid="uid://db7kn4h7v1jqa" path="res://Scripts/turrets/ProjectileStats.cs" id="1_3yn07"]
+[ext_resource type="Resource" uid="uid://lp6l47k85sno" path="res://Resources/Animations/AnimationPacks/ExplosionAnimations.tres" id="2_igq0r"]
 
 [resource]
 script = ExtResource("1_3yn07")
@@ -12,4 +13,5 @@ Hitbox = 16.0
 Animations = ExtResource("1_1n7bh")
 AOERadius = 5.0
 AOEFalloff = true
+ImpactAnimations = ExtResource("2_igq0r")
 metadata/_custom_type_script = "uid://db7kn4h7v1jqa"
