@@ -13,8 +13,10 @@ public partial class AnimationPackEntry : Resource
 		Idle,
 		Bob,
 		Firing,
+		Impact,
+		Death,
 		// etc.
 	}
-    [Export] public State EntryState;
-    [Export] public SpriteFrames Frames;
+	[Export] public State EntryState;
+	[Export] public SpriteFrames Frames;
 }

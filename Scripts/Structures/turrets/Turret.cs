@@ -65,8 +65,9 @@ public partial class Turret : GenericStructure
 		// Update sprite to aim at target's direction
 		_targeting.OnTargetSelect += (target) =>
 		{
+			if(!IsInstanceValid(target)) return;
 			var directionRads = GlobalPosition.AngleToPoint(target.GlobalPosition);
-			// _animation.SetState(AnimationPackEntry.State.Idle, directionRads); // TODO: Update when new animations roll out
+			//_animation.SetState(AnimationPackEntry.State.Idle, directionRads); // TODO: Update when new animations roll out
 			_animation.SetDirection(directionRads);
 		};
 
@@ -164,10 +165,10 @@ public partial class Turret : GenericStructure
 		return $"{Name}: {_stats}";
 	}
 
-    public override void SetConfigurationOption(string configurationName, string configurationSelection)
-    {
+	public override void SetConfigurationOption(string configurationName, string configurationSelection)
+	{
 		
-        if (configurationName.Equals("Target"))
+		if (configurationName.Equals("Target"))
 		{
 			foreach (TargetingMode mode in System.Enum.GetValues(typeof(TargetingMode)))
 			{
@@ -177,7 +178,7 @@ public partial class Turret : GenericStructure
 				}
 			}
 		}
-    }
+	}
 
 
 }

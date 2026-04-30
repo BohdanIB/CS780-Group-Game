@@ -22,7 +22,7 @@ public partial class StructurePlacer : Node2D
 	private bool _isPlacementValid = false;
 
 	[Export] public ConstructionInformation[] temporaryConstructionInfo; //TODO: Remove
-	private int infoIndex = 0;
+	private int infoIndex = -1;
 
 	public override void _Ready()
 	{
@@ -95,6 +95,7 @@ public partial class StructurePlacer : Node2D
 	{
 		if (Input.IsActionJustPressed("ToggleTurretPlacementMode")) // TODO: remove.  This is just a placeholder before UI is integrated
 		{
+			GD.Print(infoIndex);
 			infoIndex = (infoIndex+1) % temporaryConstructionInfo.Length;
 			SetStructure(temporaryConstructionInfo[infoIndex]);
 		}

@@ -15,9 +15,11 @@ public partial class TurretStats : StructureStats
 	public enum Category
 	{
 		Ballista,
-		Blade
-	}
-
+		Blade,
+		Electro,
+		Bomb,
+		Freeze,
+	};
 
 	// Turret Stats
 	[Export] public Category Type;

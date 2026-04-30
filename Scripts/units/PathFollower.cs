@@ -13,6 +13,7 @@ public partial class PathFollower : Node2D
 	[Export] protected DetectableComponent _detectable;
 	[Export] protected MoverComponent _mover;
 	[Export] protected AnimationComponent _animation;
+	
 
 	[Signal] public delegate void UnitDiedEventHandler(PathFollower unit);
 

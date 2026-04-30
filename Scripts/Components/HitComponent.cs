@@ -96,8 +96,8 @@ public partial class HitComponent : Area2D
 	public bool CanHit(HurtComponent hurt)
 	{
 		return ((hurt.GetEntityTypes() & _validHurtableTypes) != Groups.GroupTypes.None) && // Hurt component can be hit by hit component type
-		       ((hurt.GetValidHitterTypes() & _senderTypes) != Groups.GroupTypes.None) && // Hurt component can be hit by sender of hit component
-		       (_target == null || _target == hurt); // Hurt component is target (if target is assigned)
+			   ((hurt.GetValidHitterTypes() & _senderTypes) != Groups.GroupTypes.None) && // Hurt component can be hit by sender of hit component
+			   (_target == null || _target == hurt); // Hurt component is target (if target is assigned)
 	}
 
 	public float GetRadius()

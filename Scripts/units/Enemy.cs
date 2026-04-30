@@ -45,19 +45,45 @@ public partial class Enemy: PathFollower
 		{
 			GD.Print($"WARNING - Enemy {this} was unable to find one of its components on _Ready()");
 		}
-
 		// Component callbacks //
 
 		_health.OnNoHealthLeft += () =>
 		{
 			GD.Print($"Enemy {Name} died.");
+			_mover.Stop();
+			if(_stats.Animations != null && _animation != null)
+			{
+				_animation.SetState(AnimationPackEntry.State.Death);
+				_animation.SetDirection(_mover.LastDirection.Angle());
+				string animName = _animation.Animation;
+				_animation.SpriteFrames.SetAnimationLoop(animName, false);
+				_animation.Connect(
+					AnimatedSprite2D.SignalName.AnimationFinished,
+					Callable.From(QueueFree),
+					(uint)ConnectFlags.OneShot
+				);
+			}
+			else 
+			{
+				QueueFree();
+			}
 			EmitSignal(SignalName.UnitDied, this);
-			QueueFree();
 		};
 		_hurt.OnHurt += (area, damage) => 
 		{
+			
 			_health.ApplyDamage(damage); 
 		}; 
+		
+		_mover.OnFreeze += () =>
+		{
+			_animation.Modulate = new Color(0.5f, 0.7f, 1.0f, 1.0f); // blueish tint
+		};
+
+		_mover.OnUnfreeze += () =>
+		{
+			_animation.Modulate = new Color(1f, 1f, 1f, 1f); // reset to normal
+		};
 
 		_mover.OnPathPointReached += (hasNextPoint, nextPoint) =>
 		{

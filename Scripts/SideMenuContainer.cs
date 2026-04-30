@@ -20,10 +20,19 @@ public partial class SideMenuContainer : PanelContainer
 
 		var blade    = GetNode<Button>("VBoxContainer/HBoxContainer/VBoxContainer/BladeTurret");
 		var ballista = GetNode<Button>("VBoxContainer/HBoxContainer/VBoxContainer2/BallistaTurret");
+		var bomb = GetNode<Button>("VBoxContainer/HBoxContainer2/VBoxContainer3/BombTurret");
+		var freeze =  GetNode<Button>("VBoxContainer/HBoxContainer2/VBoxContainer4/FreezeTurret");
+		var electro =  GetNode<Button>("VBoxContainer/HBoxContainer3/VBoxContainer5/ElectroTurret");
+		
 		blade.Pressed += () => GD.Print(">>> BLADE BUTTON CLICKED <<<");
+		
+		bomb.Pressed += () => GD.Print(">>> BOMB BUTTON CLICKED <<<");
 
 		ballista.Pressed += () => OnTurretButtonPressed(TurretStats.Category.Ballista);
 		blade.Pressed += () => OnTurretButtonPressed(TurretStats.Category.Blade);
+		bomb.Pressed += () => OnTurretButtonPressed(TurretStats.Category.Bomb);
+		electro.Pressed += () => OnTurretButtonPressed(TurretStats.Category.Electro);
+		freeze.Pressed += () => OnTurretButtonPressed(TurretStats.Category.Freeze);
 
 
 		
