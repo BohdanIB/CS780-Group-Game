@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="AnimationPack" format=3 uid="uid://sjadoqd44fpe"]
 
-[ext_resource type="Resource" uid="uid://bdhlepsxfmil" path="res://Resources/Animations/AnimationPackEntries/freeze__tower_idle_animation_entry.tres" id="1_714ks"]
+[ext_resource type="Resource" uid="uid://bdhlepsxfmil" path="res://Resources/Animations/AnimationPackEntries/Structure/freeze__tower_idle_animation_entry.tres" id="1_714ks"]
 [ext_resource type="Script" uid="uid://b8k2bijsjc1da" path="res://Scripts/Animation/AnimationPack.cs" id="1_x7784"]
 
 [resource]

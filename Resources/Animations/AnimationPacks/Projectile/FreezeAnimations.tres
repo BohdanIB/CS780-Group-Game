@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="AnimationPack" format=3 uid="uid://bu32vqbg8kvpa"]
 
-[ext_resource type="Resource" uid="uid://cxwv4fljr842u" path="res://Resources/Animations/AnimationPackEntries/freeze_idle_animation_entry.tres" id="1_714ks"]
+[ext_resource type="Resource" uid="uid://cxwv4fljr842u" path="res://Resources/Animations/AnimationPackEntries/Projectile/freeze_idle_animation_entry.tres" id="1_714ks"]
 [ext_resource type="Script" uid="uid://b8k2bijsjc1da" path="res://Scripts/Animation/AnimationPack.cs" id="1_x7784"]
 
 [resource]

@@ -2,7 +2,7 @@
 
 [ext_resource type="Resource" uid="uid://8up6n72scnpd" path="res://Resources/Projectiles/ElectroStats.tres" id="1_cewui"]
 [ext_resource type="Script" uid="uid://bawwkshhg5psh" path="res://Scripts/turrets/TurretStats.cs" id="1_ga68c"]
-[ext_resource type="Resource" uid="uid://bhdwmej6ctgip" path="res://Resources/Animations/AnimationPacks/ElectroTurretAnimations.tres" id="1_kd22d"]
+[ext_resource type="Resource" uid="uid://bhdwmej6ctgip" path="res://Resources/Animations/AnimationPacks/Structure/ElectroTurretAnimations.tres" id="1_kd22d"]
 
 [resource]
 script = ExtResource("1_ga68c")

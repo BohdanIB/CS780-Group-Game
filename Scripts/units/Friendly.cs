@@ -36,7 +36,19 @@ public partial class Friendly : PathFollower
 		_health.OnNoHealthLeft += () =>
 		{
 			GD.Print($"Friendly {Name} died.");
-			QueueFree();
+			_mover.Stop();
+			if(_stats.Animations != null && _animation != null)
+			{
+				_animation.SetDirection(_mover.LastDirection.Angle());
+				_animation.SetState(AnimationPackEntry.State.Death);
+				string animName = _animation.Animation;
+				_animation.SpriteFrames.SetAnimationLoop(animName, false);
+				_animation.AnimationFinished += () => QueueFree();
+			}
+			else 
+			{
+				QueueFree();
+			}
 		};
 		_hurt.OnHurt += (area, damage) => 
 		{

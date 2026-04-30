@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="AnimationPack" format=3 uid="uid://db62e420mpwox"]
 
-[ext_resource type="Resource" uid="uid://c1tphjsbvcmlp" path="res://Resources/Animations/AnimationPackEntries/bomb_idle_animation_entry.tres" id="1_m6ora"]
+[ext_resource type="Resource" uid="uid://c1tphjsbvcmlp" path="res://Resources/Animations/AnimationPackEntries/Projectile/bomb_idle_animation_entry.tres" id="1_m6ora"]
 [ext_resource type="Script" uid="uid://b8k2bijsjc1da" path="res://Scripts/Animation/AnimationPack.cs" id="1_uuryy"]
 
 [resource]

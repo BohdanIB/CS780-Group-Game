@@ -1,6 +1,6 @@
-[gd_resource type="Resource" script_class="AnimationPack" format=3 uid="uid://bhdwmej6ctgip"]
+[gd_resource type="Resource" script_class="AnimationPack" format=3 uid="uid://yht161tan3km"]
 
-[ext_resource type="Resource" uid="uid://cropu3x8qmff3" path="res://Resources/Animations/AnimationPackEntries/electro__tower_idle_animation_entry.tres" id="1_6tbxt"]
+[ext_resource type="Resource" uid="uid://br7pfskndpsdj" path="res://Resources/Animations/AnimationPackEntries/Projectile/electro_idle_animation_entry.tres" id="1_6tbxt"]
 [ext_resource type="Script" uid="uid://b8k2bijsjc1da" path="res://Scripts/Animation/AnimationPack.cs" id="1_8eo1e"]
 
 [resource]

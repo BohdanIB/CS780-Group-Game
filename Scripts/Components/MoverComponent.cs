@@ -13,6 +13,7 @@ public partial class MoverComponent : Node2D
 	[Export] public float Speed = 20f;
 	[Export] public Node2D ParentNode;
 	public bool CurrentlyMoving { get; private set; } = true;
+	public Vector2 LastDirection { get; private set; } = Vector2.Zero;
 	private Vector2[] _moverPath = [];
 	private int _currentPathIndex = START_PATH_INDEX;
 	private bool _isFrozen = false;
@@ -34,11 +35,12 @@ public partial class MoverComponent : Node2D
 		_freezeTimer.OneShot = true;
 		AddChild(_freezeTimer);
 		_freezeTimer.Timeout += Unfreeze;
-		
+		/* //implemtation for canal jammer
 		_slowTimer = new Timer();
 		_slowTimer.OneShot = true;
 		AddChild(_slowTimer);
 		_slowTimer.Timeout += Unslow;
+		*/
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -54,6 +56,9 @@ public partial class MoverComponent : Node2D
 		var targetPosition = _moverPath[_currentPathIndex];
 		var distanceToTarget = ParentNode.Position.DistanceTo(targetPosition);
 		var totalMovement = Speed*delta;
+		
+		 LastDirection = (targetPosition - ParentNode.Position).Normalized();
+		
 		while (totalMovement >= distanceToTarget)
 		{
 			ParentNode.Position = targetPosition;
@@ -67,6 +72,9 @@ public partial class MoverComponent : Node2D
 			totalMovement -= distanceToTarget;
 			targetPosition = _moverPath[_currentPathIndex];
 			distanceToTarget = ParentNode.Position.DistanceTo(targetPosition);
+			
+			LastDirection = (targetPosition - ParentNode.Position).Normalized();
+			
 			EmitSignal(SignalName.OnPathPointReached, true, targetPosition);
 		}
 		ParentNode.Position = ParentNode.Position.MoveToward(targetPosition, (float)totalMovement);
@@ -129,7 +137,7 @@ public partial class MoverComponent : Node2D
 		EmitSignal(SignalName.OnUnfreeze);
 	}
 	public bool IsFrozen() => _isFrozen;
-	
+	/* //implementation for canal jammer
 	public void Slow(float multiplier, float duration)
 	{
 		if (_isFrozen) return;
@@ -141,5 +149,5 @@ public partial class MoverComponent : Node2D
 	public void Unslow()
 	{
 		Speed = _originalSpeed;
-	}
+	} */
 }

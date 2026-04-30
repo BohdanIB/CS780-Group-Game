@@ -51,9 +51,9 @@ public partial class Enemy: PathFollower
 		{
 			GD.Print($"Enemy {Name} died.");
 			_mover.Stop();
-			
 			if(_stats.Animations != null && _animation != null)
 			{
+				_animation.SetDirection(_mover.LastDirection.Angle());
 				_animation.SetState(AnimationPackEntry.State.Death);
 				string animName = _animation.Animation;
 				_animation.SpriteFrames.SetAnimationLoop(animName, false);
