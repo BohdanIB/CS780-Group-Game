@@ -5,7 +5,7 @@
 [ext_resource type="Resource" uid="uid://r4wamk14k7h3" path="res://Resources/Terrain/Water.tres" id="2_epmr0"]
 [ext_resource type="Script" uid="uid://xqmubjkmtno0" path="res://Scripts/Structures/StructurePlacementRequirements.cs" id="3_daota"]
 [ext_resource type="PackedScene" uid="uid://b20oyeiv6r3fs" path="res://Scenes/Structures/port.tscn" id="4_s2g5k"]
-[ext_resource type="Resource" uid="uid://b5j8gdyrviu3q" path="res://Resources/Animations/AnimationPacks/PortAnimations.tres" id="5_4y2fu"]
+[ext_resource type="Resource" uid="uid://b5j8gdyrviu3q" path="res://Resources/Animations/AnimationPacks/Structure/PortAnimations.tres" id="5_4y2fu"]
 [ext_resource type="Script" uid="uid://jb6hpr5v0mpt" path="res://Scripts/Structures/StructureStats.cs" id="6_w60on"]
 
 [sub_resource type="Resource" id="Resource_s2g5k"]

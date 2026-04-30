@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="AnimationPackEntry" format=3 uid="uid://5krw8itfo47"]
+
+[ext_resource type="Script" uid="uid://bc14nr141nonp" path="res://Scripts/Animation/AnimationPackEntry.cs" id="1_6oo1x"]
+[ext_resource type="SpriteFrames" uid="uid://b160puyw7hdee" path="res://Assets/AnimationFrames/Structure/lumberjack_idle_frames.tres" id="1_g7n6t"]
+
+[resource]
+script = ExtResource("1_6oo1x")
+Frames = ExtResource("1_g7n6t")
+metadata/_custom_type_script = "uid://bc14nr141nonp"

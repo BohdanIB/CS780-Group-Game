@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="MaterialGathererStats" format=3 uid="uid://d4hrddtwjioxi"]
+
+[ext_resource type="Resource" uid="uid://3ptkmopago8s" path="res://Resources/Animations/AnimationPacks/Structure/MineAnimations.tres" id="1_6h7jx"]
+[ext_resource type="Resource" uid="uid://dfk6ujpa1i1xn" path="res://Resources/Materials/Stone.tres" id="2_4tr2l"]
+[ext_resource type="Script" uid="uid://6aa1ye00hd8k" path="res://Scripts/Structures/gatherers/MaterialGathererStats.cs" id="3_od3gg"]
+
+[resource]
+script = ExtResource("3_od3gg")
+gatheredMaterial = ExtResource("2_4tr2l")
+gatherTime = 3.5
+Animations = ExtResource("1_6h7jx")
+metadata/_custom_type_script = "uid://6aa1ye00hd8k"

@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="ConstructionInformation" format=3 uid="uid://c1ihc7a8crl43"]
+
+[ext_resource type="Texture2D" uid="uid://cpn2mk0jrq18l" path="res://Assets/Sprites/MineSprite.png" id="1_ae2sr"]
+[ext_resource type="Script" uid="uid://xqmubjkmtno0" path="res://Scripts/Structures/StructurePlacementRequirements.cs" id="2_ae2sr"]
+[ext_resource type="Resource" uid="uid://dxmt4lkaw6sf1" path="res://Resources/Terrain/Mountain.tres" id="2_uc0ma"]
+[ext_resource type="PackedScene" uid="uid://yxa7mihcwpii" path="res://Scenes/Structures/material_gatherer.tscn" id="3_uc0ma"]
+[ext_resource type="Resource" uid="uid://d4hrddtwjioxi" path="res://Resources/Materials/Gatherers/MineStats.tres" id="4_6wris"]
+[ext_resource type="Script" uid="uid://c5a4sxpqqv1sn" path="res://Scripts/Structures/ConstructionInformation.cs" id="5_y8xvo"]
+
+[sub_resource type="Resource" id="Resource_2to2x"]
+script = ExtResource("2_ae2sr")
+_validPlacementBiomes = Array[Object]([ExtResource("2_uc0ma")])
+_requiredAdjacentBiomes = null
+_minimumPortProximity = 1
+metadata/_custom_type_script = "uid://xqmubjkmtno0"
+
+[resource]
+script = ExtResource("5_y8xvo")
+DisplayImageAtlas = ExtResource("1_ae2sr")
+DisplayImageRect = Rect2(0, 0, 64, 64)
+PlacementRequirements = SubResource("Resource_2to2x")
+Structure = ExtResource("3_uc0ma")
+StructureStats = ExtResource("4_6wris")
+metadata/_custom_type_script = "uid://c5a4sxpqqv1sn"

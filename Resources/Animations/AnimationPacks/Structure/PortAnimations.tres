@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="AnimationPack" format=3 uid="uid://b5j8gdyrviu3q"]
 
 [ext_resource type="Script" uid="uid://b8k2bijsjc1da" path="res://Scripts/Animation/AnimationPack.cs" id="1_et73m"]
-[ext_resource type="Resource" uid="uid://dpxo7kgrui5qo" path="res://Resources/Animations/AnimationPackEntries/port_idle_animation_entry.tres" id="1_t8xc3"]
+[ext_resource type="Resource" uid="uid://dpxo7kgrui5qo" path="res://Resources/Animations/AnimationPackEntries/Structure/port_idle_animation_entry.tres" id="1_t8xc3"]
 
 [resource]
 script = ExtResource("1_et73m")

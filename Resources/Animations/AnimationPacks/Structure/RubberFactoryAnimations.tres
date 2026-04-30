@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="AnimationPack" format=3 uid="uid://cp6j8mwwainoq"]
+
+[ext_resource type="Resource" uid="uid://dheugc3pgfao6" path="res://Resources/Animations/AnimationPackEntries/Structure/rubberfactory_idle_animation_entry.tres" id="1_3025g"]
+[ext_resource type="Script" uid="uid://b8k2bijsjc1da" path="res://Scripts/Animation/AnimationPack.cs" id="1_jpahm"]
+
+[resource]
+script = ExtResource("1_jpahm")
+Animations = Array[Object]([ExtResource("1_3025g")])
+metadata/_custom_type_script = "uid://b8k2bijsjc1da"

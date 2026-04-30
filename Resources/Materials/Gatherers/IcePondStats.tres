@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="MaterialGathererStats" format=3 uid="uid://berjwkp5xgsxf"]
+
+[ext_resource type="Resource" uid="uid://qp6ba36tfxr6" path="res://Resources/Animations/AnimationPacks/Structure/IcePondAnimations.tres" id="1_e4ajd"]
+[ext_resource type="Resource" path="res://Resources/Materials/Ice.tres" id="2_eivnn"]
+[ext_resource type="Script" uid="uid://6aa1ye00hd8k" path="res://Scripts/Structures/gatherers/MaterialGathererStats.cs" id="3_rsj5o"]
+
+[resource]
+script = ExtResource("3_rsj5o")
+gatheredMaterial = ExtResource("2_eivnn")
+gatherTime = 6.0
+Animations = ExtResource("1_e4ajd")
+metadata/_custom_type_script = "uid://6aa1ye00hd8k"

@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="MaterialGathererStats" format=3 uid="uid://imihy5kss2ls"]
+
+[ext_resource type="Resource" uid="uid://cp6j8mwwainoq" path="res://Resources/Animations/AnimationPacks/Structure/RubberFactoryAnimations.tres" id="1_pka8b"]
+[ext_resource type="Resource" path="res://Resources/Materials/Rubber.tres" id="2_82gi8"]
+[ext_resource type="Script" uid="uid://6aa1ye00hd8k" path="res://Scripts/Structures/gatherers/MaterialGathererStats.cs" id="3_gm64f"]
+
+[resource]
+script = ExtResource("3_gm64f")
+gatheredMaterial = ExtResource("2_82gi8")
+gatherTime = 5.0
+Animations = ExtResource("1_pka8b")
+metadata/_custom_type_script = "uid://6aa1ye00hd8k"
