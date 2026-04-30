@@ -3,5 +3,7 @@
 [ext_resource type="Script" uid="uid://cplgdv73pm7sk" path="res://Scripts/Item System/MaterialType.cs" id="1_8jm4a"]
 
 [resource]
+resource_name = "Gold"
 script = ExtResource("1_8jm4a")
+DisplayImageRect = Rect2(0, 0, 32, 32)
 metadata/_custom_type_script = "uid://cplgdv73pm7sk"
