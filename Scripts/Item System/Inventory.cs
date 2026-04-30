@@ -5,6 +5,7 @@ using System.Linq;
 
 public class Inventory
 {
+    public delegate void OnContentsChangedEventHandler();
     private Dictionary<MaterialType, int> materialCounts = [];
 
     public bool HasMaterial(MaterialType material)
@@ -69,4 +70,15 @@ public class Inventory
             RemoveMaterials(material, materialCounts[material]);
         }
     }
+
+    public override string ToString()
+    {
+        string output = "Contents of Dictionary:";
+        foreach (MaterialType material in materialCounts.Keys)
+        {
+            output += $"\n {material} : {materialCounts[material]}";
+        }
+        return output;
+    }
+
 }
