@@ -5,29 +5,29 @@ using System;
 [GlobalClass]
 public partial class MaterialRequirements : Resource
 {
-    [Export] private Dictionary<MaterialType, int> _requirements;
+	[Export] private Dictionary<MaterialType, int> _requirements;
 
 
-    public bool AreMaterialsAvailiable(Inventory inventory)
-    {
-        foreach (MaterialType material in _requirements.Keys)
-        {
-            if (!inventory.HasMaterial(material, _requirements[material])) return false;
-        }
+	public bool AreMaterialsAvailiable(Inventory inventory)
+	{
+		foreach (MaterialType material in _requirements.Keys)
+		{
+			if (!inventory.HasMaterial(material, _requirements[material])) return false;
+		}
 
-        return true;
-    }
+		return true;
+	}
 
-    public bool SpendMaterials(Inventory inventory)
-    {
-        if (!AreMaterialsAvailiable(inventory)) return false;
+	public bool SpendMaterials(Inventory inventory)
+	{
+		if (!AreMaterialsAvailiable(inventory)) return false;
 
-        foreach (MaterialType material in _requirements.Keys)
-        {
-            inventory.RemoveMaterials(material, _requirements[material]);
-        }
+		foreach (MaterialType material in _requirements.Keys)
+		{
+			inventory.RemoveMaterials(material, _requirements[material]);
+		}
 
-        return true;
+		return true;
 
-    }
+	}
 }

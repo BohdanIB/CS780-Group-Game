@@ -57,7 +57,11 @@ public partial class Enemy: PathFollower
 				_animation.SetDirection(_mover.LastDirection.Angle());
 				string animName = _animation.Animation;
 				_animation.SpriteFrames.SetAnimationLoop(animName, false);
-				_animation.AnimationFinished += () => QueueFree();
+				_animation.Connect(
+					AnimatedSprite2D.SignalName.AnimationFinished,
+					Callable.From(QueueFree),
+					(uint)ConnectFlags.OneShot
+				);
 			}
 			else 
 			{

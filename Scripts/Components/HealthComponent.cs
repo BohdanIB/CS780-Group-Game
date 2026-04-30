@@ -9,6 +9,7 @@ public partial class HealthComponent : Node2D
 	[Signal] public delegate void OnNoHealthLeftEventHandler();
 	[Export] private float _startingHealth = 1f;
 	private float _currentHealth;
+	private bool _isDead;
 
 	public override void _Ready()
 	{
@@ -28,6 +29,7 @@ public partial class HealthComponent : Node2D
 
 	public void ApplyDamage(float damage)
 	{
+		if (!IsInstanceValid(this) || _isDead) return;
 		float oldHealth = _currentHealth;
 		_currentHealth -= damage;
 		GD.Print($"HealthComponent applying damage {damage} to current health of {oldHealth}. New health value: {_currentHealth}.");
@@ -44,8 +46,10 @@ public partial class HealthComponent : Node2D
 
 	private void CheckHealthLeft()
 	{
+		if (_isDead) return;
 		if (_currentHealth <= 0f)
 		{
+			_isDead = true;
 			GD.Print($"\tHealthComponent current health: '{_currentHealth}' is less than or equal to 0. Emitting OnNoHealthLeft signal.");
 			EmitSignal(SignalName.OnNoHealthLeft);
 		}

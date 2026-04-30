@@ -49,7 +49,7 @@ ScenePath = "uid://cvx7nxyaghhrx"
 [node name="Enemies" type="Node2D" parent="." unique_id=1260695484]
 
 [node name="StructurePlacer" parent="." unique_id=1843712961 instance=ExtResource("4_structplacer")]
-temporaryConstructionInfo = Array[Object]([ExtResource("4_21xkr"), ExtResource("5_6bp64"), ExtResource("8_d1ilt"), ExtResource("7_hptm8"), ExtResource("6_ynf5e"), ExtResource("2_jjvhh")])
+temporaryConstructionInfo = Array[Object]([ExtResource("4_21xkr"), ExtResource("5_6bp64"), ExtResource("6_ynf5e"), ExtResource("8_d1ilt"), ExtResource("7_hptm8"), ExtResource("2_jjvhh")])
 
 [node name="PlayArea" parent="." unique_id=1275724900 instance=ExtResource("3_8gbba")]
 

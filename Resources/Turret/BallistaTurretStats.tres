@@ -6,7 +6,6 @@
 
 [resource]
 script = ExtResource("1_etjm6")
-Type = 0
 AggroRadius = 100.0
 DetectableRadius = 16.0
 HitboxRadius = 16.0
