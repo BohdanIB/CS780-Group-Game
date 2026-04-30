@@ -1,7 +1,10 @@
 [gd_resource type="Resource" script_class="MaterialType" format=3 uid="uid://b5w2pxw3i7x8r"]
 
 [ext_resource type="Script" uid="uid://cplgdv73pm7sk" path="res://Scripts/Item System/MaterialType.cs" id="1_4qdjl"]
+[ext_resource type="Texture2D" uid="uid://rp7lo1igaill" path="res://Assets/Sprites/MaterialSprites.png" id="1_w6sj7"]
 
 [resource]
 script = ExtResource("1_4qdjl")
+DisplayImageAtlas = ExtResource("1_w6sj7")
+DisplayImageRect = Rect2(0, 0, 32, 2)
 metadata/_custom_type_script = "uid://cplgdv73pm7sk"
