@@ -5,6 +5,7 @@ public partial class TradingPort : GenericStructure
 {
     private const int PORT_CONNECTION_RANGE = 3;
     public Inventory StorageInventory {get; private set;}
+    public Vector2I WaterAccessPoint;
 
     public override void Initialize(StructureStats stats)
     {
@@ -13,5 +14,7 @@ public partial class TradingPort : GenericStructure
         ConnectedPort = this;
 
         StorageInventory = new();
+
+        FriendlySpawner.Instance.RegisterPort(this);
     }
 }

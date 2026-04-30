@@ -84,6 +84,11 @@ public partial class GameUi : CanvasLayer
 	coinCountLabel.Text = $"{Main.PlayerInventory.GetMaterialCount(_coinsMaterial)}";
 }
 
+	public void UpdateMaterialDisplays()
+	{
+		UpdateCoinDisplay();
+	}
+
 	
 
 	public void ShowWarning(string message , bool GameOver = false)

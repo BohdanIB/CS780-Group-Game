@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 public partial class FriendlySpawner : Node
 {
+	public static FriendlySpawner Instance {get; private set;}
 	[Export] public float SpawnIntervalSeconds = 10f;
 	[Export] public int FriendliesPerInterval = 3;
 
@@ -11,8 +12,10 @@ public partial class FriendlySpawner : Node
 	private Vector2I _hub;
 	private TileMapLayer _tileMapLayer;
 	private GridAStarPathfinder<GroundTile> _pathfinder;
-	private List<GroundTile> _endpoints;
 	private Timer _spawnTimer;
+
+	private List<TradingPort> _ports;
+	private int _portDispatchIndex;
 
 	public void Initialize(GenericGrid<GroundTile> grid, Vector2I hub, TileMapLayer tileMapLayer)
 	{
@@ -20,8 +23,10 @@ public partial class FriendlySpawner : Node
 		_hub = hub;
 		_tileMapLayer = tileMapLayer;
 
+		Instance ??= this;
+		_ports = [];
+
 		BuildPathfinder();
-		BuildEndpointList();
 
 		_spawnTimer = new Timer
 		{
@@ -60,35 +65,23 @@ public partial class FriendlySpawner : Node
 		);
 	}
 
-	private void BuildEndpointList()
-	{
-		_endpoints = new List<GroundTile>();
-		for (int x = 0; x < _grid.GetWidth(); x++)
-		{
-			for (int y = 0; y < _grid.GetHeight(); y++)
-			{
-				var tile = _grid.GetGridValueOrDefault(x, y);
-				if (tile.HasRoadDeadEnd())
-					_endpoints.Add(tile);
-			}
-		}
-		GD.Print($"FriendlySpawner found {_endpoints.Count} endpoints.");
-	}
-
 	private void SpawnGroup()
 	{
-		for (int i = 0; i < FriendliesPerInterval; i++)
-			SpawnFriendly();
+		for (int i = 0; i < Math.Min(FriendliesPerInterval, _ports.Count); i++)
+			SpawnFriendly(_ports[_portDispatchIndex]);
+
+			_portDispatchIndex = (_portDispatchIndex + 1) % _ports.Count;
 	}
 
-	private void SpawnFriendly()
+	private void SpawnSingle()
 	{
-		if (_endpoints.Count == 0)
-		{
-			GD.PrintErr("FriendlySpawner: No endpoints found!");
-			return;
-		}
+		SpawnFriendly(_ports[_portDispatchIndex]);
 
+		_portDispatchIndex = (_portDispatchIndex + 1) % _ports.Count;
+	}
+
+	private void SpawnFriendly(TradingPort destinationPort)
+	{
 		var stats = FriendlyStats.ALL_FRIENDLIES?.Find(s => s.Type == FriendlyStats.Category.Regular);
 		if (stats == null)
 		{
@@ -102,16 +95,27 @@ public partial class FriendlySpawner : Node
 
 		friendly.Initialize(stats);
 
-		var endpoint = _endpoints[GD.RandRange(0, _endpoints.Count - 1)].position;
-		var pathGrid = _pathfinder.GetPath(_hub, endpoint);
+		List<Vector2I> outboundGridPath = _pathfinder.GetPath(_hub, destinationPort.WaterAccessPoint);
+		List<Vector2I> inboundGridPath = _pathfinder.GetPath(destinationPort.WaterAccessPoint, _hub);
 
-		var pathWorld = new List<Vector2>();
-		foreach (var point in pathGrid)
-			pathWorld.Add(IsometricTileMap.MapCoordToGlobalPosition(_tileMapLayer, point));
+		List<Vector2> outboundWorldPath = [];
+		List<Vector2> inboundWorldPath = [];
+		foreach (var point in outboundGridPath)
+			outboundWorldPath.Add(IsometricTileMap.MapCoordToGlobalPosition(_tileMapLayer, point));
+		foreach (var point in inboundGridPath)
+			inboundWorldPath.Add(IsometricTileMap.MapCoordToGlobalPosition(_tileMapLayer, point));
 
 		friendly.GlobalPosition = IsometricTileMap.MapCoordToGlobalPosition(_tileMapLayer, _hub);
-		friendly.SetPath(pathWorld.ToArray());
 
-		GD.Print($"FriendlySpawner spawned a friendly heading to {endpoint}.");
+		friendly.SetTradeRoute(destinationPort, [.. outboundWorldPath], [.. inboundWorldPath]);
+
+		friendly.OnRouteCompleted += SpawnSingle;
+
+		GD.Print($"FriendlySpawner spawned a friendly heading to {destinationPort.WaterAccessPoint}.");
+	}
+
+	public void RegisterPort(TradingPort port)
+	{
+		_ports.Add(port);
 	}
 }

@@ -1,8 +1,8 @@
 [gd_resource type="Resource" script_class="MaterialGathererStats" format=3 uid="uid://c2ke6cwkljr4f"]
 
 [ext_resource type="Script" uid="uid://6aa1ye00hd8k" path="res://Scripts/Structures/gatherers/MaterialGathererStats.cs" id="1_k1jv7"]
-[ext_resource type="Resource" uid="uid://c1h7wxlwa66wd" path="res://Resources/Animations/AnimationPacks/FarmAnimations.tres" id="1_o71oy"]
-[ext_resource type="Resource" uid="uid://mg8qtq5xp7ij" path="res://Resources/Materials/Gold.tres" id="2_kkqg3"]
+[ext_resource type="Resource" uid="uid://c1h7wxlwa66wd" path="res://Resources/Animations/AnimationPacks/Structure/FarmAnimations.tres" id="1_o71oy"]
+[ext_resource type="Resource" uid="uid://cvhvxvqfmwhiw" path="res://Resources/Materials/Coins.tres" id="2_kkqg3"]
 
 [resource]
 script = ExtResource("1_k1jv7")

@@ -1,7 +1,11 @@
 [gd_resource type="Resource" script_class="MaterialType" format=3 uid="uid://cvhvxvqfmwhiw"]
 
 [ext_resource type="Script" uid="uid://cplgdv73pm7sk" path="res://Scripts/Item System/MaterialType.cs" id="1_kypoh"]
+[ext_resource type="Texture2D" uid="uid://beegdda2lfujw" path="res://Assets/Sprites/coin.png" id="2_3kjc2"]
 
 [resource]
+resource_name = "Coins"
 script = ExtResource("1_kypoh")
+DisplayImageAtlas = ExtResource("2_3kjc2")
+DisplayImageRect = Rect2(0, 0, 32, 32)
 metadata/_custom_type_script = "uid://cplgdv73pm7sk"

@@ -189,6 +189,13 @@ public partial class StructurePlacer : Node2D
 			placedStructure.ConnectedPort = closestPort;
 			placedStructure.ClosestPortProximity = Math.Max(0, largestPortProximity-1);	
 		}
+		if (placedStructure is TradingPort placedPort)
+		{
+			for (int i = 0; i < 4; i++)
+			{
+				if (adjacentTiles[i].Biome.ResourceName.Equals("Water")) placedPort.WaterAccessPoint = adjacentTiles[i].position;
+			}
+		}
 		
 		placedStructure.Initialize(_constructionInformation.StructureStats);
 

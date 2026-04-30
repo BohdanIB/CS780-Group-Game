@@ -10,6 +10,7 @@ public partial class Main : Node2D
 	private Vector2I _hubLocation;
 
 	public static Inventory PlayerInventory { get; private set; }
+	public static GameUi UserInterface {get; private set;}
 
 	public override void _Ready()
 	{
@@ -17,11 +18,12 @@ public partial class Main : Node2D
 		//GD.Seed(MAIN_SEED);
 		GD.Randomize();
 
-
+		UserInterface = GetTree().GetRoot().GetNode<GameUi>("Main/GameUI");
 
 		var coinsMaterial = GD.Load<MaterialType>("res://Resources/Materials/Coins.tres");
 		PlayerInventory = new Inventory(); 
 		PlayerInventory.AddMaterials(coinsMaterial, 1000);
+		UserInterface.UpdateMaterialDisplays();
 
 		GD.Print("PlayerInventory hash: ", PlayerInventory.GetHashCode());
 

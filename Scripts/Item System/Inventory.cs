@@ -73,10 +73,10 @@ public class Inventory
 
     public override string ToString()
     {
-        string output = "Contents of Dictionary:";
+        string output = "Contents of Inventory:";
         foreach (MaterialType material in materialCounts.Keys)
         {
-            output += $"\n {material} : {materialCounts[material]}";
+            output += $"\n {material.ResourceName} : {materialCounts[material]}";
         }
         return output;
     }
