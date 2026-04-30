@@ -2,7 +2,7 @@
 
 [ext_resource type="Resource" uid="uid://dd6fwj0g2qjmc" path="res://Resources/Animations/AnimationPacks/Structure/BombTurretAnimation.tres" id="1_q7hkp"]
 [ext_resource type="Resource" uid="uid://bty30gj1kv0tk" path="res://Resources/Projectiles/BombStats.tres" id="2_wiufr"]
-[ext_resource type="Script" uid="uid://bawwkshhg5psh" path="res://Scripts/turrets/TurretStats.cs" id="3_iwf1g"]
+[ext_resource type="Script" uid="uid://bawwkshhg5psh" path="res://Scripts/Structures/turrets/TurretStats.cs" id="3_iwf1g"]
 
 [resource]
 script = ExtResource("3_iwf1g")
@@ -10,7 +10,7 @@ Type = 3
 AggroRadius = 150.0
 DetectableRadius = 16.0
 HitboxRadius = 16.0
-Health = 150.0
+Health = 200.0
 FireRate = 1.0
 ProjectileStats = ExtResource("2_wiufr")
 Animations = ExtResource("1_q7hkp")
