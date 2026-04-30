@@ -53,8 +53,8 @@ public partial class Enemy: PathFollower
 			_mover.Stop();
 			if(_stats.Animations != null && _animation != null)
 			{
-				_animation.SetDirection(_mover.LastDirection.Angle());
 				_animation.SetState(AnimationPackEntry.State.Death);
+				_animation.SetDirection(_mover.LastDirection.Angle());
 				string animName = _animation.Animation;
 				_animation.SpriteFrames.SetAnimationLoop(animName, false);
 				_animation.AnimationFinished += () => QueueFree();

@@ -18,8 +18,8 @@ public partial class MoverComponent : Node2D
 	private int _currentPathIndex = START_PATH_INDEX;
 	private bool _isFrozen = false;
 	private Timer _freezeTimer;
-	private float _originalSpeed;
-	private Timer _slowTimer;
+	/*private float _originalSpeed; //canal jammer implementation
+	private Timer _slowTimer;*/
 
 	public void Initialize(float speed, Node2D parent = null, bool start = true, Vector2[] moverPath = null)
 	{

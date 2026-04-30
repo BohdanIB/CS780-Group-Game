@@ -66,7 +66,7 @@ public partial class Turret : GenericStructure
 		_targeting.OnTargetSelect += (target) =>
 		{
 			var directionRads = GlobalPosition.AngleToPoint(target.GlobalPosition);
-			// _animation.SetState(AnimationPackEntry.State.Idle, directionRads); // TODO: Update when new animations roll out
+			//_animation.SetState(AnimationPackEntry.State.Idle, directionRads); // TODO: Update when new animations roll out
 			_animation.SetDirection(directionRads);
 		};
 
