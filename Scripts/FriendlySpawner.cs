@@ -67,6 +67,7 @@ public partial class FriendlySpawner : Node
 
 	private void SpawnGroup()
 	{
+		if (_ports.Count <= 0) return;
 		for (int i = 0; i < Math.Min(FriendliesPerInterval, _ports.Count); i++)
 			SpawnFriendly(_ports[_portDispatchIndex]);
 
