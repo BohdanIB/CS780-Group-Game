@@ -9,7 +9,8 @@
 [ext_resource type="PackedScene" uid="uid://dtv7kt7wo8omt" path="res://Scenes/path_follower.tscn" id="4_jjvhh"]
 [ext_resource type="PackedScene" uid="uid://5e8ht0mldott" path="res://Scenes/structure_placer.tscn" id="4_structplacer"]
 [ext_resource type="Resource" uid="uid://7o5m0v8ccfo2" path="res://Resources/ConstructionInformation/BladeTurretConstructionInformation.tres" id="5_6bp64"]
-[ext_resource type="PackedScene" uid="uid://bxnekokl8stoa" path="res://Scenes/game_ui.tscn" id="6_21xkr"]
+[ext_resource type="Resource" uid="uid://dvy7ft02jq0di" path="res://Resources/ConstructionInformation/PortConstructionInformation.tres" id="6_6bp64"]
+[ext_resource type="PackedScene" uid="uid://qvldmmxham0p" path="res://Scenes/game_ui.tscn" id="6_21xkr"]
 [ext_resource type="Resource" uid="uid://bl0fbwwq0nd80" path="res://Resources/ConstructionInformation/ElectroTurrentConstructionInformation.tres" id="6_ynf5e"]
 [ext_resource type="Script" uid="uid://dp5rjda24qxii" path="res://Scripts/EnemySpawner.cs" id="7_6bp64"]
 [ext_resource type="Script" uid="uid://c7j48ea8ghddd" path="res://Scripts/CameraController.cs" id="7_344ge"]
@@ -17,11 +18,11 @@
 [ext_resource type="Resource" uid="uid://wsiscs3vetad" path="res://Resources/ConstructionInformation/BombTurretConstructionInformation.tres" id="8_d1ilt"]
 [ext_resource type="PackedScene" uid="uid://bxnd3hgmx5vi6" path="res://Scenes/Components/spawner_component.tscn" id="10_wsu2k"]
 [ext_resource type="Script" uid="uid://cxywbq0qfpgfg" path="res://Scripts/FriendlySpawner.cs" id="14_jkdf5"]
+[ext_resource type="Script" uid="uid://doh0wtguuc37u" path="res://Scripts/GameSettings.cs" id="14_wsu2k"]
 
 [node name="Main" type="Node2D" unique_id=1822167308 node_paths=PackedStringArray("_structurePlacer")]
 script = ExtResource("1_jjgbg")
 _structurePlacer = NodePath("StructurePlacer")
-tempConstructionInformation = ExtResource("2_jjvhh")
 
 [node name="GridRenderer" parent="." unique_id=76182152 instance=ExtResource("2_bo1nx")]
 
@@ -49,9 +50,12 @@ ScenePath = "uid://cvx7nxyaghhrx"
 [node name="Enemies" type="Node2D" parent="." unique_id=1260695484]
 
 [node name="StructurePlacer" parent="." unique_id=1843712961 instance=ExtResource("4_structplacer")]
-temporaryConstructionInfo = Array[Object]([ExtResource("4_21xkr"), ExtResource("5_6bp64"), ExtResource("6_ynf5e"), ExtResource("8_d1ilt"), ExtResource("7_hptm8"), ExtResource("2_jjvhh")])
+temporaryConstructionInfo = Array[Object]([ExtResource("4_21xkr"), ExtResource("5_6bp64"), ExtResource("6_ynf5e"), ExtResource("8_d1ilt"), ExtResource("7_hptm8"), ExtResource("2_jjvhh"), ExtResource("6_6bp64")])
 
 [node name="PlayArea" parent="." unique_id=1275724900 instance=ExtResource("3_8gbba")]
 
 [node name="FriendlySpawner" type="Node" parent="." unique_id=53342767]
 script = ExtResource("14_jkdf5")
+
+[node name="Game Settings" type="Node" parent="." unique_id=1046757037]
+script = ExtResource("14_wsu2k")

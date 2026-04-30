@@ -172,6 +172,32 @@ public partial class StructurePlacer : Node2D
 			}
 		}
 
+		GroundTile[] adjacentTiles = _placementGrid.GetNeighbors(_currentGridCoordinates.X, _currentGridCoordinates.Y, considerDiagonals: false);
+		int largestPortProximity = 0;
+		TradingPort closestPort = null;
+		for (int i = 0; i < 4; i++)
+		{
+			if (adjacentTiles[i].Structure is GenericStructure adjacentStructure && adjacentStructure != null)
+			{
+				if (adjacentStructure.ConnectedPort != null && adjacentStructure.ClosestPortProximity > largestPortProximity)
+				{
+					largestPortProximity = adjacentStructure.ClosestPortProximity;
+					closestPort = adjacentStructure.ConnectedPort;
+				}
+			}
+		}
+		if (closestPort != null) {
+			placedStructure.ConnectedPort = closestPort;
+			placedStructure.ClosestPortProximity = Math.Max(0, largestPortProximity-1);	
+		}
+		if (placedStructure is TradingPort placedPort)
+		{
+			for (int i = 0; i < 4; i++)
+			{
+				if (adjacentTiles[i].Biome.ResourceName.Equals("Water")) placedPort.WaterAccessPoint = adjacentTiles[i].position;
+			}
+		}
+		
 		placedStructure.Initialize(_constructionInformation.StructureStats);
 
 		// Hide turret radius after placement

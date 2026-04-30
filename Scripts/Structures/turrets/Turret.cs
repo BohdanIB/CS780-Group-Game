@@ -65,6 +65,7 @@ public partial class Turret : GenericStructure
 		// Update sprite to aim at target's direction
 		_targeting.OnTargetSelect += (target) =>
 		{
+			if(!IsInstanceValid(target)) return;
 			var directionRads = GlobalPosition.AngleToPoint(target.GlobalPosition);
 			//_animation.SetState(AnimationPackEntry.State.Idle, directionRads); // TODO: Update when new animations roll out
 			_animation.SetDirection(directionRads);

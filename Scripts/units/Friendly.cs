@@ -6,11 +6,17 @@ using System.Collections.Generic;
 
 public partial class Friendly : PathFollower
 {
+	[Signal] public delegate void OnRouteCompletedEventHandler();
 	[Export] private FriendlyStats _stats;
+	private Vector2[] _outboundPath, _inboundPath;
+	private bool _isOutbound;
+	private TradingPort _destinationPort;
+	private Inventory _storageInventory;
 
 	[ExportGroup("Types")]
 	[Export] public Groups.GroupTypes _friendlyTypes = PathFollower.TYPES | Groups.GroupTypes.Friendly;
 	[Export] public Groups.GroupTypes _enemyTypes = Groups.GroupTypes.Enemy;
+	
 	// [Export] public Groups.GroupTypes _hurtTypes = Groups.GroupTypes.Enemy;
 	// [Export] public Groups.GroupTypes _detectorTypes = Groups.GroupTypes.None;
 	// [Export] public Groups.GroupTypes _detectableTypes = Groups.GroupTypes.Enemy;
@@ -21,10 +27,50 @@ public partial class Friendly : PathFollower
 	/// <param name="stats"></param>
 	public void Initialize(FriendlyStats stats, Vector2[] path = null)
 	{
-		SetPath(path);
 		_stats = stats;
 		InitializeComponents();
 		UpdateStats();
+		_storageInventory = new();
+	}
+
+	public void SetTradeRoute(TradingPort destinationPort, Vector2[] outboundPath, Vector2[] inboundPath)
+	{
+		_outboundPath = outboundPath;
+		_inboundPath = inboundPath;
+		_destinationPort = destinationPort;
+
+		_isOutbound = true;
+		SetPath(_outboundPath);
+	}
+
+	public void EvaluatePathCompletion()
+	{
+		if (_isOutbound)
+		{
+			ArriveAtPort();
+		}
+		else
+		{
+			ArriveAtHub();
+		}
+	}
+
+	public void ArriveAtPort()
+	{
+		_destinationPort.StorageInventory.TransferContents(_storageInventory);
+
+		_isOutbound = false;
+		SetPath(_inboundPath);
+	}
+
+	public void ArriveAtHub()
+	{
+		_storageInventory.TransferContents(Main.PlayerInventory);
+		Main.UserInterface.UpdateMaterialDisplays();
+
+		EmitSignal(SignalName.OnRouteCompleted);
+
+		QueueFree();
 	}
 
 	public override void _Ready()

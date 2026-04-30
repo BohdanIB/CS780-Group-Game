@@ -4,6 +4,8 @@
 [ext_resource type="Texture2D" uid="uid://beegdda2lfujw" path="res://Assets/Sprites/coin.png" id="2_3kjc2"]
 
 [resource]
+resource_name = "Coins"
 script = ExtResource("1_kypoh")
-sprite = ExtResource("2_3kjc2")
+DisplayImageAtlas = ExtResource("2_3kjc2")
+DisplayImageRect = Rect2(0, 0, 32, 32)
 metadata/_custom_type_script = "uid://cplgdv73pm7sk"

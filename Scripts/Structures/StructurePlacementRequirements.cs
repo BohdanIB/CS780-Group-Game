@@ -11,6 +11,7 @@ public partial class StructurePlacementRequirements : Resource
 	[Export] private BiomeType[] _validPlacementBiomes;
 	[Export] private BiomeType[] _requiredAdjacentBiomes;
 	[Export] private bool _allowWaterPlacement = false;
+	[Export] private int _minimumPortProximity = -1;
 
 	public bool IsPlacementValid(GenericGrid<GroundTile> placementGrid, Vector2I placementCoordinates)
 	{
@@ -22,21 +23,27 @@ public partial class StructurePlacementRequirements : Resource
 		}
 		
 		if (!IsBiomeValid(placementTile.Biome)) return false;
-
-		BiomeType[] adjacentBiomes = new BiomeType[4];
+		
 		GroundTile[] adjacentTiles = placementGrid.GetNeighbors(placementCoordinates.X, placementCoordinates.Y, considerDiagonals: false);
+		BiomeType[] adjacentBiomes = new BiomeType[4];
+		GenericStructure[] adjacentStructures = new GenericStructure[4];
+
 		for (int i = 0; i < 4; i++)
 		{
 			adjacentBiomes[i] = adjacentTiles[i]?.Biome;
+			adjacentStructures[i] = adjacentTiles[i]?.Structure;
 		}
 		if (!AreAdjacentBiomesValid(adjacentBiomes)) return false;
-		
+		if (!IsWithinPortRange(adjacentStructures, _minimumPortProximity)) return false;
+
 		return true;
-	}
+	} 
+
 
 	public bool IsBiomeValid(BiomeType biome)
 	{
 		if (_validPlacementBiomes == null || _validPlacementBiomes.Length == 0) return true;
+
 		return Array.IndexOf(_validPlacementBiomes, biome) > -1;
 	}
 
@@ -48,5 +55,15 @@ public partial class StructurePlacementRequirements : Resource
 		}
 
 		return true;
+	}
+
+	public bool IsWithinPortRange(GenericStructure[] adjacentStructures, int requiredProximity)
+	{
+		if (_minimumPortProximity <= 0) return true;
+		foreach (GenericStructure structure in adjacentStructures)
+		{
+			if (structure != null && structure.ClosestPortProximity > requiredProximity) return true;
+		}
+		return false;
 	}
 }

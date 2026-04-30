@@ -5,6 +5,7 @@ using System.Linq;
 
 public class Inventory
 {
+    public delegate void OnContentsChangedEventHandler();
     private Dictionary<MaterialType, int> materialCounts = [];
 
     public bool HasMaterial(MaterialType material)
@@ -60,4 +61,24 @@ public class Inventory
     {
         return [.. materialCounts.Keys];
     }
+
+    public void TransferContents(Inventory destinationInventory)
+    {
+        foreach (MaterialType material in materialCounts.Keys)
+        {
+            destinationInventory.AddMaterials(material, materialCounts[material]);
+            RemoveMaterials(material, materialCounts[material]);
+        }
+    }
+
+    public override string ToString()
+    {
+        string output = "Contents of Inventory:";
+        foreach (MaterialType material in materialCounts.Keys)
+        {
+            output += $"\n {material.ResourceName} : {materialCounts[material]}";
+        }
+        return output;
+    }
+
 }

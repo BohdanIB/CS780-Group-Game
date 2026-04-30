@@ -15,5 +15,4 @@ humidityGenerationRange = Vector2(0, 0)
 elevationGenerationRange = Vector2(0, 0)
 temperatureGenerationRange = Vector2(0, 0)
 harvestableMaterials = null
-isWater = true
 metadata/_custom_type_script = "uid://dff1fbgdyals4"

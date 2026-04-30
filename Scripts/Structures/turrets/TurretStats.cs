@@ -26,8 +26,8 @@ public partial class TurretStats : StructureStats
 	[Export] public float AggroRadius, DetectableRadius, HitboxRadius;
 	[Export] public float Health;
 	[Export] public float FireRate; // shots per second, so (1/FireRate) will give you the time between shots for this turret.
-	[Export] public ProjectileStats ProjectileStats;
-	[Export] public AnimationPack Animations;
+	[Export] public ProjectileStats ProjectileStats; 
+	
 
 	[Export] public int Cost;
 
