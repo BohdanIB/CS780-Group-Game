@@ -1,0 +1,37 @@
+[gd_resource type="Resource" script_class="ConstructionInformation" format=3 uid="uid://gsx0xjup0i63"]
+
+[ext_resource type="Texture2D" uid="uid://dlil1k8prac6y" path="res://Assets/Sprites/LumberjackSprites.png" id="1_mh2v1"]
+[ext_resource type="Resource" uid="uid://bnpf2tfftoyg7" path="res://Resources/Terrain/Swamp.tres" id="2_3lfh0"]
+[ext_resource type="Script" uid="uid://xqmubjkmtno0" path="res://Scripts/Structures/StructurePlacementRequirements.cs" id="2_b5e7j"]
+[ext_resource type="Resource" uid="uid://cvhvxvqfmwhiw" path="res://Resources/Materials/Coins.tres" id="2_evtt0"]
+[ext_resource type="Resource" uid="uid://ofawk8jjvbja" path="res://Resources/Terrain/Jungle.tres" id="3_evtt0"]
+[ext_resource type="PackedScene" uid="uid://yxa7mihcwpii" path="res://Scenes/Structures/material_gatherer.tscn" id="3_nylxx"]
+[ext_resource type="Script" uid="uid://cyuxxj1ajju4u" path="res://Scripts/Item System/MaterialRequirements.cs" id="3_tgvx2"]
+[ext_resource type="Resource" uid="uid://dcxl5gj2gdxet" path="res://Resources/Materials/Gatherers/LumberjackStats.tres" id="4_hrqc2"]
+[ext_resource type="Resource" uid="uid://xr3cl5h2rxfa" path="res://Resources/Terrain/Plains.tres" id="4_tgvx2"]
+[ext_resource type="Resource" uid="uid://dxmt4lkaw6sf1" path="res://Resources/Terrain/Mountain.tres" id="5_edrcy"]
+[ext_resource type="Script" uid="uid://c5a4sxpqqv1sn" path="res://Scripts/Structures/ConstructionInformation.cs" id="5_mh2v1"]
+
+[sub_resource type="Resource" id="Resource_edrcy"]
+script = ExtResource("3_tgvx2")
+_requirements = Dictionary[Object, int]({
+ExtResource("2_evtt0"): 50
+})
+metadata/_custom_type_script = "uid://cyuxxj1ajju4u"
+
+[sub_resource type="Resource" id="Resource_2to2x"]
+script = ExtResource("2_b5e7j")
+_validPlacementBiomes = Array[Object]([ExtResource("2_3lfh0"), ExtResource("3_evtt0"), ExtResource("4_tgvx2"), ExtResource("5_edrcy")])
+_requiredAdjacentBiomes = null
+_minimumPortProximity = 1
+metadata/_custom_type_script = "uid://xqmubjkmtno0"
+
+[resource]
+script = ExtResource("5_mh2v1")
+DisplayImageAtlas = ExtResource("1_mh2v1")
+DisplayImageRect = Rect2(0, 0, 64, 64)
+PlacementRequirements = SubResource("Resource_2to2x")
+MaterialRequirements = SubResource("Resource_edrcy")
+Structure = ExtResource("3_nylxx")
+StructureStats = ExtResource("4_hrqc2")
+metadata/_custom_type_script = "uid://c5a4sxpqqv1sn"

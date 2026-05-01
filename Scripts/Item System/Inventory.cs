@@ -20,6 +20,7 @@ public class Inventory
 
     public int GetMaterialCount(MaterialType material)
     {
+        if (material == null) return 0;
         if (!materialCounts.TryGetValue(material, out int value)) return 0;
 
         return value;
@@ -27,6 +28,7 @@ public class Inventory
 
     public void AddMaterials(MaterialType material, int count)
     {
+        if (material == null || count == 0) return;
         if (GetMaterialCount(material) == 0)
         {
             materialCounts[material] = count;

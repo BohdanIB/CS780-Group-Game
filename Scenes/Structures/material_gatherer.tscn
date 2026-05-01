@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://bu5bt5d2jv3iu" path="res://Scenes/Components/hurt_component.tscn" id="3_ajy1o"]
 [ext_resource type="PackedScene" uid="uid://c1wk4dy8g10qq" path="res://Scenes/Components/animation_component.tscn" id="4_86fob"]
 [ext_resource type="Texture2D" uid="uid://btcjokbaebndn" path="res://Assets/Sprites/RightArrow.png" id="5_86fob"]
-[ext_resource type="Script" uid="uid://wddxndbtg025" path="res://Scenes/Structures/MaterialGenerationParticle.cs" id="6_id7gx"]
+[ext_resource type="Script" uid="uid://wddxndbtg025" path="res://Scripts/Structures/gatherers/MaterialGenerationParticle.cs" id="6_id7gx"]
 
 [node name="MaterialGatherer" type="Node2D" unique_id=109589947 node_paths=PackedStringArray("_gatherTimer", "_particle", "_health", "_hurt", "_animation")]
 script = ExtResource("1_5iknt")
@@ -28,6 +28,7 @@ visible = false
 z_index = 6
 z_as_relative = false
 texture = ExtResource("5_86fob")
+region_enabled = true
 script = ExtResource("6_id7gx")
 _displayTime = 1.5
 _initialAlpha = 1

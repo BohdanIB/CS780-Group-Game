@@ -22,7 +22,7 @@ public partial class StructurePlacer : Node2D
 	private bool _isPlacementValid = false;
 
 	[Export] public ConstructionInformation[] temporaryConstructionInfo; //TODO: Remove
-	private int infoIndex = -1;
+	private int infoIndex = 0;
 
 	public override void _Ready()
 	{
@@ -96,7 +96,10 @@ public partial class StructurePlacer : Node2D
 		if (Input.IsActionJustPressed("ToggleTurretPlacementMode")) // TODO: remove.  This is just a placeholder before UI is integrated
 		{
 			GD.Print(infoIndex);
-			infoIndex = (infoIndex+1) % temporaryConstructionInfo.Length;
+			if (_constructionInformation != null) 
+			{
+				infoIndex = (infoIndex+1) % temporaryConstructionInfo.Length;
+			}
 			SetStructure(temporaryConstructionInfo[infoIndex]);
 		}
 
@@ -154,15 +157,18 @@ public partial class StructurePlacer : Node2D
 
 	private void PlaceStructure()
 	{
-		_constructionInformation.MaterialRequirements?.SpendMaterials(_paymentInventory);
+		bool? paymentOutcome = _constructionInformation.MaterialRequirements?.SpendMaterials(_paymentInventory);
+		if (paymentOutcome != null && paymentOutcome == false) return;
 
 		// Notify GameUI to update the coin label
 		var gameUi = GetTree().GetRoot().GetNode<GameUi>("Main/GameUI");
-		gameUi?.UpdateCoinDisplay();
+		gameUi?.UpdateMaterialDisplays();
 
 		GenericStructure placedStructure = _constructionInformation.Structure.Instantiate<GenericStructure>();
 		placedStructure.GlobalPosition = IsometricTileMap.MapCoordToGlobalPosition(_placementTilemap, _currentGridCoordinates);
-		_placementGrid.GetGridValueOrDefault(_currentGridCoordinates.X, _currentGridCoordinates.Y).Structure = placedStructure;
+		
+		GroundTile placementTile = _placementGrid.GetGridValueOrDefault(_currentGridCoordinates.X, _currentGridCoordinates.Y);
+		placementTile.Structure = placedStructure;
 
 		foreach (OptionSelector selector in _optionSelectors)
 		{
@@ -198,7 +204,7 @@ public partial class StructurePlacer : Node2D
 			}
 		}
 		
-		placedStructure.Initialize(_constructionInformation.StructureStats);
+		placedStructure.Initialize(_constructionInformation.StructureStats, placementTile);
 
 		// Hide turret radius after placement
 		if (placedStructure is Turret turret)

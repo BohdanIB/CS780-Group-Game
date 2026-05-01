@@ -1,0 +1,39 @@
+[gd_resource type="SpriteFrames" format=3 uid="uid://b160puyw7hdee"]
+
+[ext_resource type="Texture2D" uid="uid://dlil1k8prac6y" path="res://Assets/Sprites/LumberjackSprites.png" id="1_mxcoj"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mxcoj"]
+atlas = ExtResource("1_mxcoj")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yl85a"]
+atlas = ExtResource("1_mxcoj")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2om6p"]
+atlas = ExtResource("1_mxcoj")
+region = Rect2(128, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_k5j1n"]
+atlas = ExtResource("1_mxcoj")
+region = Rect2(192, 0, 64, 64)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mxcoj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yl85a")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2om6p")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_k5j1n")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]

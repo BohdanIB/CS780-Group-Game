@@ -4,7 +4,7 @@ using System;
 public partial class SideMenuContainer : PanelContainer
 {
 	[Signal]
-	public delegate void TurretSelectedEventHandler(TurretStats.Category turretType);
+	public delegate void StructureSelectedEventHandler(ConstructionInformation constructionInformation);
 	
 
 	private bool _open = false;
@@ -16,26 +16,6 @@ public partial class SideMenuContainer : PanelContainer
 		MouseFilter = Control.MouseFilterEnum.Pass;
 		GD.Print("SideMenuContainer READY fired");
 		GD.Print("Ballista path exists? " + (GetNodeOrNull<Button>("VBoxContainer/HBoxContainer/VBoxContainer/BallistaTurret") != null));
-
-
-		var blade    = GetNode<Button>("VBoxContainer/HBoxContainer/VBoxContainer/BladeTurret");
-		var ballista = GetNode<Button>("VBoxContainer/HBoxContainer/VBoxContainer2/BallistaTurret");
-		var bomb = GetNode<Button>("VBoxContainer/HBoxContainer2/VBoxContainer3/BombTurret");
-		var freeze =  GetNode<Button>("VBoxContainer/HBoxContainer2/VBoxContainer4/FreezeTurret");
-		var electro =  GetNode<Button>("VBoxContainer/HBoxContainer3/VBoxContainer5/ElectroTurret");
-		
-		blade.Pressed += () => GD.Print(">>> BLADE BUTTON CLICKED <<<");
-		
-		bomb.Pressed += () => GD.Print(">>> BOMB BUTTON CLICKED <<<");
-
-		ballista.Pressed += () => OnTurretButtonPressed(TurretStats.Category.Ballista);
-		blade.Pressed += () => OnTurretButtonPressed(TurretStats.Category.Blade);
-		bomb.Pressed += () => OnTurretButtonPressed(TurretStats.Category.Bomb);
-		electro.Pressed += () => OnTurretButtonPressed(TurretStats.Category.Electro);
-		freeze.Pressed += () => OnTurretButtonPressed(TurretStats.Category.Freeze);
-
-
-		
 	}
 
 	private void SetHiddenState()
@@ -71,10 +51,10 @@ else
 		_open = !_open;
 	}
 
-	private void OnTurretButtonPressed(TurretStats.Category turretType)
+	public void OnStructureButtonPressed(ConstructionInformation constructionInformation)
 	{
-		GD.Print($"Button pressed, emitting TurretSelected: {turretType}");
-		EmitSignal(SignalName.TurretSelected, (int)turretType);
+		GD.Print($"Button pressed, emitting selected ConstructionInformation: {constructionInformation}");
+		EmitSignal(SignalName.StructureSelected, constructionInformation);
 	}
 
 	public override void _Process(double delta)

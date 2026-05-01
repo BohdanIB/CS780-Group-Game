@@ -1,0 +1,36 @@
+[gd_resource type="Resource" script_class="ConstructionInformation" format=3 uid="uid://ctd23x3lnt62"]
+
+[ext_resource type="Texture2D" uid="uid://ckgiuhn8tkxvy" path="res://Assets/Sprites/RubberFactorySprites.png" id="1_me0jp"]
+[ext_resource type="Resource" uid="uid://ofawk8jjvbja" path="res://Resources/Terrain/Jungle.tres" id="2_hvbq0"]
+[ext_resource type="Script" uid="uid://xqmubjkmtno0" path="res://Scripts/Structures/StructurePlacementRequirements.cs" id="2_me0jp"]
+[ext_resource type="Resource" uid="uid://cvhvxvqfmwhiw" path="res://Resources/Materials/Coins.tres" id="2_xnq6j"]
+[ext_resource type="PackedScene" uid="uid://yxa7mihcwpii" path="res://Scenes/Structures/material_gatherer.tscn" id="3_hvbq0"]
+[ext_resource type="Resource" uid="uid://dfk6ujpa1i1xn" path="res://Resources/Materials/Stone.tres" id="3_iv7mv"]
+[ext_resource type="Resource" uid="uid://imihy5kss2ls" path="res://Resources/Materials/Gatherers/RubberFactoryStats.tres" id="4_fpbnl"]
+[ext_resource type="Script" uid="uid://cyuxxj1ajju4u" path="res://Scripts/Item System/MaterialRequirements.cs" id="4_yxtn0"]
+[ext_resource type="Script" uid="uid://c5a4sxpqqv1sn" path="res://Scripts/Structures/ConstructionInformation.cs" id="5_xnq6j"]
+
+[sub_resource type="Resource" id="Resource_ebx5s"]
+script = ExtResource("4_yxtn0")
+_requirements = Dictionary[Object, int]({
+ExtResource("2_xnq6j"): 125,
+ExtResource("3_iv7mv"): 25
+})
+metadata/_custom_type_script = "uid://cyuxxj1ajju4u"
+
+[sub_resource type="Resource" id="Resource_2to2x"]
+script = ExtResource("2_me0jp")
+_validPlacementBiomes = Array[Object]([ExtResource("2_hvbq0")])
+_requiredAdjacentBiomes = null
+_minimumPortProximity = 1
+metadata/_custom_type_script = "uid://xqmubjkmtno0"
+
+[resource]
+script = ExtResource("5_xnq6j")
+DisplayImageAtlas = ExtResource("1_me0jp")
+DisplayImageRect = Rect2(0, 0, 64, 64)
+PlacementRequirements = SubResource("Resource_2to2x")
+MaterialRequirements = SubResource("Resource_ebx5s")
+Structure = ExtResource("3_hvbq0")
+StructureStats = ExtResource("4_fpbnl")
+metadata/_custom_type_script = "uid://c5a4sxpqqv1sn"

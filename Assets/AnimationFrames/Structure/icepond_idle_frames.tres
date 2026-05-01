@@ -1,0 +1,14 @@
+[gd_resource type="SpriteFrames" format=3 uid="uid://6iljac2jugxh"]
+
+[ext_resource type="Texture2D" uid="uid://cfpgxdgar1pag" path="res://Assets/Sprites/IcePondSprite.png" id="1_jih0k"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_jih0k")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]

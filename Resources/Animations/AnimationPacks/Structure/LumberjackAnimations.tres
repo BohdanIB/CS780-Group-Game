@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="AnimationPack" format=3 uid="uid://dts3rcinlpruf"]
+
+[ext_resource type="Script" uid="uid://b8k2bijsjc1da" path="res://Scripts/Animation/AnimationPack.cs" id="1_esrea"]
+[ext_resource type="Resource" uid="uid://5krw8itfo47" path="res://Resources/Animations/AnimationPackEntries/Structure/lumberjack_idle_animation_entry.tres" id="1_mgdft"]
+
+[resource]
+script = ExtResource("1_esrea")
+Animations = Array[Object]([ExtResource("1_mgdft")])
+metadata/_custom_type_script = "uid://b8k2bijsjc1da"

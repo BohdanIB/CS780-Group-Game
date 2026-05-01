@@ -19,6 +19,7 @@ public partial class GenericStructure: Node2D
 	}
 
 	public const Groups.GroupTypes TYPES = Groups.GroupTypes.Structure;
+	protected GroundTile _locationTile;
 
 	[ExportGroup("Components")]
 	[Export] protected HealthComponent _health;
@@ -28,9 +29,10 @@ public partial class GenericStructure: Node2D
 	public TradingPort ConnectedPort {get; set;}
 	public int ClosestPortProximity {get; set;}
 
-	public virtual void Initialize(StructureStats stats)
+	public virtual void Initialize(StructureStats stats, GroundTile tile)
 	{
 		if (stats != null) _animation.Initialize(stats.Animations, AnimationPackEntry.State.Idle);
+		_locationTile = tile;
 	}
 
 	public override void _Ready()

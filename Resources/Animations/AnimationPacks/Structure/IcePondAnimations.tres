@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="AnimationPack" format=3 uid="uid://qp6ba36tfxr6"]
+
+[ext_resource type="Script" uid="uid://b8k2bijsjc1da" path="res://Scripts/Animation/AnimationPack.cs" id="1_84juu"]
+[ext_resource type="Resource" uid="uid://dqld3jpx6wrdf" path="res://Resources/Animations/AnimationPackEntries/Structure/icepond_idle_animation_entry.tres" id="1_r8bxr"]
+
+[resource]
+script = ExtResource("1_84juu")
+Animations = Array[Object]([ExtResource("1_r8bxr")])
+metadata/_custom_type_script = "uid://b8k2bijsjc1da"

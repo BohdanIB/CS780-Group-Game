@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="BiomeType" format=3 uid="uid://dxmt4lkaw6sf1"]
 
-[ext_resource type="Script" path="res://Scripts/World/BiomeTileType.cs" id="1_h3of7"]
+[ext_resource type="Script" uid="uid://b1nppbqcimkor" path="res://Scripts/World/BiomeTileType.cs" id="1_h3of7"]
 [ext_resource type="Script" uid="uid://dff1fbgdyals4" path="res://Scripts/World/BiomeType.cs" id="1_uscgg"]
 
 [sub_resource type="Resource" id="Resource_30gny"]

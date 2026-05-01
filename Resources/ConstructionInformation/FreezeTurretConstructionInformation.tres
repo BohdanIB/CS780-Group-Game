@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ConstructionInformation" format=3 uid="uid://2labqj7skqls"]
+[gd_resource type="Resource" script_class="ConstructionInformation" format=3 uid="uid://ch81rrx47lt2t"]
 
 [ext_resource type="Texture2D" uid="uid://58os2uojn07s" path="res://Assets/Sprites/isometric_freeze_turret.png" id="1_36wco"]
 [ext_resource type="Script" uid="uid://c5a4sxpqqv1sn" path="res://Scripts/Structures/ConstructionInformation.cs" id="1_15507"]
@@ -6,11 +6,13 @@
 [ext_resource type="PackedScene" uid="uid://b2w8csm5vypb0" path="res://Scenes/Structures/turret.tscn" id="2_36wco"]
 [ext_resource type="Script" uid="uid://cyuxxj1ajju4u" path="res://Scripts/Item System/MaterialRequirements.cs" id="2_sm2ot"]
 [ext_resource type="Resource" uid="uid://b7bplpg3mt7ea" path="res://Resources/Turret/FreezeTurretStats.tres" id="3_sm2ot"]
+[ext_resource type="Resource" uid="uid://c4apyxum25wtb" path="res://Resources/Materials/Ice.tres" id="3_ujmic"]
 
 [sub_resource type="Resource" id="Resource_3c2qf"]
 script = ExtResource("2_sm2ot")
 _requirements = Dictionary[Object, int]({
-ExtResource("2_3c2qf"): 300
+ExtResource("2_3c2qf"): 300,
+ExtResource("3_ujmic"): 15
 })
 metadata/_custom_type_script = "uid://cyuxxj1ajju4u"
 

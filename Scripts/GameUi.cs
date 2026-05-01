@@ -2,12 +2,15 @@ using Godot;
 
 public partial class GameUi : CanvasLayer
 {
+	private const int COIN_MATERIAL_INDEX = 0;
+	[Export] public Label[] materialDisplays;
+	[Export] public MaterialType[] materialsToDisplay;
+
 	private Label timerLabel;
 	private float elapsedTime = 0f;
 	private Label killCountLabel;
 	private int enemyKillCount = 0;
-	//private int coins = 1000;
-	private Label coinCountLabel;
+
 	private Label _warningLabel;	
 	private Label _BaseHPLabel;
 
@@ -16,32 +19,23 @@ public partial class GameUi : CanvasLayer
 
 	private bool game_over = false;
 
-	private MaterialType _coinsMaterial;
-
 	public override void _Ready()
 	{
 		var sideMenu = GetNode<SideMenuContainer>("SideMenuContainer");
 		_warningLabel = GetNode<Label>("UI/WarningLabel");
 
-		_coinsMaterial = GD.Load<MaterialType>("res://Resources/Materials/Coins.tres");
 		
 		var structurePlacer = GetNode<StructurePlacer>("../StructurePlacer");
-		coinCountLabel = GetNode<Label>("UI/Panel/HBoxContainer/CoinCount/CoinCountLabel");
+
 
 		_BaseHPLabel = GetNode<Label>("UI/Panel/HBoxContainer/BaseHealth/BaseHPLabel");
 		_BaseHPLabel.Text = $"{StartingBaseHP}";
 		
 		killCountLabel = GetNode<Label>("UI/Panel/HBoxContainer/KillCount/KillCountLabel");
-		coinCountLabel.Text = "1000";
 
 		
 		
-		sideMenu.TurretSelected += (turretType) =>
-		{
-			structurePlacer.SetStructure(
-				structurePlacer.temporaryConstructionInfo[(int)turretType]
-			);
-		};
+		sideMenu.StructureSelected += structurePlacer.SetStructure;
 
 
 		_warningLabel.MouseFilter = Control.MouseFilterEnum.Ignore;
@@ -67,7 +61,7 @@ public partial class GameUi : CanvasLayer
 	{
 		enemyKillCount++;
 		AddCoins(25);
-		killCountLabel.Text = $"Kills: {enemyKillCount}";
+		killCountLabel.Text = $"{enemyKillCount}";
 	}
 
 
@@ -79,14 +73,12 @@ public partial class GameUi : CanvasLayer
 		screen.onVictory();   
 	}
 
-	public void UpdateCoinDisplay()
-{
-	coinCountLabel.Text = $"{Main.PlayerInventory.GetMaterialCount(_coinsMaterial)}";
-}
-
 	public void UpdateMaterialDisplays()
 	{
-		UpdateCoinDisplay();
+		for (int i = 0; i < materialsToDisplay.Length; i++)
+		{
+			materialDisplays[i].Text = Main.PlayerInventory.GetMaterialCount(materialsToDisplay[i]) + "";
+		}
 	}
 
 	
@@ -109,18 +101,10 @@ public partial class GameUi : CanvasLayer
 		}
 	}
 
-	public bool TryToSpendCoins(int amount)
-	{
-		if (!Main.PlayerInventory.HasMaterial(_coinsMaterial, amount)) return false;
-		Main.PlayerInventory.RemoveMaterials(_coinsMaterial, amount);
-		coinCountLabel.Text = $"{Main.PlayerInventory.GetMaterialCount(_coinsMaterial)}";
-		return true;
-	}
-
 		public void AddCoins(int amount)
 	{
-		Main.PlayerInventory.AddMaterials(_coinsMaterial, amount);
-		coinCountLabel.Text = $"{Main.PlayerInventory.GetMaterialCount(_coinsMaterial)}";
+		Main.PlayerInventory.AddMaterials(materialsToDisplay[COIN_MATERIAL_INDEX], amount);
+		UpdateMaterialDisplays();
 	}
 
 	public void TakeDamage(int amount)

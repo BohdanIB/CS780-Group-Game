@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="MaterialType" format=3 uid="uid://divgtfj6qt882"]
+
+[ext_resource type="Script" uid="uid://cplgdv73pm7sk" path="res://Scripts/Item System/MaterialType.cs" id="1_760yy"]
+[ext_resource type="Texture2D" uid="uid://rp7lo1igaill" path="res://Assets/Sprites/MaterialSprites.png" id="1_es4tu"]
+
+[resource]
+resource_name = "Rubber"
+script = ExtResource("1_760yy")
+DisplayImageAtlas = ExtResource("1_es4tu")
+DisplayImageRect = Rect2(96, 0, 32, 32)
+metadata/_custom_type_script = "uid://cplgdv73pm7sk"
