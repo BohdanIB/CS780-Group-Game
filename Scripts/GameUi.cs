@@ -2,8 +2,10 @@ using Godot;
 
 public partial class GameUi : CanvasLayer
 {
+	private const int COIN_MATERIAL_INDEX = 0;
 	[Export] public Label[] materialDisplays;
 	[Export] public MaterialType[] materialsToDisplay;
+
 	private Label timerLabel;
 	private float elapsedTime = 0f;
 	private Label killCountLabel;
@@ -16,8 +18,6 @@ public partial class GameUi : CanvasLayer
 	private int currentBaseHP = StartingBaseHP;
 
 	private bool game_over = false;
-
-	private MaterialType _coinsMaterial;
 
 	public override void _Ready()
 	{
@@ -35,12 +35,7 @@ public partial class GameUi : CanvasLayer
 
 		
 		
-		sideMenu.TurretSelected += (turretType) =>
-		{
-			structurePlacer.SetStructure(
-				structurePlacer.temporaryConstructionInfo[(int)turretType]
-			);
-		};
+		sideMenu.StructureSelected += structurePlacer.SetStructure;
 
 
 		_warningLabel.MouseFilter = Control.MouseFilterEnum.Ignore;
@@ -106,17 +101,9 @@ public partial class GameUi : CanvasLayer
 		}
 	}
 
-	public bool TryToSpendCoins(int amount)
-	{
-		if (!Main.PlayerInventory.HasMaterial(_coinsMaterial, amount)) return false;
-		Main.PlayerInventory.RemoveMaterials(_coinsMaterial, amount);
-		UpdateMaterialDisplays();
-		return true;
-	}
-
 		public void AddCoins(int amount)
 	{
-		Main.PlayerInventory.AddMaterials(_coinsMaterial, amount);
+		Main.PlayerInventory.AddMaterials(materialsToDisplay[COIN_MATERIAL_INDEX], amount);
 		UpdateMaterialDisplays();
 	}
 

@@ -22,7 +22,7 @@ public partial class StructurePlacer : Node2D
 	private bool _isPlacementValid = false;
 
 	[Export] public ConstructionInformation[] temporaryConstructionInfo; //TODO: Remove
-	private int infoIndex = -1;
+	private int infoIndex = 0;
 
 	public override void _Ready()
 	{
@@ -96,7 +96,10 @@ public partial class StructurePlacer : Node2D
 		if (Input.IsActionJustPressed("ToggleTurretPlacementMode")) // TODO: remove.  This is just a placeholder before UI is integrated
 		{
 			GD.Print(infoIndex);
-			infoIndex = (infoIndex+1) % temporaryConstructionInfo.Length;
+			if (_constructionInformation != null) 
+			{
+				infoIndex = (infoIndex+1) % temporaryConstructionInfo.Length;
+			}
 			SetStructure(temporaryConstructionInfo[infoIndex]);
 		}
 
@@ -154,7 +157,8 @@ public partial class StructurePlacer : Node2D
 
 	private void PlaceStructure()
 	{
-		_constructionInformation.MaterialRequirements?.SpendMaterials(_paymentInventory);
+		bool? paymentOutcome = _constructionInformation.MaterialRequirements?.SpendMaterials(_paymentInventory);
+		if (paymentOutcome != null && paymentOutcome == false) return;
 
 		// Notify GameUI to update the coin label
 		var gameUi = GetTree().GetRoot().GetNode<GameUi>("Main/GameUI");

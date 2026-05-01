@@ -1,16 +1,18 @@
-[gd_resource type="Resource" script_class="ConstructionInformation" format=3 uid="uid://wsiscs3vetad"]
+[gd_resource type="Resource" script_class="ConstructionInformation" format=3 uid="uid://dcvsv2tsnnja2"]
 
 [ext_resource type="Texture2D" uid="uid://cxou4j7lrcklx" path="res://Assets/Sprites/isometric_bomb_turret.png" id="1_minwk"]
 [ext_resource type="Script" uid="uid://c5a4sxpqqv1sn" path="res://Scripts/Structures/ConstructionInformation.cs" id="1_t6kwh"]
 [ext_resource type="Script" uid="uid://cyuxxj1ajju4u" path="res://Scripts/Item System/MaterialRequirements.cs" id="2_1xt40"]
 [ext_resource type="Resource" uid="uid://cvhvxvqfmwhiw" path="res://Resources/Materials/Coins.tres" id="2_gpya1"]
 [ext_resource type="PackedScene" uid="uid://b2w8csm5vypb0" path="res://Scenes/Structures/turret.tscn" id="2_r7ou3"]
-[ext_resource type="Resource" uid="uid://csn3po3hxc2oa" path="res://Resources/Turret/BombTurretStats.tres" id="3_1xt40"]
+[ext_resource type="Resource" path="res://Resources/Turret/BombTurretStats.tres" id="3_1xt40"]
+[ext_resource type="Resource" uid="uid://dfk6ujpa1i1xn" path="res://Resources/Materials/Stone.tres" id="3_gpya1"]
 
 [sub_resource type="Resource" id="Resource_gpya1"]
 script = ExtResource("2_1xt40")
 _requirements = Dictionary[Object, int]({
-ExtResource("2_gpya1"): 150
+ExtResource("2_gpya1"): 150,
+ExtResource("3_gpya1"): 20
 })
 metadata/_custom_type_script = "uid://cyuxxj1ajju4u"
 

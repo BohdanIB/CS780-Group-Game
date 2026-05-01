@@ -15,8 +15,19 @@
 [ext_resource type="Resource" uid="uid://c4apyxum25wtb" path="res://Resources/Materials/Ice.tres" id="5_f26dr"]
 [ext_resource type="Script" uid="uid://e0mn8kx5s333" path="res://Scripts/QuitButton.cs" id="6_3t1kc"]
 [ext_resource type="Resource" uid="uid://divgtfj6qt882" path="res://Resources/Materials/Rubber.tres" id="6_nmm1h"]
-[ext_resource type="PackedScene" uid="uid://kadpj6pgjsg3" path="res://Scenes/option_selector.tscn" id="11_dvsk4"]
+[ext_resource type="Script" uid="uid://dcyftjgienmnr" path="res://Scripts/ConstructionButton.cs" id="10_6nxe7"]
+[ext_resource type="Resource" uid="uid://7o5m0v8ccfo2" path="res://Resources/ConstructionInformation/BladeTurretConstructionInformation.tres" id="11_sq00d"]
+[ext_resource type="Resource" uid="uid://nbjv8l8rk1xm" path="res://Resources/ConstructionInformation/BallistaTurretConstructionInformation.tres" id="12_7w3vj"]
 [ext_resource type="Texture2D" uid="uid://rp7lo1igaill" path="res://Assets/Sprites/MaterialSprites.png" id="12_74ohg"]
+[ext_resource type="Resource" uid="uid://dcvsv2tsnnja2" path="res://Resources/ConstructionInformation/BombTurretConstructionInformation.tres" id="13_2pit0"]
+[ext_resource type="Resource" uid="uid://ch81rrx47lt2t" path="res://Resources/ConstructionInformation/FreezeTurretConstructionInformation.tres" id="14_1gkst"]
+[ext_resource type="Resource" uid="uid://dpky1r6fa7o1n" path="res://Resources/ConstructionInformation/ElectroTurrentConstructionInformation.tres" id="15_ou877"]
+[ext_resource type="Resource" uid="uid://dvy7ft02jq0di" path="res://Resources/ConstructionInformation/PortConstructionInformation.tres" id="16_ou877"]
+[ext_resource type="Resource" uid="uid://x2da3uinl30n" path="res://Resources/ConstructionInformation/FarmConstructionInformation.tres" id="17_gwcid"]
+[ext_resource type="Resource" uid="uid://gsx0xjup0i63" path="res://Resources/ConstructionInformation/LumberjackConstructionInformation.tres" id="18_yqhrj"]
+[ext_resource type="Resource" uid="uid://c1ihc7a8crl43" path="res://Resources/ConstructionInformation/MineConstructionInformation.tres" id="19_0asng"]
+[ext_resource type="Resource" uid="uid://ca71iqluscwai" path="res://Resources/ConstructionInformation/IcePondConstructionInformation.tres" id="20_eph8b"]
+[ext_resource type="Resource" uid="uid://ctd23x3lnt62" path="res://Resources/ConstructionInformation/RubberFactoryConstructionInformation.tres" id="21_e1rtb"]
 
 [sub_resource type="Theme" id="Theme_bw2rt"]
 
@@ -25,6 +36,26 @@ load_path = "res://.godot/imported/Parchment.jpg-fe8f57644b03f8173c5b76cb768c05f
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_3t1kc"]
 texture = SubResource("CompressedTexture2D_gjn1n")
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ou877"]
+atlas = ExtResource("12_74ohg")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gwcid"]
+atlas = ExtResource("12_74ohg")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yqhrj"]
+atlas = ExtResource("12_74ohg")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0asng"]
+atlas = ExtResource("12_74ohg")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_eph8b"]
+atlas = ExtResource("12_74ohg")
+region = Rect2(64, 0, 32, 32)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_y8vuf"]
 bg_color = Color(0, 0, 0, 1)
@@ -115,7 +146,8 @@ script = ExtResource("1_bw2rt")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="SideMenuContainer" unique_id=1335139940]
 layout_mode = 2
-size_flags_horizontal = 0
+size_flags_horizontal = 4
+size_flags_vertical = 4
 alignment = 1
 
 [node name="HBoxContainer" type="HBoxContainer" parent="SideMenuContainer/VBoxContainer" unique_id=180445247]
@@ -145,6 +177,8 @@ vertical_alignment = 1
 layout_mode = 2
 text = "Blade Turret
 "
+script = ExtResource("10_6nxe7")
+constructionInformation = ExtResource("11_sq00d")
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="SideMenuContainer/VBoxContainer/HBoxContainer" unique_id=1258693969]
 layout_mode = 2
@@ -162,10 +196,22 @@ layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 text = "75"
 
+[node name="TextureRect2" type="TextureRect" parent="SideMenuContainer/VBoxContainer/HBoxContainer/VBoxContainer2/HBoxContainer" unique_id=781016238]
+layout_mode = 2
+texture = SubResource("AtlasTexture_ou877")
+stretch_mode = 3
+
+[node name="Label2" type="Label" parent="SideMenuContainer/VBoxContainer/HBoxContainer/VBoxContainer2/HBoxContainer" unique_id=828450519]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+text = "10"
+
 [node name="BallistaTurret" type="Button" parent="SideMenuContainer/VBoxContainer/HBoxContainer/VBoxContainer2" unique_id=613986699]
 layout_mode = 2
 size_flags_horizontal = 4
 text = "Ballista Turret"
+script = ExtResource("10_6nxe7")
+constructionInformation = ExtResource("12_7w3vj")
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="SideMenuContainer/VBoxContainer" unique_id=1431012881]
 layout_mode = 2
@@ -185,9 +231,19 @@ texture = ExtResource("5_3t1kc")
 layout_mode = 2
 text = "150"
 
+[node name="TextureRect2" type="TextureRect" parent="SideMenuContainer/VBoxContainer/HBoxContainer2/VBoxContainer3/HBoxContainer" unique_id=1143070536]
+layout_mode = 2
+texture = SubResource("AtlasTexture_gwcid")
+
+[node name="Label2" type="Label" parent="SideMenuContainer/VBoxContainer/HBoxContainer2/VBoxContainer3/HBoxContainer" unique_id=1937114884]
+layout_mode = 2
+text = "20"
+
 [node name="BombTurret" type="Button" parent="SideMenuContainer/VBoxContainer/HBoxContainer2/VBoxContainer3" unique_id=1596578160]
 layout_mode = 2
 text = "Bomb Turret"
+script = ExtResource("10_6nxe7")
+constructionInformation = ExtResource("13_2pit0")
 
 [node name="VBoxContainer4" type="VBoxContainer" parent="SideMenuContainer/VBoxContainer/HBoxContainer2" unique_id=822389189]
 layout_mode = 2
@@ -203,9 +259,19 @@ texture = ExtResource("5_3t1kc")
 layout_mode = 2
 text = "300"
 
+[node name="TextureRect2" type="TextureRect" parent="SideMenuContainer/VBoxContainer/HBoxContainer2/VBoxContainer4/HBoxContainer" unique_id=1298796823]
+layout_mode = 2
+texture = SubResource("AtlasTexture_yqhrj")
+
+[node name="Label2" type="Label" parent="SideMenuContainer/VBoxContainer/HBoxContainer2/VBoxContainer4/HBoxContainer" unique_id=929905473]
+layout_mode = 2
+text = "15"
+
 [node name="FreezeTurret" type="Button" parent="SideMenuContainer/VBoxContainer/HBoxContainer2/VBoxContainer4" unique_id=471981184]
 layout_mode = 2
 text = "Freeze Turret"
+script = ExtResource("10_6nxe7")
+constructionInformation = ExtResource("14_1gkst")
 
 [node name="HBoxContainer3" type="HBoxContainer" parent="SideMenuContainer/VBoxContainer" unique_id=1373627358]
 layout_mode = 2
@@ -224,9 +290,159 @@ texture = ExtResource("5_3t1kc")
 layout_mode = 2
 text = "250"
 
+[node name="TextureRect2" type="TextureRect" parent="SideMenuContainer/VBoxContainer/HBoxContainer3/VBoxContainer5/HBoxContainer" unique_id=66735222]
+layout_mode = 2
+texture = SubResource("AtlasTexture_0asng")
+
+[node name="Label2" type="Label" parent="SideMenuContainer/VBoxContainer/HBoxContainer3/VBoxContainer5/HBoxContainer" unique_id=1249133345]
+layout_mode = 2
+text = "25"
+
 [node name="ElectroTurret" type="Button" parent="SideMenuContainer/VBoxContainer/HBoxContainer3/VBoxContainer5" unique_id=553572525]
 layout_mode = 2
 text = "Electro Turret"
+script = ExtResource("10_6nxe7")
+constructionInformation = ExtResource("15_ou877")
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="SideMenuContainer/VBoxContainer" unique_id=922795025]
+layout_mode = 2
+
+[node name="VBoxContainer3" type="VBoxContainer" parent="SideMenuContainer/VBoxContainer/HBoxContainer4" unique_id=979579460]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SideMenuContainer/VBoxContainer/HBoxContainer4/VBoxContainer3" unique_id=1031472567]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="TextureRect" type="TextureRect" parent="SideMenuContainer/VBoxContainer/HBoxContainer4/VBoxContainer3/HBoxContainer" unique_id=1611076925]
+layout_mode = 2
+texture = ExtResource("5_3t1kc")
+
+[node name="Label" type="Label" parent="SideMenuContainer/VBoxContainer/HBoxContainer4/VBoxContainer3/HBoxContainer" unique_id=1716821833]
+layout_mode = 2
+text = "100"
+
+[node name="Port" type="Button" parent="SideMenuContainer/VBoxContainer/HBoxContainer4/VBoxContainer3" unique_id=932848909]
+layout_mode = 2
+text = "Port"
+script = ExtResource("10_6nxe7")
+constructionInformation = ExtResource("16_ou877")
+
+[node name="VBoxContainer4" type="VBoxContainer" parent="SideMenuContainer/VBoxContainer/HBoxContainer4" unique_id=1451424350]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SideMenuContainer/VBoxContainer/HBoxContainer4/VBoxContainer4" unique_id=1048479196]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="SideMenuContainer/VBoxContainer/HBoxContainer4/VBoxContainer4/HBoxContainer" unique_id=1055827641]
+layout_mode = 2
+texture = ExtResource("5_3t1kc")
+
+[node name="Label" type="Label" parent="SideMenuContainer/VBoxContainer/HBoxContainer4/VBoxContainer4/HBoxContainer" unique_id=1862032263]
+layout_mode = 2
+text = "50"
+
+[node name="Farm" type="Button" parent="SideMenuContainer/VBoxContainer/HBoxContainer4/VBoxContainer4" unique_id=820167071]
+layout_mode = 2
+text = "Farm"
+script = ExtResource("10_6nxe7")
+constructionInformation = ExtResource("17_gwcid")
+
+[node name="HBoxContainer5" type="HBoxContainer" parent="SideMenuContainer/VBoxContainer" unique_id=1557859544]
+layout_mode = 2
+
+[node name="VBoxContainer3" type="VBoxContainer" parent="SideMenuContainer/VBoxContainer/HBoxContainer5" unique_id=1714609177]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SideMenuContainer/VBoxContainer/HBoxContainer5/VBoxContainer3" unique_id=264808191]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="TextureRect" type="TextureRect" parent="SideMenuContainer/VBoxContainer/HBoxContainer5/VBoxContainer3/HBoxContainer" unique_id=902228319]
+layout_mode = 2
+texture = ExtResource("5_3t1kc")
+
+[node name="Label" type="Label" parent="SideMenuContainer/VBoxContainer/HBoxContainer5/VBoxContainer3/HBoxContainer" unique_id=778463679]
+layout_mode = 2
+text = "50"
+
+[node name="Lumberjack" type="Button" parent="SideMenuContainer/VBoxContainer/HBoxContainer5/VBoxContainer3" unique_id=1315564148]
+layout_mode = 2
+text = "Lumberjack"
+script = ExtResource("10_6nxe7")
+constructionInformation = ExtResource("18_yqhrj")
+
+[node name="VBoxContainer4" type="VBoxContainer" parent="SideMenuContainer/VBoxContainer/HBoxContainer5" unique_id=148013319]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SideMenuContainer/VBoxContainer/HBoxContainer5/VBoxContainer4" unique_id=2010249418]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="SideMenuContainer/VBoxContainer/HBoxContainer5/VBoxContainer4/HBoxContainer" unique_id=1403257147]
+layout_mode = 2
+texture = ExtResource("5_3t1kc")
+
+[node name="Label" type="Label" parent="SideMenuContainer/VBoxContainer/HBoxContainer5/VBoxContainer4/HBoxContainer" unique_id=1381985841]
+layout_mode = 2
+text = "75"
+
+[node name="Mine" type="Button" parent="SideMenuContainer/VBoxContainer/HBoxContainer5/VBoxContainer4" unique_id=1616104247]
+layout_mode = 2
+text = "Mine"
+script = ExtResource("10_6nxe7")
+constructionInformation = ExtResource("19_0asng")
+
+[node name="HBoxContainer6" type="HBoxContainer" parent="SideMenuContainer/VBoxContainer" unique_id=1281439457]
+layout_mode = 2
+
+[node name="VBoxContainer3" type="VBoxContainer" parent="SideMenuContainer/VBoxContainer/HBoxContainer6" unique_id=1796304229]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SideMenuContainer/VBoxContainer/HBoxContainer6/VBoxContainer3" unique_id=2086944630]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="TextureRect" type="TextureRect" parent="SideMenuContainer/VBoxContainer/HBoxContainer6/VBoxContainer3/HBoxContainer" unique_id=568089704]
+layout_mode = 2
+texture = ExtResource("5_3t1kc")
+
+[node name="Label" type="Label" parent="SideMenuContainer/VBoxContainer/HBoxContainer6/VBoxContainer3/HBoxContainer" unique_id=1062689938]
+layout_mode = 2
+text = "75"
+
+[node name="Ice Pond" type="Button" parent="SideMenuContainer/VBoxContainer/HBoxContainer6/VBoxContainer3" unique_id=101514354]
+layout_mode = 2
+text = "Ice Pond"
+script = ExtResource("10_6nxe7")
+constructionInformation = ExtResource("20_eph8b")
+
+[node name="VBoxContainer4" type="VBoxContainer" parent="SideMenuContainer/VBoxContainer/HBoxContainer6" unique_id=1823811784]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SideMenuContainer/VBoxContainer/HBoxContainer6/VBoxContainer4" unique_id=1871482821]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="SideMenuContainer/VBoxContainer/HBoxContainer6/VBoxContainer4/HBoxContainer" unique_id=495853063]
+layout_mode = 2
+texture = ExtResource("5_3t1kc")
+
+[node name="Label" type="Label" parent="SideMenuContainer/VBoxContainer/HBoxContainer6/VBoxContainer4/HBoxContainer" unique_id=872047227]
+layout_mode = 2
+text = "125"
+
+[node name="TextureRect2" type="TextureRect" parent="SideMenuContainer/VBoxContainer/HBoxContainer6/VBoxContainer4/HBoxContainer" unique_id=1630986355]
+layout_mode = 2
+texture = SubResource("AtlasTexture_eph8b")
+
+[node name="Label2" type="Label" parent="SideMenuContainer/VBoxContainer/HBoxContainer6/VBoxContainer4/HBoxContainer" unique_id=397381967]
+layout_mode = 2
+text = "25"
+
+[node name="Rubber Factory" type="Button" parent="SideMenuContainer/VBoxContainer/HBoxContainer6/VBoxContainer4" unique_id=616535506]
+layout_mode = 2
+text = "Rubber Factory"
+script = ExtResource("10_6nxe7")
+constructionInformation = ExtResource("21_e1rtb")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="SideMenuContainer" unique_id=666790940]
 layout_mode = 2
@@ -276,14 +492,6 @@ script = ExtResource("2_xjnnq")
 title = "Quit Game?"
 dialog_text = "Are you sure you want to quit to the main menu?
 "
-
-[node name="OptionSelector" parent="." unique_id=839933324 instance=ExtResource("11_dvsk4")]
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_top = -32.0
-offset_bottom = 0.0
-grow_vertical = 0
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=384932]
 
@@ -465,4 +673,15 @@ size_flags_horizontal = 4
 theme_override_colors/font_color = Color(0.9488593, 0.21690774, 0.14402792, 1)
 theme_override_font_sizes/font_size = 40
 
+[connection signal="ConstructionButtonPressed" from="SideMenuContainer/VBoxContainer/HBoxContainer/VBoxContainer/BladeTurret" to="SideMenuContainer" method="OnStructureButtonPressed"]
+[connection signal="ConstructionButtonPressed" from="SideMenuContainer/VBoxContainer/HBoxContainer/VBoxContainer2/BallistaTurret" to="SideMenuContainer" method="OnStructureButtonPressed"]
+[connection signal="ConstructionButtonPressed" from="SideMenuContainer/VBoxContainer/HBoxContainer2/VBoxContainer3/BombTurret" to="SideMenuContainer" method="OnStructureButtonPressed"]
+[connection signal="ConstructionButtonPressed" from="SideMenuContainer/VBoxContainer/HBoxContainer2/VBoxContainer4/FreezeTurret" to="SideMenuContainer" method="OnStructureButtonPressed"]
+[connection signal="ConstructionButtonPressed" from="SideMenuContainer/VBoxContainer/HBoxContainer3/VBoxContainer5/ElectroTurret" to="SideMenuContainer" method="OnStructureButtonPressed"]
+[connection signal="ConstructionButtonPressed" from="SideMenuContainer/VBoxContainer/HBoxContainer4/VBoxContainer3/Port" to="SideMenuContainer" method="OnStructureButtonPressed"]
+[connection signal="ConstructionButtonPressed" from="SideMenuContainer/VBoxContainer/HBoxContainer4/VBoxContainer4/Farm" to="SideMenuContainer" method="OnStructureButtonPressed"]
+[connection signal="ConstructionButtonPressed" from="SideMenuContainer/VBoxContainer/HBoxContainer5/VBoxContainer3/Lumberjack" to="SideMenuContainer" method="OnStructureButtonPressed"]
+[connection signal="ConstructionButtonPressed" from="SideMenuContainer/VBoxContainer/HBoxContainer5/VBoxContainer4/Mine" to="SideMenuContainer" method="OnStructureButtonPressed"]
+[connection signal="ConstructionButtonPressed" from="SideMenuContainer/VBoxContainer/HBoxContainer6/VBoxContainer3/Ice Pond" to="SideMenuContainer" method="OnStructureButtonPressed"]
+[connection signal="ConstructionButtonPressed" from="SideMenuContainer/VBoxContainer/HBoxContainer6/VBoxContainer4/Rubber Factory" to="SideMenuContainer" method="OnStructureButtonPressed"]
 [connection signal="confirmed" from="QuitConfirmDialog" to="SideMenuContainer/HBoxContainer/QuitButton" method="_on_quit_confirm_dialog_confirmed"]

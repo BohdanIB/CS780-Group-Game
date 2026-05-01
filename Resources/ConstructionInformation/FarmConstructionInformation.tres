@@ -2,9 +2,18 @@
 
 [ext_resource type="Texture2D" uid="uid://5f34lbmq0pcd" path="res://Assets/Sprites/WindmillSprites.png" id="1_1r01g"]
 [ext_resource type="Script" uid="uid://c5a4sxpqqv1sn" path="res://Scripts/Structures/ConstructionInformation.cs" id="1_droj7"]
+[ext_resource type="Resource" uid="uid://cvhvxvqfmwhiw" path="res://Resources/Materials/Coins.tres" id="2_2to2x"]
+[ext_resource type="Script" uid="uid://cyuxxj1ajju4u" path="res://Scripts/Item System/MaterialRequirements.cs" id="3_c22tg"]
 [ext_resource type="Script" uid="uid://xqmubjkmtno0" path="res://Scripts/Structures/StructurePlacementRequirements.cs" id="3_dn3s7"]
 [ext_resource type="PackedScene" uid="uid://yxa7mihcwpii" path="res://Scenes/Structures/material_gatherer.tscn" id="4_dn3s7"]
 [ext_resource type="Resource" uid="uid://c2ke6cwkljr4f" path="res://Resources/Materials/Gatherers/FarmStats.tres" id="5_2to2x"]
+
+[sub_resource type="Resource" id="Resource_8splb"]
+script = ExtResource("3_c22tg")
+_requirements = Dictionary[Object, int]({
+ExtResource("2_2to2x"): 50
+})
+metadata/_custom_type_script = "uid://cyuxxj1ajju4u"
 
 [sub_resource type="Resource" id="Resource_2to2x"]
 script = ExtResource("3_dn3s7")
@@ -18,6 +27,7 @@ script = ExtResource("1_droj7")
 DisplayImageAtlas = ExtResource("1_1r01g")
 DisplayImageRect = Rect2(0, 0, 64, 64)
 PlacementRequirements = SubResource("Resource_2to2x")
+MaterialRequirements = SubResource("Resource_8splb")
 Structure = ExtResource("4_dn3s7")
 StructureStats = ExtResource("5_2to2x")
 metadata/_custom_type_script = "uid://c5a4sxpqqv1sn"
