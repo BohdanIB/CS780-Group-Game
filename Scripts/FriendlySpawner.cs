@@ -23,7 +23,7 @@ public partial class FriendlySpawner : Node
 		_hub = hub;
 		_tileMapLayer = tileMapLayer;
 
-		Instance ??= this;
+		Instance = this;
 		_ports = [];
 
 		BuildPathfinder();
