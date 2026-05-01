@@ -8,5 +8,6 @@
 script = ExtResource("1_k1jv7")
 gatheredMaterial = ExtResource("2_kkqg3")
 gatherTime = 3.0
+gatherQuantity = 2
 Animations = ExtResource("1_o71oy")
 metadata/_custom_type_script = "uid://6aa1ye00hd8k"

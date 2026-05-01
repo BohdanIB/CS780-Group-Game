@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://c5a4sxpqqv1sn" path="res://Scripts/Structures/ConstructionInformation.cs" id="1_0seec"]
 [ext_resource type="Texture2D" uid="uid://fv21qi0wo01c" path="res://Assets/Sprites/isometric_electro_turret.png" id="1_amoso"]
 [ext_resource type="PackedScene" uid="uid://b2w8csm5vypb0" path="res://Scenes/Structures/turret.tscn" id="1_e28rt"]
-[ext_resource type="Resource" path="res://Resources/Turret/ElectroTurretStats.tres" id="2_amoso"]
+[ext_resource type="Resource" uid="uid://cece7aspbm6jr" path="res://Resources/Turret/ElectroTurretStats.tres" id="2_amoso"]
 [ext_resource type="Script" uid="uid://cyuxxj1ajju4u" path="res://Scripts/Item System/MaterialRequirements.cs" id="2_fn6gm"]
 [ext_resource type="Resource" uid="uid://cvhvxvqfmwhiw" path="res://Resources/Materials/Coins.tres" id="2_sapsp"]
 [ext_resource type="Resource" uid="uid://divgtfj6qt882" path="res://Resources/Materials/Rubber.tres" id="3_j3x18"]
