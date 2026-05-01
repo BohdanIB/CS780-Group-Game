@@ -33,8 +33,9 @@ public partial class Turret : GenericStructure
 	/// </summary>
 	/// <param name="stats"></param>
 	/// <param name="targetingMode"></param>
-	public override void Initialize(StructureStats stats)
+	public override void Initialize(StructureStats stats, GroundTile tile)
 	{
+		base.Initialize(stats, tile);
 		if (stats is TurretStats turretStats) _stats = turretStats;
 		InitializeComponents();
 		UpdateStats();
@@ -54,6 +55,7 @@ public partial class Turret : GenericStructure
 		_health.OnNoHealthLeft += () =>
 		{
 			GD.Print($"Turret {Name} died.");
+			if (_locationTile != null && _locationTile.Structure == this) _locationTile.Structure = null;
 			QueueFree();
 		};
 

@@ -13,9 +13,9 @@ public partial class MaterialGatherer : GenericStructure
 	[Export] private MaterialGenerationParticle _particle;
 
 
-	public override void Initialize(StructureStats stats)
+	public override void Initialize(StructureStats stats, GroundTile tile)
 	{
-		base.Initialize(stats);
+		base.Initialize(stats, tile);
 
 		if (stats is MaterialGathererStats gathererStats)
 		{

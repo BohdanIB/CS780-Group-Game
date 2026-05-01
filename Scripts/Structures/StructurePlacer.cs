@@ -166,7 +166,9 @@ public partial class StructurePlacer : Node2D
 
 		GenericStructure placedStructure = _constructionInformation.Structure.Instantiate<GenericStructure>();
 		placedStructure.GlobalPosition = IsometricTileMap.MapCoordToGlobalPosition(_placementTilemap, _currentGridCoordinates);
-		_placementGrid.GetGridValueOrDefault(_currentGridCoordinates.X, _currentGridCoordinates.Y).Structure = placedStructure;
+		
+		GroundTile placementTile = _placementGrid.GetGridValueOrDefault(_currentGridCoordinates.X, _currentGridCoordinates.Y);
+		placementTile.Structure = placedStructure;
 
 		foreach (OptionSelector selector in _optionSelectors)
 		{
@@ -202,7 +204,7 @@ public partial class StructurePlacer : Node2D
 			}
 		}
 		
-		placedStructure.Initialize(_constructionInformation.StructureStats);
+		placedStructure.Initialize(_constructionInformation.StructureStats, placementTile);
 
 		// Hide turret radius after placement
 		if (placedStructure is Turret turret)
