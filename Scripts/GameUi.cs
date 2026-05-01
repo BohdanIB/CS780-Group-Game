@@ -61,7 +61,7 @@ public partial class GameUi : CanvasLayer
 	{
 		enemyKillCount++;
 		AddCoins(25);
-		killCountLabel.Text = $"Kills: {enemyKillCount}";
+		killCountLabel.Text = $"{enemyKillCount}";
 	}
 
 
