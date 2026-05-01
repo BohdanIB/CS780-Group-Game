@@ -7,6 +7,7 @@ public partial class MaterialGatherer : GenericStructure
 
 	private MaterialType _gatheredMaterial;
 	private float _gatheringTime;
+	private int _gatherQuantity;
 
 	[Export] private Timer _gatherTimer;
 	[Export] private MaterialGenerationParticle _particle;
@@ -20,6 +21,7 @@ public partial class MaterialGatherer : GenericStructure
 		{
 			_gatheredMaterial = gathererStats.gatheredMaterial;
 			_gatheringTime = gathererStats.gatherTime;
+			_gatherQuantity = gathererStats.gatherQuantity;
 
 			_particle.RegionRect = _gatheredMaterial.DisplayImageRect;
 			_particle.Texture = _gatheredMaterial.DisplayImageAtlas;
@@ -36,7 +38,7 @@ public partial class MaterialGatherer : GenericStructure
 
 	public void ProduceMaterial()
 	{
-		ConnectedPort?.StorageInventory.AddMaterials(_gatheredMaterial, 1);
+		ConnectedPort?.StorageInventory.AddMaterials(_gatheredMaterial, _gatherQuantity);
 		_particle.StartVisual();
 		GD.Print($"  Produced {_gatheredMaterial}");
 	}
