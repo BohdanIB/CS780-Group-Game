@@ -115,7 +115,8 @@ public partial class GameUi : CanvasLayer
 		_BaseHPLabel.Text = $"{currentBaseHP}";
 	if (currentBaseHP <= 0)
 	{
-		ShowWarning("Base destroyed! Game Over!", GameOver: true);
+		game_over = true; 
+			GetNode<GameOverScreen>("GameOverScreen").onGameOver();
 	}
 }
 
