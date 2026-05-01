@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://crxhy7rh5tjyr"]
 
-[ext_resource type="Script" uid="uid://bw81jj6ypb53m" path="res://Scripts/StartMenu.cs" id="1_jgtwh"]
+[ext_resource type="Script" path="res://Scripts/StartMenu.cs" id="1_jgtwh"]
 [ext_resource type="Texture2D" uid="uid://o4vxbpmw835q" path="res://Assets/Sprites/Mariano Taccola De Ingensis combat d.jpg" id="1_juhg0"]
-[ext_resource type="Script" uid="uid://nlfgcbuo3qpg" path="res://Scripts/AnimatedButton.cs" id="3_m6uer"]
+[ext_resource type="Script" path="res://Scripts/AnimatedButton.cs" id="3_m6uer"]
 
 [node name="StartMenu" type="Control" unique_id=1969216613]
 layout_mode = 3

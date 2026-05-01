@@ -7,12 +7,19 @@ public partial class MoverComponent : Node2D
 
 	[Signal] public delegate void OnPathPointReachedEventHandler(bool HasNextPoint, Vector2 NextPoint);
 	[Signal] public delegate void OnPathCompletedEventHandler();
+	[Signal] public delegate void OnFreezeEventHandler();
+	[Signal] public delegate void OnUnfreezeEventHandler();
 
 	[Export] public float Speed = 20f;
 	[Export] public Node2D ParentNode;
 	public bool CurrentlyMoving { get; private set; } = true;
+	public Vector2 LastDirection { get; private set; } = Vector2.Zero;
 	private Vector2[] _moverPath = [];
 	private int _currentPathIndex = START_PATH_INDEX;
+	private bool _isFrozen = false;
+	private Timer _freezeTimer;
+	/*private float _originalSpeed; //canal jammer implementation
+	private Timer _slowTimer;*/
 
 	public void Initialize(float speed, Node2D parent = null, bool start = true, Vector2[] moverPath = null)
 	{
@@ -20,6 +27,20 @@ public partial class MoverComponent : Node2D
 		if (parent != null) { ParentNode = parent; }
 		if (start) {Start();} else {Stop();}
 		if (moverPath != null) { SetMoverPath(moverPath); }
+	}
+	
+	public override void _Ready()
+	{
+		_freezeTimer = new Timer();
+		_freezeTimer.OneShot = true;
+		AddChild(_freezeTimer);
+		_freezeTimer.Timeout += Unfreeze;
+		/* //implemtation for canal jammer
+		_slowTimer = new Timer();
+		_slowTimer.OneShot = true;
+		AddChild(_slowTimer);
+		_slowTimer.Timeout += Unslow;
+		*/
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -35,6 +56,9 @@ public partial class MoverComponent : Node2D
 		var targetPosition = _moverPath[_currentPathIndex];
 		var distanceToTarget = ParentNode.Position.DistanceTo(targetPosition);
 		var totalMovement = Speed*delta;
+		
+		 LastDirection = (targetPosition - ParentNode.Position).Normalized();
+		
 		while (totalMovement >= distanceToTarget)
 		{
 			ParentNode.Position = targetPosition;
@@ -48,6 +72,9 @@ public partial class MoverComponent : Node2D
 			totalMovement -= distanceToTarget;
 			targetPosition = _moverPath[_currentPathIndex];
 			distanceToTarget = ParentNode.Position.DistanceTo(targetPosition);
+			
+			LastDirection = (targetPosition - ParentNode.Position).Normalized();
+			
 			EmitSignal(SignalName.OnPathPointReached, true, targetPosition);
 		}
 		ParentNode.Position = ParentNode.Position.MoveToward(targetPosition, (float)totalMovement);
@@ -93,5 +120,34 @@ public partial class MoverComponent : Node2D
 		_moverPath = path;
 		_currentPathIndex = START_PATH_INDEX;
 	}
-
+	
+	public void Freeze(float duration) 
+	{
+		if (_isFrozen) return;
+		_isFrozen = true;
+		Stop();
+		_freezeTimer.Start(duration);
+		EmitSignal(SignalName.OnFreeze);
+	}
+	
+	private void Unfreeze()
+	{
+		_isFrozen = false;
+		Start();
+		EmitSignal(SignalName.OnUnfreeze);
+	}
+	public bool IsFrozen() => _isFrozen;
+	/* //implementation for canal jammer
+	public void Slow(float multiplier, float duration)
+	{
+		if (_isFrozen) return;
+		_originalSpeed = Speed;
+		Speed *= multiplier;
+		_slowTimer.Start(duration);
+	}
+	
+	public void Unslow()
+	{
+		Speed = _originalSpeed;
+	} */
 }

@@ -19,6 +19,9 @@ public partial class ProjectileStats : Resource
 	{
 		Bolt,
 		Blade,
+		Electro,
+		Bomb,
+		Freeze,
 	};
 
 	// Projectile Stats
@@ -27,6 +30,15 @@ public partial class ProjectileStats : Resource
 	[Export] public float Damage;
 	[Export] public float Hitbox;
 	[Export] public AnimationPack Animations;
+	[Export] public float AOERadius;
+	[Export] public bool AOEFalloff;
+	[Export] public int ChainCount;
+	[Export] public float ChainDamageFalloff;
+	[Export] public float ChainRadius;
+	[Export] public float ChainRadiusFalloff;
+	[Export] public bool Freezes;
+	[Export] public float FreezeDuration;
+	[Export] public AnimationPack ImpactAnimations;
 
 	/// <summary>
 	/// Get list of all projectile stats.
@@ -49,6 +61,14 @@ public partial class ProjectileStats : Resource
 		directory.ListDirEnd();
 
 		return loadedProjectiles;
+	}
+	
+	public ProjectileStats WithChainFalloff()
+	{
+	ProjectileStats copy = (ProjectileStats)Duplicate();
+	copy.Damage *= ChainDamageFalloff;
+	copy.ChainRadius *= ChainRadiusFalloff;
+	return copy;
 	}
 
 	public override string ToString()

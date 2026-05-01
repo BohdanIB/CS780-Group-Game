@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="ProjectileStats" format=3 uid="uid://8up6n72scnpd"]
+
+[ext_resource type="Resource" uid="uid://yht161tan3km" path="res://Resources/Animations/AnimationPacks/Projectile/ElectroAnimations.tres" id="1_7vs6c"]
+[ext_resource type="Script" uid="uid://db7kn4h7v1jqa" path="res://Scripts/turrets/ProjectileStats.cs" id="1_ihrkt"]
+[ext_resource type="Resource" uid="uid://dbc3lfiq3ddqg" path="res://Resources/Animations/AnimationPacks/Projectile/ShockAnimations.tres" id="2_qaf0t"]
+
+[resource]
+script = ExtResource("1_ihrkt")
+Type = 2
+Speed = 200.0
+Damage = 35.0
+Hitbox = 16.0
+Animations = ExtResource("1_7vs6c")
+ChainCount = 3
+ChainDamageFalloff = 5.0
+ChainRadius = 10.0
+ChainRadiusFalloff = 10.0
+ImpactAnimations = ExtResource("2_qaf0t")
+metadata/_custom_type_script = "uid://db7kn4h7v1jqa"

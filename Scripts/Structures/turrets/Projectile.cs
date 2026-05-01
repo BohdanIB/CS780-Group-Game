@@ -2,6 +2,7 @@
 using CS780GroupProject.Scripts.Utils;
 using static CS780GroupProject.Scripts.Utils.NodeComponentChecking;
 using Godot;
+using System.Collections.Generic;
 
 public partial class Projectile : Node2D
 {
@@ -117,9 +118,36 @@ public partial class Projectile : Node2D
 
 	private void ProjectileImpact()
 	{
+		var alreadyHit = new HashSet<HurtComponent>();
 		// Todo: WIP - Potentially add animation or some other effects to projectile on impact? May want to incorporate signal somehow.
+		if (_stats.AOERadius > 0f)
+			ApplyAOEDamage(GlobalPosition, alreadyHit);
+		if (_stats.ChainCount > 0)
+			ApplyChainDamage(GlobalPosition, _stats.ChainCount, alreadyHit);
+		if (_stats.Freezes && IsInstanceValid(_target))
+		{
+			var mover = GetComponentInSiblingsOrNull<MoverComponent>(_target);
+			mover?.Freeze(_stats.FreezeDuration);
+		}
+		
+		
 		EmitSignal(SignalName.OnProjectileImpact, GlobalPosition, _stats);
-		QueueFree();
+		if (_stats.ImpactAnimations != null && _animation != null)
+		{
+			_target = null;
+			SetPhysicsProcess(false);
+			_animation.Initialize(_stats.ImpactAnimations, AnimationPackEntry.State.Impact);
+	
+			// Ensure animation is not looping
+			string animName = _animation.Animation;
+			_animation.SpriteFrames.SetAnimationLoop(animName, false);
+			_animation.AnimationFinished += () => QueueFree();
+			_animation.Play(animName);
+		}
+		else
+		{
+			QueueFree();
+		}
 	}
 
 	public void UpdateStats(ProjectileStats newStats = null)
@@ -154,6 +182,67 @@ public partial class Projectile : Node2D
 	public HurtComponent GetTarget()
 	{
 		return _target;
+	}
+	
+	private void ApplyAOEDamage(Vector2 position, HashSet<HurtComponent> alreadyHit)
+	{
+		foreach (Node node in GetTree().GetNodesInGroup(_validHitableTypes.ToString()))
+		{
+			if (node is not HurtComponent hurt || !IsInstanceValid(hurt))
+			{
+				continue;
+			}
+			float dist = position.DistanceTo(hurt.GlobalPosition);
+			if (dist > _stats.AOERadius)
+			{
+				continue;
+			}
+			float falloff = 1f - Mathf.Clamp(dist / _stats.AOERadius, 0f, 1f);
+			float aoeDamage = _stats.Damage * falloff;
+			
+			var health = GetComponentInSiblingsOrNull<HealthComponent>(hurt);
+			health?.ApplyDamage(aoeDamage);
+		}
+	}
+
+	private void ApplyChainDamage(Vector2 position, int chainsRemaining, HashSet<HurtComponent> alreadyHit, ProjectileStats stats = null) 
+	{		
+		stats ??= _stats;
+		List<(HurtComponent hurt, float dist)> candidates = new();
+		
+		foreach (Node node in GetTree().GetNodesInGroup(_validHitableTypes.ToString()))
+		{
+			if (node is not HurtComponent hurt || !IsInstanceValid(hurt))
+			{
+				continue;
+			}
+			if (alreadyHit.Contains(hurt))
+			{
+				continue;
+			}
+			float dist = position.DistanceTo(hurt.GlobalPosition);
+			if (dist > _stats.ChainRadius)
+			{
+				continue;
+			}
+			candidates.Add((hurt, dist));
+		}
+		candidates.Sort((a, b) => a.dist.CompareTo(b.dist));
+		foreach (var (hurt,dist) in candidates)
+		{
+			float falloff = 1f - Mathf.Clamp(dist / stats.ChainRadius, 0f, 1f);
+			float chainDamage = stats.Damage * falloff;
+			
+			var health = GetComponentInSiblingsOrNull<HealthComponent>(hurt);
+			health?.ApplyDamage(chainDamage);
+			alreadyHit.Add(hurt);
+			
+			if (chainsRemaining > 0) 
+			{
+				ApplyChainDamage(hurt.GlobalPosition, chainsRemaining - 1, alreadyHit, stats.WithChainFalloff());
+				break;
+			}
+		}
 	}
 
 }

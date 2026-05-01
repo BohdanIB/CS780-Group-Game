@@ -52,7 +52,6 @@ public partial class AnimationComponent : AnimatedSprite2D
 			}
 		}
 	}
-
 	/// <summary>
 	/// Set the animation to play by direction (only applicable to animations which use direction)
 	/// </summary>

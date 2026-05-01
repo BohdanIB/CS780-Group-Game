@@ -11,6 +11,7 @@ _placementGhost = NodePath("PlacementGhost")
 _validPlacementColor = Color(0, 0.7882353, 0, 0.5882353)
 _invalidPlacementColor = Color(0.6666667, 0, 0, 0.5882353)
 _selectorContainer = NodePath("Option Selectors")
+temporaryConstructionInfo = Array[Object]([])
 
 [node name="PlacementGhost" type="Sprite2D" parent="." unique_id=1148194564]
 modulate = Color(1, 1, 1, 0.4392157)
@@ -24,14 +25,11 @@ offset_bottom = 104.0
 [node name="OptionSelector1" parent="Option Selectors" unique_id=839933324 instance=ExtResource("3_5150u")]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
-visible = true
 
 [node name="OptionSelector2" parent="Option Selectors" unique_id=768693561 instance=ExtResource("3_5150u")]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
-visible = true
 
 [node name="OptionSelector3" parent="Option Selectors" unique_id=1145831017 instance=ExtResource("3_5150u")]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
-visible = true 

@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="AnimationPackEntry" format=3 uid="uid://cxwv4fljr842u"]
+
+[ext_resource type="SpriteFrames" uid="uid://do7tkxfsgcbon" path="res://Assets/AnimationFrames/Structure/freeze_idle_frames.tres" id="1_oqeyc"]
+[ext_resource type="Script" uid="uid://bc14nr141nonp" path="res://Scripts/Animation/AnimationPackEntry.cs" id="2_gdbet"]
+
+[resource]
+script = ExtResource("2_gdbet")
+Frames = ExtResource("1_oqeyc")
+metadata/_custom_type_script = "uid://bc14nr141nonp"

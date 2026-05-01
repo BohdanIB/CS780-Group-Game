@@ -4,6 +4,7 @@ using CS780GroupProject.Scripts.Utils;
 using Godot;
 using System.Diagnostics;
 
+
 public partial class ShooterComponent : Node2D
 {
 	[Signal] public delegate void OnShootEventHandler(HurtComponent Target, Projectile Projectile);
@@ -97,7 +98,7 @@ public partial class ShooterComponent : Node2D
 		// };
 	}
 
-    public Groups.GroupTypes GetEntityTypes()
+	public Groups.GroupTypes GetEntityTypes()
 	{
 		return _thisEntityTypes;
 	}
@@ -120,5 +121,5 @@ public partial class ShooterComponent : Node2D
 		_shotsPerSecond = shotsPerSecond;
 		_shotTime = 1 / shotsPerSecond;
 	}
-
+	
 }

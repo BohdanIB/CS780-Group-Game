@@ -185,23 +185,27 @@ anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = -250.0
+size_flags_horizontal = 0
+size_flags_vertical = 3
 theme = SubResource("Theme_bw2rt")
 theme_override_styles/panel = SubResource("StyleBoxTexture_3t1kc")
 script = ExtResource("1_bw2rt")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="SideMenuContainer" unique_id=1335139940]
 layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
+size_flags_horizontal = 0
+alignment = 1
 
 [node name="HBoxContainer" type="HBoxContainer" parent="SideMenuContainer/VBoxContainer" unique_id=180445247]
 layout_mode = 2
+size_flags_horizontal = 4
 
 [node name="VBoxContainer" type="VBoxContainer" parent="SideMenuContainer/VBoxContainer/HBoxContainer" unique_id=981618266]
 layout_mode = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="SideMenuContainer/VBoxContainer/HBoxContainer/VBoxContainer" unique_id=1545012627]
 layout_mode = 2
+size_flags_horizontal = 0
 
 [node name="TextureRect" type="TextureRect" parent="SideMenuContainer/VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=2141844475]
 layout_mode = 2
@@ -240,6 +244,67 @@ text = "75"
 layout_mode = 2
 size_flags_horizontal = 4
 text = "Ballista Turret"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="SideMenuContainer/VBoxContainer" unique_id=1431012881]
+layout_mode = 2
+
+[node name="VBoxContainer3" type="VBoxContainer" parent="SideMenuContainer/VBoxContainer/HBoxContainer2" unique_id=1788044379]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SideMenuContainer/VBoxContainer/HBoxContainer2/VBoxContainer3" unique_id=451920113]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="TextureRect" type="TextureRect" parent="SideMenuContainer/VBoxContainer/HBoxContainer2/VBoxContainer3/HBoxContainer" unique_id=1879544702]
+layout_mode = 2
+texture = ExtResource("5_3t1kc")
+
+[node name="Label" type="Label" parent="SideMenuContainer/VBoxContainer/HBoxContainer2/VBoxContainer3/HBoxContainer" unique_id=1712928865]
+layout_mode = 2
+text = "150"
+
+[node name="BombTurret" type="Button" parent="SideMenuContainer/VBoxContainer/HBoxContainer2/VBoxContainer3" unique_id=1596578160]
+layout_mode = 2
+text = "Bomb Turret"
+
+[node name="VBoxContainer4" type="VBoxContainer" parent="SideMenuContainer/VBoxContainer/HBoxContainer2" unique_id=822389189]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SideMenuContainer/VBoxContainer/HBoxContainer2/VBoxContainer4" unique_id=897705158]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="SideMenuContainer/VBoxContainer/HBoxContainer2/VBoxContainer4/HBoxContainer" unique_id=170348964]
+layout_mode = 2
+texture = ExtResource("5_3t1kc")
+
+[node name="Label" type="Label" parent="SideMenuContainer/VBoxContainer/HBoxContainer2/VBoxContainer4/HBoxContainer" unique_id=795414417]
+layout_mode = 2
+text = "300"
+
+[node name="FreezeTurret" type="Button" parent="SideMenuContainer/VBoxContainer/HBoxContainer2/VBoxContainer4" unique_id=471981184]
+layout_mode = 2
+text = "Freeze Turret"
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="SideMenuContainer/VBoxContainer" unique_id=1373627358]
+layout_mode = 2
+
+[node name="VBoxContainer5" type="VBoxContainer" parent="SideMenuContainer/VBoxContainer/HBoxContainer3" unique_id=1012221583]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SideMenuContainer/VBoxContainer/HBoxContainer3/VBoxContainer5" unique_id=1063603934]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="SideMenuContainer/VBoxContainer/HBoxContainer3/VBoxContainer5/HBoxContainer" unique_id=1511062077]
+layout_mode = 2
+texture = ExtResource("5_3t1kc")
+
+[node name="Label" type="Label" parent="SideMenuContainer/VBoxContainer/HBoxContainer3/VBoxContainer5/HBoxContainer" unique_id=227406320]
+layout_mode = 2
+text = "250"
+
+[node name="ElectroTurret" type="Button" parent="SideMenuContainer/VBoxContainer/HBoxContainer3/VBoxContainer5" unique_id=553572525]
+layout_mode = 2
+text = "Electro Turret"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="SideMenuContainer" unique_id=666790940]
 layout_mode = 2

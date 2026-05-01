@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://27mmcge0cxrm"]
 
-[ext_resource type="Script" uid="uid://bg3usi07e1a27" path="res://Scripts/GenericStructure.cs" id="1_4h5ic"]
+[ext_resource type="Script" uid="uid://bg3usi07e1a27" path="res://Scripts/Structures/GenericStructure.cs" id="1_4h5ic"]
 [ext_resource type="PackedScene" uid="uid://e5vy6kbwqw12" path="res://Scenes/Components/health_component.tscn" id="2_nkylo"]
 [ext_resource type="PackedScene" uid="uid://bu5bt5d2jv3iu" path="res://Scenes/Components/hurt_component.tscn" id="3_305qt"]
 [ext_resource type="PackedScene" uid="uid://c1wk4dy8g10qq" path="res://Scenes/Components/animation_component.tscn" id="4_abu07"]

@@ -75,7 +75,7 @@ public partial class DetectableComponent : Area2D
 	{
 		((CircleShape2D)_detectableCollisionShape2D.Shape).Radius = newRadius;
 	}
-    public Groups.GroupTypes GetEntityTypes()
+	public Groups.GroupTypes GetEntityTypes()
 	{
 		return _thisEntityTypes;
 	}

@@ -46,16 +46,16 @@ public partial class GenericStructure: Node2D
 
 	public static Dictionary<string, string[]> GetConfigurationOptions(ConfigurationType configurationType)
 	{
-        return configurationType switch
-        {
-            ConfigurationType.None => null,
-            ConfigurationType.TurretTargeting => new()
+		return configurationType switch
+		{
+			ConfigurationType.None => null,
+			ConfigurationType.TurretTargeting => new()
 				{
 					["Target"] = Enum.GetNames(typeof(TargetingMode))
 				},
-            _ => null,
-        };
-    }
+			_ => null,
+		};
+	}
 
 	public virtual void SetConfigurationOption(string configurationName, string configurationSelection) { }
 }
