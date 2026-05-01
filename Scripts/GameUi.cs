@@ -2,12 +2,13 @@ using Godot;
 
 public partial class GameUi : CanvasLayer
 {
+	[Export] public Label[] materialDisplays;
+	[Export] public MaterialType[] materialsToDisplay;
 	private Label timerLabel;
 	private float elapsedTime = 0f;
 	private Label killCountLabel;
 	private int enemyKillCount = 0;
-	//private int coins = 1000;
-	private Label coinCountLabel;
+
 	private Label _warningLabel;	
 	private Label _BaseHPLabel;
 
@@ -23,16 +24,14 @@ public partial class GameUi : CanvasLayer
 		var sideMenu = GetNode<SideMenuContainer>("SideMenuContainer");
 		_warningLabel = GetNode<Label>("UI/WarningLabel");
 
-		_coinsMaterial = GD.Load<MaterialType>("res://Resources/Materials/Coins.tres");
 		
 		var structurePlacer = GetNode<StructurePlacer>("../StructurePlacer");
-		coinCountLabel = GetNode<Label>("UI/Panel/HBoxContainer/CoinCount/CoinCountLabel");
+
 
 		_BaseHPLabel = GetNode<Label>("UI/Panel/HBoxContainer/BaseHealth/BaseHPLabel");
 		_BaseHPLabel.Text = $"{StartingBaseHP}";
 		
 		killCountLabel = GetNode<Label>("UI/Panel/HBoxContainer/KillCount/KillCountLabel");
-		coinCountLabel.Text = "1000";
 
 		
 		
@@ -79,14 +78,12 @@ public partial class GameUi : CanvasLayer
 		screen.onVictory();   
 	}
 
-	public void UpdateCoinDisplay()
-{
-	coinCountLabel.Text = $"{Main.PlayerInventory.GetMaterialCount(_coinsMaterial)}";
-}
-
 	public void UpdateMaterialDisplays()
 	{
-		UpdateCoinDisplay();
+		for (int i = 0; i < materialsToDisplay.Length; i++)
+		{
+			materialDisplays[i].Text = Main.PlayerInventory.GetMaterialCount(materialsToDisplay[i]) + "";
+		}
 	}
 
 	
@@ -113,14 +110,14 @@ public partial class GameUi : CanvasLayer
 	{
 		if (!Main.PlayerInventory.HasMaterial(_coinsMaterial, amount)) return false;
 		Main.PlayerInventory.RemoveMaterials(_coinsMaterial, amount);
-		coinCountLabel.Text = $"{Main.PlayerInventory.GetMaterialCount(_coinsMaterial)}";
+		UpdateMaterialDisplays();
 		return true;
 	}
 
 		public void AddCoins(int amount)
 	{
 		Main.PlayerInventory.AddMaterials(_coinsMaterial, amount);
-		coinCountLabel.Text = $"{Main.PlayerInventory.GetMaterialCount(_coinsMaterial)}";
+		UpdateMaterialDisplays();
 	}
 
 	public void TakeDamage(int amount)

@@ -1,9 +1,10 @@
-[gd_resource type="Resource" script_class="MaterialType" format=3 uid="uid://wn25i5mqsf3k"]
+[gd_resource type="Resource" script_class="MaterialType" format=3 uid="uid://c4apyxum25wtb"]
 
 [ext_resource type="Texture2D" uid="uid://rp7lo1igaill" path="res://Assets/Sprites/MaterialSprites.png" id="1_y3r0h"]
 [ext_resource type="Script" uid="uid://cplgdv73pm7sk" path="res://Scripts/Item System/MaterialType.cs" id="1_ysyyb"]
 
 [resource]
+resource_name = "Ice"
 script = ExtResource("1_ysyyb")
 DisplayImageAtlas = ExtResource("1_y3r0h")
 DisplayImageRect = Rect2(32, 0, 32, 32)

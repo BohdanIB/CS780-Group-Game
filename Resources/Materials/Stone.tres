@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://rp7lo1igaill" path="res://Assets/Sprites/MaterialSprites.png" id="1_gjjdr"]
 
 [resource]
+resource_name = "Stone"
 script = ExtResource("1_akt1g")
 DisplayImageAtlas = ExtResource("1_gjjdr")
 DisplayImageRect = Rect2(64, 0, 32, 32)

@@ -158,7 +158,7 @@ public partial class StructurePlacer : Node2D
 
 		// Notify GameUI to update the coin label
 		var gameUi = GetTree().GetRoot().GetNode<GameUi>("Main/GameUI");
-		gameUi?.UpdateCoinDisplay();
+		gameUi?.UpdateMaterialDisplays();
 
 		GenericStructure placedStructure = _constructionInformation.Structure.Instantiate<GenericStructure>();
 		placedStructure.GlobalPosition = IsometricTileMap.MapCoordToGlobalPosition(_placementTilemap, _currentGridCoordinates);
